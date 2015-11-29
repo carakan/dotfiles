@@ -31,3 +31,16 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 05. Text Formatting/Layout                                                 "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autoindent            " auto-indent
+set tabstop=2             " tab spacing
+set softtabstop=2         " unify
+set shiftwidth=2          " indent/outdent by 2 columns
+set shiftround            " always indent/outdent to the nearest tabstop
+set expandtab             " use spaces instead of tabs
+set smartindent           " automatically insert one extra level of indentation
+set smarttab              " use tabs at the start of a line, spaces elsewhere
+set nowrap                " don't wrap text

@@ -1,5 +1,4 @@
-Bundle 'spf13/vim-colors'
 Bundle 'tpope/vim-endwise'
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-haml'
 Bundle 'elixir-lang/vim-elixir'
+Bundle 'thoughtbot/vim-rspec'
+Bundle 'ecomba/vim-ruby-refactoring'
