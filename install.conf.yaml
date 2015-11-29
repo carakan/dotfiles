@@ -5,12 +5,12 @@
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
     ~/.gitconfig: gitconfig
-	~/.vimrc.before.local: vimrc.before.local
-	~/.vimrc.bundles.local: vimrc.bundles.local
+    ~/.vimrc.before.local: vimrc.before.local
+    ~/.vimrc.bundles.local: vimrc.bundles.local
     ~/.vimrc.local: vimrc.local
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-	
+
 - shel:
   - ln -s ~/.vim ~/.config/nvim
   - ln -s ~/.vimrc ~/.config/nvim/init.vim
