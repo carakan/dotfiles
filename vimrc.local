@@ -1,0 +1,33 @@
+" color molokai
+colorscheme molokai
+
+" Uses tpope's vim-sensible defaults
+
+set hidden
+set notimeout
+set noswapfile
+set nowritebackup
+set nowrap
+set nofoldenable
+set lazyredraw
+set number
+set expandtab
+set ignorecase
+set smartcase
+set noshowmode
+set modeline
+
+
+set guifont=Source\ Code\ Pro\ for\ Powerline:h12
+
+" syntastic configuration
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:loaded_syntastic_ruby_rubocop_checker = 1
+let g:loaded_syntastic_ruby_rubylint_checker = 1
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0

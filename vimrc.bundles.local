@@ -1,0 +1,5 @@
+Bundle 'spf13/vim-colors'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-haml'
+Bundle 'elixir-lang/vim-elixir'
