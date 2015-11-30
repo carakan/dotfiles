@@ -4,6 +4,7 @@
     ~/.profile: profile
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
+    ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.vimrc.before.local: vimrc.before.local
     ~/.vimrc.bundles.local: vimrc.bundles.local
