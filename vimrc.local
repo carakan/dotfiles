@@ -7,7 +7,16 @@ set t_Co=256
 syntax on
 
 " color molokai
-colorscheme molokai
+"colorscheme onedark
+let g:onedark_terminal_italics = 0
+colorscheme railscasts
+
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+
+" No spell in any case
+set nospell
 
 " Uses tpope's vim-sensible defaults
 
@@ -50,7 +59,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 05. Text Formatting/Layout                                                 "
+" Text Formatting/Layout                                                 	 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent            " auto-indent
 set tabstop=2             " tab spacing
@@ -67,3 +76,6 @@ nnoremap <leader>so :OpenSession
 nnoremap <leader>ss :SaveSession
 nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
+
+" search files as full name without any regex
+let g:ctrlp_regexp = 1
