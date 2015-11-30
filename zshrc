@@ -4,6 +4,8 @@ export ZSH=/Users/carakan/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
+# Another powerful theme
+# ZSH_THEME="clean"
 ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
@@ -89,5 +91,8 @@ export PATH="/usr/local/sbin:$PATH"
 
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
+
+export EDITOR="nvim"
+export BUNDLER_EDITOR="nvim"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

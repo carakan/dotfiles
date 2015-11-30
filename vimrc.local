@@ -1,3 +1,11 @@
+" no backups
+set nobackup
+set nowritebackup
+
+" Enable 256 colors
+set t_Co=256
+syntax on
+
 " color molokai
 colorscheme molokai
 
@@ -17,8 +25,17 @@ set smartcase
 set noshowmode
 set modeline
 
-
+" set patched fonts
 set guifont=Source\ Code\ Pro\ for\ Powerline:h12
+
+" Disable arrows keys
+noremap   <Up>     <NOP>
+noremap   <Down>   <NOP>
+noremap   <Left>   <NOP>
+noremap   <Right>  <NOP>
+
+" airline customizations
+let g:airline_theme='wombat'
 
 " syntastic configuration
 set statusline+=%#warningmsg#
@@ -44,3 +61,9 @@ set expandtab             " use spaces instead of tabs
 set smartindent           " automatically insert one extra level of indentation
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 set nowrap                " don't wrap text
+
+" handle sessions plugin: xolox/vim-session
+nnoremap <leader>so :OpenSession
+nnoremap <leader>ss :SaveSession
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
