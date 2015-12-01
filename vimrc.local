@@ -28,12 +28,6 @@ else
   :hi VertSplit ctermfg=239
 end
 
-" Popup color.
-:hi Pmenu ctermbg=215
-:hi PmenuSel ctermbg=217
-:hi PmenuSbar ctermbg=219
-end
-
 " No spell in any case
 set nospell
 
