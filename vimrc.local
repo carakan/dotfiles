@@ -13,9 +13,20 @@ colorscheme railscasts
 
 if has("gui_running")
 else
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+  let g:indent_guides_auto_colors = 0
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+
+  " Popup color.
+  :hi Pmenu ctermbg=215
+  :hi PmenuSel ctermbg=217
+  :hi PmenuSbar ctermbg=219
+  " Set split separator to Unicode box drawing character
+  set encoding=utf8
+  set fillchars=vert:│
+  :hi VertSplit ctermbg=NONE
+  :hi VertSplit ctermfg=239
+end
 
 " Popup color.
 :hi Pmenu ctermbg=215
@@ -61,10 +72,10 @@ set statusline+=%*
 let g:loaded_syntastic_ruby_rubocop_checker = 1
 let g:loaded_syntastic_ruby_rubylint_checker = 1
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout                                                 	 "
@@ -87,3 +98,23 @@ nnoremap <leader>sc :CloseSession<CR>
 
 " search files as full name without any regex
 let g:ctrlp_regexp = 1
+
+" Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow
+set splitright
+
+" Make it obvious where 80 characters is
+:set textwidth=80
+:set colorcolumn=+1
+:hi ColorColumn guibg=#2d2d2d ctermbg=237
+
+" vimux integration
+map <Leader>vp :VimuxPromptCommand<CR>
+map <Leader>vl :VimuxRunLastCommand<CR>
+map <Leader>vi :VimuxInspectRunner<CR>
+map <Leader>vq :VimuxCloseRunner<CR>
+map <Leader>vs :VimuxInterruptRunner<CR>
