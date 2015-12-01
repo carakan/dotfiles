@@ -11,9 +11,17 @@ syntax on
 let g:onedark_terminal_italics = 0
 colorscheme railscasts
 
+if has("gui_running")
+else
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+
+" Popup color.
+:hi Pmenu ctermbg=215
+:hi PmenuSel ctermbg=217
+:hi PmenuSbar ctermbg=219
+end
 
 " No spell in any case
 set nospell
