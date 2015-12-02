@@ -112,3 +112,11 @@ map <Leader>vl :VimuxRunLastCommand<CR>
 map <Leader>vi :VimuxInspectRunner<CR>
 map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vs :VimuxInterruptRunner<CR>
+
+" silver search
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+" save files
+nnoremap <c-s> :w<CR>
+inoremap <c-s> <Esc>:w<CR>l
+vnoremap <c-s> <Esc>:w<CR> 

@@ -96,3 +96,9 @@ export EDITOR="nvim"
 export BUNDLER_EDITOR="nvim"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+
+# enable control-s and control-q
+stty start undef
+stty stop undef
+setopt noflowcontrol
