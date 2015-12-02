@@ -21,11 +21,11 @@ git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
 
 - Install patched fonts from:
 
-https://github.com/powerline/fonts direct link: https://github.com/carakan/dotfiles/archive/master.zip
+https://github.com/powerline/fonts direct link: https://github.com/powerline/fonts/archive/master.zip
 
 unzip and run `./install.sh`
 
 Notes
 =====
 
-as I know this does not run over neovim 
+As I know this does not run over neovim 
