@@ -57,7 +57,11 @@ noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
 " airline customizations
-let g:airline_theme='wombat'
+" let g:airline_theme='wombat'
+let g:airline_theme='powerlineish'
+let g:airline_detect_modified = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
 
 " syntastic configuration
 set statusline+=%#warningmsg#
@@ -65,6 +69,9 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:loaded_syntastic_ruby_rubocop_checker = 1
 let g:loaded_syntastic_ruby_rubylint_checker = 1
+
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
 
 "let g:syntastic_always_populate_loc_list = 0
 "let g:syntastic_auto_loc_list = 1
@@ -102,8 +109,8 @@ set splitbelow
 set splitright
 
 " Make it obvious where 80 characters is
-:set textwidth=80
-:set colorcolumn=+1
+set textwidth=80
+set colorcolumn=+1
 :hi ColorColumn guibg=#2d2d2d ctermbg=237
 
 " vimux integration
@@ -120,3 +127,6 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>l
 vnoremap <c-s> <Esc>:w<CR> 
+
+" enable elixir 
+let g:vimix_map_keys = 1
