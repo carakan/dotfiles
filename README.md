@@ -25,6 +25,17 @@ https://github.com/powerline/fonts direct link: https://github.com/powerline/fon
 
 unzip and run `./install.sh`
 
+- install ack or silver search
+
+when I used Ack that not found all of ocurrences and I swiched to `ag`
+
+```
+brew install the_silver_searcher
+brew install reattach-to-user-namespace
+```
+
+
+
 Notes
 =====
 
