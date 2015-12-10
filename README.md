@@ -34,9 +34,18 @@ brew install the_silver_searcher
 brew install reattach-to-user-namespace
 ```
 
+http://evertpot.com/osx-tmux-vim-copy-paste-clipboard/
+https://gist.github.com/burke/5960455
 
+- install reattach-to-user-namespace
+
+```
+brew install reattach-to-user-namespace
+```
 
 Notes
 =====
+
+
 
 As I know this does not run over neovim 

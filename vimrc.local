@@ -121,7 +121,7 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vs :VimuxInterruptRunner<CR>
 
 " silver search
-let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
 
 " save files
 nnoremap <c-s> :w<CR>
@@ -130,3 +130,4 @@ vnoremap <c-s> <Esc>:w<CR>
 
 " enable elixir 
 let g:vimix_map_keys = 1
+
