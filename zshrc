@@ -92,8 +92,8 @@ export PATH="/usr/local/sbin:$PATH"
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
-export EDITOR="nvim"
-export BUNDLER_EDITOR="nvim"
+export EDITOR="vim"
+export BUNDLER_EDITOR="vim"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 

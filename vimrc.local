@@ -121,7 +121,11 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vs :VimuxInterruptRunner<CR>
 
 " silver search
-let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
+UnBundle 'mileszs/ack.vim'
+command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
+command! -nargs=* -complete=file Ag Grepper! -tool ag -open -switch -query <args>
+command! -nargs=* -complete=file Ack Grepper! -tool ag -open -switch -query <args>
+nnoremap <leader>ag  :Grepper! -tool ag -open -switch<cr>
 
 " save files
 nnoremap <c-s> :w<CR>
@@ -131,6 +135,6 @@ vnoremap <c-s> <Esc>:w<CR>
 " enable elixir 
 let g:vimix_map_keys = 1
 
-" 
+" this enable nerdtree when is open vim
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
