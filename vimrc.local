@@ -8,7 +8,6 @@ syntax on
 
 " color molokai
 "colorscheme onedark
-let g:onedark_terminal_italics = 0
 colorscheme railscasts
 
 if has("gui_running")
@@ -58,7 +57,7 @@ noremap   <Right>  <NOP>
 
 " airline customizations
 " let g:airline_theme='wombat'
-let g:airline_theme='powerlineish'
+let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
