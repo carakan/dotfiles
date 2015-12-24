@@ -43,9 +43,25 @@ https://gist.github.com/burke/5960455
 brew install reattach-to-user-namespace
 ```
 
+UPDATE
+======
+
+I changed to NeoVim because I have a lot of problems switching from insert mode to normal, I researching a lot and I not found a valid solution for that, the only solution for now is change using neovim, look pretty well.
+
+for that you need install python3:
+
+```
+brew install python3 
+pip3 install --upgrade pip setuptools
+```
+
+when running nvim
+```
+:UpdateRemotePlugins
+```
+
+
 Notes
 =====
 
 
-
-As I know this does not run over neovim 

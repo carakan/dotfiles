@@ -17,9 +17,9 @@ else
   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
 
   " Popup color.
-  :hi Pmenu ctermbg=215
-  :hi PmenuSel ctermbg=217
-  :hi PmenuSbar ctermbg=219
+  :hi Pmenu ctermbg=251 ctermfg=239
+  :hi PmenuSel ctermbg=239 ctermfg=253
+  :hi PmenuSbar ctermbg=255
   " Set split separator to Unicode box drawing character
   set encoding=utf8
   set fillchars=vert:│
@@ -120,7 +120,6 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vs :VimuxInterruptRunner<CR>
 
 " silver search
-UnBundle 'mileszs/ack.vim'
 command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
 command! -nargs=* -complete=file Ag Grepper! -tool ag -open -switch -query <args>
 command! -nargs=* -complete=file Ack Grepper! -tool ag -open -switch -query <args>
@@ -137,3 +136,19 @@ let g:vimix_map_keys = 1
 " this enable nerdtree when is open vim
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" RSpec.vim mappings
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
+" Fix some timeouts
+set timeoutlen=1000 ttimeoutlen=0
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#auto_completion_start_length = 1
+let b:deoplete_sources = ['buffer', 'neosnippet']
+let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'

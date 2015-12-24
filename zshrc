@@ -102,3 +102,6 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 stty start undef
 stty stop undef
 setopt noflowcontrol
+
+# 10ms for key sequences
+KEYTIMEOUT=1
