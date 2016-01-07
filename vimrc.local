@@ -17,8 +17,8 @@ else
   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
 
   " Popup color.
-  :hi Pmenu ctermbg=251 ctermfg=239
-  :hi PmenuSel ctermbg=239 ctermfg=253
+  :hi Pmenu ctermbg=232 ctermfg=253
+  :hi PmenuSel ctermbg=239 ctermfg=255
   :hi PmenuSbar ctermbg=255
   " Set split separator to Unicode box drawing character
   set encoding=utf8
@@ -149,6 +149,6 @@ set timeoutlen=1000 ttimeoutlen=0
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let g:deoplete#auto_completion_start_length = 1
+let g:deoplete#auto_completion_start_length = 2
 let b:deoplete_sources = ['buffer', 'neosnippet']
 let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'

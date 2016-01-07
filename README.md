@@ -21,7 +21,8 @@ git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
 
 - Install patched fonts from:
 
-https://github.com/powerline/fonts direct link: https://github.com/powerline/fonts/archive/master.zip
+https://g0ithub.com/powerline/fonts direct link:
+https://github.com/powerline/fonts/archive/master.zip
 
 unzip and run `./install.sh`
 
@@ -46,7 +47,9 @@ brew install reattach-to-user-namespace
 UPDATE
 ======
 
-I changed to NeoVim because I have a lot of problems switching from insert mode to normal, I researching a lot and I not found a valid solution for that, the only solution for now is change using neovim, look pretty well.
+I changed to NeoVim because I have a lot of problems switching from insert mode
+to normal, I researching a lot and I not found a valid solution for that, the
+only solution for now is change using neovim, look pretty well.
 
 for that you need install python3:
 
@@ -64,4 +67,5 @@ when running nvim
 Notes
 =====
 
-
+I patched or adjust Iterm2 to enable Crtl-h over neovim using this:
+https://github.com/neovim/neovim/issues/2048#issuecomment-98307896
