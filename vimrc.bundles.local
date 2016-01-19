@@ -2,7 +2,6 @@ UnBundle 'Shougo/neocomplete.vim.git'
 UnBundle 'mileszs/ack.vim'
 
 Bundle 'tpope/vim-endwise'
-Bundle 'thoughtbot/vim-rspec'
 Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'jeetsukumaran/vim-buffergator'
 Bundle 'xolox/vim-session'
@@ -17,3 +16,5 @@ Bundle 'mhinz/vim-grepper'
 Bundle 'tpope/vim-dispatch'
 Bundle 'Shougo/deoplete.nvim'
 Bundle 'Shougo/context_filetype.vim'
+
+Bundle 'janko-m/vim-test'
