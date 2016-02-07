@@ -62,15 +62,36 @@ let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
 
-" syntastic configuration
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:loaded_syntastic_ruby_rubocop_checker = 1
-let g:loaded_syntastic_ruby_rubylint_checker = 1
+" neomake
+autocmd! BufWritePost * Neomake
+let g:neomake_coffeescript_enabled_makers = ['coffeelint']
+let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_elixir_enabled_makers = ['elixir']
+let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
+let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
 
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_warning_symbol = "⚠"
+let g:neomake_warning_sign = {
+  \ 'text': '⚠',
+  \ 'texthl': 'WarningMsg',
+  \ }
+
+let g:neomake_error_sign = {
+  \ 'text': '✗',
+  \ 'texthl': 'ErrorMsg',
+  \ }
+
+" investigate
+let g:investigate_use_dash = 1
+
+" syntastic configuration
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:loaded_syntastic_ruby_rubocop_checker = 1
+"let g:loaded_syntastic_ruby_rubylint_checker = 1
+
+"let g:syntastic_error_symbol = "✗"
+"let g:syntastic_warning_symbol = "⚠"
 
 "let g:syntastic_always_populate_loc_list = 0
 "let g:syntastic_auto_loc_list = 1
@@ -120,10 +141,10 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vs :VimuxInterruptRunner<CR>
 
 " silver search
-command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
-command! -nargs=* -complete=file Ag Grepper! -tool ag -open -switch -query <args>
-command! -nargs=* -complete=file Ack Grepper! -tool ag -open -switch -query <args>
-nnoremap <leader>ag  :Grepper! -tool ag -open -switch<cr>
+command! -nargs=* -complete=file GG Grepper -tool git -query <args>
+command! -nargs=* -complete=file Ag Grepper -tool ag -open -switch -query <args>
+command! -nargs=* -complete=file Ack Grepper -tool ag -open -switch -query <args>
+nnoremap <leader>ag  :Grepper -tool ag -open -switch<cr>
 
 " save files
 nnoremap <c-s> :w<CR>
@@ -154,3 +175,4 @@ nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let test#strategy = "vimux"
+
