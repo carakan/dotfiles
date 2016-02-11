@@ -12,11 +12,5 @@
 	name = Carlos Ramos
 	email = carakan@gmail.com
 [core]
-	editor = /usr/bin/vim
+	editor = /usr/local/bin/nvim
 	excludesfile = /Users/carakan/.gitignore_global
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
