@@ -60,12 +60,11 @@ noremap   <Right>  <NOP>
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#syntastic#enabled = 1
 
 " neomake
 autocmd! BufWritePost * Neomake
 let g:neomake_coffeescript_enabled_makers = ['coffeelint']
-let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
 let g:neomake_elixir_enabled_makers = ['elixir']
 let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
 let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
@@ -79,6 +78,8 @@ let g:neomake_error_sign = {
   \ 'text': '✗',
   \ 'texthl': 'ErrorMsg',
   \ }
+  
+let g:neomake_airline = 1
 
 " investigate
 let g:investigate_use_dash = 1
@@ -175,4 +176,3 @@ nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let test#strategy = "vimux"
-
