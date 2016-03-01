@@ -1,20 +1,22 @@
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 " no backups
 set nobackup
 set nowritebackup
 
 " Enable 256 colors
-set t_Co=256
+" set t_Co=256
 syntax on
 
 " color molokai
-"colorscheme onedark
+" colorscheme onedark
 colorscheme railscasts
 
 if has("gui_running")
 else
   let g:indent_guides_auto_colors = 0
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 guibg=#545454
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237 guibg=#3a3a3a
 
   " Popup color.
   :hi Pmenu ctermbg=232 ctermfg=253
@@ -81,24 +83,6 @@ let g:neomake_error_sign = {
   
 let g:neomake_airline = 1
 
-" investigate
-let g:investigate_use_dash = 1
-
-" syntastic configuration
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:loaded_syntastic_ruby_rubocop_checker = 1
-"let g:loaded_syntastic_ruby_rubylint_checker = 1
-
-"let g:syntastic_error_symbol = "✗"
-"let g:syntastic_warning_symbol = "⚠"
-
-"let g:syntastic_always_populate_loc_list = 0
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout                                                 	 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -132,7 +116,7 @@ set splitright
 " Make it obvious where 80 characters is
 set textwidth=80
 set colorcolumn=+1
-:hi ColorColumn guibg=#2d2d2d ctermbg=237
+:hi ColorColumn guibg=#3a2b2b ctermbg=237
 
 " vimux integration
 map <Leader>vp :VimuxPromptCommand<CR>

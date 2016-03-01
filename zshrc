@@ -105,3 +105,5 @@ setopt noflowcontrol
 
 # 10ms for key sequences
 KEYTIMEOUT=1
+
+alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'

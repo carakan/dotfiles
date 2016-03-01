@@ -44,6 +44,16 @@ https://gist.github.com/burke/5960455
 brew install reattach-to-user-namespace
 ```
 
+Install tmux with 24 bits support
+=================================
+
+```
+    brew uninstall tmux
+    brew tap choppsv1/term24
+    brew install choppsv1/term24/tmux
+```
+
+
 UPDATE
 ======
 
