@@ -117,6 +117,7 @@ set splitright
 set textwidth=80
 set colorcolumn=+1
 :hi ColorColumn guibg=#3a2b2b ctermbg=237
+let &colorcolumn="80,".join(range(120,999),",")
 
 " vimux integration
 map <Leader>vp :VimuxPromptCommand<CR>
