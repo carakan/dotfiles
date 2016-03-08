@@ -98,6 +98,16 @@ git pull
 nvim +BundleInstall! +BundleClean +qall
 ```
 
+Install linters
+===============
+```
+npm install -g jscs
+npm install -g jshint
+npm install -g eslint
+npm install -g stylelint
+npm install -g csslint 
+```
+
 
 Notes
 =====

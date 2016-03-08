@@ -12,6 +12,7 @@
     ~/.vimrc.local: vimrc.local
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
+    ~/.ctags: ctags
 
 - shell:
   - rm -rf ~/.config/nvim

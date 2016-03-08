@@ -67,21 +67,23 @@ let g:airline#extensions#tabline#enabled = 1
 autocmd! BufWritePost * Neomake
 let g:neomake_coffeescript_enabled_makers = ['coffeelint']
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
-let g:neomake_elixir_enabled_makers = ['elixir']
+let g:neomake_elixir_enabled_makers = ['elixir', 'credo']
 let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
 let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
 
 let g:neomake_warning_sign = {
   \ 'text': '⚠',
-  \ 'texthl': 'WarningMsg',
+  \ 'texthl': 'WarningMsgNeo',
   \ }
 
 let g:neomake_error_sign = {
-  \ 'text': '✗',
-  \ 'texthl': 'ErrorMsg',
+  \ 'text': '❌',
+  \ 'texthl': 'ErrorMsgNeo',
   \ }
   
 let g:neomake_airline = 1
+:hi ErrorMsgNeo guibg=#3a2b2b guifg=#c42d2d ctermbg=237
+:hi WarningMsgNeo guibg=#3a2b2b guifg=#ffd400 ctermbg=237
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout                                                 	 "
