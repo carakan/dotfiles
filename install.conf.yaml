@@ -16,7 +16,7 @@
     ~/.gitignore_global: gitignore_global
 
 - shell:
-  - git config --global core.excludesfile $HOME/.global_ignore
+  - git config --global core.excludesfile $HOME/.gitignore_global
   - rm -rf ~/.config/nvim
   - rm -rf ~/.config/nvim/init.vim
   - ln -s ~/.vim ~/.config/nvim

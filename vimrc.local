@@ -126,7 +126,12 @@ map <Leader>vp :VimuxPromptCommand<CR>
 map <Leader>vl :VimuxRunLastCommand<CR>
 map <Leader>vi :VimuxInspectRunner<CR>
 map <Leader>vq :VimuxCloseRunner<CR>
-map <Leader>vs :VimuxInterruptRunner<CR>
+map <Leader>vx :VimuxInterruptRunner<CR>
+map <Leader>vz :call VimuxZoomRunner()<CR>
+ " Run the current file with rspec
+ map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
+
+
 
 " silver search
 command! -nargs=* -complete=file GG Grepper -tool git -query <args>
