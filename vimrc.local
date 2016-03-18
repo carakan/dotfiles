@@ -105,7 +105,8 @@ nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
 
 " search files as full name without any regex
-let g:ctrlp_regexp = 1
+" let g:ctrlp_regexp = 1
+let g:ctrlp_extensions = ['dir', 'mixed', 'funky']
 
 " Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
 nnoremap <C-J> <C-W><C-J>
@@ -128,10 +129,9 @@ map <Leader>vi :VimuxInspectRunner<CR>
 map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 map <Leader>vz :call VimuxZoomRunner()<CR>
- " Run the current file with rspec
- map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
-
-
+" Run the current file with rspec
+map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
+let g:VimuxHeight = "12"
 
 " silver search
 command! -nargs=* -complete=file GG Grepper -tool git -query <args>
