@@ -10,13 +10,11 @@ syntax on
 
 " color molokai
 " colorscheme onedark
-colorscheme railscasts
+colorscheme railscasts2
 
 if has("gui_running")
 else
   let g:indent_guides_auto_colors = 0
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 guibg=#545454
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237 guibg=#3a3a3a
 
   " Popup color.
   :hi Pmenu ctermbg=232 ctermfg=253
@@ -25,8 +23,6 @@ else
   " Set split separator to Unicode box drawing character
   set encoding=utf8
   set fillchars=vert:│
-  :hi VertSplit ctermbg=NONE
-  :hi VertSplit ctermfg=239
 end
 
 " No spell in any case
@@ -82,8 +78,8 @@ let g:neomake_error_sign = {
   \ }
   
 let g:neomake_airline = 1
-:hi ErrorMsgNeo guibg=#3a2b2b guifg=#c42d2d ctermbg=237
-:hi WarningMsgNeo guibg=#3a2b2b guifg=#ffd400 ctermbg=237
+:hi ErrorMsgNeo guibg=#353535 guifg=#c42d2d ctermbg=237
+:hi WarningMsgNeo guibg=#353535 guifg=#ffd400 ctermbg=237
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout                                                 	 "
