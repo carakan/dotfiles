@@ -9,7 +9,7 @@ set nowritebackup
 syntax on
 
 " color molokai
-colorscheme railscasts2
+colorscheme new-railscasts
 
 if has("gui_running")
 else
@@ -173,18 +173,6 @@ nmap <silent> <leader>d <Plug>DashSearch
 
 " Auto tags generation
 map <Leader>ct :call atags#generate()<cr>
-
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "\uf040",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
 
 " autocompletion for ruby
 let g:monster#completion#rcodetools#backend = "async_rct_complete"
