@@ -96,6 +96,9 @@ Update spf13 plugins
 cd $HOME/to/spf13-vim/
 git pull
 nvim +BundleInstall! +BundleClean +qall
+" Compile vimproc
+cd ~/.vim/bundle/vimproc.vim
+make
 ```
 
 Install linters
@@ -108,6 +111,11 @@ npm install -g stylelint
 npm install -g csslint 
 ```
 
+Install some Gems
+=================
+```
+rvm @global do gem install reek rubocop rcodetools 
+```
 
 Notes
 =====
