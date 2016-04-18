@@ -84,6 +84,15 @@ brew install python3
 pip3 install --upgrade pip setuptools
 ```
 
+Install neovim plugin for python3
+---------------------------------
+
+```
+pip3 install neovim
+# upgrade
+pip3 install --upgrade neovim
+```
+
 when running nvim
 ```
 :UpdateRemotePlugins

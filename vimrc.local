@@ -48,7 +48,6 @@ set guifont=Source\ Code\ Pro\ for\ Powerline:h12
 
 " Enable ruby syntax
 let ruby_operators = 1
-let ruby_fold = 1
 
 " Disable arrows keys
 noremap   <Up>     <NOP>
@@ -96,12 +95,6 @@ set expandtab             " use spaces instead of tabs
 set smartindent           " automatically insert one extra level of indentation
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 set nowrap                " don't wrap text
-
-" handle sessions plugin: xolox/vim-session
-nnoremap <leader>so :OpenSession
-nnoremap <leader>ss :SaveSession
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
 
 " search files as full name without any regex
 " let g:ctrlp_regexp = 1
