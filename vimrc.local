@@ -5,7 +5,6 @@ set nobackup
 set nowritebackup
 
 " Enable 256 colors
-" set t_Co=256
 syntax on
 
 " color molokai
@@ -136,9 +135,6 @@ nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>l
 vnoremap <c-s> <Esc>:w<CR> 
 
-" enable elixir 
-let g:vimix_map_keys = 1
-
 " this enable nerdtree when is open vim
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -169,6 +165,6 @@ map <Leader>ct :call atags#generate()<cr>
 
 " autocompletion for ruby
 let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
+let g:deoplete#omni#input_patterns = {
         \   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
         \}

@@ -2,6 +2,8 @@ UnBundle 'Shougo/neocomplete.vim.git'
 UnBundle 'mileszs/ack.vim'
 UnBundle 'scrooloose/syntastic'
 UnBundle 'flazz/vim-colorschemes'
+UnBundle 'altercation/vim-colors-solarized'
+
 
 Bundle 'tpope/vim-endwise'
 Bundle 'ecomba/vim-ruby-refactoring'
