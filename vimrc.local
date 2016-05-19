@@ -1,4 +1,4 @@
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
 
 " no backups
 set nobackup
@@ -145,7 +145,6 @@ set timeoutlen=1000 ttimeoutlen=0
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let g:deoplete#auto_completion_start_length = 2
 let b:deoplete_sources = ['buffer', 'neosnippet']
 let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
@@ -165,6 +164,6 @@ map <Leader>ct :call atags#generate()<cr>
 
 " autocompletion for ruby
 let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#omni#input_patterns = {
-        \   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-        \}
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
