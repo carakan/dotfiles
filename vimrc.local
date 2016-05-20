@@ -145,8 +145,8 @@ set timeoutlen=1000 ttimeoutlen=0
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let b:deoplete_sources = ['buffer', 'neosnippet']
-let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+" let b:deoplete_sources = ['buffer', 'neosnippet']
+" let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " vim test plugin
 nmap <silent> <leader>t :TestNearest<CR>
@@ -164,6 +164,11 @@ map <Leader>ct :call atags#generate()<cr>
 
 " autocompletion for ruby
 let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
+let g:deoplete#sources#input_patterns = {
 \   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
 \}
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
