@@ -8,11 +8,11 @@ Requirements
 
 - Ohmyzsh
 
-- vim 
+- Neovim
 ```
-brew install vim --with-lua --with-luajit
+brew install neovim
 ```
-- install this theme:
+- install this theme for zsh:
 
 ```
 cd ~/.oh-my-zsh/custom
@@ -26,19 +26,20 @@ https://github.com/powerline/fonts/archive/master.zip
 
 unzip and run `./install.sh`
 
+or simple download from this repository and install patched fonts
+
 - install ack or silver search
 
 when I used Ack that not found all of ocurrences and I swiched to `ag`
 
 ```
 brew install the_silver_searcher
-brew install reattach-to-user-namespace
 ```
+
+- install reattach-to-user-namespace
 
 http://evertpot.com/osx-tmux-vim-copy-paste-clipboard/
 https://gist.github.com/burke/5960455
-
-- install reattach-to-user-namespace
 
 ```
 brew install reattach-to-user-namespace
@@ -46,12 +47,7 @@ brew install reattach-to-user-namespace
 
 Install tmux with 24 bits support
 =================================
-
-```
-    brew uninstall tmux
-    brew tap choppsv1/term24
-    brew install choppsv1/term24/tmux
-```
+you need install tmux >= 2.2
 
 to test
 ```
@@ -80,7 +76,7 @@ only solution for now is change using neovim, look pretty well.
 for that you need install python3:
 
 ```
-brew install python3 
+brew install python3
 pip3 install --upgrade pip setuptools
 ```
 

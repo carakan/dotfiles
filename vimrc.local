@@ -139,9 +139,6 @@ vnoremap <c-s> <Esc>:w<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" Fix some timeouts
-set timeoutlen=1000 ttimeoutlen=0
-
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
@@ -164,11 +161,13 @@ map <Leader>ct :call atags#generate()<cr>
 
 " autocompletion for ruby
 let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.ruby =
+\ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+let g:monster#debug#enable = 1

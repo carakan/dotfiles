@@ -92,11 +92,10 @@ export PATH="/usr/local/sbin:$PATH"
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
-export EDITOR="vim"
-export BUNDLER_EDITOR="vim"
+export EDITOR="nvim"
+export BUNDLER_EDITOR="nvim"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
 
 # enable control-s and control-q
 stty start undef
@@ -106,4 +105,4 @@ setopt noflowcontrol
 # 10ms for key sequences
 KEYTIMEOUT=1
 
-alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+alias vim='nvim'
