@@ -113,6 +113,12 @@ set colorcolumn=+1
 :hi ColorColumn guibg=#3a2b2b ctermbg=237
 let &colorcolumn="80,".join(range(120,999),",")
 
+" run nearest window
+let g:VimuxUseNearestPane = 1
+
+map <silent><Leader>tt :w<CR> :call VimuxRunCommand("ruby ".  @% . ' -l ' . line('.'))<CR>
+map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
+
 " vimux integration
 map <Leader>vp :VimuxPromptCommand<CR>
 map <Leader>vl :VimuxRunLastCommand<CR>
@@ -151,7 +157,9 @@ nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
-let test#strategy = "vimux"
+
+let g:test#strategy = "vimux"
+let g:test#preserve_screen = 1
 
 " dash integration
 nmap <silent> <leader>d <Plug>DashSearch
