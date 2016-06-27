@@ -89,8 +89,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/sbin:$PATH"
 
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+export NVM_DIR="$HOME/.nvm"
+. "$(brew --prefix nvm)/nvm.sh"
 
 export EDITOR="nvim"
 export BUNDLER_EDITOR="nvim"
@@ -109,4 +109,4 @@ alias vim='nvim'
 
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/ 
+export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/
