@@ -55,7 +55,6 @@ noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
 " airline customizations
-" let g:airline_theme='wombat'
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -142,8 +141,8 @@ inoremap <c-s> <Esc>:w<CR>l
 vnoremap <c-s> <Esc>:w<CR> 
 
 " this enable nerdtree when is open vim
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
