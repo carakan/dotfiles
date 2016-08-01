@@ -166,15 +166,10 @@ nmap <silent> <leader>d <Plug>DashSearch
 " Auto tags generation
 map <Leader>ct :call atags#generate()<cr>
 
-" autocompletion for ruby
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.ruby =
-\ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
-
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 let g:monster#debug#enable = 1
+:let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
