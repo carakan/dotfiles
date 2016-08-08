@@ -36,6 +36,12 @@ when I used Ack that not found all of ocurrences and I swiched to `ag`
 brew install the_silver_searcher
 ```
 
+- install syntax highlighting
+
+```
+brew install zsh-syntax-highlighting 
+```
+
 - install reattach-to-user-namespace
 
 http://evertpot.com/osx-tmux-vim-copy-paste-clipboard/
@@ -101,9 +107,6 @@ Update spf13 plugins
 cd $HOME/to/spf13-vim/
 git pull
 nvim +BundleInstall! +BundleClean +qall
-" Compile vimproc
-cd ~/.vim/bundle/vimproc.vim
-make
 ```
 
 Install linters

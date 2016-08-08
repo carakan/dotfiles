@@ -50,6 +50,8 @@ export TERM="xterm-256color"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -110,3 +112,8 @@ alias vim='nvim'
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)
 export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/
+###-tns-completion-start-###
+if [ -f /Users/carakan/.tnsrc ]; then 
+    source /Users/carakan/.tnsrc 
+fi
+###-tns-completion-end-###
