@@ -151,14 +151,19 @@ let g:deoplete#enable_ignore_case = 1
 " let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " vim test plugin
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>a :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>g :TestVisit<CR>
+let g:test#strategy = 'tslime'
+nnoremap <leader>tf :TestFile<CR>
+nnoremap <leader>tt :TestNearest<CR>
+nnoremap <leader>tl :TestLast<CR>
+nnoremap <leader>tv :TestVisit<CR>
+nnoremap <leader>ta :TestSuite<CR>
 
-let g:test#strategy = "vimux"
-let g:test#preserve_screen = 1
+" tslime configs
+let g:tslime_always_current_session = 1 
+let g:tslime_always_current_window = 1
+vmap <C-c><C-c> <Plug>SendSelectionToTmux
+nmap <C-c><C-c> <Plug>NormalModeSendToTmux
+nmap <C-c>r <Plug>SetTmuxVars
 
 " dash integration
 nmap <silent> <leader>d <Plug>DashSearch
