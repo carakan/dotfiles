@@ -115,8 +115,8 @@ let &colorcolumn="80,".join(range(120,999),",")
 " run nearest window
 let g:VimuxUseNearestPane = 1
 
-map <silent><Leader>tt :w<CR> :call VimuxRunCommand("ruby ".  @% . ' -l ' . line('.'))<CR>
-map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
+" map <silent><Leader>tt :w<CR> :call VimuxRunCommand("ruby ".  @% . ' -l ' . line('.'))<CR>
+" map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
 
 " vimux integration
 map <Leader>vp :VimuxPromptCommand<CR>
