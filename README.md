@@ -1,7 +1,8 @@
 README
 ======
 
-Repo for my custom zsh, tmux and vim setup across my multiple machines.
+Repo for my custom zsh, tmux and vim setup across my multiple machines (works
+very well on OSx, not sure on other OS).
 
 Requirements
 ============
@@ -53,11 +54,21 @@ https://gist.github.com/burke/5960455
 brew install reattach-to-user-namespace
 ```
 
-Install tmux with 24 bits support
-=================================
-you need install tmux >= 2.2
+Install dotfiles
+================
 
-to test
+```
+cd ~
+git clone https://github.com/carakan/dotfiles ~/.dotfiles
+cd ~/.dotfiles
+./install
+```
+
+Install tmux with 24 bits support
+---------------------------------
+Only needs install tmux >= 2.2
+
+to test run this script in a tmux panel:
 ```
 awk 'BEGIN{
     s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
@@ -74,14 +85,14 @@ awk 'BEGIN{
 }'
 ```
 
-UPDATE
-======
+UPDATE Notes
+============
 
 I changed to NeoVim because I have a lot of problems switching from insert mode
 to normal, I researching a lot and I not found a valid solution for that, the
-only solution for now is change using neovim, look pretty well.
+only solution for now is change using neovim, looks pretty well.
 
-for that you need install python3:
+you need install python3:
 
 ```
 brew install python3
@@ -93,7 +104,7 @@ Install neovim plugin for python3
 
 ```
 pip3 install neovim
-# upgrade
+# to upgrade
 pip3 install --upgrade neovim
 ```
 
@@ -102,12 +113,21 @@ when running nvim
 :UpdateRemotePlugins
 ```
 
+Install spf13
+=============
+run this on a terminal:
+
+```
+curl https://j.mp/spf13-vim3 -L > spf13-vim.sh && sh spf13-vim.sh
+```
+
+Recently I saw no changes into this great project, so I'm looking migrate to
+plug.
+
 Update spf13 plugins
 ====================
 
 ```
-cd $HOME/to/spf13-vim/
-git pull
 nvim +BundleInstall! +BundleClean +qall
 ```
 
@@ -124,7 +144,7 @@ npm install -g csslint
 Install some Gems
 =================
 ```
-rvm @global do gem install reek rubocop rcodetools 
+rvm @global do gem install reek rubocop rcodetools
 ```
 
 Notes
