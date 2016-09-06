@@ -118,17 +118,6 @@ let g:VimuxUseNearestPane = 1
 " map <silent><Leader>tt :w<CR> :call VimuxRunCommand("ruby ".  @% . ' -l ' . line('.'))<CR>
 " map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
 
-" vimux integration
-map <Leader>vp :VimuxPromptCommand<CR>
-map <Leader>vl :VimuxRunLastCommand<CR>
-map <Leader>vi :VimuxInspectRunner<CR>
-map <Leader>vq :VimuxCloseRunner<CR>
-map <Leader>vx :VimuxInterruptRunner<CR>
-map <Leader>vz :call VimuxZoomRunner()<CR>
-" Run the current file with rspec
-map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
-let g:VimuxHeight = "12"
-
 " silver search
 command! -nargs=* -complete=file GG Grepper -tool git -query <args>
 command! -nargs=* -complete=file Ag Grepper -tool ag -open -switch -query <args>
@@ -148,7 +137,6 @@ vnoremap <c-s> <Esc>:w<CR>
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 " let b:deoplete_sources = ['buffer', 'neosnippet']
-" let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " vim test plugin
 let g:test#strategy = 'tslime'
