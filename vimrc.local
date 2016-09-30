@@ -61,24 +61,18 @@ let g:airline#extensions#tabline#enabled = 1
 
 " neomake
 autocmd! BufWritePost * Neomake
-let g:neomake_coffeescript_enabled_makers = ['coffeelint']
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
-let g:neomake_elixir_enabled_makers = ['elixir', 'credo']
+let g:neomake_elixir_enabled_makers = ['elixirc', 'credo']
 let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
 let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
+let g:neomake_typescript_enabled_makers = ['tsc']
 
-let g:neomake_warning_sign = {
-  \ 'text': '⚠',
-  \ 'texthl': 'WarningMsgNeo',
-  \ }
-
-let g:neomake_error_sign = {
-  \ 'text': '❌',
-  \ 'texthl': 'ErrorMsgNeo',
-  \ }
+let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
+let g:neomake_warning_sign = {'text': '⚠', 'texthl': 'WarningMsgNeo'}
+let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
+let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
   
 let g:neomake_airline = 1
-:hi ErrorMsgNeo guibg=#353535 guifg=#c42d2d ctermbg=237
 :hi WarningMsgNeo guibg=#353535 guifg=#ffd400 ctermbg=237
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
