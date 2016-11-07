@@ -7,7 +7,6 @@ set nowritebackup
 " Enable 256 colors
 syntax on
 
-" color molokai
 colorscheme new-railscasts
 
 if has("gui_running")

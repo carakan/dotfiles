@@ -138,13 +138,14 @@ npm install -g jscs
 npm install -g jshint
 npm install -g eslint
 npm install -g stylelint
-npm install -g csslint 
+npm install -g csslint
+npm install -g typescript 
 ```
 
 Install some Gems
 =================
 ```
-rvm @global do gem install reek rubocop rcodetools
+rvm @global do gem install reek rubocop
 ```
 
 Notes
