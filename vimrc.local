@@ -1,4 +1,6 @@
-set termguicolors
+if (has("termguicolors"))
+ set termguicolors
+endif
 
 " no backups
 set nobackup
