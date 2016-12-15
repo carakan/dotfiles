@@ -1,13 +1,6 @@
-if (has("termguicolors"))
- set termguicolors
-endif
-
 " no backups
 set nobackup
 set nowritebackup
-
-" Enable 256 colors
-syntax on
 
 colorscheme new-railscasts
 
