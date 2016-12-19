@@ -8,9 +8,6 @@
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   type = cat-file -t
   dump = cat-file -p
-[user]
-	name = Carlos Ramos
-	email = carakan@gmail.com
 [core]
 	editor = /usr/local/bin/nvim
-	excludesfile = /Users/carakan/.gitignore_global
+	excludesfile = ~/.gitignore_global

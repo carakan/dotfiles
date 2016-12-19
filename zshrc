@@ -112,8 +112,6 @@ alias vim='nvim'
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)
 export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/
-###-tns-completion-start-###
-if [ -f /Users/carakan/.tnsrc ]; then 
-    source /Users/carakan/.tnsrc 
-fi
-###-tns-completion-end-###
+
+# this add every time the keys only for SIERRA MacOS
+ssh-add -A 2>/dev/null;

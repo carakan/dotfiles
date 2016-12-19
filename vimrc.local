@@ -95,7 +95,8 @@ set splitbelow
 set splitright
 
 " Make it obvious where 80 characters is
-set textwidth=80
+set tw=120
+set textwidth=120
 set colorcolumn=+1
 :hi ColorColumn guibg=#3a2b2b ctermbg=237
 let &colorcolumn="80,".join(range(120,999),",")
