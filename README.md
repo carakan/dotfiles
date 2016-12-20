@@ -147,6 +147,7 @@ npm install -g typescript
 
 Install some Gems
 =================
+
 ```
 rvm @global do gem install reek rubocop
 ```
@@ -154,5 +155,11 @@ rvm @global do gem install reek rubocop
 Notes
 =====
 
-I patched or adjust Iterm2 to enable Crtl-h over neovim using this:
-https://github.com/neovim/neovim/issues/2048#issuecomment-98307896
+- I patched or adjust Iterm2 to enable Crtl-h over neovim using this: https://github.com/neovim/neovim/issues/2048#issuecomment-98307896
+
+- From MacOS Sierra ssh keys no longer added by default, I added a simple solution from https://github.com/lionheart/openradar-mirror/issues/15361 also you need to run this command for first time:
+
+```
+ssh-add -K
+```
+
