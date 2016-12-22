@@ -36,9 +36,6 @@ set smartcase
 set noshowmode
 set modeline
 
-" set patched fonts
-set guifont=Source\ Code\ Pro\ for\ Powerline:h12
-
 " Enable ruby syntax
 let ruby_operators = 1
 
