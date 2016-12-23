@@ -1,19 +1,18 @@
 README
 ======
 
-Repo for my custom zsh, tmux and vim setup across my multiple machines (works
+M custom zsh, tmux and vim setup across my multiple machines (works
 very well on OSx, not sure on other OS).
 
 Requirements
 ============
 
-- Ohmyzsh
+- Ohmyzsh 
 
 - Neovim
 ```
 brew tap neovim/neovim             # only on first time
-brew install neovim/neovim/neovim  # to get last STABLE version
-brew install --HEAD neovim         # to get master changes
+brew install neovim/neovim/neovim  # to install last STABLE version
 ```
 - install this theme for zsh:
 
@@ -24,22 +23,17 @@ git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
 
 - Install patched fonts from:
 
-https://g0ithub.com/powerline/fonts direct link:
-https://github.com/powerline/fonts/archive/master.zip
+https://github.com/ryanoasis/nerd-fonts/releases/tag/v1.0.0
 
-unzip and run `./install.sh`
+or simple download and install fonts from directory fontpatched in this project
 
-or simple download from this repository and install patched fonts
-
-- install ack or silver search
-
-when I used Ack that not found all of ocurrences and I swiched to `ag`
+- install silver search
 
 ```
 brew install the_silver_searcher
 ```
 
-- install syntax highlighting
+- install syntax highlighting (this is added by default in last versions of zsh)
 
 ```
 brew install zsh-syntax-highlighting 
@@ -85,11 +79,9 @@ awk 'BEGIN{
 }'
 ```
 
-UPDATE Notes
-============
 
-I changed to NeoVim because I have a lot of problems switching from insert mode
-to normal, I researching a lot and I not found a valid solution for that, the
+I use NeoVim because I have a lot of problems switching from insert mode
+to normal using vim, I researching a lot and I not found a valid solution for that, the
 only solution for now is change using neovim, looks pretty well.
 
 you need install python3:
@@ -162,4 +154,10 @@ Notes
 ```
 ssh-add -K
 ```
+
+- if you install my dotfiles you HAVE TO read this link to ensure all is working well:
+
+https://github.com/neovim/neovim/wiki/FAQ
+
+also, you can run `:CheckHealth` into your neovim to check the health of this dotfiles
 
