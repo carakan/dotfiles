@@ -6,6 +6,7 @@
     ~/.bashrc: bashrc
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
+    ~/.gitignore_global: gitignore_global
     ~/.irbrc: irbrc
     ~/.vimrc.before.local: vimrc.before.local
     ~/.vimrc.bundles.local: vimrc.bundles.local
@@ -13,10 +14,11 @@
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
     ~/.ctags: ctags
-    ~/.gitignore_global: gitignore_global
 
 - shell:
   - git config --global core.excludesfile $HOME/.gitignore_global
+  - chmod 755 ~/.dotfiles/tmuxterm
+  - ~/.dotfiles/tmuxterm
   - rm -rf ~/.config/nvim
   - rm -rf ~/.config/nvim/init.vim
   - ln -s ~/.vim ~/.config/nvim
