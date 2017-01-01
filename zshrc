@@ -10,8 +10,8 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
 DISABLE_UPDATE_PROMPT=true
-export TERM=xterm-256color-italic
-# export TERM="xterm-256color"
+# export TERM=xterm-256color-italic
+export TERM="xterm-256color"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

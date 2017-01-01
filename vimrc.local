@@ -119,7 +119,7 @@ set splitright
 set tw=120
 set textwidth=120
 set colorcolumn=+1
-:hi ColorColumn guibg=#3a2b2b ctermbg=237
+:hi ColorColumn guibg=#302424 ctermbg=237
 let &colorcolumn="80,".join(range(120,999),",")
 
 " run nearest window
