@@ -6,4 +6,7 @@ let g:spf13_no_autochdir = 1
 let g:airline_powerline_fonts=1	
 let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript', 'html', 'ruby', 'elixir', 'misc']
 
-autocmd BufRead,BufNewFile *.slim set ft=slim
+let g:spf13_leader=' '
+
+let did_install_default_menus = 1
+let did_install_syntax_menu = 1

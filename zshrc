@@ -93,13 +93,9 @@ export LANG=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/sbin:$PATH"
 
-export NVM_DIR="$HOME/.nvm"
-. "$(brew --prefix nvm)/nvm.sh"
 
 export EDITOR="nvim"
 export BUNDLER_EDITOR="nvim"
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 # enable control-s and control-q
 stty start undef
@@ -117,3 +113,6 @@ export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/
 
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
