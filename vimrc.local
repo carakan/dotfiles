@@ -175,5 +175,4 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-let g:monster#debug#enable = 1
 :let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
