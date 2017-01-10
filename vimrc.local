@@ -156,6 +156,7 @@ nnoremap <leader>tl :TestLast<CR>
 nnoremap <leader>tv :TestVisit<CR>
 nnoremap <leader>ta :TestSuite<CR>
 let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
+let test#elixir#exunit#options = '--trace'
 
 " tslime configs
 let g:tslime_always_current_session = 1 

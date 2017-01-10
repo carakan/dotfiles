@@ -11,7 +11,7 @@ UnBundle 'kchmck/vim-coffee-script'
 UnBundle 'powerline/fonts'
 UnBundle 'vim-scripts/sessionman.vim'
 UnBundle 'rust-lang/rust.vim'
-
+UnBundle 'spf13/vim-colors'
 
 Bundle 'tpope/vim-endwise'
 Bundle 'ecomba/vim-ruby-refactoring'
