@@ -177,3 +177,7 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 :let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+
+" move lines in visual mode
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
