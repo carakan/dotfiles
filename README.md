@@ -108,7 +108,7 @@ when running nvim
 :UpdateRemotePlugins
 ```
 
-Install spf13
+Install supra-vim
 =============
 run this on a terminal:
 
@@ -116,14 +116,12 @@ run this on a terminal:
 curl https://j.mp/spf13-vim3 -L > spf13-vim.sh && sh spf13-vim.sh
 ```
 
-Recently I saw no changes into this great project, so I'm looking migrate to
-plug.
-
-Update spf13 plugins
+Update vim plugins
 ====================
+call into vim:
 
 ```
-nvim +BundleInstall! +BundleClean +qall
+:call dein#update()
 ```
 
 Install linters

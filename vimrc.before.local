@@ -2,7 +2,7 @@ if (has("termguicolors"))
  set termguicolors
 endif
 
-let g:airline_powerline_fonts=1	
+let g:airline_powerline_fonts=1
 let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript', 'html', 'ruby', 'elixir', 'misc']
 
 let g:spf13_leader=' '
