@@ -6,10 +6,17 @@ export ZSH=/Users/carakan/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # Another powerful theme
 # ZSH_THEME="clean"
-ZSH_THEME="powerlevel9k/powerlevel9k"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
 DISABLE_UPDATE_PROMPT=true
+ 
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time os_icon)
+POWERLEVEL9K_MODE='awesome-fontconfig'
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
+POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M:%S}"
+ZSH_THEME="powerlevel9k/powerlevel9k"
+ 
 # export TERM=xterm-256color-italic
 export TERM="xterm-256color"
 
