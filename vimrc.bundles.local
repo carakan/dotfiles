@@ -8,7 +8,6 @@ call dein#add('mhinz/vim-grepper')
 call dein#add('tpope/vim-dispatch')
 call dein#add('janko-m/vim-test')
 call dein#add('rizzatti/dash.vim')
-call dein#add('Shougo/neosnippet.vim')
 call dein#add('neomake/neomake')
 call dein#add('ap/vim-css-color'), {'on_ft':['css','scss', 'html']}
 call dein#add('fntlnz/atags.vim')

@@ -122,6 +122,8 @@ call into vim:
 
 ```
 :call dein#update()
+" if you added/removed some plugins you need to run this
+:call map(dein#check_clean(), "delete(v:val, 'rf')")
 ```
 
 Install linters
