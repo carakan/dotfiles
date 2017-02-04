@@ -7,5 +7,3 @@ let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript'
 
 let g:spf13_leader=' '
 
-let did_install_default_menus = 1
-let did_install_syntax_menu = 1
