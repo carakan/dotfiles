@@ -18,7 +18,7 @@ POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M:%S}"
 ZSH_THEME="powerlevel9k/powerlevel9k"
  
 # export TERM=xterm-256color-italic
-export TERM="xterm-256color"
+export TERM="tmux-256color"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -64,7 +64,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew bundler tmux asdf capistrano)
+plugins=(git brew bundler tmux asdf capistrano zsh-autosuggestions)
 
 # User configuration
 

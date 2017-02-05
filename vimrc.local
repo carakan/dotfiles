@@ -86,7 +86,7 @@ let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
 let g:neomake_warning_sign = {'text': '⚠', 'texthl': 'WarningMsgNeo'}
 let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
 let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
-  
+
 let g:neomake_airline = 1
 :hi WarningMsgNeo guibg=#353535 guifg=#ffd400 ctermbg=237
 
@@ -137,7 +137,7 @@ nnoremap <leader>ag  :Grepper -tool ag -open -switch<cr>
 " save files
 nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>l
-vnoremap <c-s> <Esc>:w<CR> 
+vnoremap <c-s> <Esc>:w<CR>
 
 " this enable nerdtree when is open vim
 " autocmd StdinReadPre * let s:std_in=1
@@ -159,7 +159,7 @@ let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 let test#elixir#exunit#options = '--trace'
 
 " tslime configs
-let g:tslime_always_current_session = 1 
+let g:tslime_always_current_session = 1
 let g:tslime_always_current_window = 1
 vmap <C-c><C-c> <Plug>SendSelectionToTmux
 nmap <C-c><C-c> <Plug>NormalModeSendToTmux
@@ -176,7 +176,7 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-:let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=2
 
 " move lines in visual mode
 vnoremap J :m '>+1<CR>gv=gv

@@ -19,6 +19,7 @@ brew install neovim/neovim/neovim  # to install last STABLE version
 ```
 cd ~/.oh-my-zsh/custom
 git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 ```
 
 - Install patched fonts from:
@@ -161,3 +162,9 @@ https://github.com/neovim/neovim/wiki/FAQ
 
 also, you can run `:CheckHealth` into your neovim to check the health of this dotfiles
 
+- sometimes when install new versions of neovim or change plugins you need do a *Hard Reset*
+```
+rm -rf ~/.vim/bundle/.cache/
+rm -rf ~/.vim/bundle/state_nvim.vim                                                                                                       
+rm -rf ~/.vim/bundle/cache_nvim                                                                                                           
+```
