@@ -53,31 +53,7 @@ let g:airline#extensions#tabline#enabled = 1
 " neomake
 autocmd! BufWritePost * Neomake
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
-let g:neomake_elixir_enabled_makers = ['mycredo', 'elixir', 'mix']
-
-function NeomakeCredoErrorType(entry)
-    if a:entry.type ==# 'F'      " Refactoring opportunities
-        let type = 'W'
-    elseif a:entry.type ==# 'D'  " Software design suggestions
-        let type = 'I'
-    elseif a:entry.type ==# 'W'  " Warnings
-        let type = 'W'
-    elseif a:entry.type ==# 'R'  " Readability suggestions
-        let type = 'I'
-    elseif a:entry.type ==# 'C'  " Convention violation
-        let type = 'W'
-    else
-        let type = 'M'           " Everything else is a message
-    endif
-    let a:entry.type = type
-endfunction
-let g:neomake_elixir_mycredo_maker = {
-      \ 'exe': 'mix',
-      \ 'args': ['credo', 'list', '%:p', '--format=oneline'],
-      \ 'errorformat': '[%t] %. %f:%l:%c %m,[%t] %. %f:%l %m',
-      \ 'postprocess': function('NeomakeCredoErrorType')
-      \ }
-
+let g:neomake_elixir_enabled_makers = ['credo', 'elixir', 'mix']
 let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
 let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
 let g:neomake_typescript_enabled_makers = ['tsc']
