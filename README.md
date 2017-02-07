@@ -104,17 +104,12 @@ pip3 install --upgrade neovim
 gem install neovim
 ```
 
-when running nvim
-```
-:UpdateRemotePlugins
-```
-
 Install supra-vim
 =============
 run this on a terminal:
 
 ```
-curl https://j.mp/spf13-vim3 -L > spf13-vim.sh && sh spf13-vim.sh
+" Still working on some awesome installer
 ```
 
 Update vim plugins
@@ -164,7 +159,7 @@ also, you can run `:CheckHealth` into your neovim to check the health of this do
 
 - sometimes when install new versions of neovim or change plugins you need do a *Hard Reset*
 ```
-rm -rf ~/.vim/bundle/.cache/
-rm -rf ~/.vim/bundle/state_nvim.vim                                                                                                       
-rm -rf ~/.vim/bundle/cache_nvim                                                                                                           
+rm -rf ~/.vim/bundle/.cache
+rm -rf ~/.vim/bundle/state_nvim.vim
+rm -rf ~/.vim/bundle/cache_nvim
 ```
