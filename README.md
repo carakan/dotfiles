@@ -28,10 +28,11 @@ https://github.com/ryanoasis/nerd-fonts/releases/tag/v1.0.0
 
 or simple download and install fonts from directory fontpatched in this project
 
-- install silver search
+- install silver search and ripgrep
 
 ```
 brew install the_silver_searcher
+brew install ripgrep
 ```
 
 - install syntax highlighting (this is added by default in last versions of zsh)

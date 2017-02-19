@@ -105,10 +105,10 @@ let g:VimuxUseNearestPane = 1
 " map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
 
 " silver search
-command! -nargs=* -complete=file GG Grepper -tool git -query <args>
-command! -nargs=* -complete=file Ag Grepper -tool ag -open -switch -query <args>
-command! -nargs=* -complete=file Ack Grepper -tool ag -open -switch -query <args>
-nnoremap <leader>ag  :Grepper -tool ag -open -switch<cr>
+"command! -nargs=* -complete=file GG Grepper -tool git -query <args>
+command! -nargs=* -complete=file Agf Grepper -tool rg -open -switch -query <args>
+"command! -nargs=* -complete=file Ack Grepper -tool ag -open -switch -query <args>
+nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
 
 " save files
 nnoremap <c-s> :w<CR>
@@ -157,3 +157,45 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=2
 " move lines in visual mode
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+  nnoremap <silent> <C-t> :Files<CR>
+  nnoremap <silent> <C-p> :Files<CR>
+  nnoremap <silent> <leader><space> :Files<CR>
+  nnoremap <silent> <leader>a :Buffers<CR>
+  nnoremap <silent> <leader>A :Windows<CR>
+  nnoremap <silent> <leader>; :BLines<CR>
+  nnoremap <silent> <leader>o :BTags<CR>
+  nnoremap <silent> <leader>O :Tags<CR>
+  nnoremap <silent> <leader>? :History<CR>
+  nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+  nnoremap <silent> <leader>. :AgIn 
+
+  nnoremap <silent> K :call SearchWordWithAg()<CR>
+  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+  nnoremap <silent> <leader>gl :Commits<CR>
+  nnoremap <silent> <leader>ga :BCommits<CR>
+  nnoremap <silent> <leader>ft :Filetypes<CR>
+
+  imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+  imap <C-x><C-l> <plug>(fzf-complete-line)
+
+  function! SearchWordWithAg()
+    execute 'Ag' expand('<cword>')
+  endfunction
+
+  function! SearchVisualSelectionWithAg() range
+    let old_reg = getreg('"')
+    let old_regtype = getregtype('"')
+    let old_clipboard = &clipboard
+    set clipboard&
+    normal! ""gvy
+    let selection = getreg('"')
+    call setreg('"', old_reg, old_regtype)
+    let &clipboard = old_clipboard
+    execute 'Ag' selection
+  endfunction
+
+  function! SearchWithAgInDirectory(...)
+    call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
+  endfunction
+  command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
