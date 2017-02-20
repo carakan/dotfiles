@@ -170,8 +170,8 @@ vnoremap K :m '<-2<CR>gv=gv
   nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
   nnoremap <silent> <leader>. :AgIn 
 
-  nnoremap <silent> K :call SearchWordWithAg()<CR>
-  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+  nnoremap <silent> F :call SearchWordWithAg()<CR>
+  vnoremap <silent> F :call SearchVisualSelectionWithAg()<CR>
   nnoremap <silent> <leader>gl :Commits<CR>
   nnoremap <silent> <leader>ga :BCommits<CR>
   nnoremap <silent> <leader>ft :Filetypes<CR>
@@ -199,3 +199,6 @@ vnoremap K :m '<-2<CR>gv=gv
     call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
   endfunction
   command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
+
+" FZF first migration
+" let g:fzf_command_prefix = 'F'
