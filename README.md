@@ -39,6 +39,7 @@ brew install ripgrep
 
 ```
 brew install zsh-syntax-highlighting 
+brew install highlight
 ```
 
 - install reattach-to-user-namespace
