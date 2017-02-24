@@ -9,7 +9,7 @@ call dein#add('tpope/vim-dispatch')
 call dein#add('janko-m/vim-test')
 call dein#add('rizzatti/dash.vim')
 call dein#add('neomake/neomake')
-call dein#add('ap/vim-css-color'), {'on_ft':['css','scss', 'html']}
+call dein#add('ap/vim-css-color')
 call dein#add('fntlnz/atags.vim')
 call dein#add('ryanoasis/vim-devicons')
 call dein#add('carakan/new-railscasts-theme')

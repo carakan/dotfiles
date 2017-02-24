@@ -7,7 +7,6 @@ colorscheme new-railscasts
 if has("gui_running")
 else
   let g:indent_guides_auto_colors = 0
-
   " Popup color.
   :hi Pmenu ctermbg=232 ctermfg=253
   :hi PmenuSel ctermbg=239 ctermfg=255
@@ -158,6 +157,8 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=2
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" NEW fzf integration
+let g:fzf_layout = { 'down': '~30%' }
   nnoremap <silent> <C-t> :Files<CR>
   nnoremap <silent> <C-p> :Files<CR>
   nnoremap <silent> <leader><space> :Files<CR>
@@ -200,15 +201,9 @@ vnoremap K :m '<-2<CR>gv=gv
   endfunction
   command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
 
-" FZF first migration
-" let g:fzf_command_prefix = 'F'
 
 let g:fzf_files_options =
   \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
-
-autocmd! VimEnter * command! -nargs=* -complete=file Ag :call fzf#vim#ag_raw(<q-args>, fzf#wrap('ag-raw',
-\ {'options': "--preview 'coderay $(cut -d: -f1 <<< {}) 2> /dev/null | sed -n $(cut -d: -f2 <<< {}),\\$p | head -".&lines."'"}))
-
 
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
 command! -bang -nargs=* Rg
