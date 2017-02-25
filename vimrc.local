@@ -53,10 +53,10 @@ let g:airline#extensions#tabline#enabled = 1
 " neomake
 autocmd! BufWritePost * Neomake
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
-let g:neomake_elixir_enabled_makers = ['credo', 'elixir', 'mix']
+let g:neomake_elixir_enabled_makers = ['credo', 'mix', 'elixir']
 let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
 let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
-let g:neomake_typescript_enabled_makers = ['tsc']
+let g:neomake_typescript_enabled_makers = ['tslint', 'tsc']
 
 let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
 let g:neomake_warning_sign = {'text': '⚠', 'texthl': 'WarningMsgNeo'}
