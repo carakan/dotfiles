@@ -132,7 +132,7 @@ npm install -g jshint
 npm install -g eslint
 npm install -g stylelint
 npm install -g csslint
-npm install -g typescript 
+npm install -g tslint typescript
 ```
 
 Install some Gems
