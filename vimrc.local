@@ -219,3 +219,7 @@ if has("autocmd")
     autocmd FileType elixir autocmd BufEnter * :syntax sync fromstart
   augroup END
 endif
+
+" Auto ;
+autocmd FileType javascript,css,typescript nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
+autocmd FileType javascript,css,typescript imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
