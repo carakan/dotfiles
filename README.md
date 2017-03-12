@@ -51,6 +51,14 @@ https://gist.github.com/burke/5960455
 brew install reattach-to-user-namespace
 ```
 
+- install fzf
+```
+brew install fzf
+
+# Install shell extensions
+/usr/local/opt/fzf/install
+```
+
 Install dotfiles
 ================
 

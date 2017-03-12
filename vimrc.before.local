@@ -1,3 +1,5 @@
+set rtp+=/usr/local/opt/fzf
+
 if (has("termguicolors"))
  set termguicolors
 endif
