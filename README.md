@@ -143,7 +143,18 @@ npm install -g csslint
 npm install -g tslint typescript
 ```
 
-Install some Gems
+INSTALL YARN
+============
+
+When I migrated to yarn i saw a lot of installs of yarn, the default is using `brew install yarn` but this  is only recommended if you not using any node version manager like nvm or asdf, if you using a node version manager the best option is install using the oficial installer script:
+
+```
+curl -o- -L https://yarnpkg.com/install.sh | bash
+```
+
+installing with as `npm` package is not recommended at this time.
+
+Install Gems
 =================
 
 ```
