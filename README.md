@@ -184,3 +184,8 @@ rm -rf ~/.vim/bundle/.cache
 rm -rf ~/.vim/bundle/state_nvim.vim
 rm -rf ~/.vim/bundle/cache_nvim
 ```
+
+- to install android SDK
+```
+brew cask install android-sdk (--force)
+```

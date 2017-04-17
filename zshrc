@@ -116,7 +116,7 @@ alias vim='nvim'
 
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1/
+export ANDROID_HOME=/usr/local/share/android-sdk
 
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
