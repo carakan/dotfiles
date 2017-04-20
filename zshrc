@@ -127,3 +127,7 @@ export ANDROID_HOME=/usr/local/share/android-sdk
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+function update_brach(){
+  git checkout master && git pull && git checkout - && git rebase master
+}
