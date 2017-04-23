@@ -135,12 +135,7 @@ call into vim:
 Install linters
 ===============
 ```
-npm install -g jscs
-npm install -g jshint
-npm install -g eslint
-npm install -g stylelint
-npm install -g csslint
-npm install -g tslint typescript
+yarn global add jscs jshint eslint stylelint csslint tslint typescript
 ```
 
 INSTALL YARN
@@ -158,7 +153,7 @@ Install Gems
 =================
 
 ```
-rvm @global do gem install reek rubocop
+gem install reek rubocop scss_lint
 ```
 
 Notes
