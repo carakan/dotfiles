@@ -132,12 +132,6 @@ call into vim:
 :call map(dein#check_clean(), "delete(v:val, 'rf')")
 ```
 
-Install linters
-===============
-```
-yarn global add jscs jshint eslint stylelint csslint tslint typescript
-```
-
 INSTALL YARN
 ============
 
@@ -148,6 +142,12 @@ curl -o- -L https://yarnpkg.com/install.sh | bash
 ```
 
 installing with as `npm` package is not recommended at this time.
+
+Install linters
+===============
+```
+yarn global add jscs eslint stylelint csslint tslint typescript
+```
 
 Install Gems
 =================
