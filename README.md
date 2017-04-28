@@ -1,7 +1,7 @@
 README
 ======
 
-M custom zsh, tmux and vim setup across my multiple machines (works
+My custom zsh, tmux and vim setup across my multiple machines (works
 very well on OSx, not sure on other OS).
 
 Requirements
@@ -71,7 +71,7 @@ cd ~/.dotfiles
 
 Install tmux with 24 bits support
 ---------------------------------
-Only needs install tmux >= 2.2
+Only needs install tmux >= 2.2, this dotfiles is working with tmux 2.4
 
 to test run this script in a tmux panel:
 ```
