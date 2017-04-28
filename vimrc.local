@@ -152,7 +152,7 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=2
+:set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
 " move lines in visual mode
 vnoremap J :m '>+1<CR>gv=gv
