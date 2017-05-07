@@ -224,3 +224,8 @@ endif
 " Auto ;
 autocmd FileType javascript,css,typescript nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
 autocmd FileType javascript,css,typescript imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
+
+let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+
+let g:tsuquyomi_completion_detail = 1

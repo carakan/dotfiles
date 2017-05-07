@@ -1,8 +1,6 @@
-call dein#add('tpope/vim-endwise')
 call dein#add('ecomba/vim-ruby-refactoring')
 call dein#add('jeetsukumaran/vim-buffergator')
 call dein#add('Xuyuanp/nerdtree-git-plugin')
-call dein#add('christoomey/vim-tmux-navigator')
 call dein#add('fboender/bexec')
 call dein#add('mhinz/vim-grepper')
 call dein#add('tpope/vim-dispatch')
