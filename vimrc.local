@@ -126,11 +126,11 @@ let g:deoplete#enable_ignore_case = 1
 
 " vim test plugin
 let g:test#strategy = 'tslime'
-nnoremap <leader>tf :TestFile<CR>
-nnoremap <leader>tt :TestNearest<CR>
-nnoremap <leader>tl :TestLast<CR>
-nnoremap <leader>tv :TestVisit<CR>
-nnoremap <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tv :TestVisit<CR>
 let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 let test#elixir#exunit#options = '--trace'
 

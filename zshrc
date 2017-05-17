@@ -126,6 +126,8 @@ export ANDROID_HOME=/usr/local/share/android-sdk
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
 export PATH="$HOME/.yarn/bin:$PATH"
 
 function update_brach(){
