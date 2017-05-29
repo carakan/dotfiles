@@ -229,3 +229,5 @@ let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 
 let g:tsuquyomi_completion_detail = 1
+
+nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
