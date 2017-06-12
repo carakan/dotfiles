@@ -184,3 +184,6 @@ rm -rf ~/.vim/bundle/cache_nvim
 ```
 brew cask install android-sdk (--force)
 ```
+
+- Remap caps lock to esc and Crtl
+I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.

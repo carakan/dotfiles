@@ -132,4 +132,7 @@ export PATH="$HOME/.yarn/bin:$PATH"
 
 function update_brach(){
   git checkout master && git pull && git checkout - && git rebase master
-}
+}}
+
+export TERMINFO="$HOME/.terminfo"
+
