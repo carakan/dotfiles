@@ -100,7 +100,6 @@ export LANG=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/sbin:$PATH"
 
-
 export EDITOR="nvim"
 export BUNDLER_EDITOR="nvim"
 
@@ -132,7 +131,6 @@ export PATH="$HOME/.yarn/bin:$PATH"
 
 function update_brach(){
   git checkout master && git pull && git checkout - && git rebase master
-}}
+}
 
 export TERMINFO="$HOME/.terminfo"
-
