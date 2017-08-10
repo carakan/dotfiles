@@ -47,6 +47,7 @@ noremap   <Right>  <NOP>
 " airline customizations
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
+let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 let g:airline#extensions#tabline#enabled = 1
 
 " neomake
