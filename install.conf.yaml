@@ -1,20 +1,21 @@
 - clean: ['~']
 
 - link:
-    ~/.profile: profile
+    ~/.asdfrc: asdfrc
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
+    ~/.config/karabiner/karabiner.json: karabiner.json
+    ~/.ctags: ctags
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
     ~/.irbrc: irbrc
+    ~/.profile: profile
+    ~/.tmux.conf: tmux.conf
     ~/.vimrc.before.local: vimrc.before.local
     ~/.vimrc.bundles.local: vimrc.bundles.local
     ~/.vimrc.local: vimrc.local
-    ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-    ~/.ctags: ctags
-    ~/.asdfrc: asdfrc
 
 - shell:
   - git config --global core.excludesfile $HOME/.gitignore_global
