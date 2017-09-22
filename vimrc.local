@@ -54,9 +54,9 @@ let g:airline#extensions#tabline#enabled = 1
 autocmd! BufWritePost * Neomake
 let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
 let g:neomake_elixir_enabled_makers = ['credo', 'mix']
-let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
-let g:neomake_scss_enabled_makers = ['scsslint']
-let g:neomake_javascript_enabled_makers = ['jscs', 'eslint']
+let g:neomake_css_enabled_makers = ['stylelint']
+let g:neomake_scss_enabled_makers = ['sass-lint']
+let g:neomake_javascript_enabled_makers = ['eslint', 'jscs']
 let g:neomake_typescript_enabled_makers = ['tslint', 'tsc']
 
 let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
@@ -151,6 +151,8 @@ map <Leader>ct :call atags#generate()<cr>
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "snips"]
+let g:UltiSnipsEditSplit= "context"
 
 :set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
@@ -236,3 +238,14 @@ let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
 
 let g:vim_search_pulse_mode = 'pattern'
 let g:vim_search_pulse_duration = 300
+
+" let g:neoformat_try_formatprg = 1
+" augroup NeoformatAutoFormat
+"     autocmd!
+"     autocmd FileType javascript setlocal formatprg=prettier\
+"                                              \--stdin\
+"                                              \--print-width\ 80\
+"                                              \--single-quote\ true\
+"                                              \--trailing-comma\ es5
+"     autocmd BufWritePre *.js Neoformat
+" augroup END

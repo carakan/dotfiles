@@ -132,28 +132,24 @@ call into vim:
 :call map(dein#check_clean(), "delete(v:val, 'rf')")
 ```
 
-INSTALL YARN
+UPGRADE NPM
 ============
 
-When I migrated to yarn i saw a lot of installs of yarn, the default is using `brew install yarn` but this  is only recommended if you not using any node version manager like nvm or asdf, if you using a node version manager the best option is install using the oficial installer script:
+from npm 5.4.x npm gets stability, to upgrade only do that:
 
-```
-curl -o- -L https://yarnpkg.com/install.sh | bash
-```
-
-installing with as `npm` package is not recommended at this time.
+`npm i -g npm`
 
 Install linters
 ===============
 ```
-yarn global add jscs eslint stylelint csslint tslint typescript
+npm i -g jscs eslint stylelint tslint typescript sass-lint
 ```
 
 Install Gems
 =================
 
 ```
-gem install reek rubocop scss_lint
+gem install reek rubocop
 ```
 
 Notes
