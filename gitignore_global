@@ -4,6 +4,7 @@ tags
 .vscode/*
 .idea/*
 tmp/**/*
+.tern-port
 
 # Thumbnails
 ._*

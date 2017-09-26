@@ -143,6 +143,7 @@ Install linters
 ===============
 ```
 npm i -g jscs eslint stylelint tslint typescript sass-lint
+npm i -g tern prettier
 ```
 
 Install Gems
