@@ -242,10 +242,6 @@ let g:vim_search_pulse_duration = 300
 " let g:neoformat_try_formatprg = 1
 " augroup NeoformatAutoFormat
 "     autocmd!
-"     autocmd FileType javascript setlocal formatprg=prettier\
-"                                              \--stdin\
-"                                              \--print-width\ 80\
-"                                              \--single-quote\ true\
-"                                              \--trailing-comma\ es5
+"     autocmd FileType javascript set formatprg=prettier\ --stdin\ --single-quote\ --print-width\ 100\ --trailing-comma\ es5
 "     autocmd BufWritePre *.js Neoformat
 " augroup END
