@@ -132,7 +132,13 @@ nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
 let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
-let test#elixir#exunit#options = '--trace'
+" let test#elixir#exunit#options = '--trace'
+
+let test#elixir#exunit#options = {
+  \ 'nearest': '--stale --trace',
+  \ 'file':    '--stale --trace',
+  \ 'suite':   '--stale --trace',
+\}
 
 " tslime configs
 let g:tslime_always_current_session = 1
