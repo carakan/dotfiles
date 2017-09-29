@@ -1,5 +1,5 @@
 call dein#add('ecomba/vim-ruby-refactoring')
-call dein#add('jeetsukumaran/vim-buffergator')
+call dein#add('Asheq/close-buffers.vim')
 call dein#add('Xuyuanp/nerdtree-git-plugin')
 call dein#add('fboender/bexec')
 call dein#add('mhinz/vim-grepper')
@@ -36,3 +36,5 @@ call dein#add('ayu-theme/ayu-vim')
 " call dein#add('sbdchd/neoformat')
 call dein#add('jeffkreeftmeijer/vim-numbertoggle')
 call dein#add('j16180339887/Global.vim')
+
+call dein#add('autozimu/LanguageClient-neovim')

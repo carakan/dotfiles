@@ -179,6 +179,7 @@ let g:fzf_layout = { 'down': '~30%' }
   nnoremap <silent> <leader>? :History<CR>
   nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
   nnoremap <silent> <leader>. :AgIn 
+  nnoremap <silent> <C-c> :Commands<CR>
 
   nnoremap <silent> F :call SearchWordWithAg()<CR>
   vnoremap <silent> F :call SearchVisualSelectionWithAg()<CR>
@@ -251,3 +252,15 @@ let g:vim_search_pulse_duration = 300
 "     autocmd FileType javascript set formatprg=prettier\ --stdin\ --single-quote\ --print-width\ 100\ --trailing-comma\ es5
 "     autocmd BufWritePre *.js Neoformat
 " augroup END
+
+nnoremap <silent> Q :CloseBuffers<CR>
+
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'html.handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
+    \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js']
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
