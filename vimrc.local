@@ -79,9 +79,8 @@ set smartindent           " automatically insert one extra level of indentation
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 set nowrap                " don't wrap text
 
-" search files as full name without any regex
-" let g:ctrlp_regexp = 1
-let g:ctrlp_extensions = ['dir', 'mixed', 'funky']
+" elixir config
+let g:alchemist#extended_autocomplete = 1
 
 " Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
 nnoremap <C-J> <C-W><C-J>
@@ -98,12 +97,6 @@ set colorcolumn=+1
 :hi ColorColumn guibg=#302424 ctermbg=237
 let &colorcolumn="80,".join(range(120,999),",")
 
-" run nearest window
-let g:VimuxUseNearestPane = 1
-
-" map <silent><Leader>tt :w<CR> :call VimuxRunCommand("ruby ".  @% . ' -l ' . line('.'))<CR>
-" map <silent><Leader>TT :w<CR> :call VimuxRunCommand("ruby ".  @%)<CR>
-
 " silver search
 "command! -nargs=* -complete=file GG Grepper -tool git -query <args>
 command! -nargs=* -complete=file Agf Grepper -tool rg -open -switch -query <args>
@@ -114,10 +107,6 @@ nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
 nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>l
 vnoremap <c-s> <Esc>:w<CR>
-
-" this enable nerdtree when is open vim
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
@@ -243,9 +232,6 @@ nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
 
-let g:vim_search_pulse_mode = 'pattern'
-let g:vim_search_pulse_duration = 300
-
 " let g:neoformat_try_formatprg = 1
 " augroup NeoformatAutoFormat
 "     autocmd!
@@ -261,6 +247,6 @@ let g:LanguageClient_serverCommands = {
     \ 'html.handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
     \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js']
     \ }
-
+let g:mustache_abbreviations = 1
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1

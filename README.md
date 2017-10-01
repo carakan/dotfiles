@@ -4,6 +4,11 @@ README
 My custom zsh, tmux and vim setup across my multiple machines (works
 very well on OSx, not sure on other OS).
 
+Usage
+=====
+
+See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USAGE.md)
+
 Requirements
 ============
 
