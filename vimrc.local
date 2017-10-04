@@ -68,18 +68,29 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
+let g:ale_sign_column_always = 0
 :hi ALEErrorSign guibg=#353535 guifg=#d80a0a gui=NONE
 :hi ALEWarningSign guibg=#353535 guifg=#ffd400 gui=NONE
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 nmap <leader>f <Plug>(ale_fix)
-" let g:ale_linters = {
-" \   'javascript': ['eslint'],
-" \   'html': []
-" \}
+let g:ale_javascript_prettier_options = '--stdin --single-quote --print-width 100 --trailing-comma es5'
+ let g:ale_linters = {
+ \   'javascript': ['eslint'],
+ \   'ruby': ['rubocop', 'ruby', 'rails_best_practices'],
+ \   'typescript': ['tslint', 'typecheck'],
+ \   'html': [],
+ \   'css': ['stylelint', 'prettier'],
+ \   'haml': ['haml-lint'],
+ \   'handlebars': ['ember-template-lint'],
+ \   'json': ['prettier'],
+ \   'scss': ['stylelint', 'prettier']
+ \}
 
 let g:ale_fixers = {
-\   'javascript': ['eslint']
+\   'javascript': ['prettier', 'eslint'],
+\   'typescript': ['tslint'],
+\   'ruby': ['rubocop']
 \}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -140,8 +151,8 @@ let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 " let test#elixir#exunit#options = '--trace'
 
 let test#elixir#exunit#options = {
-  \ 'nearest': '--stale --trace',
-  \ 'file':    '--stale --trace',
+  \ 'nearest': '--trace',
+  \ 'file':    '--trace',
   \ 'suite':   '--stale --trace',
 \}
 
