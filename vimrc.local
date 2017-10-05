@@ -1,6 +1,5 @@
 " no backups
 set nobackup
-set nowritebackup
 
 colorscheme new-railscasts
 
@@ -20,7 +19,6 @@ end
 set nospell
 
 " Uses tpope's vim-sensible defaults
-
 set hidden
 set notimeout
 set noswapfile
@@ -47,24 +45,47 @@ noremap   <Right>  <NOP>
 " airline customizations
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
-let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''$'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 let g:airline#extensions#tabline#enabled = 1
 
-" neomake
-autocmd! BufWritePost * Neomake
-let g:neomake_ruby_enabled_makers = ['mri', 'rubocop', 'reek']
-let g:neomake_elixir_enabled_makers = ['credo', 'mix']
-let g:neomake_css_enabled_makers = ['stylelint']
-let g:neomake_scss_enabled_makers = ['sass-lint']
-let g:neomake_javascript_enabled_makers = ['eslint', 'jscs']
-let g:neomake_typescript_enabled_makers = ['tslint', 'tsc']
+function! TrimWhitespace(buffer)
+  return substitute(a:buffer, '\s\+$', '', 'e')
+endfunction
 
-let g:neomake_error_sign = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
-let g:neomake_warning_sign = {'text': '⚠', 'texthl': 'WarningMsgNeo'}
-let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
-let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
+" ALE
+let g:airline#extensions#ale#enabled = 1
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_column_always = 0
+let g:airline#extensions#ale#error_symbol   = '⨉ '
+let g:airline#extensions#ale#warning_symbol = '⚠ '
+:hi ALEErrorSign guibg=#302424 guifg=#d80a0a gui=NONE
+:hi ALEWarningSign guibg=#42422a guifg=#ffd400 gui=bold
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
+nmap <leader>f <Plug>(ale_fix)
+let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5'
+let g:ale_linters = {
+ \   'javascript': ['eslint'],
+ \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
+ \   'typescript': ['tslint', 'typecheck'],
+ \   'html': [],
+ \   'css': ['stylelint', 'prettier'],
+ \   'haml': ['haml-lint'],
+ \   'handlebars': ['ember-template-lint'],
+ \   'json': ['prettier'],
+ \   'scss': ['stylelint', 'prettier'],
+ \   'elixir': ['credo'],
+ \}
 
-:hi WarningMsgNeo guibg=#353535 guifg=#ffd400 ctermbg=237
+let g:ale_fixers = {
+\   'javascript': ['eslint', 'standard', 'remove_trailing_lines'],
+\   'typescript': ['remove_trailing_lines'],
+\   'ruby': ['rubocop'],
+\   'css': ['stylelint', 'remove_trailing_lines'],
+\   'scss': ['stylelint', 'remove_trailing_lines'],
+\   'html': ['remove_trailing_lines'],
+\   'elixir': [],
+\}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout                                                 	 "
@@ -124,8 +145,8 @@ let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 " let test#elixir#exunit#options = '--trace'
 
 let test#elixir#exunit#options = {
-  \ 'nearest': '--stale --trace',
-  \ 'file':    '--stale --trace',
+  \ 'nearest': '--trace',
+  \ 'file':    '--trace',
   \ 'suite':   '--stale --trace',
 \}
 
@@ -212,21 +233,12 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-if has("autocmd")
-  augroup filetype_elixir
-    au!
-    autocmd FileType elixir autocmd BufEnter * :syntax sync fromstart
-  augroup END
-endif
-
 " Auto ;
 autocmd FileType javascript,css,typescript nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
 autocmd FileType javascript,css,typescript imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
 
 let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
-
-let g:tsuquyomi_completion_detail = 1
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
