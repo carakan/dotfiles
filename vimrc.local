@@ -47,8 +47,12 @@ let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
 
-function! TrimWhitespace(buffer)
-  return substitute(a:buffer, '\s\+$', '', 'e')
+function! TrimWhiteSpaces(buffer, lines)
+    let l = 1
+    for line in a:lines
+        call setline(l, substitute(line, '\s\+$', '', "g"))
+        let l = l + 1
+    endfor
 endfunction
 
 " ALE
@@ -84,7 +88,7 @@ let g:ale_fixers = {
 \   'css': ['stylelint', 'remove_trailing_lines'],
 \   'scss': ['stylelint', 'remove_trailing_lines'],
 \   'html': ['remove_trailing_lines'],
-\   'elixir': [],
+\   'elixir': ['remove_trailing_lines', 'TrimWhiteSpaces'],
 \}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
