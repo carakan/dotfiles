@@ -47,11 +47,17 @@ let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
 
+function! TrimWhitespace(buffer)
+  return substitute(a:buffer, '\s\+$', '', 'e')
+endfunction
+
 " ALE
 let g:airline#extensions#ale#enabled = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
 let g:ale_sign_column_always = 0
+let g:airline#extensions#ale#error_symbol   = '⨉ '
+let g:airline#extensions#ale#warning_symbol = '⚠ '
 :hi ALEErrorSign guibg=#302424 guifg=#d80a0a gui=NONE
 :hi ALEWarningSign guibg=#42422a guifg=#ffd400 gui=bold
 nmap ]a <Plug>(ale_next_wrap)
@@ -59,16 +65,16 @@ nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
 let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5'
 let g:ale_linters = {
- \   'javascript': ['eslint', 'StripTrailingWhitespace'],
- \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek', 'StripTrailingWhitespace'],
+ \   'javascript': ['eslint'],
+ \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
  \   'typescript': ['tslint', 'typecheck'],
- \   'html': ['StripTrailingWhitespace'],
- \   'css': ['stylelint', 'prettier', 'StripTrailingWhitespace'],
- \   'haml': ['haml-lint', 'StripTrailingWhitespace'],
- \   'handlebars': ['ember-template-lint', 'StripTrailingWhitespace'],
- \   'json': ['prettier', 'StripTrailingWhitespace'],
- \   'scss': ['stylelint', 'prettier', 'StripTrailingWhitespace'],
- \   'elixir': ['credo', 'TrimWhitespace'],
+ \   'html': [],
+ \   'css': ['stylelint', 'prettier'],
+ \   'haml': ['haml-lint'],
+ \   'handlebars': ['ember-template-lint'],
+ \   'json': ['prettier'],
+ \   'scss': ['stylelint', 'prettier'],
+ \   'elixir': ['credo'],
  \}
 
 let g:ale_fixers = {
@@ -78,6 +84,7 @@ let g:ale_fixers = {
 \   'css': ['stylelint', 'remove_trailing_lines'],
 \   'scss': ['stylelint', 'remove_trailing_lines'],
 \   'html': ['remove_trailing_lines'],
+\   'elixir': [],
 \}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
