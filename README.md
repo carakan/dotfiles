@@ -147,7 +147,7 @@ from npm 5.4.x npm gets stability, to upgrade only do that:
 Install linters
 ===============
 ```
-npm i -g jscs eslint stylelint tslint typescript sass-lint
+npm i -g eslint stylelint tslint typescript sass-lint
 npm i -g tern prettier
 ```
 
