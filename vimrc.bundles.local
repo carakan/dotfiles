@@ -32,6 +32,7 @@ call dein#add('plasticboy/vim-markdown')
 call dein#add('keith/rspec.vim')
 call dein#add('stephpy/vim-yaml')
 call dein#add('cakebaker/scss-syntax.vim')
+call dein#add('christoomey/vim-sort-motion')
 
 " call dein#add('autozimu/LanguageClient-neovim')
 
