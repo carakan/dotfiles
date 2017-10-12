@@ -47,17 +47,6 @@ let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
 
-" Remove all whitespaces at the end of lines
-function! TrimWhiteSpaces(buffer, lines)
-    let l = 1
-    let lines_new = range(len(a:lines))
-    for line in a:lines
-        let lines_new[l - 1] = substitute(line, '\s\+$', '', "g")
-        let l = l + 1
-    endfor
-    return lines_new
-endfunction
-
 " ALE
 let g:airline#extensions#ale#enabled = 1
 let g:ale_sign_error = '✖'
@@ -85,13 +74,13 @@ let g:ale_linters = {
  \}
 
 let g:ale_fixers = {
-\   'javascript': ['eslint', 'standard', 'remove_trailing_lines', 'TrimWhiteSpaces'],
-\   'typescript': ['remove_trailing_lines', 'TrimWhiteSpaces'],
-\   'ruby': ['rubocop', 'TrimWhiteSpaces'],
-\   'css': ['stylelint', 'remove_trailing_lines', 'TrimWhiteSpaces'],
-\   'scss': ['TrimWhiteSpaces', 'stylelint', 'remove_trailing_lines'],
-\   'html': ['remove_trailing_lines', 'TrimWhiteSpaces'],
-\   'elixir': ['remove_trailing_lines', 'TrimWhiteSpaces'],
+\   'javascript': ['eslint', 'standard', 'remove_trailing_lines', 'trim_whitespace'],
+\   'typescript': ['remove_trailing_lines', 'trim_whitespace'],
+\   'ruby': ['rubocop', 'trim_whitespace'],
+\   'css': ['stylelint', 'remove_trailing_lines', 'trim_whitespace'],
+\   'scss': ['trim_whitespace', 'stylelint', 'remove_trailing_lines'],
+\   'html': ['remove_trailing_lines', 'trim_whitespace'],
+\   'elixir': ['remove_trailing_lines', 'trim_whitespace'],
 \}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
