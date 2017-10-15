@@ -54,8 +54,8 @@ let g:ale_sign_warning = '⚠'
 let g:ale_sign_column_always = 0
 let g:airline#extensions#ale#error_symbol   = '⨉ '
 let g:airline#extensions#ale#warning_symbol = '⚠ '
-:hi ALEErrorSign guibg=#302424 guifg=#d80a0a gui=NONE
-:hi ALEWarningSign guibg=#42422a guifg=#ffd400 gui=bold
+:hi ALEErrorSign guibg=#420101 guifg=#d80a0a gui=NONE
+:hi ALEWarningSign guibg=#494900 guifg=#FFC66D gui=bold
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
@@ -71,6 +71,7 @@ let g:ale_linters = {
  \   'json': ['prettier'],
  \   'scss': ['stylelint', 'prettier'],
  \   'elixir': ['credo'],
+ \   'vim': ['vint'],
  \}
 
 let g:ale_fixers = {
