@@ -6,3 +6,4 @@ let g:airline_powerline_fonts=1
 let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript', 'html', 'ruby', 'elixir', 'misc']
 let g:spf13_leader=' '
 let g:jsx_ext_required = 1
+au BufRead,BufNewFile *.scss set filetype=scss.css
