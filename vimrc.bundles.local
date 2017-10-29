@@ -26,6 +26,7 @@ call dein#add('w0ng/vim-hybrid')
 call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
 call dein#add('jeffkreeftmeijer/vim-numbertoggle')
 call dein#add('j16180339887/Global.vim')
+call dein#add('othree/javascript-libraries-syntax.vim')
 
 call dein#add('tpope/vim-git')
 call dein#add('plasticboy/vim-markdown')
