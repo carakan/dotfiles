@@ -78,7 +78,7 @@ let g:ale_linters = {
  \}
 
 let g:ale_fixers = {
-\   'javascript': ['eslint', 'standard', 'remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['prettier', 'eslint', 'standard', 'remove_trailing_lines', 'trim_whitespace'],
 \   'typescript': ['remove_trailing_lines', 'trim_whitespace', 'tslint'],
 \   'ruby': ['rubocop', 'trim_whitespace'],
 \   'css': ['stylelint', 'remove_trailing_lines', 'trim_whitespace'],
