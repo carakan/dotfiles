@@ -114,10 +114,9 @@ export ANDROID_HOME=/usr/local/share/android-sdk
 . $HOME/.asdf/completions/asdf.bash
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --follow --glob "!.git/*"'
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-
-export PATH="$HOME/.yarn/bin:$PATH"
+eval "$(direnv hook zsh)"
 
 function update_brach(){
   git checkout master && git pull && git checkout - && git rebase master
