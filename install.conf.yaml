@@ -9,6 +9,7 @@
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
+    ~/.ignore: ignore
     ~/.irbrc: irbrc
     ~/.profile: profile
     ~/.tmux.conf: tmux.conf

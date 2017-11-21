@@ -1,0 +1,14 @@
+*.log
+*.DS_Store
+tags
+.vscode/*
+.idea/*
+tmp/**/*
+dist/*
+tmp/*
+" node.js
+bower_components/*
+node_modules/*
+" Elixir
+deps/*
+_build/*
