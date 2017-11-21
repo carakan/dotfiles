@@ -5,6 +5,7 @@ tags
 .idea/*
 tmp/**/*
 .tern-port
-
+.envrc
+.tool-versions
 # Thumbnails
 ._*

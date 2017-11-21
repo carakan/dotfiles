@@ -62,7 +62,7 @@ let g:airline#extensions#ale#warning_symbol = ' '
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
-let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5'
+let g:ale_javascript_prettier_options = '--single-quote --print-width 95 --trailing-comma es5'
 let g:ale_linters = {
  \   'javascript': ['eslint'],
  \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
@@ -79,12 +79,13 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint', 'standard', 'remove_trailing_lines', 'trim_whitespace'],
-\   'typescript': ['remove_trailing_lines', 'trim_whitespace', 'tslint'],
+\   'typescript': ['prettier', 'tslint'],
 \   'ruby': ['rubocop', 'trim_whitespace'],
 \   'css': ['stylelint', 'remove_trailing_lines', 'trim_whitespace'],
 \   'scss': ['trim_whitespace', 'stylelint', 'remove_trailing_lines'],
 \   'html': ['remove_trailing_lines', 'trim_whitespace'],
 \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
+\   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier']
 \}
 
 """"
