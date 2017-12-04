@@ -140,15 +140,14 @@ call into vim:
 UPGRADE NPM
 ============
 
-from npm 5.4.x npm gets stability, to upgrade only do that:
+from npm > 5.4.x npm gets stability, to upgrade only do that:
 
 `npm i -g npm`
 
 Install linters
 ===============
 ```
-npm i -g eslint stylelint tslint typescript sass-lint
-npm i -g tern prettier
+npm i -g eslint stylelint tslint typescript sass-lint tern prettier neovim
 ```
 
 Install Gems
@@ -181,6 +180,10 @@ rm -rf ~/.vim/bundle/.cache
 rm -rf ~/.vim/bundle/state_nvim.vim
 rm -rf ~/.vim/bundle/cache_nvim
 ```
+- Enable sign commits:
+```
+git config --global commit.gpgsign true
+```
 
 - to install android SDK
 ```
@@ -189,3 +192,5 @@ brew cask install android-sdk (--force)
 
 - Remap caps lock to esc and Crtl
 I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.
+
+- [upgrade ssh keys](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
