@@ -5,7 +5,6 @@ tags
 .idea/*
 tmp/**/*
 dist/*
-tmp/*
 " node.js
 bower_components/*
 node_modules/*
