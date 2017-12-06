@@ -7,5 +7,6 @@ tmp/**/*
 .tern-port
 .envrc
 .tool-versions
+.capistrano/*
 # Thumbnails
 ._*

@@ -11,3 +11,4 @@ node_modules/*
 " Elixir
 deps/*
 _build/*
+coverage/*

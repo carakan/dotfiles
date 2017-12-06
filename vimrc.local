@@ -269,9 +269,8 @@ let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
 nnoremap <silent> Q :CloseBuffers<CR>
 
 set hidden
-
 let g:LanguageClient_serverCommands = {
-    \ 'html.handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
+    \ 'javascript': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
     \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js']
     \ }
 let g:mustache_abbreviations = 1
