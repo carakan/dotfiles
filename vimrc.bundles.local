@@ -37,6 +37,7 @@ call dein#add('christoomey/vim-sort-motion')
 call dein#add('fszymanski/fzf-gitignore')
 call dein#add('autozimu/LanguageClient-neovim')
 call dein#add('chaoren/vim-wordmotion')
+call dein#add('gorkunov/smartpairs.vim')
 
 " THEMES
 " call dein#add('tomasiser/vim-code-dark')
