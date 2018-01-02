@@ -192,8 +192,18 @@ let g:UltiSnipsEditSplit= "context"
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" NEW fzf integration
-let g:fzf_layout = { 'down': '~30%' }
+" FZF integration
+" let $FZF_DEFAULT_COMMAND = 'ag --hidden -l -g ""'
+" let g:fzf_files_options = '--preview "rougify {} | head -'.&lines.'"'
+" let g:fzf_layout = { 'down': '~30%' }
+
+function! FZFOpen(command_str)
+  if (expand('%') =~# 'NERD_tree' && winnr('$') > 1)
+    exe "normal! \<c-w>\<c-w>"
+  endif
+  exe 'normal! ' . a:command_str . "\<cr>"
+endfunction
+
   nnoremap <silent> <C-t> :Files<CR>
   nnoremap <silent> <C-p> :Files<CR>
   nnoremap <silent> <leader><space> :Files<CR>
@@ -248,9 +258,36 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-" Auto ;
-autocmd FileType javascript,css,typescript nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
-autocmd FileType javascript,css,typescript imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
+function! Fzf_dev()
+        
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(item)
+    let l:parts = split(a:item, ' ')
+    let l:file_path = get(l:parts, 1, '')
+    execute 'silent e' l:file_path
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink':  function('s:edit_file'),
+        \ 'options': '-m ' . l:fzf_files_options,
+        \ 'down':    '40%' })
+endfunction
 
 let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
@@ -258,13 +295,6 @@ let g:NERDDefaultAlign = 'left'
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
-
-" let g:neoformat_try_formatprg = 1
-" augroup NeoformatAutoFormat
-"     autocmd!
-"     autocmd FileType javascript set formatprg=prettier\ --stdin\ --single-quote\ --print-width\ 100\ --trailing-comma\ es5
-"     autocmd BufWritePre *.js Neoformat
-" augroup END
 
 nnoremap <silent> Q :CloseBuffers<CR>
 
@@ -276,3 +306,33 @@ let g:LanguageClient_serverCommands = {
 let g:mustache_abbreviations = 1
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
+
+
+" ----------------------------------------------------------------------------
+" WebDevIcons
+" ----------------------------------------------------------------------------
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:WebDevIconsOS = 'Darwin'
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['ex'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['exs'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['jsx'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vim'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['md'] = ''
+
+" after a re-source, fix syntax matching issues (concealing brackets):
+if exists('g:loaded_webdevicons')
+  call webdevicons#refresh()
+endif
+
+" ----------------------------------------------------------------------------
+"  vim-nerdtree-syntax-highlight:
+" ----------------------------------------------------------------------------
+let g:NERDTreeExtensionHighlightColor = {}
+let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
+let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
