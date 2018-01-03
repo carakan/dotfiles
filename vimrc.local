@@ -134,11 +134,10 @@ set colorcolumn=+1
 :hi ColorColumn guibg=#302424 ctermbg=237
 let &colorcolumn="80,".join(range(120,999),",")
 
-" silver search
-"command! -nargs=* -complete=file GG Grepper -tool git -query <args>
-command! -nargs=* -complete=file Agf Grepper -tool rg -open -switch -query <args>
-"command! -nargs=* -complete=file Ack Grepper -tool ag -open -switch -query <args>
+" Vim-grepper
 nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
+nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
+nnoremap <leader>g :Grepper -tool git -noopen -jump<cr>
 
 " save files
 nnoremap <c-s> :w<CR>
@@ -336,3 +335,6 @@ endif
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
 let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
+
+" AndrewRadev/ember_tools.vim
+let g:ember_tools_highlight_actions = 0
