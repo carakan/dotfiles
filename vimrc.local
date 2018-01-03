@@ -338,3 +338,6 @@ let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
 
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
+
+" Rubygems
+nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
