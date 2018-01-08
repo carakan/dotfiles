@@ -66,6 +66,7 @@ let g:ale_javascript_prettier_options = '--single-quote --print-width 90 --trail
 let g:ale_typescript_prettier_options = '--single-quote --print-width 90 --trailing-comma es5 --arrow-parens always'
 let g:ale_linters = {
  \   'javascript': ['eslint'],
+ \   'erb': ['erb', 'erubis'],
  \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
  \   'typescript': ['tslint', 'typecheck'],
  \   'html': [],
@@ -342,3 +343,5 @@ let g:ember_tools_highlight_actions = 0
 
 " Rubygems
 nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
+
+let g:airline#extensions#cursormode#enabled = 0

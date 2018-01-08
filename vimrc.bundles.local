@@ -36,6 +36,7 @@ call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
 call dein#add('bergercookie/vim-debugstring')
 call dein#add('alexbel/vim-rubygems')
 call dein#add('lucidstack/hex.vim')
+call dein#add('wincent/ferret')
 
 " Themes
 "call dein#add('arty88/sexy-railscasts-256-theme')
