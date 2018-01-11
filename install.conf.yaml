@@ -7,6 +7,7 @@
     ~/.config/karabiner/karabiner.json: karabiner.json
     ~/.ctags: ctags
     ~/.gemrc: gemrc
+    ~/.tool-versions: tool-versions
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
     ~/.ignore: ignore

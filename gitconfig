@@ -8,6 +8,9 @@
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   type = cat-file -t
   dump = cat-file -p
+[user]
+
 [core]
 	editor = /usr/local/bin/nvim
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/carakan/.gitignore_global
+[commit]
