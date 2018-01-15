@@ -33,17 +33,16 @@ call dein#add('autozimu/LanguageClient-neovim')
 call dein#add('chaoren/vim-wordmotion')
 call dein#add('gorkunov/smartpairs.vim')
 call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
-call dein#add('bergercookie/vim-debugstring')
 call dein#add('alexbel/vim-rubygems')
-call dein#add('lucidstack/hex.vim')
+call dein#add('carakan/pmv.vim')
 call dein#add('wincent/ferret')
 
 " Themes
-"call dein#add('arty88/sexy-railscasts-256-theme')
-"call dein#add('jacoborus/tender')
-"call dein#add('w0ng/vim-hybrid')
+" call dein#add('arty88/sexy-railscasts-256-theme')
+" call dein#add('jacoborus/tender')
+" call dein#add('w0ng/vim-hybrid')
 
 " Need research
 " call dein#add('tpope/vim-git')
 call dein#add('fszymanski/fzf-gitignore')
-call dein#add('jsfaint/gen_tags.vim')
+" call dein#add('jsfaint/gen_tags.vim')
