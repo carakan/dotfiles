@@ -84,7 +84,7 @@ let g:ale_fixers = {
 \   'typescript': ['prettier', 'tslint'],
 \   'ruby': ['rubocop', 'trim_whitespace'],
 \   'css': ['stylelint', 'prettier'],
-\   'scss': ['stylelint', 'prettier'],
+\   'scss': ['stylelint'],
 \   'html': ['remove_trailing_lines', 'trim_whitespace'],
 \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
 \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
