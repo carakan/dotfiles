@@ -44,6 +44,6 @@ call dein#add('DougBeney/pickachu')
 
 " Need research
 " call dein#add('tpope/vim-git')
-call dein#add('fszymanski/fzf-gitignore')
+" call dein#add('fszymanski/fzf-gitignore')
 " call dein#add('jsfaint/gen_tags.vim')
 " call dein#add('autozimu/LanguageClient-neovim')

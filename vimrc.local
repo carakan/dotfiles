@@ -62,8 +62,8 @@ let g:airline#extensions#ale#warning_symbol = ' '
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
-let g:ale_javascript_prettier_options = '--single-quote --print-width 90 --trailing-comma es5 --arrow-parens always'
-let g:ale_typescript_prettier_options = '--single-quote --print-width 90 --trailing-comma es5 --arrow-parens always'
+let g:ale_javascript_prettier_options = '--single-quote --print-width 95 --trailing-comma es5 --arrow-parens always'
+let g:ale_typescript_prettier_options = '--single-quote --print-width 95 --trailing-comma es5 --arrow-parens always'
 let g:ale_linters = {
  \   'javascript': ['eslint'],
  \   'erb': ['erb', 'erubis'],
