@@ -7,3 +7,6 @@ let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript'
 let g:spf13_leader=' '
 let g:jsx_ext_required = 1
 au BufRead,BufNewFile *.scss set filetype=scss.css
+
+autocmd FileType html.handlebars :UltiSnipsAddFiletypes mustache
+autocmd FileType javascript UltiSnipsAddFiletypes javascript-ember

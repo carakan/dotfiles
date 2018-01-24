@@ -107,6 +107,9 @@ alias vim='nvim'
 export JAVA_HOME=$(/usr/libexec/java_home)
 export ANDROID_HOME=/usr/local/share/android-sdk
 
+# Erlang elixir
+export ERL_AFLAGS="-kernel shell_history enabled"
+
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
