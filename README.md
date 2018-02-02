@@ -172,7 +172,7 @@ ssh-add -K
 
 https://github.com/neovim/neovim/wiki/FAQ
 
-also, you can run `:CheckHealth` into your neovim to check the health of this dotfiles
+also, you can run `:checkhealth` into your neovim to check the health of this dotfiles
 
 - sometimes when install new versions of neovim or change plugins you need do a *Hard Reset*
 ```
