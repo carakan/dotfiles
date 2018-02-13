@@ -1,12 +1,13 @@
-*~
 *.DS_Store
-tags
-.vscode/*
-.idea/*
-tmp/**/*
-.tern-port
-.envrc
-.tool-versions
+*~
 .capistrano/*
+.envrc
+.idea/*
+.tern-port
+.tern-project
+.tool-versions
+.vscode/*
+tags
+tmp/**/*
 # Thumbnails
 ._*
