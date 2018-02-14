@@ -194,8 +194,6 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " FZF integration
-" let $FZF_DEFAULT_COMMAND = 'ag --hidden -l -g ""'
-" let g:fzf_files_options = '--preview "rougify {} | head -'.&lines.'"'
 " let g:fzf_layout = { 'down': '~30%' }
 
 function! FZFOpen(command_str)

@@ -106,6 +106,7 @@ alias vim='nvim'
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)
 export ANDROID_HOME=/usr/local/share/android-sdk
+export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 
 # Erlang elixir
 export ERL_AFLAGS="-kernel shell_history enabled"
@@ -117,7 +118,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 . $HOME/.asdf/completions/asdf.bash
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 
 eval "$(direnv hook zsh)"
 

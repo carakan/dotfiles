@@ -5,10 +5,9 @@ tags
 .idea/*
 tmp/**/*
 dist/*
-" node.js
 bower_components/*
 node_modules/*
-" Elixir
 deps/*
 _build/*
 coverage/*
+.git/*
