@@ -138,8 +138,9 @@ let &colorcolumn="80,".join(range(120,999),",")
 
 " Vim-grepper
 nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
-nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
-nnoremap <leader>g :Grepper -tool git -noopen -jump<cr>
+nnoremap <Leader>* :Grepper -tool rg -cword -noprompt<CR>
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
 " save files
 nnoremap <c-s> :w<CR>
