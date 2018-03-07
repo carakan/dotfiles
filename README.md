@@ -96,24 +96,24 @@ awk 'BEGIN{
 ```
 
 
-I use NeoVim because I have a lot of problems switching from insert mode
-to normal using vim, I researching a lot and I not found a valid solution for that, the
-only solution for now is change using neovim, looks pretty well.
+I use NeoVim because I have had a lot of problems switching from insert mode
+to normal using vim, I researching a lot I'm not able to found a valid solution for this weird error, the
+only solution for now is change using neovim, looks better/modern alternative.
 
-you need install python3:
+So you need to install python (3):
 
 ```
-brew install python3
-pip3 install --upgrade pip setuptools
+brew install python
+pip install --upgrade pip setuptools
 ```
 
-Install neovim plugin for python3 and ruby
+Install neovim plugin for python and ruby
 ---------------------------------
 
 ```
-pip3 install neovim
+pip install neovim
 # to upgrade
-pip3 install --upgrade neovim
+pip install --upgrade neovim
 
 #ruby
 gem install neovim

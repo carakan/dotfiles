@@ -42,6 +42,14 @@ noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
+" Little tricks
+nnoremap <bs> <c-^>
+set undofile " Only works on neovim
+" nnoremap <space><space> :'{,'}s/\<<c-r><c-w>\>//g<left><left>
+" xnoremap <space><space> y:'{,'}s/<c-r><c-0>//g<left><left>
+" nnoremap <space>s :%s/\<<c-r><c-w>\>//g<left><left>
+" xnoremap <space>s y:%s/<c-r><c-0>//g<left><left>s
+
 " airline customizations
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
@@ -358,6 +366,7 @@ let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
 let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
 let g:NERDTreeExtensionHighlightColor['yml'] = 'f4bf70'
 let g:NERDTreeExtensionHighlightColor['yaml'] = 'f4bf70'
+let g:NERDTreeChDirMode=0
 
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
