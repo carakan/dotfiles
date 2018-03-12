@@ -36,6 +36,7 @@ call dein#add('alexbel/vim-rubygems')
 call dein#add('carakan/pmv.vim')
 call dein#add('wincent/ferret')
 call dein#add('DougBeney/pickachu')
+call dein#add('tpope/vim-db')
 
 " Themes
 " call dein#add('arty88/sexy-railscasts-256-theme')
