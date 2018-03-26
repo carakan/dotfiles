@@ -97,8 +97,8 @@ awk 'BEGIN{
 
 
 I use NeoVim because I have had a lot of problems switching from insert mode
-to normal using vim, I researching a lot I'm not able to found a valid solution for this weird error, the
-only solution for now is change using neovim, looks better/modern alternative.
+to normal using vim, I researching a lot and I'm not found a valid solution for that, the only solution for now is change 
+to using neovim and looks more better/modern alternative.
 
 So you need to install python (3):
 
