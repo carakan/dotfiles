@@ -158,7 +158,7 @@ vnoremap <c-s> <Esc>:w<CR>
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-" let b:deoplete_sources = ['buffer', 'neosnippet']
+let deoplete#tag#cache_limit_size = 5000000
 
 " vim test plugin
 let g:test#strategy = 'tslime'
