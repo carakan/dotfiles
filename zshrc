@@ -98,10 +98,11 @@ stty start undef
 stty stop undef
 setopt noflowcontrol
 
+# load aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
+
 # 10ms for key sequences
 KEYTIMEOUT=1
-
-alias vim='nvim'
 
 # android
 export JAVA_HOME=$(/usr/libexec/java_home)

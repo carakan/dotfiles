@@ -1,0 +1,117 @@
+# Unix
+alias l="ls -lah"
+alias ll="ls -lah"
+alias ls="gls -F -G --color --group-directories-first"
+alias ln="ln -v"
+alias mkdir="mkdir -p"
+alias rmf='rm -rf'
+alias rmrf='rm -rf'
+alias e="$EDITOR"
+alias v="$VISUAL"
+alias sp="nvr -cc split"
+alias vs="nvr -cc vsplit"
+alias tree="tree -C"
+
+# Bundler
+alias b="bundle"
+
+# SSH fix for working with xterm-color256-italic
+alias ssh="TERM=xterm-256color ssh"
+
+# Rails
+alias migrate="rake db:migrate db:rollback && rake db:migrate"
+alias s="rspec"
+alias rof="rspec --only-failures"
+
+# Pretty print the path
+alias path='echo $PATH | tr -s ":" "\n"'
+
+# Typos
+alias quit="exit"
+alias cd..="cd .."
+alias vim.="vim ."
+alias fap='gap'
+
+# git reset empty files
+gref() {
+  command git --no-pager diff --cached --stat | command grep " |\\s*0$" | awk '{system("command git reset " $1)}'
+}
+
+# Git
+alias gap="git add -p"
+alias gnap='git add -N . && gap && gref'
+# disable zsh git plugin
+alias gsr='gst'
+alias gcd1='git clone --depth=1'
+
+# usb
+alias usbtree='ioreg -p IOUSB -l -w 0'
+
+# fuzzy commands with fzf
+alias fta='tmux attach -t $(tl | fzf | tr ":" "\n" | head -n1)'
+alias ftk='tmux kill-session -t $(tl | fzf | tr ":" "\n" | head -n1)'
+alias gcorb='gco --track $(git branch -r | fzf)'
+alias gcob='gco $(git branch | fzf)'
+
+fkill() {
+  kill -9 $(ps ax | fzf | awk '{ print $1 }')
+}
+
+# Usage: hr freethousand [port]
+#
+# Summary: Kill a process that is listening a port
+#
+# Help: Don't know where that Rails server is listening? Just freethousand!
+# This command takes a port as an argument, otherwise defaulting to 3000.
+freethousand() {
+  port="${1:-3000}"
+  pid="$(lsof -Fp -i tcp:$port | sed 's/p//')"
+
+  if [ -n "$pid" ]; then
+    echo "Killing process with PID $pid listening on port $port..." >&2
+    kill $pid
+  else
+    echo "No process listening on port $port" >&2
+  fi
+}
+
+alias vim='nvim'
+alias legacyvim='command vim'
+
+alias brewup='brew upgrade --cleanup'
+
+alias d='cd ~/dev'
+alias fd='cd ~/dev/$(ls ~/dev/ --color=never | fzf)'
+alias f='cd ~/dev/forks'
+alias dt='cd ~/dotfiles'
+alias dot='cd ~/dotfiles'
+alias ss='imgur-screenshot.sh'
+
+# quick config
+alias vimconfig='vim -o ~/.vimrc ~/.vimrc.bundles'
+alias muxconfig='vim ~/.tmux.conf && tmux source-file ~/.tmux.conf'
+alias sshconfig='vim ~/.ssh/config'
+alias aliasconfig='vim ~/.aliases && source ~/.aliases'
+alias hostsconfig='sudo vim /etc/hosts'
+alias zshconfig="vim -o ~/.zshrc && source ~/.zshrc"
+alias zshplugins="vim ~/.oh-my-zsh"
+
+# ripgrep - rg is taken by rails generate alias from the oh-my-zsh rails plugin
+alias rgrep='command rg'
+
+# curl
+# usage postjson '{"key": "value"}' http://example.com/create_record
+alias postjson='curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d '
+# usage postjson http://example.com/record/1
+alias getjson='curl -i -H "Accept: application/json" -H "Content-Type: application/json"'
+
+# elixir
+alias extwiki='mix ecto.migrate && mix ecto.rollback && mix ecto.migrate'
+alias imix='iex -S mix'
+alias im='iex -S mix'
+alias mc='mix compile'
+alias mpr='mix phx.routes'
+alias mps='mix phx.server'
+alias mt='mix test'
+alias mdg='mix deps.get'
+alias mdca='mix deps.clean --all'
