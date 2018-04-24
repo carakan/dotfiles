@@ -16,8 +16,7 @@ Requirements
 
 - Neovim
 ```
-brew tap neovim/neovim             # only on first time
-brew install neovim/neovim/neovim  # to install last STABLE version
+brew install neovim  # to install last STABLE version
 ```
 - install this theme for zsh:
 
