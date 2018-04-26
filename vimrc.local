@@ -45,10 +45,6 @@ noremap   <Right>  <NOP>
 " Little tricks
 nnoremap <bs> <c-^>
 set undofile " Only works on neovim
-" nnoremap <space><space> :'{,'}s/\<<c-r><c-w>\>//g<left><left>
-" xnoremap <space><space> y:'{,'}s/<c-r><c-0>//g<left><left>
-" nnoremap <space>s :%s/\<<c-r><c-w>\>//g<left><left>
-" xnoremap <space>s y:%s/<c-r><c-0>//g<left><left>s
 
 " airline customizations
 let g:airline_theme='bubblegum'
@@ -216,8 +212,6 @@ endfunction
   nnoremap <silent> <leader>o :BTags<CR>
   nnoremap <silent> <leader>O :Tags<CR>
   nnoremap <silent> <leader>? :History<CR>
-  nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
-  nnoremap <silent> <leader>. :AgIn 
   nnoremap <silent> <C-c> :Commands<CR>
 
   nnoremap <silent> F :call SearchWordWithAg()<CR>
@@ -230,7 +224,7 @@ endfunction
   imap <C-x><C-l> <plug>(fzf-complete-line)
 
   function! SearchWordWithAg()
-    execute 'Ag' expand('<cword>')
+    execute 'Rg' expand('<cword>')
   endfunction
 
   function! SearchVisualSelectionWithAg() range
