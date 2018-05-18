@@ -31,10 +31,6 @@ w0rp/ale
 - `[a` previous error
 - `<leader>f` applies code formater/fixes to current buffer
 
-atags
-
-- `<Leader>ct` generate tags
-
 ember-tools
 
 - `:Extract` extract to component
