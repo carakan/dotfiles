@@ -28,21 +28,6 @@ call dein#add('keith/rspec.vim')
 call dein#add('stephpy/vim-yaml')
 call dein#add('cakebaker/scss-syntax.vim')
 call dein#add('christoomey/vim-sort-motion')
-call dein#add('chaoren/vim-wordmotion')
 call dein#add('gorkunov/smartpairs.vim')
 call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
-call dein#add('alexbel/vim-rubygems')
-call dein#add('carakan/pmv.vim')
-call dein#add('wincent/ferret')
-call dein#add('DougBeney/pickachu')
 call dein#add('tpope/vim-dadbod')
-
-" Themes
-" call dein#add('arty88/sexy-railscasts-256-theme')
-" call dein#add('jacoborus/tender')
-" call dein#add('w0ng/vim-hybrid')
-
-" Need research
-" call dein#add('tpope/vim-git')
-" call dein#add('fszymanski/fzf-gitignore')
-" call dein#add('autozimu/LanguageClient-neovim')
