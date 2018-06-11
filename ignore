@@ -1,5 +1,6 @@
 *.log
 *.DS_Store
+.gitkeep
 tags
 .vscode/*
 .idea/*
