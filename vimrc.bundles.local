@@ -27,7 +27,6 @@ call dein#add('yuttie/comfortable-motion.vim')
 
 call dein#add('keith/rspec.vim')
 call dein#add('stephpy/vim-yaml')
-call dein#add('cakebaker/scss-syntax.vim')
 call dein#add('christoomey/vim-sort-motion')
 call dein#add('gorkunov/smartpairs.vim')
 call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')

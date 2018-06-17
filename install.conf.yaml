@@ -6,7 +6,9 @@
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
     ~/.config/karabiner/karabiner.json: karabiner.json
-    ~/.ctags: ctags
+    ~/.ctags.d/global.ctags: 
+        create: true
+        path: ctags
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
@@ -22,7 +24,6 @@
     ~/.zshrc: zshrc
 
 - shell:
-  - git config --global core.excludesfile $HOME/.gitignore_global
   - chmod 755 ~/.dotfiles/tmuxterm
   - ~/.dotfiles/tmuxterm
   - rm -rf ~/.config/nvim

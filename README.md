@@ -32,11 +32,11 @@ https://github.com/ryanoasis/nerd-fonts/releases/tag/v1.0.0
 
 or simple download and install fonts from directory fontpatched in this project
 
-- install silver search and ripgrep
+- install ripgrep and ctags
 
 ```
-brew install the_silver_searcher
 brew install ripgrep
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 ```
 
 - install syntax highlighting (this is added by default in last versions of zsh)
