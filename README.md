@@ -118,6 +118,11 @@ pip install --upgrade neovim
 gem install neovim
 ```
 
+- could need to run sometimes this command, to register new plugins
+```
+:UpdateRemotePlugins
+```
+
 Install supra-vim
 =============
 run this on a terminal:
