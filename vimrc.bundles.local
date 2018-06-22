@@ -23,7 +23,6 @@ call dein#add('jeffkreeftmeijer/vim-numbertoggle')
 call dein#add('j16180339887/Global.vim')
 call dein#add('othree/javascript-libraries-syntax.vim')
 call dein#add('plasticboy/vim-markdown')
-call dein#add('yuttie/comfortable-motion.vim')
 
 call dein#add('keith/rspec.vim')
 call dein#add('stephpy/vim-yaml')
