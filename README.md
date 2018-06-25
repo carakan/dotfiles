@@ -148,10 +148,11 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 
 `npm i -g npm`
 
-Install linters
+Install linters & LSP
 ===============
 ```
 npm i -g eslint stylelint tslint typescript tern prettier neovim
+npm i -g vscode-html-languageserver-bin
 ```
 
 Install Gems

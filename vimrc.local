@@ -351,3 +351,13 @@ let g:ember_tools_highlight_actions = 0
 nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
 
 let g:airline#extensions#cursormode#enabled = 0
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_serverCommands = {
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
+    \ 'html': ['html-languageserver', '--stdio']
+    \ }
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 1)
