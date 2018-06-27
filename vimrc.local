@@ -275,8 +275,6 @@ command! -bang -nargs=* Rg
 
 
 let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
-
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
