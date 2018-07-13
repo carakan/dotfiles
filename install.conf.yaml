@@ -5,6 +5,9 @@
     ~/.asdfrc: asdfrc
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
+    ~/.config/nvim/coc-settings.json: 
+        create: true
+        path: coc.json
     ~/.config/karabiner/karabiner.json: karabiner.json
     ~/.ctags.d/global.ctags: 
         create: true
@@ -26,8 +29,6 @@
 - shell:
   - chmod 755 ~/.dotfiles/tmuxterm
   - ~/.dotfiles/tmuxterm
-  - rm -rf ~/.config/nvim
-  - rm -rf ~/.config/nvim/init.vim
   - ln -s ~/.vim ~/.config/nvim
   - ln -s ~/.vimrc ~/.config/nvim/init.vim
   - sudo ln -s ~/.dotfiles/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist

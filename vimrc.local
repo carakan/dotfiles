@@ -70,8 +70,8 @@ let g:airline#extensions#ale#warning_symbol = ' '
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
-let g:ale_javascript_prettier_options = '--single-quote --print-width 95 --trailing-comma es5 --arrow-parens always'
-let g:ale_typescript_prettier_options = '--single-quote --print-width 95 --trailing-comma es5 --arrow-parens always'
+let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
+let g:ale_typescript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
 let g:ale_linters = {
  \   'javascript': ['eslint'],
  \   'erb': ['erb', 'erubis'],
@@ -350,15 +350,5 @@ nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
 
 let g:airline#extensions#cursormode#enabled = 0
 
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/vim-lsp.log')
-
-if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'javascript'],
-        \ })
-  autocmd FileType javascript,typescript setlocal omnifunc=lsp#complete
-endif
+" CoC
+let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.1/.npm/lib/node_modules/neovim/bin/cli.js'
