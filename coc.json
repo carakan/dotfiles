@@ -1,3 +1,4 @@
 {
-    "coc.preferences.diagnostic.enable": false
+    "coc.preferences.diagnostic.enable": false,
+    "coc.preferences.watchmanPath": "/usr/local/bin/watchman"
 }

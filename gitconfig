@@ -14,3 +14,7 @@
 	editor = /usr/local/bin/nvim
 	excludesfile = ~/.gitignore_global
 [commit]
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
