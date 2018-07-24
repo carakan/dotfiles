@@ -147,7 +147,7 @@ xmap gs <plug>(GrepperOperator)
 
 " save files
 nnoremap <c-s> :w<CR>
-inoremap <c-s> <Esc>:w<CR>l
+inoremap <c-s> <Esc>:w<CR>
 vnoremap <c-s> <Esc>:w<CR>
 
 " deoplete
@@ -162,9 +162,8 @@ nmap <silent> <leader>tf :TestFile<CR>
 nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
-let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
-" let test#elixir#exunit#options = '--trace'
 
+let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 let test#elixir#exunit#options = {
   \ 'nearest': '--trace',
   \ 'file':    '--trace',
