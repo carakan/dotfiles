@@ -65,8 +65,8 @@ let g:ale_sign_column_always = 0
 let g:ale_statusline_format = [' %d', ' %d', '']
 let g:airline#extensions#ale#error_symbol   = ' '
 let g:airline#extensions#ale#warning_symbol = ' '
-:hi ALEErrorSign guibg=#2d2d2d guifg=#d80a0a gui=NONE
-:hi ALEWarningSign guibg=#2d2d2d guifg=#FFC66D gui=NONE
+:hi ALEErrorSign guibg=#2D2D2D guifg=#D80A0A gui=NONE
+:hi ALEWarningSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
@@ -351,3 +351,6 @@ let g:airline#extensions#cursormode#enabled = 0
 
 " CoC
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.1/.npm/lib/node_modules/neovim/bin/cli.js'
+
+let g:bookmark_sign = ''
+highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
