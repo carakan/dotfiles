@@ -355,8 +355,11 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'html.handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
-    \ 'html': ['html-languageserver', '--stdio']
+    \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
+    \ 'html': ['html-languageserver', '--stdio'],
+    \ 'css': ['css-languageserver', '--stdio'],
+    \ 'scss': ['css-languageserver', '--stdio'],
+    \ 'ruby': ['solargraph', 'stdio']
     \ }
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 

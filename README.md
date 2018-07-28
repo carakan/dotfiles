@@ -154,6 +154,7 @@ Install linters & LSP
 npm i -g eslint stylelint tslint typescript tern prettier neovim
 npm i -g javascript-typescript-langserver
 npm i -g vscode-html-languageserver-bin
+npm i -g vscode-css-languageserver-bin
 ```
 
 Install Gems
