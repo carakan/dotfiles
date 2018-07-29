@@ -362,7 +362,6 @@ let g:LanguageClient_serverCommands = {
     \ 'html': ['html-languageserver', '--stdio'],
     \ 'css': ['css-languageserver', '--stdio'],
     \ 'scss': ['css-languageserver', '--stdio'],
-    \ 'elixir': ['~/lsp/elixir-ls/language_server.sh'],
     \ 'ruby': ['solargraph', 'stdio']
     \ }
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
