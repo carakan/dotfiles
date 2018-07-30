@@ -76,7 +76,7 @@ let g:ale_linters = {
  \   'javascript': ['eslint'],
  \   'erb': ['erb', 'erubis'],
  \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
- \   'typescript': ['tslint', 'typecheck'],
+ \   'typescript': ['tslint', 'typecheck', 'tsserver'],
  \   'html': [],
  \   'css': ['stylelint', 'prettier'],
  \   'haml': ['haml-lint'],

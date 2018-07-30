@@ -153,7 +153,7 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 Install linters & LSP
 ===============
 ```
-npm i -g eslint stylelint tslint typescript tern prettier neovim
+npm i -g eslint stylelint tslint typescript prettier neovim
 npm i -g javascript-typescript-langserver
 npm i -g vscode-html-languageserver-bin
 npm i -g vscode-css-languageserver-bin
@@ -199,6 +199,8 @@ git config --global commit.gpgsign true
 ```
 brew cask install android-sdk (--force)
 ```
+
+- install GNU globals check this instructions: https://gist.github.com/alexshgov/7e5ed7841667c66ef5ca4f31664714a9
 
 - Remap caps lock to esc and Crtl
 ~~I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.~~
