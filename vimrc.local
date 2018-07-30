@@ -352,9 +352,9 @@ let g:airline#extensions#cursormode#enabled = 0
 " CoC
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.1/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:LanguageClient_autoStart = 1
-let g:LanguageClient_rootMarkers = {
-    \ 'elixir': ['mix.exs'],
-    \ }
+" let g:LanguageClient_rootMarkers = {
+"     \ 'elixir': ['mix.exs'],
+"     \ }
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
@@ -389,5 +389,16 @@ call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 let g:bookmark_sign = ''
 highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 
-
 let g:NERDTreeMapMenu = 'nt'
+
+" enable gtags module
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+" config project root markers.
+let g:gutentags_project_root = ['.root']
+
+" generate datebases in my cache directory, prevent gtags files polluting my project
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+" forbid gutentags adding gtags databases
+let g:gutentags_auto_add_gtags_cscope = 0

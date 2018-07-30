@@ -114,6 +114,8 @@ pip install neovim
 # to upgrade
 pip install --upgrade neovim
 
+brew install globals --with-pygments
+
 #ruby
 gem install neovim
 ```
@@ -155,6 +157,7 @@ npm i -g eslint stylelint tslint typescript tern prettier neovim
 npm i -g javascript-typescript-langserver
 npm i -g vscode-html-languageserver-bin
 npm i -g vscode-css-languageserver-bin
+gem install solargraph
 ```
 
 Install Gems

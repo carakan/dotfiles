@@ -1,7 +1,6 @@
 call dein#add('Asheq/close-buffers.vim')
 call dein#add('Xuyuanp/nerdtree-git-plugin')
 call dein#add('mhinz/vim-grepper')
-call dein#add('tpope/vim-dispatch')
 call dein#add('janko-m/vim-test')
 call dein#add('rizzatti/dash.vim')
 call dein#add('w0rp/ale')
