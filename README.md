@@ -200,10 +200,10 @@ git config --global commit.gpgsign true
 brew cask install android-sdk (--force)
 ```
 
-- install GNU globals check this instructions: https://gist.github.com/alexshgov/7e5ed7841667c66ef5ca4f31664714a9
+- install GNU globals check this instructions: https://gist.github.com/carakan/60496e0f05033417be2352419639fcc5
 
 - Remap caps lock to esc and Crtl
-~~I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.~~
+I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.~~
 This dotfiles work with last version of karabiner elements.
 
 - [upgrade ssh keys](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
