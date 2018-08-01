@@ -358,7 +358,7 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
+    \ 'handlebars': ['node', '/Users/carakan/lsp/ember-language-server/lib/start-server.js'],
     \ 'html': ['html-languageserver', '--stdio'],
     \ 'css': ['css-languageserver', '--stdio'],
     \ 'scss': ['css-languageserver', '--stdio'],
@@ -384,7 +384,7 @@ call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
   autocmd FileType javascript,python,typescript,json,css,less,html,reason setlocal omnifunc=LanguageClient#complete
 
  let g:LanguageClient_loggingLevel='DEBUG'
- let g:LanguageClient_loggingFile='~/development/LC.log'
+ let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
 
 let g:bookmark_sign = ''
 highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
@@ -392,7 +392,7 @@ highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 let g:NERDTreeMapMenu = 'nt'
 
 " enable gtags module
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
+let g:gutentags_modules = ['ctags']
 
 " config project root markers.
 " let g:gutentags_project_root = ['.root']
