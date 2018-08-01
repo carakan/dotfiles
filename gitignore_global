@@ -11,3 +11,6 @@ tags
 tmp/**/*
 # Thumbnails
 ._*
+GPATH
+GRTAGS
+GTAGS

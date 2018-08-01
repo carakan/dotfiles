@@ -83,7 +83,7 @@ let g:ale_linters = {
  \   'handlebars': ['ember-template-lint'],
  \   'json': ['prettier'],
  \   'scss': ['stylelint', 'prettier'],
- \   'elixir': ['credo', 'mix'],
+ \   'elixir': ['credo', 'dialyxir', 'mix'],
  \   'vim': ['vint'],
  \}
 
