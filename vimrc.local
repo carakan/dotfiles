@@ -96,7 +96,8 @@ let g:ale_fixers = {
 \   'html': ['remove_trailing_lines', 'trim_whitespace'],
 \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
 \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
-\   'json': ['prettier']
+\   'json': ['prettier'],
+\   'yaml': ['prettier']
 \}
 
 """"
