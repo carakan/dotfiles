@@ -115,9 +115,6 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 
@@ -132,3 +129,6 @@ export TERMINFO="$HOME/.terminfo"
 # this is for homebrew
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
