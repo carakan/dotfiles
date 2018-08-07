@@ -73,32 +73,32 @@ nmap <leader>f <Plug>(ale_fix)
 let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
 let g:ale_typescript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
 let g:ale_linters = {
- \   'javascript': ['eslint'],
- \   'erb': ['erb', 'erubis'],
- \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
- \   'typescript': ['tslint', 'typecheck', 'tsserver'],
- \   'html': [],
- \   'css': ['stylelint', 'prettier'],
- \   'haml': ['haml-lint'],
- \   'handlebars': ['ember-template-lint'],
- \   'json': ['prettier'],
- \   'scss': ['stylelint', 'prettier'],
- \   'elixir': ['credo', 'dialyxir', 'mix'],
- \   'vim': ['vint'],
- \}
+  \   'css': ['stylelint', 'prettier'],
+  \   'elixir': ['credo', 'dialyxir', 'mix'],
+  \   'erb': ['erb', 'erubis'],
+  \   'haml': ['haml-lint'],
+  \   'handlebars': ['ember-template-lint'],
+  \   'html': [],
+  \   'javascript': ['eslint'],
+  \   'json': ['prettier'],
+  \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
+  \   'scss': ['stylelint', 'prettier'],
+  \   'typescript': ['tslint', 'typecheck', 'tsserver'],
+  \   'vim': ['vint'],
+  \}
 
 let g:ale_fixers = {
-\   'javascript': ['prettier', 'eslint'],
-\   'typescript': ['prettier', 'tslint'],
-\   'ruby': ['rubocop', 'trim_whitespace'],
-\   'css': ['stylelint', 'prettier'],
-\   'scss': ['stylelint'],
-\   'html': ['remove_trailing_lines', 'trim_whitespace'],
-\   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
-\   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
-\   'json': ['prettier'],
-\   'yaml': ['prettier']
-\}
+  \   'css': ['stylelint', 'prettier'],
+  \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
+  \   'html': ['remove_trailing_lines', 'trim_whitespace'],
+  \   'javascript': ['prettier', 'eslint'],
+  \   'json': ['prettier'],
+  \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
+  \   'ruby': ['rufo', 'rubocop'],
+  \   'scss': ['stylelint'],
+  \   'typescript': ['prettier', 'tslint'],
+  \   'yaml': ['prettier']
+  \}
 
 """"
 " Signify
@@ -200,7 +200,7 @@ vnoremap K :m '<-2<CR>gv=gv
 " FZF integration
 
 let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
+  \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'Comment'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -395,11 +395,3 @@ let g:NERDTreeMapMenu = 'nt'
 " enable gtags module
 let g:gutentags_modules = ['ctags']
 
-" config project root markers.
-" let g:gutentags_project_root = ['.root']
-
-" generate datebases in my cache directory, prevent gtags files polluting my project
-" let g:gutentags_cache_dir = expand('~/.cache/tags')
-
-" forbid gutentags adding gtags databases
-" let g:gutentags_auto_add_gtags_cscope = 0
