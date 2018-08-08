@@ -12,6 +12,7 @@ deps/*
 _build/*
 coverage/*
 .git/*
+.elixir-ls/*
 GPATH
 GRTAGS
 GTAGS
