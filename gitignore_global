@@ -7,7 +7,7 @@
 .tern-project
 .tool-versions
 .vscode/*
-.elixir-ls/*
+.elixir_ls/*
 tags
 tmp/**/*
 # Thumbnails
