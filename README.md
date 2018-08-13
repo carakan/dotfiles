@@ -46,15 +46,6 @@ brew install zsh-syntax-highlighting
 brew install highlight
 ```
 
-- install reattach-to-user-namespace
-
-http://evertpot.com/osx-tmux-vim-copy-paste-clipboard/
-https://gist.github.com/burke/5960455
-
-```
-brew install reattach-to-user-namespace
-```
-
 - install fzf
 ```
 brew install fzf
