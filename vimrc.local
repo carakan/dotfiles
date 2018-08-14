@@ -281,14 +281,7 @@ let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
 
 nnoremap <silent> Q :CloseBuffers<CR>
 
-let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['node', '~/lsp/ember-language-server/lib/start-server.js'],
-    \ 'handlebars': ['node', '~/lsp/ember-language-server/lib/start-server.js']
-    \ }
 let g:mustache_abbreviations = 1
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-
 
 " ----------------------------------------------------------------------------
 " WebDevIcons
@@ -352,15 +345,17 @@ let g:airline#extensions#cursormode#enabled = 0
 
 " CoC
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.1/.npm/lib/node_modules/neovim/bin/cli.js'
+
 let g:LanguageClient_autoStart = 1
-" let g:LanguageClient_rootMarkers = {
-"     \ 'elixir': ['mix.exs'],
-"     \ }
+let g:LanguageClient_rootMarkers = {
+    \ 'elixir': ['mix.exs'],
+    \ }
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'handlebars': ['node', '/Users/carakan/lsp/ember-language-server/lib/start-server.js'],
     \ 'html': ['html-languageserver', '--stdio'],
+    \ 'elixir': ['~/lsp/elixir-ls/language_server.sh'],
     \ 'css': ['css-languageserver', '--stdio'],
     \ 'scss': ['css-languageserver', '--stdio'],
     \ 'ruby': ['solargraph', 'stdio']
@@ -369,17 +364,17 @@ call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
 
   " <leader>ld to go to definition
-  autocmd FileType javascript,typescript,json,css,html nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
+  nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
   " <leader>lf to autoformat document
-  autocmd FileType javascript,typescript,json,css,html nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
+  nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
   " <leader>lh for type info under cursor
-  autocmd FileType javascript,typescript,json,css,html nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
+  nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
   " <leader>lr to rename variable under cursor
-  autocmd FileType javascript,typescript,json,css,html nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
+  nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
   " <leader>lc to switch omnifunc to LanguageClient
-  autocmd FileType javascript,typescript,json,css,html,reason nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
+  nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
   " <leader>ls to fuzzy find the symbols in the current document
-  autocmd FileType javascript,typescript,json,css,html,reason nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
+  nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
 
   " Use as omnifunc by default
   autocmd FileType javascript,python,typescript,json,css,less,html,reason setlocal omnifunc=LanguageClient#complete
@@ -394,4 +389,3 @@ let g:NERDTreeMapMenu = 'nt'
 
 " enable gtags module
 let g:gutentags_modules = ['ctags']
-

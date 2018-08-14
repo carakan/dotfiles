@@ -18,3 +18,5 @@
 	rebase = true
 [rebase]
 	autoStash = true
+[color]
+  ui = auto
