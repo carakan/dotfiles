@@ -25,6 +25,7 @@ call dein#add('MattesGroeger/vim-bookmarks')
 " call dein#add('neoclide/coc.nvim', {'build': 'npm install'})
 call dein#add('autozimu/LanguageClient-neovim', { 'rev': 'next', 'build': 'bash install.sh' })
 call dein#add('justinmk/vim-sneak')
+call dein#add('posva/vim-vue')
 
 call dein#add('keith/rspec.vim')
 call dein#add('stephpy/vim-yaml')
