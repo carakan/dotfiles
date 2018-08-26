@@ -148,6 +148,7 @@ npm i -g eslint stylelint tslint typescript prettier neovim
 npm i -g javascript-typescript-langserver
 npm i -g vscode-html-languageserver-bin
 npm i -g vscode-css-languageserver-bin
+npm i -g vue-language-server
 gem install solargraph
 ```
 
