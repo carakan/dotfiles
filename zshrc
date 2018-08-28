@@ -129,6 +129,7 @@ export TERMINFO="$HOME/.terminfo"
 # this is for homebrew
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
+export HOMEBREW_AUTO_UPDATE_SECS=600000
 
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
