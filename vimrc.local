@@ -363,7 +363,6 @@ let g:LanguageClient_serverCommands = {
     \ }
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
-
   " <leader>ld to go to definition
   nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
   " <leader>lf to autoformat document
@@ -377,10 +376,11 @@ call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
   " <leader>ls to fuzzy find the symbols in the current document
   nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
 
-  " Use as omnifunc by default
-  autocmd FileType javascript,python,typescript,json,css,less,html,reason setlocal omnifunc=LanguageClient#complete
+" Use as omnifunc by default
+setlocal omnifunc=LanguageClient#complete
+setlocal completefunc=LanguageClient#complete
 
- let g:LanguageClient_loggingLevel='DEBUG'
+ " let g:LanguageClient_loggingLevel='DEBUG'
  let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
 
 let g:bookmark_sign = ''
