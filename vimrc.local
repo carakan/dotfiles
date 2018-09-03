@@ -85,6 +85,7 @@ let g:ale_linters = {
   \   'scss': ['stylelint', 'prettier'],
   \   'typescript': ['tslint', 'typecheck', 'tsserver'],
   \   'vim': ['vint'],
+  \   'vue': ['vls', 'eslint'],
   \}
 
 let g:ale_fixers = {
@@ -97,6 +98,7 @@ let g:ale_fixers = {
   \   'ruby': ['rufo', 'rubocop'],
   \   'scss': ['stylelint'],
   \   'typescript': ['prettier', 'tslint'],
+  \   'vue': ['prettier'],
   \   'yaml': ['prettier']
   \}
 
