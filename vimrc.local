@@ -98,7 +98,7 @@ let g:ale_fixers = {
   \   'ruby': ['rufo', 'rubocop'],
   \   'scss': ['stylelint'],
   \   'typescript': ['prettier', 'tslint'],
-  \   'vue': ['prettier'],
+  \   'vue': ['prettier', 'trim_whitespace'],
   \   'yaml': ['prettier']
   \}
 
