@@ -64,7 +64,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew tmux asdf zsh-autosuggestions ember-cli osx)
+plugins=(git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
 
 # User configuration
 
@@ -105,9 +105,9 @@ setopt noflowcontrol
 KEYTIMEOUT=1
 
 # android
-export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=/usr/local/share/android-sdk
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+# export JAVA_HOME=$(/usr/libexec/java_home)
+# export ANDROID_HOME=/usr/local/share/android-sdk
+# export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 
 # Erlang elixir
 export ERL_AFLAGS="-kernel shell_history enabled"

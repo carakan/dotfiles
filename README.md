@@ -22,8 +22,9 @@ brew install neovim  # to install last STABLE version
 
 ```
 cd ~/.oh-my-zsh/custom
-git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
-git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
 ```
 
 - Install patched fonts from:
@@ -52,6 +53,7 @@ brew install fzf
 
 # Install shell extensions
 /usr/local/opt/fzf/install
+brew install git-cal
 ```
 
 Install dotfiles
