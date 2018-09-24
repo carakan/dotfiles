@@ -223,46 +223,46 @@ function! FZFOpen(command_str)
   exe 'normal! ' . a:command_str . "\<cr>"
 endfunction
 
-  nnoremap <silent> <C-p> :Files<CR>
-  nnoremap <silent> <C-t> :Buffers<CR>
-  nnoremap <silent> <leader><space> :Files<CR>
-  nnoremap <silent> <leader>a :Buffers<CR>
-  nnoremap <silent> <leader>A :Windows<CR>
-  nnoremap <silent> <leader>; :BLines<CR>
-  nnoremap <silent> <leader>o :BTags<CR>
-  nnoremap <silent> <leader>O :Tags<CR>
-  nnoremap <silent> <leader>? :History<CR>
-  nnoremap <silent> <C-c> :Commands<CR>
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-t> :Buffers<CR>
+nnoremap <silent> <leader><space> :Files<CR>
+nnoremap <silent> <leader>a :Buffers<CR>
+nnoremap <silent> <leader>A :Windows<CR>
+nnoremap <silent> <leader>; :BLines<CR>
+nnoremap <silent> <leader>o :BTags<CR>
+nnoremap <silent> <leader>O :Tags<CR>
+nnoremap <silent> <leader>? :History<CR>
+nnoremap <silent> <C-c> :Commands<CR>
 
-  nnoremap <silent> F :call SearchWordWithAg()<CR>
-  vnoremap <silent> F :call SearchVisualSelectionWithAg()<CR>
-  nnoremap <silent> <leader>gl :Commits<CR>
-  nnoremap <silent> <leader>ga :BCommits<CR>
-  nnoremap <silent> <leader>ft :Filetypes<CR>
+nnoremap <silent> F :call SearchWordWithAg()<CR>
+vnoremap <silent> F :call SearchVisualSelectionWithAg()<CR>
+nnoremap <silent> <leader>gl :Commits<CR>
+nnoremap <silent> <leader>ga :BCommits<CR>
+nnoremap <silent> <leader>ft :Filetypes<CR>
 
-  imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-  imap <C-x><C-l> <plug>(fzf-complete-line)
+imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+imap <C-x><C-l> <plug>(fzf-complete-line)
 
-  function! SearchWordWithAg()
-    execute 'Rg' expand('<cword>')
-  endfunction
+function! SearchWordWithAg()
+  execute 'Rg' expand('<cword>')
+endfunction
 
-  function! SearchVisualSelectionWithAg() range
-    let old_reg = getreg('"')
-    let old_regtype = getregtype('"')
-    let old_clipboard = &clipboard
-    set clipboard&
-    normal! ""gvy
-    let selection = getreg('"')
-    call setreg('"', old_reg, old_regtype)
-    let &clipboard = old_clipboard
-    execute 'Rg' selection
-  endfunction
+function! SearchVisualSelectionWithAg() range
+  let old_reg = getreg('"')
+  let old_regtype = getregtype('"')
+  let old_clipboard = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', old_reg, old_regtype)
+  let &clipboard = old_clipboard
+  execute 'Rg' selection
+endfunction
 
-  function! SearchWithAgInDirectory(...)
-    call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
-  endfunction
-  command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
+function! SearchWithAgInDirectory(...)
+  call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
+endfunction
+command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
 
 let g:fzf_files_options =
   \ '--preview "(highlight -s candy -O truecolor {} || cat {}) 2> /dev/null | head -'.&lines.'"'
@@ -345,9 +345,8 @@ nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
 
 let g:airline#extensions#cursormode#enabled = 0
 
-" CoC
-let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.1/.npm/lib/node_modules/neovim/bin/cli.js'
-
+" node
+let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/8.11.3/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_rootMarkers = {
     \ 'elixir': ['mix.exs'],
@@ -365,25 +364,25 @@ let g:LanguageClient_serverCommands = {
     \ }
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
-  " <leader>ld to go to definition
-  nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
-  " <leader>lf to autoformat document
-  nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
-  " <leader>lh for type info under cursor
-  nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
-  " <leader>lr to rename variable under cursor
-  nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
-  " <leader>lc to switch omnifunc to LanguageClient
-  nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
-  " <leader>ls to fuzzy find the symbols in the current document
-  nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
+" <leader>ld to go to definition
+nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
+" <leader>lf to autoformat document
+nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
+" <leader>lh for type info under cursor
+nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
+" <leader>lr to rename variable under cursor
+nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
+" <leader>lc to switch omnifunc to LanguageClient
+nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
+" <leader>ls to fuzzy find the symbols in the current document
+nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
 
 " Use as omnifunc by default
 setlocal omnifunc=LanguageClient#complete
 setlocal completefunc=LanguageClient#complete
 
- " let g:LanguageClient_loggingLevel='DEBUG'
- let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
+" let g:LanguageClient_loggingLevel='DEBUG'
+let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
 
 let g:bookmark_sign = ''
 highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE

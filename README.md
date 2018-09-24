@@ -20,7 +20,7 @@ brew install neovim  # to install last STABLE version
 ```
 - install this theme for zsh:
 
-```
+```shell
 cd ~/.oh-my-zsh/custom
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
