@@ -389,3 +389,4 @@ highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 
 let g:NERDTreeMapMenu = 'nt'
 
+vmap <leader>y :YankCode<CR>
