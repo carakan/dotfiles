@@ -89,9 +89,9 @@ let g:ale_linters = {
   \}
 
 let g:ale_fixers = {
+  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
   \   'css': ['stylelint', 'prettier'],
   \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
-  \   'html': ['remove_trailing_lines', 'trim_whitespace'],
   \   'javascript': ['prettier', 'eslint'],
   \   'json': ['prettier'],
   \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
@@ -288,39 +288,39 @@ let g:mustache_abbreviations = 1
 " ----------------------------------------------------------------------------
 " WebDevIcons
 " ----------------------------------------------------------------------------
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
-let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:webdevicons_enable_airline_statusline = 1
-let g:webdevicons_enable_airline_tabline = 1
 let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['ex'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['exs'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['json'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['jsx'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vim'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['md'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rabl'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rb'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['svg'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vim'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['yaml'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['yml'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['svg'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['json'] = ''
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_tabline = 1
 
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {} " needed
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*vimrc.*'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-version'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-gemset'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.keep'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.rspec'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-gemset'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-version'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Rakefile'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['application.rb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['environment.rb'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['package.json'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['routes.rb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['spring.rb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.keep'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['package.json'] = ''
 
 " after a re-source, fix syntax matching issues (concealing brackets):
 if exists('g:loaded_webdevicons')
@@ -352,14 +352,14 @@ let g:LanguageClient_rootMarkers = {
     \ 'elixir': ['mix.exs'],
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'css': ['css-languageserver', '--stdio'],
+    \ 'elixir': ['~/lsp/elixir-ls/language_server.sh'],
     \ 'handlebars': ['node', '/Users/carakan/lsp/ember-language-server/lib/start-server.js'],
     \ 'html': ['html-languageserver', '--stdio'],
-    \ 'elixir': ['~/lsp/elixir-ls/language_server.sh'],
-    \ 'css': ['css-languageserver', '--stdio'],
-    \ 'scss': ['css-languageserver', '--stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
     \ 'ruby': ['solargraph', 'stdio'],
+    \ 'scss': ['css-languageserver', '--stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
     \ 'vue': ['vls']
     \ }
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
