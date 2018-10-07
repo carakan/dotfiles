@@ -1,9 +1,8 @@
-" no backups
 set nobackup
 
 colorscheme new-railscasts
 
-if has("gui_running")
+if has('gui_running')
 else
   let g:indent_guides_auto_colors = 0
   " Popup color.
@@ -34,7 +33,7 @@ set noshowmode
 set modeline
 
 " Enable ruby syntax
-let ruby_operators = 1
+let g:ruby_operators = 1
 
 " Disable arrows keys
 noremap   <Up>     <NOP>
@@ -136,11 +135,10 @@ set splitbelow
 set splitright
 
 " Make it obvious where 80 characters is
-set tw=120
 set textwidth=120
 set colorcolumn=+1
 :hi ColorColumn guibg=#302424 ctermbg=237
-let &colorcolumn="80,".join(range(120,999),",")
+let &colorcolumn = '80,' . join(range(120, 999), ',')
 
 " Vim-grepper
 nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
@@ -156,7 +154,7 @@ vnoremap <c-s> <Esc>:w<CR>
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let deoplete#tag#cache_limit_size = 5000000
+let g:deoplete#tag#cache_limit_size = 5000000
 
 " vim test plugin
 let g:test#strategy = 'tslime'
@@ -166,8 +164,8 @@ nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
 
-let test#javascript#mocha#executable = 'NODE_ENV=test mocha'
-let test#elixir#exunit#options = {
+let g:test#javascript#mocha#executable = 'NODE_ENV=test mocha'
+let g:test#elixir#exunit#options = {
   \ 'nearest': '--trace',
   \ 'file':    '--trace',
   \ 'suite':   '--stale --trace',
@@ -187,11 +185,11 @@ nmap <silent> <leader>d <Plug>DashSearch
 map <Leader>ct :call atags#generate()<cr>
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "snips"]
-let g:UltiSnipsEditSplit= "context"
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<c-b>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
+let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snips']
+let g:UltiSnipsEditSplit = 'context'
 
 :set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
@@ -248,15 +246,15 @@ function! SearchWordWithAg()
 endfunction
 
 function! SearchVisualSelectionWithAg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  let l:old_clipboard = &clipboard
   set clipboard&
   normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
-  execute 'Rg' selection
+  let l:selection = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  let &clipboard = l:old_clipboard
+  execute 'Rg' l:selection
 endfunction
 
 function! SearchWithAgInDirectory(...)
@@ -279,7 +277,7 @@ let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml, *.hbs, *.xml"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml, *.hbs, *.xml'
 
 nnoremap <silent> Q :CloseBuffers<CR>
 
