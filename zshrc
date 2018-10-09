@@ -64,7 +64,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
+plugins=(asdf brew dircycle dirhistory dirpersist ember-cli git git-extras gitfast history-substring-search jsontools last-working-dir node npm osx repo safe-paste sudo tmux urltools web-search zsh-autosuggestions zsh-completions)
 
 # User configuration
 
