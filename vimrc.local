@@ -49,6 +49,7 @@ set undofile " Only works on neovim
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:bufferline_echo = 0
 
 " ALE
 let g:ale_lint_on_text_changed = 'never'
