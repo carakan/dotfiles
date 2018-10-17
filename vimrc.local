@@ -379,6 +379,7 @@ nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<
 " Use as omnifunc by default
 setlocal omnifunc=LanguageClient#complete
 setlocal completefunc=LanguageClient#complete
+let g:LanguageClient_diagnosticsList = 'Disabled'
 
 " let g:LanguageClient_loggingLevel='DEBUG'
 let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
