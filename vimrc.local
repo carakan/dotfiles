@@ -91,7 +91,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
   \   'css': ['stylelint', 'prettier'],
-  \   'elixir': ['remove_trailing_lines', 'trim_whitespace', 'mix_format'],
+  \   'elixir': ['mix_format'],
   \   'javascript': ['prettier', 'eslint'],
   \   'json': ['prettier'],
   \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
