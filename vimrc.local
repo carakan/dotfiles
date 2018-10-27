@@ -199,7 +199,6 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " FZF integration
-
 let g:fzf_colors =
   \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -224,17 +223,17 @@ endfunction
 
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-t> :Buffers<CR>
-nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader>a :Buffers<CR>
 nnoremap <silent> <leader>A :Windows<CR>
 nnoremap <silent> <leader>; :BLines<CR>
-nnoremap <silent> <leader>o :BTags<CR>
-nnoremap <silent> <leader>O :Tags<CR>
+nnoremap <silent> <leader>O :BTags<CR>
+nnoremap <silent> <leader>o :Tags<CR>
+nnoremap <silent> <leader>m :Maps<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <C-c> :Commands<CR>
 
-nnoremap <silent> F :call SearchWordWithAg()<CR>
-vnoremap <silent> F :call SearchVisualSelectionWithAg()<CR>
+nnoremap <silent> F :call SearchWordWithRg()<CR>
+vnoremap <silent> F :call SearchVisualSelectionWithRg()<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>ft :Filetypes<CR>
@@ -242,11 +241,11 @@ nnoremap <silent> <leader>ft :Filetypes<CR>
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
-function! SearchWordWithAg()
+function! SearchWordWithRg()
   execute 'Rg' expand('<cword>')
 endfunction
 
-function! SearchVisualSelectionWithAg() range
+function! SearchVisualSelectionWithRg() range
   let l:old_reg = getreg('"')
   let l:old_regtype = getregtype('"')
   let l:old_clipboard = &clipboard
