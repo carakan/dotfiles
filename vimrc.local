@@ -1,4 +1,5 @@
 set nobackup
+set cursorcolumn
 
 colorscheme new-railscasts
 
@@ -138,7 +139,6 @@ set splitright
 " Make it obvious where 80 characters is
 set textwidth=120
 set colorcolumn=+1
-:hi ColorColumn guibg=#302424 ctermbg=237
 let &colorcolumn = '80,' . join(range(120, 999), ',')
 
 " Vim-grepper
