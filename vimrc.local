@@ -167,9 +167,9 @@ nmap <silent> <leader>tv :TestVisit<CR>
 
 let g:test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 let g:test#elixir#exunit#options = {
-  \ 'nearest': '--trace',
-  \ 'file':    '--trace',
-  \ 'suite':   '--stale --trace --failed',
+  \ 'nearest': '--trace --color',
+  \ 'file':    '--trace --color',
+  \ 'suite':   '--color --trace --failed',
 \}
 
 " tslime configs
