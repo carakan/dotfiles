@@ -126,7 +126,7 @@ set expandtab             " use spaces instead of tabs
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 
 " elixir config
-let g:alchemist#extended_autocomplete = 1
+let g:elixir_use_markdown_for_docs = 1
 
 " Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
 nnoremap <C-J> <C-W><C-J>
