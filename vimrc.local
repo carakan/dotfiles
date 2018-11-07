@@ -71,8 +71,6 @@ let g:airline#extensions#ale#warning_symbol = ' '
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
-let g:ale_javascript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
-let g:ale_typescript_prettier_options = '--single-quote --print-width 100 --trailing-comma es5 --arrow-parens always'
 let g:ale_linters = {
   \   'css': ['stylelint', 'prettier'],
   \   'elixir': ['credo', 'dialyxir', 'mix'],
@@ -95,14 +93,13 @@ let g:ale_fixers = {
   \   'elixir': ['mix_format'],
   \   'javascript': ['prettier', 'eslint'],
   \   'json': ['prettier'],
-  \   'markdown': ['remove_trailing_lines', 'trim_whitespace', 'prettier'],
+  \   'markdown': ['prettier'],
   \   'ruby': ['rufo', 'rubocop'],
   \   'scss': ['stylelint'],
   \   'typescript': ['prettier', 'tslint'],
-  \   'vue': ['prettier', 'trim_whitespace'],
+  \   'vue': ['prettier'],
   \   'yaml': ['prettier'],
-  \   'html': ['prettier'],
-  \   'handlebars': ['prettier']
+  \   'html': ['prettier']
   \}
 
 """"
@@ -455,3 +452,5 @@ function! Fzf_dev()
         \ 'options': g:fzf_files_options,
         \ 'down':    '40%' })
 endfunction
+
+au BufRead,BufNewFile *.scss set filetype=scss.css
