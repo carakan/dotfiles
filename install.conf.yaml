@@ -5,9 +5,6 @@
     ~/.asdfrc: asdfrc
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
-    ~/.config/nvim/coc-settings.json: 
-        create: true
-        path: coc.json
     ~/.config/karabiner/karabiner.json: 
         create: true
         path: karabiner.json
@@ -19,6 +16,7 @@
     ~/.gitignore_global: gitignore_global
     ~/.ignore: ignore
     ~/.irbrc: irbrc
+    ~/.prettierrc: prettierrc
     ~/.profile: profile
     ~/.tern-config: tern-config
     ~/.tmux.conf: tmux.conf

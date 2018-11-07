@@ -100,7 +100,9 @@ let g:ale_fixers = {
   \   'scss': ['stylelint'],
   \   'typescript': ['prettier', 'tslint'],
   \   'vue': ['prettier', 'trim_whitespace'],
-  \   'yaml': ['prettier']
+  \   'yaml': ['prettier'],
+  \   'html': ['prettier'],
+  \   'handlebars': ['prettier']
   \}
 
 """"

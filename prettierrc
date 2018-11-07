@@ -1,0 +1,13 @@
+{
+  "printWidth": 100,
+  "arrowParens": "always",
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": "*.hbs",
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
+}
