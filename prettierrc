@@ -7,7 +7,8 @@
     {
       "files": "*.hbs",
       "options": {
-        "parser": "glimmer"
+        "parser": "glimmer",
+        "singleQuote": false
       }
     }
   ]
