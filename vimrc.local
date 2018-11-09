@@ -6,17 +6,10 @@ colorscheme new-railscasts
 if has('gui_running')
 else
   let g:indent_guides_auto_colors = 0
-  " Popup color.
-  :hi Pmenu ctermbg=232 ctermfg=253
-  :hi PmenuSel ctermbg=239 ctermfg=255
-  :hi PmenuSbar ctermbg=255
   " Set split separator to Unicode box drawing character
   set encoding=utf8
   set fillchars=vert:│
 end
-
-" No spell in any case
-set nospell
 
 " Uses tpope's vim-sensible defaults
 set hidden
@@ -32,6 +25,7 @@ set ignorecase
 set smartcase
 set noshowmode
 set modeline
+set nospell
 
 " Enable ruby syntax
 let g:ruby_operators = 1
@@ -228,7 +222,6 @@ nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>O :BTags<CR>
 nnoremap <silent> <leader>o :Tags<CR>
 nnoremap <silent> <leader>m :Maps<CR>
-nnoremap <silent> <leader>M :call Fzf_dev()<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <C-c> :Commands<CR>
 
@@ -422,35 +415,11 @@ endfunction
 
 imap <C-k> <C-R>=ExpandLspSnippet()<CR>
 
-function! Fzf_dev()
+nmap <C-S-P> :call <SID>SynStack()<CR>
 
-  function! s:files()
-    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
-    return s:prepend_icon(l:files)
-  endfunction
-
-  function! s:prepend_icon(candidates)
-    let l:result = []
-    for l:candidate in a:candidates
-      let l:filename = fnamemodify(l:candidate, ':p:t')
-      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
-      call add(l:result, printf('%s %s', l:icon, l:candidate))
-    endfor
-
-    return l:result
-  endfunction
-
-  function! s:edit_file(item)
-    let l:pos = stridx(a:item, ' ')
-    let l:file_path = a:item[pos+1:-1]
-    execute 'silent e' l:file_path
-  endfunction
-
-  call fzf#run({
-        \ 'source': <sid>files(),
-        \ 'sink':   function('s:edit_file'),
-        \ 'options': g:fzf_files_options,
-        \ 'down':    '40%' })
-endfunction
-
-au BufRead,BufNewFile *.scss set filetype=scss.css
+function! <SID>SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
