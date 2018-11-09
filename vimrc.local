@@ -3,13 +3,10 @@ set cursorcolumn
 
 colorscheme new-railscasts
 
-if has('gui_running')
-else
-  let g:indent_guides_auto_colors = 0
-  " Set split separator to Unicode box drawing character
-  set encoding=utf8
-  set fillchars=vert:│
-end
+let g:indent_guides_auto_colors = 0
+" Set split separator to Unicode box drawing character
+set encoding=utf8
+set fillchars=vert:│
 
 " Uses tpope's vim-sensible defaults
 set hidden
@@ -415,7 +412,7 @@ endfunction
 
 imap <C-k> <C-R>=ExpandLspSnippet()<CR>
 
-nmap <C-S-P> :call <SID>SynStack()<CR>
+nmap <C-y> :call <SID>SynStack()<CR>
 
 function! <SID>SynStack()
     if !exists("*synstack")
