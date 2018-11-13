@@ -399,7 +399,7 @@ imap <C-k> <C-R>=ExpandLspSnippet()<CR>
 nmap <C-y> :call <SID>SynStack()<CR>
 
 function! <SID>SynStack()
-    if !exists("*synstack")
+    if !exists('*synstack')
         return
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
