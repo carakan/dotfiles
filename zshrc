@@ -117,6 +117,10 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
+export BAT_THEME="OneHalfDark"
+export FZF_COMPLETION_OPTS="--preview '(bat --color=always {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 eval "$(direnv hook zsh)"
 
