@@ -10,6 +10,13 @@
         "parser": "glimmer",
         "singleQuote": false
       }
+    },
+    {
+      "files": "*.erb",
+      "options": {
+        "parser": "html",
+        "singleQuote": false
+      }
     }
   ]
 }

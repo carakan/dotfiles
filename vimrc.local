@@ -56,8 +56,6 @@ let g:ale_sign_column_always = 0
 let g:ale_statusline_format = [' %d', ' %d', '']
 let g:airline#extensions#ale#error_symbol   = ' '
 let g:airline#extensions#ale#warning_symbol = ' '
-:hi ALEErrorSign guibg=#2D2D2D guifg=#D80A0A gui=NONE
-:hi ALEWarningSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
@@ -89,35 +87,36 @@ let g:ale_fixers = {
   \   'typescript': ['prettier', 'tslint'],
   \   'vue': ['prettier'],
   \   'yaml': ['prettier'],
-  \   'html': ['prettier']
+  \   'html': ['prettier'],
+  \   'eruby': ['prettier']
   \}
 
 " Signify
-let g:signify_disable_by_default     = 0
 let g:signify_cursorhold_insert      = 1
 let g:signify_cursorhold_normal      = 1
-let g:signify_update_on_bufenter     = 1
-let g:signify_update_on_focusgained  = 1
+let g:signify_disable_by_default     = 0
 let g:signify_sign_add               = '✚'
-let g:signify_sign_delete            = '✖'
-let g:signify_sign_delete_first_line = '✭'
 let g:signify_sign_change            = '✹'
 let g:signify_sign_changedelete      = '➜'
+let g:signify_sign_delete            = '✖'
+let g:signify_sign_delete_first_line = '✭'
+let g:signify_update_on_bufenter     = 1
+let g:signify_update_on_focusgained  = 1
 
 " Text Formatting/Layout                                                    "
 set autoindent            " auto-indent
-set shiftround            " always indent/outdent to the nearest tabstop
 set expandtab             " use spaces instead of tabs
+set shiftround            " always indent/outdent to the nearest tabstop
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 
 " elixir config
 let g:elixir_use_markdown_for_docs = 1
 
 " Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+nnoremap <C-H> <C-W><C-H>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
@@ -171,11 +170,11 @@ nmap <silent> <leader>d <Plug>DashSearch
 map <Leader>ct :call atags#generate()<cr>
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpForwardTrigger = '<c-b>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
-let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snips']
 let g:UltiSnipsEditSplit = 'context'
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
+let g:UltiSnipsJumpForwardTrigger = '<c-b>'
+let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snips']
 
 :set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
@@ -206,22 +205,21 @@ function! FZFOpen(command_str)
   exe 'normal! ' . a:command_str . "\<cr>"
 endfunction
 
+nnoremap <silent> <C-c> :Commands<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-t> :Buffers<CR>
-nnoremap <silent> <leader>a :Buffers<CR>
-nnoremap <silent> <leader>A :Windows<CR>
 nnoremap <silent> <leader>; :BLines<CR>
-nnoremap <silent> <leader>O :BTags<CR>
-nnoremap <silent> <leader>o :Tags<CR>
-nnoremap <silent> <leader>m :Maps<CR>
 nnoremap <silent> <leader>? :History<CR>
-nnoremap <silent> <C-c> :Commands<CR>
-
+nnoremap <silent> <leader>A :Windows<CR>
+nnoremap <silent> <leader>O :BTags<CR>
+nnoremap <silent> <leader>a :Buffers<CR>
+nnoremap <silent> <leader>ft :Filetypes<CR>
+nnoremap <silent> <leader>ga :BCommits<CR>
+nnoremap <silent> <leader>gl :Commits<CR>
+nnoremap <silent> <leader>m :Maps<CR>
+nnoremap <silent> <leader>o :Tags<CR>
 nnoremap <silent> F :call SearchWordWithRg()<CR>
 vnoremap <silent> F :call SearchVisualSelectionWithRg()<CR>
-nnoremap <silent> <leader>gl :Commits<CR>
-nnoremap <silent> <leader>ga :BCommits<CR>
-nnoremap <silent> <leader>ft :Filetypes<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -308,7 +306,7 @@ if exists('g:loaded_webdevicons')
   call webdevicons#refresh()
 endif
 
-"  vim-nerdtree-syntax-highlight:
+" vim-nerdtree-syntax-highlight:
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
 let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
@@ -326,6 +324,7 @@ let g:airline#extensions#cursormode#enabled = 0
 
 " node
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/10.13.0/.npm/lib/node_modules/neovim/bin/cli.js'
+" LanguageClient
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_rootMarkers = {
     \ 'elixir': ['mix.exs'],
@@ -358,7 +357,6 @@ let g:LanguageClient_diagnosticsList = 'Disabled'
 " let g:LanguageClient_loggingLevel='DEBUG'
 let g:LanguageClient_loggingFile='/Users/carakan/development/LC.log'
 let g:bookmark_sign = ''
-highlight BookmarkSign guibg=#2D2D2D guifg=#FFC66D gui=NONE
 let g:NERDTreeMapMenu = 'nt'
 
 vmap <leader>y :YankCode<CR>
