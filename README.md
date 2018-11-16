@@ -103,9 +103,6 @@ pip install --upgrade pip setuptools
 pip install neovim
 # to upgrade
 pip install --upgrade neovim
-
-brew install globals --with-pygments
-
 #ruby
 gem install neovim
 ```
@@ -120,8 +117,8 @@ gem install neovim
 
 run this on a terminal:
 
-```
-" Still working on some awesome installer
+```zsh
+curl https://raw.githubusercontent.com/carakan/supra-vim/master/bootstrap.sh -L > supra-vim.sh && sh supra-vim.sh
 ```
 
 # Update vim plugins
