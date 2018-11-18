@@ -170,7 +170,7 @@ https://github.com/neovim/neovim/wiki/FAQ
 
 also, you can run `:checkhealth` into your neovim to check the health of this dotfiles
 
-- sometimes when install new versions of neovim or change plugins you need do a _Hard Reset_
+- Sometimes when install new versions of neovim or change plugins you need do a _Hard Reset_
 
 ```zsh
 rm -rf ~/.vim/bundle/.cache

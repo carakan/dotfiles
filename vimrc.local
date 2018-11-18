@@ -43,25 +43,27 @@ let g:airline#extensions#tabline#enabled = 1
 let g:bufferline_echo = 0
 
 " ALE
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_save = 1
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#error_symbol   = ' '
+let g:airline#extensions#ale#info_symbol = ' '
+let g:airline#extensions#ale#warning_symbol = ' '
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_filetype_changed = 0
-let g:airline#extensions#ale#enabled = 1
-let g:ale_sign_error=''
-let g:ale_sign_warning=''
-let g:ale_sign_style_warning=''
-let g:ale_sign_info=''
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
 let g:ale_sign_column_always = 0
-let g:ale_statusline_format = [' %d', ' %d', '']
-let g:airline#extensions#ale#error_symbol   = ' '
-let g:airline#extensions#ale#warning_symbol = ' '
+let g:ale_sign_error=''
+let g:ale_sign_info=''
+let g:ale_sign_style_error=''
+let g:ale_sign_style_warning=''
+let g:ale_sign_warning=''
+let g:ale_statusline_format = [' %d', ' %d', ' %d']
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
   \   'css': ['stylelint', 'prettier'],
-  \   'elixir': ['credo', 'dialyxir', 'mix'],
+  \   'elixir': ['credo', 'mix'],
   \   'erb': ['erb', 'erubis'],
   \   'haml': ['haml-lint'],
   \   'handlebars': ['ember-template-lint'],
