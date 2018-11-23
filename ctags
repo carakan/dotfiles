@@ -13,9 +13,7 @@
 
 --langdef=Elixir
 --langmap=Elixir:.ex.exs
---regex-Elixir=/^[ \t]*def[ \t]+(init|handle_call|handle_cast|handle_info|terminate)[ \t]*([(].*[)])/\1\2/O,OTP callbacks,OTP callbacks(def handle...)/
---regex-Elixir=/^[ \t]*def[ \t]+([a-z_][a-zA-Z0-9_?!]*)/\1/f,functions,functions (def ...)/
---regex-Elixir=/^[ \t]*defp[ \t]+([a-z_][a-zA-Z0-9_?!]*)/\1/g,functionsp,functionsp (defp ...)/
+--regex-Elixir=/^[ \t]*def(p?)[ \t]+([a-z_][a-zA-Z0-9_?!]*)/\2/f,functions,functions (def ...)/
 --regex-Elixir=/^[ \t]*defcallback[ \t]+([a-z_][a-zA-Z0-9_?!]*)/\1/c,callbacks,callbacks (defcallback ...)/
 --regex-Elixir=/^[ \t]*defdelegate[ \t]+([a-z_][a-zA-Z0-9_?!]*)/\1/d,delegates,delegates (defdelegate ...)/
 --regex-Elixir=/^[ \t]*defexception[ \t]+([A-Z][a-zA-Z0-9_]*\.)*([A-Z][a-zA-Z0-9_?!]*)/\2/e,exceptions,exceptions (defexception ...)/
