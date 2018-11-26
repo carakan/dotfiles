@@ -1,6 +1,6 @@
 # README
 
-My custom zsh, tmux and vim setup across my multiple machines (works
+My custom .dotfiles setup across my multiple machines (works
 very well on OSx, not sure on other OS).
 
 # Usage
@@ -14,7 +14,7 @@ See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USA
 - Neovim
 
 ```zsh
-brew install neovim  # to install last STABLE version
+brew install neovim
 ```
 
 - install this theme for zsh:
@@ -100,9 +100,12 @@ pip install --upgrade pip setuptools
 ## Install neovim plugin for python and ruby
 
 ```zsh
-pip install neovim
+# To upgrade to new package pynvim
+pip3 uninstall neovim
+pip3 uninstall pynvim
+pip3 install pynvim
 # to upgrade
-pip install --upgrade neovim
+pip install --upgrade pynvim
 #ruby
 gem install neovim
 ```
@@ -189,8 +192,6 @@ git config --global commit.gpgsign true
 ```zsh
 brew cask install android-sdk (--force)
 ```
-
-- install GNU globals check this instructions: https://gist.github.com/carakan/60496e0f05033417be2352419639fcc5
 
 - Remap caps lock to esc and Crtl
   I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.~~
