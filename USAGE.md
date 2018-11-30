@@ -1,8 +1,6 @@
-Guide
-=====
+# Guide
 
-Vim
----
+## Vim
 
 - `<Crtl> w` to aline all buffers opened.
 - `<Crtl> o` show in full screen.
@@ -10,8 +8,7 @@ Vim
 - `:call dein#update` update all plugins.
 - `Q` show all buffers and show options to close that buffers.
 
-Plugins:
-========
+# Plugins:
 
 Asheq/close-buffers.vim
 
@@ -45,4 +42,4 @@ christoomey/vim-sort-motion
 - `gsip` => Sort the current paragraph
 - `gsii` => Sort the current indentation level (requires text-obj-indent plugin)
 - `gsi(` => Sort within parenthesis. (b, c, a) would become (a, b, c)
-- `gs`   => sort lines selected (visual mode)
+- `gs` => sort lines selected (visual mode)
