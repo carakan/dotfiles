@@ -17,6 +17,13 @@
         "parser": "html",
         "singleQuote": false
       }
+    },
+    {
+      "files": "*.eex",
+      "options": {
+        "parser": "html",
+        "singleQuote": false
+      }
     }
   ]
 }
