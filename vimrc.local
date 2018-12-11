@@ -45,6 +45,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:bufferline_echo = 0
 
 " ALE
+let g:ale_completion_enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#ale#error_symbol   = ' '
 let g:airline#extensions#ale#info_symbol = ' '
@@ -70,7 +71,7 @@ let g:ale_linters = {
   \   'haml': ['haml-lint'],
   \   'handlebars': ['ember-template-lint'],
   \   'html': [],
-  \   'javascript': ['eslint'],
+  \   'javascript': ['eslint', 'tsserver'],
   \   'json': ['prettier'],
   \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
   \   'scss': ['stylelint', 'prettier'],
