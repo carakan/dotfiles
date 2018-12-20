@@ -64,7 +64,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(sudo node npm git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
+plugins=(alias-tips sudo node npm git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
 
 # User configuration
 

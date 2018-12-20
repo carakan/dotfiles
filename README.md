@@ -22,8 +22,11 @@ brew install neovim
 ```zsh
 cd ~/.oh-my-zsh/custom
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+
+cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
+git clone https://github.com/djui/alias-tips.git
+git clone https://github.com/zsh-users/zsh-completions
+git clone git://github.com/zsh-users/zsh-autosuggestions 
 ```
 
 - Install patched fonts from:
