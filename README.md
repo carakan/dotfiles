@@ -26,7 +26,7 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
 git clone https://github.com/djui/alias-tips.git
 git clone https://github.com/zsh-users/zsh-completions
-git clone git://github.com/zsh-users/zsh-autosuggestions 
+git clone git://github.com/zsh-users/zsh-autosuggestions
 ```
 
 - Install patched fonts from:
