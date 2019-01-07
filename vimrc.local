@@ -142,11 +142,6 @@ nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>
 vnoremap <c-s> <Esc>:w<CR>
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#tag#cache_limit_size = 5000000
-
 " vim test plugin
 let g:test#strategy = 'tslime'
 nmap <silent> <leader>tn :TestNearest<CR>
@@ -347,7 +342,6 @@ let g:LanguageClient_serverCommands = {
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'vue': ['vls']
     \ }
-call deoplete#custom#source('LanguageClient', 'min_pattern_length', 1)
 
 " Mappings for LanguageClient
 nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>

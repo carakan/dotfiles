@@ -58,6 +58,11 @@ brew install fzf
 brew install git-cal
 ```
 
+- install yarn (No option for that)
+```
+brew install yarn --without-node
+```
+
 # Install dotfiles
 
 ```zsh
