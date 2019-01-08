@@ -10,6 +10,7 @@
 .elixir_ls/*
 tags
 tmp/**/*
+node_modules/*
 # Thumbnails
 ._*
 GPATH
