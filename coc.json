@@ -12,5 +12,11 @@
     // command used for jump to other buffer
     "coc.preferences.jumpCommand": "edit",
     "coc.preferences.diagnostic.enable": false,
-    "coc.preferences.watchmanPath": "/usr/local/bin/watchman"
+    "coc.preferences.watchmanPath": "/usr/local/bin/watchman",
+    "languageserver": {
+        "elixir": {
+          "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
+          "filetypes": ["elixir", "eelixir"]
+        }
+      }
 }
