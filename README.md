@@ -58,6 +58,11 @@ brew install fzf
 brew install git-cal
 ```
 
+- install yarn (No option for that)
+```
+brew install yarn --without-node
+```
+
 # Install dotfiles
 
 ```zsh
@@ -147,11 +152,21 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 
 ```zsh
 npm i -g eslint stylelint tslint typescript prettier neovim
-npm i -g javascript-typescript-langserver
-npm i -g vscode-html-languageserver-bin
-npm i -g vscode-css-languageserver-bin
 npm i -g vue-language-server
 gem install solargraph
+```
+
+## Install Coc.nvim plugins
+
+In neovim run this command:
+
+```
+:CocInstall coc-html coc-json coc-css coc-emoji coc-tag coc-ultisnips coc-highlight coc-tsserver coc-vetur coc-yaml coc-solargraph
+```
+## Update Coc.nvim plugins
+
+```
+:CocUpdate
 ```
 
 # Install Gems
