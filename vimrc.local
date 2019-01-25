@@ -376,5 +376,5 @@ endfunc
 
 let g:vimade_usecursorhold = 1
 let g:vimade = {
-  \ "fadelevel": 0.75
+  \ "fadelevel": 0.7
 \}

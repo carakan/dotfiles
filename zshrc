@@ -128,13 +128,14 @@ function update_brach(){
   git checkout master && git pull && git checkout - && git rebase master
 }
 
+export TERMINFO="$HOME/.terminfo"
+
 # this is for homebrew
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export TERMINFO="$HOME/.terminfo"
 
