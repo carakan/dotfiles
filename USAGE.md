@@ -43,3 +43,8 @@ christoomey/vim-sort-motion
 - `gsii` => Sort the current indentation level (requires text-obj-indent plugin)
 - `gsi(` => Sort within parenthesis. (b, c, a) would become (a, b, c)
 - `gs` => sort lines selected (visual mode)
+
+## Write Unicode chars on Vim
+
+- First option is to write in the form: `"\u{HEXCODE}"`
+- Second option is: press `Crtl + v` next press `u` and finally the `HEXCODE`
