@@ -23,6 +23,9 @@ set noshowmode
 set modeline
 set nospell
 
+" Enable popup transparency (neovim >= 0.4)
+set pumblend=15
+
 " Enable ruby syntax
 let g:ruby_operators = 1
 
