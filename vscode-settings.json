@@ -1,0 +1,32 @@
+{
+    "window.zoomLevel": 1,
+    "editor.fontSize": 16,
+    "editor.fontFamily": "DankiMono Nerd Font",
+    "workbench.colorTheme": "NewRailscasts",
+    "editor.fontLigatures": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.tabSize": 2,
+    "workbench.fontAliasing": "antialiased",
+    "workbench.colorCustomizations" : {
+        "terminal.background":"#212121",
+        "terminal.foreground":"#f3f5f5",
+        "terminalCursor.background":"#EEFFFF",
+        "terminalCursor.foreground":"#EEFFFF",
+        "terminal.ansiBlack":"#212121",
+        "terminal.ansiBlue":"#82AAFF",
+        "terminal.ansiBrightBlack":"#4A4A4A",
+        "terminal.ansiBrightBlue":"#82AAFF",
+        "terminal.ansiBrightCyan":"#89DDFF",
+        "terminal.ansiBrightGreen":"#C3E88D",
+        "terminal.ansiBrightMagenta":"#C792EA",
+        "terminal.ansiBrightRed":"#F07178",
+        "terminal.ansiBrightWhite":"#FFFFFF",
+        "terminal.ansiBrightYellow":"#FFCB6B",
+        "terminal.ansiCyan":"#89DDFF",
+        "terminal.ansiGreen":"#C3E88D",
+        "terminal.ansiMagenta":"#C792EA",
+        "terminal.ansiRed":"#F07178",
+        "terminal.ansiWhite":"#f3f5f5",
+        "terminal.ansiYellow":"#FFCB6B"
+    }
+}

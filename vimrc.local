@@ -24,7 +24,7 @@ set modeline
 set nospell
 
 " Enable popup transparency (neovim >= 0.4)
-set pumblend=15
+set pumblend=20
 
 " Enable ruby syntax
 let g:ruby_operators = 1
@@ -382,5 +382,5 @@ endfunc
 
 let g:vimade_usecursorhold = 1
 let g:vimade = {
-  \ "fadelevel": 0.7
+  \ "fadelevel": 0.6
 \}
