@@ -7,6 +7,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.tabSize": 2,
     "workbench.fontAliasing": "antialiased",
+    "terminal.integrated.fontSize": 16,
     "workbench.colorCustomizations" : {
         "terminal.background":"#212121",
         "terminal.foreground":"#f3f5f5",
