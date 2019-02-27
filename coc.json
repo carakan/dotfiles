@@ -20,8 +20,13 @@
 
   "languageserver": {
     "elixir": {
-      "command": "~/lsp/elixir-ls/language_server.sh",
-      "filetypes": ["elixir", "eelixir"]
+      "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
+      "filetypes": ["elixir", "eelixir"],
+      "initializationOptions": {
+        "elixirLS": {
+               "dialyzerEnabled": false
+             }
+      }
     }
   }
 }

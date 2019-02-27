@@ -157,7 +157,7 @@ let g:test#javascript#mocha#executable = 'NODE_ENV=test mocha'
 let g:test#elixir#exunit#options = {
   \ 'nearest': '--trace --color',
   \ 'file':    '--trace --color',
-  \ 'suite':   '--color --trace --failed',
+  \ 'suite':   '--trace --color',
 \}
 
 " tslime configs
