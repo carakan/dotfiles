@@ -26,6 +26,11 @@
         "elixirLS": {
                "dialyzerEnabled": false
              }
+      },
+      "settings": {
+        "elixirLS": {
+               "dialyzerEnabled": false
+             }
       }
     }
   }
