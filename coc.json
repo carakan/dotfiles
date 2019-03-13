@@ -24,13 +24,13 @@
       "filetypes": ["elixir", "eelixir"],
       "initializationOptions": {
         "elixirLS": {
-               "dialyzerEnabled": false
-             }
+          "dialyzerEnabled": false
+        }
       },
       "settings": {
         "elixirLS": {
-               "dialyzerEnabled": false
-             }
+          "dialyzerEnabled": false
+        }
       }
     }
   }
