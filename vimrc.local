@@ -385,6 +385,11 @@ let g:vimade_usecursorhold = 1
 let g:vimade = {
   \ "fadelevel": 0.6
 \}
+
+let g:Hexokinase_highlighters = ['virtual', 'background']
+let g:Hexokinase_virtualText = '█████'
+let g:Hexokinase_ftAutoload = ['*']
+
 " projectionist
 let g:rails_projections = {
       \  "app/controllers/*_controller.rb": {
