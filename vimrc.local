@@ -40,9 +40,6 @@ noremap   <Right>  <NOP>
 nnoremap <bs> <c-^>
 set undofile " Only works on neovim
 
-autocmd BufRead,BufNewFile *.html.erb set filetype=html.eruby
-autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
-
 " airline customizations
 let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
