@@ -9,6 +9,8 @@
   "coc.preferences.timeout": 2000,
   "coc.preferences.triggerAfterInsertEnter": false,
   "coc.preferences.watchmanPath": "/usr/local/bin/watchman",
+  "coc.preferences.colorSupport": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.source.around.priority": 10,
   "coc.source.buffer.priority": 11,
   "coc.source.dictionary.priority": 20,
@@ -18,20 +20,48 @@
   "coc.source.ultisnips.priority": 2,
   "coc.source.word.priority": 21,
 
+  "suggest.detailMaxLength": 30,
+  "suggest.minTriggerInputLength": 2,
+  "suggest.completionItemKindLabels": {
+    "function": "\uf794",
+    "method": "\uf6a6",
+    "variable": "\uf71b",
+    "constant": "\uf8ff",
+    "struct": "\ufb44",
+    "class": "\uf0e8",
+    "interface": "\ufa52",
+    "text": "\ue612",
+    "enum": "\uf435",
+    "enumMember": "\uf02b",
+    "module": "\uf668",
+    "color": "\ue22b",
+    "property": "\ufab6",
+    "field": "\uf93d",
+    "unit": "\uf475",
+    "file": "\uf471",
+    "value": "\uf8a3",
+    "event": "\ufacd",
+    "folder": "\uf115",
+    "keyword": "\uf893",
+    "snippet": "\uf64d",
+    "operator": "\uf915",
+    "reference": "\uf87a",
+    "typeParameter": "\uf278",
+    "default": "\uf29c"
+  },
+
   "languageserver": {
     "elixir": {
       "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
       "filetypes": ["elixir", "eelixir"],
+      "trace.server": "verbose",
+      "rootPatterns": ["mix.exs"],
       "initializationOptions": {
         "elixirLS": {
           "dialyzerEnabled": false
         }
       },
-      "settings": {
-        "elixirLS": {
-          "dialyzerEnabled": false
-        }
-      }
+      "settings": {}
     }
   }
 }
