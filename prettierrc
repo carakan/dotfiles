@@ -5,6 +5,12 @@
   "singleQuote": true,
   "overrides": [
     {
+      "files": "*.rb",
+      "options": {
+        "parser": "ruby"
+      }
+    },
+    {
       "files": "*.hbs",
       "options": {
         "parser": "glimmer",

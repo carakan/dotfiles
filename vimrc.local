@@ -90,7 +90,7 @@ let g:ale_fixers = {
   \   'javascript': ['prettier', 'eslint'],
   \   'json': ['prettier'],
   \   'markdown': ['prettier'],
-  \   'ruby': ['rufo', 'rubocop'],
+  \   'ruby': ['prettier', 'rubocop'],
   \   'scss': ['stylelint'],
   \   'typescript': ['prettier', 'tslint'],
   \   'vue': ['prettier'],

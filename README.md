@@ -151,7 +151,7 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 # Install linters & LSP
 
 ```zsh
-npm i -g eslint stylelint tslint typescript prettier neovim
+npm i -g eslint stylelint tslint typescript prettier neovim @prettier/plugin-ruby
 npm i -g vue-language-server
 gem install solargraph
 ```
