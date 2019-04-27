@@ -1,6 +1,7 @@
 set nobackup
 set cursorcolumn
 colorscheme new-railscasts
+set pyx=3
 
 let g:indent_guides_auto_colors = 0
 " Set split separator to Unicode box drawing character
