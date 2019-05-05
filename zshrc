@@ -64,7 +64,8 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(history github gem mix rails vscode alias-tips sudo node npm git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
+plugins=( bgnotify dnf history github gem mix rails vscode alias-tips sudo node npm git 
+          brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
 
 # User configuration
 
@@ -138,4 +139,3 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
-

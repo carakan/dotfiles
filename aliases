@@ -1,4 +1,5 @@
 # Unix
+alias ls="colorls --sd -A"
 alias l="ls -lah"
 alias ll="ls -lah"
 alias ln="ln -v"

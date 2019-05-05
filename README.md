@@ -172,7 +172,7 @@ In neovim run this command:
 # Install Gems
 
 ```zsh
-gem install reek rubocop
+gem install reek rubocop colorls
 ```
 
 # Notes
