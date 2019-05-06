@@ -28,6 +28,10 @@ set nospell
 set pumblend=20
 set wildoptions=pum
 
+autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
+autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
+autocmd BufRead,BufNewFile *.scss set filetype=scss.css
+
 " Enable ruby syntax
 let g:ruby_operators = 1
 
@@ -381,7 +385,7 @@ endfunc
 
 let g:vimade_usecursorhold = 1
 let g:vimade = {
-  \ "fadelevel": 0.6
+  \ 'fadelevel': 0.6
 \}
 
 let g:Hexokinase_highlighters = ['virtual', 'background']

@@ -1,5 +1,5 @@
-set rtp+=/usr/local/opt/fzf
-if (has("termguicolors"))
+set runtimepath+=/usr/local/opt/fzf
+if (has('termguicolors'))
  set termguicolors
 endif
 let g:airline_powerline_fonts=1
@@ -7,8 +7,5 @@ let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript'
 let g:spf13_leader=' '
 let g:jsx_ext_required = 1
 
-autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 autocmd FileType html.handlebars :UltiSnipsAddFiletypes mustache
 autocmd FileType javascript UltiSnipsAddFiletypes javascript-ember
-autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
-autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
