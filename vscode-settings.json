@@ -1,13 +1,12 @@
 {
-    "window.zoomLevel": 1,
-    "editor.fontSize": 16,
-    "editor.fontFamily": "DankiMono Nerd Font",
-    "workbench.colorTheme": "NewRailscasts",
-    "editor.fontLigatures": true,
-    "workbench.iconTheme": "material-icon-theme",
-    "editor.tabSize": 2,
-    "workbench.fontAliasing": "antialiased",
-    "terminal.integrated.fontSize": 16,
-    "workbench.colorCustomizations" : {
-    }
+  "window.zoomLevel": 1,
+  "editor.fontSize": 16,
+  "editor.fontFamily": "DankiMono Nerd Font",
+  "workbench.colorTheme": "NewRailscasts",
+  "editor.fontLigatures": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.tabSize": 2,
+  "workbench.fontAliasing": "antialiased",
+  "terminal.integrated.fontSize": 16,
+  "workbench.colorCustomizations": {}
 }
