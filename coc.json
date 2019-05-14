@@ -56,12 +56,12 @@
       "filetypes": ["elixir", "eelixir"],
       "trace.server": "verbose",
       "rootPatterns": ["mix.exs"],
-      "initializationOptions": {
+      "initializationOptions": {},
+      "settings": {
         "elixirLS": {
           "dialyzerEnabled": false
         }
-      },
-      "settings": {}
+      }
     }
   }
 }
