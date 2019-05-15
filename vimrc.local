@@ -25,7 +25,7 @@ set modeline
 set nospell
 
 " Enable popup transparency (neovim >= 0.4)
-set pumblend=20
+set pumblend=22
 set wildoptions=pum
 
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
@@ -389,7 +389,7 @@ let g:vimade = {
 \}
 
 let g:Hexokinase_highlighters = ['virtual', 'background']
-let g:Hexokinase_virtualText = '█████'
+let g:Hexokinase_virtualText = '██████'
 let g:Hexokinase_ftAutoload = ['*']
 
 " projectionist
