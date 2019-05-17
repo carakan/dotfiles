@@ -5,6 +5,7 @@
     ~/.asdfrc: asdfrc
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
+    ~/.bat.conf: bat.conf
     ~/.config/karabiner/karabiner.json: 
         create: true
         path: karabiner.json
