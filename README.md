@@ -47,6 +47,7 @@ brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 ```zsh
 brew install zsh-syntax-highlighting
 brew install bat # for preview files
+brew install htop
 ```
 
 - install fzf

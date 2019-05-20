@@ -11,6 +11,10 @@ alias v="$VISUAL"
 alias sp="nvr -cc split"
 alias vs="nvr -cc vsplit"
 alias tree="tree -C"
+alias clear='clear && printf "\e[3J"'
+alias cat='bat'
+alias c='cat'
+alias top='htop'
 
 # Bundler
 alias b="bundle"
