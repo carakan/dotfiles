@@ -60,6 +60,7 @@ brew install git-cal
 ```
 
 - install yarn (No option for that)
+
 ```
 brew install yarn --without-node
 ```
@@ -164,6 +165,7 @@ In neovim run this command:
 ```
 :CocInstall coc-html coc-json coc-css coc-emoji coc-tag coc-ultisnips coc-highlight coc-tsserver coc-vetur coc-yaml coc-solargraph
 ```
+
 ## Update Coc.nvim plugins
 
 ```
@@ -213,7 +215,7 @@ brew cask install android-sdk (--force)
 ```
 
 - Remap caps lock to esc and Crtl
-  I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.~~
+  I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.
   This dotfiles work with last version of karabiner elements.
 
 - [upgrade ssh keys](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
