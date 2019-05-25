@@ -19,7 +19,6 @@
     ~/.irbrc: irbrc
     ~/.prettierrc: prettierrc
     ~/.profile: profile
-    ~/.tern-config: tern-config
     ~/.tmux.conf: tmux.conf
     ~/.tool-versions: tool-versions
     ~/.vimrc.before.local: vimrc.before.local
