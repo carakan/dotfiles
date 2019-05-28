@@ -1,3 +1,7 @@
+call dein#add('iamcco/sran.nvim', { 'build': 'yarn' })
+call dein#add('iamcco/git-p.nvim')
+
+
 call dein#add('AaronLasseigne/yank-code')
 call dein#add('AndrewRadev/ember_tools.vim')
 call dein#add('AndrewRadev/splitjoin.vim')
