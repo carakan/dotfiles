@@ -178,6 +178,12 @@ In neovim run this command:
 gem install reek rubocop colorls
 ```
 
+# Install the bundle Homebrew
+
+```zsh
+brew bundle
+```
+
 # Notes
 
 - I patched or adjust Iterm2 to enable Crtl-h over neovim using this: https://github.com/neovim/neovim/issues/2048#issuecomment-98307896
