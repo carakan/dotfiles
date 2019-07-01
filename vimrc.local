@@ -24,9 +24,11 @@ set noshowmode
 set modeline
 set nospell
 
-" Enable popup transparency (neovim >= 0.4)
+" Enable menu and window popup transparency (neovim >= 0.4)
 set pumblend=22
+set winblend=22
 set wildoptions=pum
+set pumheight=15
 
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
 autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
