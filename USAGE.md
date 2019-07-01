@@ -6,6 +6,7 @@
 - `<Crtl>-w o` show buffer in full screen.
 - `<Crtl> p` show all files to open.
 - `:call dein#update()` update all plugins.
+- `zh`, `zl` to scroll horizontally.
 
 # Plugins
 
