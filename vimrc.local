@@ -26,8 +26,9 @@ set nospell
 
 " Enable menu and window popup transparency (neovim >= 0.4)
 set pumblend=22
-set winblend=22
-set wildoptions=pum
+set winblend=28
+set wildoptions=pum,tagfile
+:hi PmenuSel blend=5
 set pumheight=15
 
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
