@@ -17,6 +17,23 @@ See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USA
 brew install neovim
 ```
 
+- install ASDF (package version)
+
+```zsh
+brew install asdf
+```
+register asdf plugins:
+
+```zsh
+bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+
+asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
+asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
+asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf plugin-add yarn https://github.com/twuni/asdf-yarn.git
+```
+
 - install this theme for zsh:
 
 ```zsh
@@ -57,12 +74,6 @@ brew install fzf
 # Install shell extensions
 /usr/local/opt/fzf/install
 brew install git-cal
-```
-
-- install yarn (No option for that)
-
-```
-brew install yarn --without-node
 ```
 
 # Install dotfiles
