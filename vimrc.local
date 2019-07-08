@@ -26,7 +26,7 @@ set nospell
 
 " Enable menu and window popup transparency (neovim >= 0.4)
 set pumblend=22
-set winblend=28
+set winblend=15
 set wildoptions=pum,tagfile
 :hi PmenuSel blend=5
 set pumheight=15
@@ -78,34 +78,34 @@ nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
-  \   'css': ['stylelint', 'prettier'],
-  \   'elixir': ['credo', 'mix'],
-  \   'erb': ['erb', 'erubis'],
-  \   'haml': ['haml-lint'],
-  \   'handlebars': ['ember-template-lint'],
-  \   'html': [],
-  \   'javascript': ['eslint', 'tsserver'],
-  \   'json': ['prettier'],
-  \   'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
-  \   'scss': ['stylelint', 'prettier'],
-  \   'typescript': ['tslint', 'typecheck', 'tsserver'],
-  \   'vim': ['vint'],
-  \   'vue': ['vls', 'eslint'],
+  \ 'css': ['stylelint', 'prettier'],
+  \ 'elixir': ['credo', 'mix'],
+  \ 'erb': ['erb', 'erubis'],
+  \ 'haml': ['haml-lint'],
+  \ 'handlebars': ['ember-template-lint'],
+  \ 'html': [],
+  \ 'javascript': ['eslint', 'tsserver'],
+  \ 'json': ['prettier'],
+  \ 'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
+  \ 'scss': ['stylelint', 'prettier'],
+  \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
+  \ 'vim': ['vint'],
+  \ 'vue': ['vls', 'eslint'],
   \}
 
 let g:ale_fixers = {
-  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'css': ['stylelint', 'prettier'],
-  \   'elixir': ['mix_format'],
-  \   'javascript': ['prettier', 'eslint'],
-  \   'json': ['prettier'],
-  \   'markdown': ['prettier'],
-  \   'ruby': ['prettier', 'rubocop'],
-  \   'scss': ['stylelint'],
-  \   'typescript': ['prettier', 'tslint'],
-  \   'vue': ['prettier'],
-  \   'yaml': ['prettier'],
-  \   'html': ['prettier']
+  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \ 'css': ['stylelint', 'prettier'],
+  \ 'elixir': ['mix_format'],
+  \ 'javascript': ['prettier', 'eslint'],
+  \ 'json': ['prettier'],
+  \ 'markdown': ['prettier'],
+  \ 'ruby': ['prettier', 'rubocop'],
+  \ 'scss': ['stylelint'],
+  \ 'typescript': ['prettier', 'tslint'],
+  \ 'vue': ['prettier'],
+  \ 'yaml': ['prettier'],
+  \ 'html': ['prettier']
   \}
 
 " Signify
@@ -197,18 +197,18 @@ vnoremap K :m '<-2<CR>gv=gv
 " FZF integration
 let g:fzf_colors =
   \ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+  \   'bg':      ['bg', 'Normal'],
+  \   'hl':      ['fg', 'Comment'],
+  \   'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \   'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \   'hl+':     ['fg', 'Statement'],
+  \   'info':    ['fg', 'PreProc'],
+  \   'border':  ['fg', 'Ignore'],
+  \   'prompt':  ['fg', 'Conditional'],
+  \   'pointer': ['fg', 'Exception'],
+  \   'marker':  ['fg', 'Keyword'],
+  \   'spinner': ['fg', 'Label'],
+  \   'header':  ['fg', 'Comment'] }
 
 function! FZFOpen(command_str)
   if (expand('%') =~# 'NERD_tree' && winnr('$') > 1)
@@ -332,9 +332,6 @@ let g:NERDTreeChDirMode=0
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
 
-" Rubygems
-nnoremap <leader><leader>g :RubygemsRecentVersion<cr>
-
 let g:airline#extensions#cursormode#enabled = 0
 
 " Configure node, python executable
@@ -379,13 +376,12 @@ endfunction
 
 imap <C-k> <C-R>=ExpandLspSnippet()<CR>
 
-nmap <C-y> :call <SID>SynStack()<CR>
-
+nmap <Leader>is :call <SID>SynStack()<CR>
+map <Leader>iS :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 function! <SID>SynStack()
-    if !exists('*synstack')
-        return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
 let g:vimade_usecursorhold = 1
