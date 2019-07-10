@@ -174,7 +174,8 @@ gem install solargraph
 In neovim run this command:
 
 ```
-:CocInstall coc-html coc-json coc-css coc-emoji coc-tag coc-ultisnips coc-highlight coc-tsserver coc-vetur coc-yaml coc-solargraph
+" Removed coc-list, coc-tag, coc-ultisnip
+:CocInstall coc-html coc-json coc-css coc-emoji coc-snippets coc-highlight coc-tsserver coc-vetur coc-yaml coc-solargraph
 ```
 
 ## Update Coc.nvim plugins
