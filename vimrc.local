@@ -79,7 +79,7 @@ nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
   \ 'css': ['stylelint', 'prettier'],
-  \ 'elixir': ['credo', 'mix'],
+  \ 'elixir': ['credo'],
   \ 'erb': ['erb', 'erubis'],
   \ 'haml': ['haml-lint'],
   \ 'handlebars': ['ember-template-lint'],
@@ -109,22 +109,22 @@ let g:ale_fixers = {
   \}
 
 " Signify
-let g:signify_cursorhold_insert      = 1
-let g:signify_cursorhold_normal      = 1
-let g:signify_disable_by_default     = 0
-let g:signify_sign_add               = '✚'
-let g:signify_sign_change            = ''
-let g:signify_sign_changedelete      = ''
-let g:signify_sign_delete            = '✖'
+let g:signify_cursorhold_insert = 1
+let g:signify_cursorhold_normal = 1
+let g:signify_disable_by_default = 0
+let g:signify_sign_add = '✚'
+let g:signify_sign_change = ''
+let g:signify_sign_changedelete = ''
+let g:signify_sign_delete = '✖'
 let g:signify_sign_delete_first_line = '﫨'
-let g:signify_update_on_bufenter     = 1
-let g:signify_update_on_focusgained  = 1
+let g:signify_update_on_bufenter = 1
+let g:signify_update_on_focusgained = 1
 
 " Text Formatting/Layout                                                    "
-set autoindent            " auto-indent
-set expandtab             " use spaces instead of tabs
-set shiftround            " always indent/outdent to the nearest tabstop
-set smarttab              " use tabs at the start of a line, spaces elsewhere
+set autoindent " auto-indent
+set expandtab  " use spaces instead of tabs
+set shiftround " always indent/outdent to the nearest tabstop
+set smarttab   " use tabs at the start of a line, spaces elsewhere
 
 " elixir config
 let g:elixir_use_markdown_for_docs = 1
@@ -348,14 +348,12 @@ function! ExpandLspSnippet()
     if !pumvisible() || empty(v:completed_item)
         return ''
     endif
-
     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
     let l:value = v:completed_item['word']
     let l:matched = len(l:value)
     if l:matched <= 0
         return ''
     endif
-
     " remove inserted chars before expand snippet
     if col('.') == col('$')
         let l:matched -= 1
@@ -363,12 +361,10 @@ function! ExpandLspSnippet()
     else
         exec 'normal! ' . l:matched . 'X'
     endif
-
     if col('.') == col('$') - 1
         " move to $ if at the end of line.
         call cursor(line('.'), col('$'))
     endif
-
     " expand snippet now.
     call UltiSnips#Anon(l:value)
     return ''
