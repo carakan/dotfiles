@@ -1,6 +1,7 @@
 {
   "coc.preferences.autoTrigger": "always",
-  "coc.preferences.diagnostic.enable": false,
+  "coc.preferences.diagnostic.enable": true,
+  "coc.preferences.diagnostic.displayByAle": true,
   "coc.preferences.formatOnType": false,
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.minTriggerInputLength": 1,
