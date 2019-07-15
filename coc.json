@@ -2,6 +2,8 @@
   "coc.preferences.autoTrigger": "always",
   "coc.preferences.diagnostic.enable": true,
   "coc.preferences.diagnostic.displayByAle": true,
+  "coc.preferences.codeLens.enable": true,
+  "coc.preferences.diagnostic.refreshOnInsertMode": false,
   "coc.preferences.formatOnType": false,
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.minTriggerInputLength": 1,

@@ -386,7 +386,7 @@ let g:vimade = {
 \}
 
 let g:Hexokinase_highlighters = ['virtual', 'background']
-let g:Hexokinase_virtualText = '██████'
+let g:Hexokinase_virtualText = ' ██████'
 let g:Hexokinase_ftAutoload = ['*']
 
 " Coc
