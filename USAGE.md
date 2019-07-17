@@ -36,6 +36,11 @@
 
 - `<C-w>o` zoom buffer tab
 
+### AndrewRadev/splitjoin.vim
+
+- `gS` to split a one-liner into multiple lines
+- `gJ` (with the cursor on the first line of a block) to join a block into a single-line statement.
+
 ### christoomey/vim-sort-motion
 
 - `gs2j` => Sort down two lines (current + 2 below)
