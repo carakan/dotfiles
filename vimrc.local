@@ -380,17 +380,32 @@ function! <SID>SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
-let g:vimade_usecursorhold = 1
 let g:vimade = {
-  \ 'fadelevel': 0.6
+  \ 'fadelevel': 0.75
 \}
 
-let g:Hexokinase_highlighters = ['virtual', 'background']
-let g:Hexokinase_virtualText = ' ██████'
+let g:Hexokinase_highlighters = ['virtual', 'background', 'foreground']
+let g:Hexokinase_virtualText = '   ████'
 let g:Hexokinase_ftAutoload = ['*']
 
-" Coc
-
+" Coc Configuration
+let g:coc_global_extensions = [
+  \ 'coc-css',
+  \ 'coc-ember',
+  \ 'coc-emoji',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-lists',
+  \ 'coc-snippets',
+  \ 'coc-solargraph',
+  \ 'coc-tag',
+  \ 'coc-todolist',
+  \ 'coc-tsserver',
+  \ 'coc-vetur',
+  \ 'coc-vimlsp',
+  \ 'coc-yaml'
+\ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
@@ -420,185 +435,185 @@ nmap <leader>rn <Plug>(coc-rename)
 
 " projectionist
 let g:rails_projections = {
-      \  "app/controllers/*_controller.rb": {
-      \     "test": [
-      \       "spec/requests/{}_spec.rb",
-      \       "spec/controllers/{}_controller_spec.rb",
-      \       "test/controllers/{}_controller_test.rb"
-      \     ],
-      \     "alternate": [
-      \       "spec/requests/{}_spec.rb",
-      \       "spec/controllers/{}_controller_spec.rb",
-      \       "test/controllers/{}_controller_test.rb"
-      \     ],
-      \   },
-      \   "app/services/*.rb": {
-      \     "command": "service",
-      \     "test": [
-      \       "spec/services/%s_spec.rb",
-      \       "test/services/%s_test.rb"
-      \     ],
-      \   },
-      \   "app/queries/*_query.rb": {
-      \     "command": "query",
-      \     "test": [
-      \       "spec/queries/%s_spec.rb",
-      \       "test/queries/%s_test.rb"
-      \     ],
-      \   },
-      \   "app/graphql/*.rb": {
-      \     "command": "graphql",
-      \     "test": [
-      \       "spec/graphql/{}_spec.rb",
-      \       "test/graphql/{}_test.rb"
-      \     ],
-      \   },
-      \   "config/routes.rb": { "command": "routes" },
-      \   "spec/*_spec.rb": {
-      \     "dispatch": "bin/rspec spec/{}_spec.rb`=v:lnum ? ':'.v:lnum : ''`",
-      \   },
-      \   "spec/requests/*_spec.rb": {
-      \     "command": "request",
-      \     "alternate": "app/controllers/{}_controller.rb"
-      \   },
-      \   "spec/features/*_spec.rb": { "command": "feature" },
-      \ }
+  \  "app/controllers/*_controller.rb": {
+  \     "test": [
+  \       "spec/requests/{}_spec.rb",
+  \       "spec/controllers/{}_controller_spec.rb",
+  \       "test/controllers/{}_controller_test.rb"
+  \     ],
+  \     "alternate": [
+  \       "spec/requests/{}_spec.rb",
+  \       "spec/controllers/{}_controller_spec.rb",
+  \       "test/controllers/{}_controller_test.rb"
+  \     ],
+  \   },
+  \   "app/services/*.rb": {
+  \     "command": "service",
+  \     "test": [
+  \       "spec/services/%s_spec.rb",
+  \       "test/services/%s_test.rb"
+  \     ],
+  \   },
+  \   "app/queries/*_query.rb": {
+  \     "command": "query",
+  \     "test": [
+  \       "spec/queries/%s_spec.rb",
+  \       "test/queries/%s_test.rb"
+  \     ],
+  \   },
+  \   "app/graphql/*.rb": {
+  \     "command": "graphql",
+  \     "test": [
+  \       "spec/graphql/{}_spec.rb",
+  \       "test/graphql/{}_test.rb"
+  \     ],
+  \   },
+  \   "config/routes.rb": { "command": "routes" },
+  \   "spec/*_spec.rb": {
+  \     "dispatch": "bin/rspec spec/{}_spec.rb`=v:lnum ? ':'.v:lnum : ''`",
+  \   },
+  \   "spec/requests/*_spec.rb": {
+  \     "command": "request",
+  \     "alternate": "app/controllers/{}_controller.rb"
+  \   },
+  \   "spec/features/*_spec.rb": { "command": "feature" },
+  \ }
 
 let g:projectionist_heuristics = {
-      \  "&mix.exs": {
-      \    "lib/*.ex": {
-      \      "type": "lib",
-      \      "alternate": [
-      \        "spec/{}_spec.exs",
-      \        "test/{}_test.exs",
-      \      ],
-      \    },
-      \    "spec/*_spec.exs": {
-      \      "type": "spec",
-      \      "alternate": "lib/{}.ex",
-      \      "dispatch": "mix espec spec/{}_spec.exs`=v:lnum ? ':'.v:lnum : ''`"
-      \    },
-      \    "spec/spec_helper.exs": { "type": "spec" },
-      \    "test/*_test.exs": {
-      \      "type": "test",
-      \      "alternate": "lib/{}.ex",
-      \      "dispatch": "mix test test/{}_test.exs`=v:lnum ? ':'.v:lnum : ''`"
-      \    },
-      \    "test/test_helper.exs": { "type": "test" },
-      \    "mix.exs": {
-      \      "type": "lib",
-      \      "alternate": "mix.lock",
-      \      "dispatch": "mix deps.get"
-      \    },
-      \    "mix.lock": { "alternate": "mix.exs" },
-      \    "*": {
-      \      "make": "mix",
-      \      "console": "iex -S mix"
-      \    }
-      \  },
-      \ "ember-cli-build.js": {
-      \   "app/routes/*.js": {
-      \     "type": "route",
-      \     "template": [
-      \       "import Ember from 'ember';",
-      \       "",
-      \       "export default Ember.Route.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/templates/{}.hbs"
-      \   },
-      \   "app/controllers/*.js": {
-      \     "type": "controller",
-      \     "template": [
-      \       "import Ember from 'ember';",
-      \       "",
-      \       "export default Ember.Controller.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/templates/{}.hbs"
-      \   },
-      \   "app/templates/components/*.hbs": {
-      \     "alternate": "tests/integration/components/{}-test.js"
-      \   },
-      \   "app/components/*.js": {
-      \     "type": "component",
-      \     "template": [
-      \       "import Ember from 'ember';",
-      \       "",
-      \       "export default Ember.Component.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/templates/components/{}.hbs"
-      \   },
-      \   "app/templates/*.js": {
-      \     "type": "template",
-      \     "template": [
-      \       "{{outlet}}",
-      \     ]
-      \   },
-      \   "app/mixins/*.js": {
-      \     "type": "mixin",
-      \     "template": [
-      \       "import Ember from 'ember';",
-      \       "",
-      \       "export default Ember.Mixin.create({",
-      \       "});",
-      \     ],
-      \   },
-      \   "app/models/*.js": {
-      \     "type": "model",
-      \     "template": [
-      \       "import DS from 'ember-data';",
-      \       "",
-      \       "export default DS.Model.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/adapters/{}.js"
-      \   },
-      \   "app/adapters/*.js": {
-      \     "type": "adapter",
-      \     "template": [
-      \       "import ApplicationAdapter from './application';",
-      \       "",
-      \       "export default ApplicationAdapter.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/serializers/{}.js"
-      \   },
-      \   "app/services/*.js": {
-      \     "type": "service",
-      \     "template": [
-      \       "import Ember from 'Ember';",
-      \       "",
-      \       "export default Ember.Service.extend({",
-      \       "});",
-      \     ],
-      \   },
-      \   "app/serializers/*.js": {
-      \     "type": "serializer",
-      \     "template": [
-      \       "import ApplicationSerializer from './application';",
-      \       "",
-      \       "export default ApplicationSerializer.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/models/{}.js"
-      \   },
-      \   "app/mirage/factories/*.js": {
-      \     "type": "factory",
-      \     "template": [
-      \       "import Mirage from 'ember-cli-mirage';",
-      \       "",
-      \       "export default Mirage.Factory.extend({",
-      \       "});",
-      \     ],
-      \     "alternate": "app/models/{}.js"
-      \   },
-      \   "tests/unit/models/*-test.js": {
-      \     "alternate": "app/models/{}.js"
-      \   },
-      \   "tests/integration/components/*-test.js": {
-      \     "alternate": "app/components/{}.js"
-      \   },
-      \ },
-      \ }
+  \  "&mix.exs": {
+  \    "lib/*.ex": {
+  \      "type": "lib",
+  \      "alternate": [
+  \        "spec/{}_spec.exs",
+  \        "test/{}_test.exs",
+  \      ],
+  \    },
+  \    "spec/*_spec.exs": {
+  \      "type": "spec",
+  \      "alternate": "lib/{}.ex",
+  \      "dispatch": "mix espec spec/{}_spec.exs`=v:lnum ? ':'.v:lnum : ''`"
+  \    },
+  \    "spec/spec_helper.exs": { "type": "spec" },
+  \    "test/*_test.exs": {
+  \      "type": "test",
+  \      "alternate": "lib/{}.ex",
+  \      "dispatch": "mix test test/{}_test.exs`=v:lnum ? ':'.v:lnum : ''`"
+  \    },
+  \    "test/test_helper.exs": { "type": "test" },
+  \    "mix.exs": {
+  \      "type": "lib",
+  \      "alternate": "mix.lock",
+  \      "dispatch": "mix deps.get"
+  \    },
+  \    "mix.lock": { "alternate": "mix.exs" },
+  \    "*": {
+  \      "make": "mix",
+  \      "console": "iex -S mix"
+  \    }
+  \  },
+  \ "ember-cli-build.js": {
+  \   "app/routes/*.js": {
+  \     "type": "route",
+  \     "template": [
+  \       "import Ember from 'ember';",
+  \       "",
+  \       "export default Ember.Route.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/templates/{}.hbs"
+  \   },
+  \   "app/controllers/*.js": {
+  \     "type": "controller",
+  \     "template": [
+  \       "import Ember from 'ember';",
+  \       "",
+  \       "export default Ember.Controller.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/templates/{}.hbs"
+  \   },
+  \   "app/templates/components/*.hbs": {
+  \     "alternate": "tests/integration/components/{}-test.js"
+  \   },
+  \   "app/components/*.js": {
+  \     "type": "component",
+  \     "template": [
+  \       "import Ember from 'ember';",
+  \       "",
+  \       "export default Ember.Component.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/templates/components/{}.hbs"
+  \   },
+  \   "app/templates/*.js": {
+  \     "type": "template",
+  \     "template": [
+  \       "{{outlet}}",
+  \     ]
+  \   },
+  \   "app/mixins/*.js": {
+  \     "type": "mixin",
+  \     "template": [
+  \       "import Ember from 'ember';",
+  \       "",
+  \       "export default Ember.Mixin.create({",
+  \       "});",
+  \     ],
+  \   },
+  \   "app/models/*.js": {
+  \     "type": "model",
+  \     "template": [
+  \       "import DS from 'ember-data';",
+  \       "",
+  \       "export default DS.Model.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/adapters/{}.js"
+  \   },
+  \   "app/adapters/*.js": {
+  \     "type": "adapter",
+  \     "template": [
+  \       "import ApplicationAdapter from './application';",
+  \       "",
+  \       "export default ApplicationAdapter.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/serializers/{}.js"
+  \   },
+  \   "app/services/*.js": {
+  \     "type": "service",
+  \     "template": [
+  \       "import Ember from 'Ember';",
+  \       "",
+  \       "export default Ember.Service.extend({",
+  \       "});",
+  \     ],
+  \   },
+  \   "app/serializers/*.js": {
+  \     "type": "serializer",
+  \     "template": [
+  \       "import ApplicationSerializer from './application';",
+  \       "",
+  \       "export default ApplicationSerializer.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/models/{}.js"
+  \   },
+  \   "app/mirage/factories/*.js": {
+  \     "type": "factory",
+  \     "template": [
+  \       "import Mirage from 'ember-cli-mirage';",
+  \       "",
+  \       "export default Mirage.Factory.extend({",
+  \       "});",
+  \     ],
+  \     "alternate": "app/models/{}.js"
+  \   },
+  \   "tests/unit/models/*-test.js": {
+  \     "alternate": "app/models/{}.js"
+  \   },
+  \   "tests/integration/components/*-test.js": {
+  \     "alternate": "app/components/{}.js"
+  \   },
+  \ },
+  \ }
