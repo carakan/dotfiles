@@ -13,6 +13,7 @@
         create: true
         path: ctags
     ~/.default-gems: default-gems
+    ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global

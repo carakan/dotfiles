@@ -127,8 +127,8 @@ pip3 uninstall pynvim
 pip3 install pynvim
 # to upgrade
 pip install --upgrade pynvim
-#ruby
-gem install neovim
+# ruby is installed with default-gems
+# gem install neovim
 ```
 
 - could need to run sometimes this command, to register new plugins
@@ -161,33 +161,14 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 
 `npm i -g npm`
 
-# Install linters & LSP
+## Install linters & LSP AND Install Coc.nvim plugins
 
-```zsh
-npm i -g eslint stylelint tslint typescript prettier neovim @prettier/plugin-ruby
-npm i -g vue-language-server
-gem install solargraph
-```
-
-## Install Coc.nvim plugins
-
-In neovim run this command:
-
-```
-" Removed coc-list, coc-tag, coc-ultisnip
-:CocInstall coc-html coc-json coc-css coc-emoji coc-snippets coc-highlight coc-tsserver coc-vetur coc-yaml coc-solargraph
-```
+(automatic)
 
 ## Update Coc.nvim plugins
 
 ```
 :CocUpdate
-```
-
-# Install Gems
-
-```zsh
-gem install reek rubocop colorls
 ```
 
 # Install the bundle Homebrew
