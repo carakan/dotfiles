@@ -6,12 +6,13 @@
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
     ~/.bat.conf: bat.conf
-    ~/.config/karabiner/karabiner.json: 
+    ~/.config/karabiner/karabiner.json:
         create: true
         path: karabiner.json
-    ~/.ctags.d/global.ctags: 
+    ~/.ctags.d/global.ctags:
         create: true
         path: ctags
+    ~/.default-gems: default-gems
     ~/.gemrc: gemrc
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
