@@ -1,5 +1,6 @@
 @prettier/plugin-ruby
 eslint
+stylelint
 neovim
 prettier
 tslint
