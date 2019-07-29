@@ -1,9 +1,11 @@
 {
   "coc.preferences.autoTrigger": "always",
-  "coc.preferences.diagnostic.enable": true,
-  "coc.preferences.diagnostic.displayByAle": true,
   "coc.preferences.codeLens.enable": true,
+  "coc.preferences.colorSupport": true,
+  "coc.preferences.diagnostic.displayByAle": true,
+  "coc.preferences.diagnostic.enable": true,
   "coc.preferences.diagnostic.refreshOnInsertMode": false,
+  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnType": false,
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.minTriggerInputLength": 1,
@@ -12,23 +14,31 @@
   "coc.preferences.timeout": 2000,
   "coc.preferences.triggerAfterInsertEnter": false,
   "coc.preferences.watchmanPath": "/usr/local/bin/watchman",
-  "coc.preferences.colorSupport": true,
-  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.source.around.priority": 10,
   "coc.source.buffer.priority": 11,
   "coc.source.dictionary.priority": 20,
   "coc.source.emoji.priority": 22,
+  "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 12,
   "coc.source.snippets.priority": 2,
   "coc.source.ultisnips.priority": 2,
   "coc.source.word.priority": 21,
-  "coc.source.file.ignoreHidden": false,
-  "html.format.enable": true,
   "html.enable": true,
-
-  "suggest.detailMaxLength": 30,
-  "suggest.minTriggerInputLength": 2,
-  "suggest.enablePreview": true,
+  "html.format.enable": true,
+  "languageserver": {
+    "elixir": {
+      "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
+      "filetypes": ["elixir", "eelixir"],
+      "trace.server": "verbose",
+      "rootPatterns": ["mix.exs"],
+      "initializationOptions": {},
+      "settings": {
+        "elixirLS": {
+          "dialyzerEnabled": false
+        }
+      }
+    }
+  },
   "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",
@@ -56,19 +66,7 @@
     "typeParameter": "\uf728",
     "default": "\uf29c"
   },
-
-  "languageserver": {
-    "elixir": {
-      "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
-      "filetypes": ["elixir", "eelixir"],
-      "trace.server": "verbose",
-      "rootPatterns": ["mix.exs"],
-      "initializationOptions": {},
-      "settings": {
-        "elixirLS": {
-          "dialyzerEnabled": false
-        }
-      }
-    }
-  }
+  "suggest.detailMaxLength": 30,
+  "suggest.enablePreview": true,
+  "suggest.minTriggerInputLength": 2
 }
