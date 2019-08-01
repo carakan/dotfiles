@@ -9,7 +9,7 @@ See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USA
 
 # Requirements
 
-- Ohmyzsh
+- install [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh)
 
 - Neovim
 
@@ -161,16 +161,6 @@ from npm > 5.4.x npm gets stability, to upgrade only do that:
 
 `npm i -g npm`
 
-## Install linters & LSP AND Install Coc.nvim plugins
-
-(automatic)
-
-## Update Coc.nvim plugins
-
-```
-:CocUpdate
-```
-
 # Install the bundle Homebrew
 
 ```zsh
@@ -211,6 +201,17 @@ git config --global commit.gpgsign true
 
 ```zsh
 brew cask install android-sdk (--force)
+```
+
+- To edit charcoal shades preferences:
+
+```zsh
+# decode to xml
+plutil -convert xml1 ~/Library/Preferences/com.charcoaldesign.shades.plist
+#edit
+code ~/Library/Preferences/com.charcoaldesign.shades.plist
+# compile to binary
+plutil -convert binary1 ~/Library/Preferences/com.charcoaldesign.shades.plist
 ```
 
 - Remap caps lock to esc and Crtl
