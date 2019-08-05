@@ -126,9 +126,7 @@ pip3 uninstall neovim
 pip3 uninstall pynvim
 pip3 install pynvim
 # to upgrade
-pip install --upgrade pynvim
-# ruby is installed with default-gems
-# gem install neovim
+pip3 install --upgrade pynvim
 ```
 
 - could need to run sometimes this command, to register new plugins
@@ -183,14 +181,6 @@ https://github.com/neovim/neovim/wiki/FAQ
 
 also, you can run `:checkhealth` into your neovim to check the health of this dotfiles
 
-- Sometimes when install new versions of neovim or change plugins you need do a _Hard Reset_
-
-```zsh
-rm -rf ~/.vim/bundle/.cache
-rm -rf ~/.vim/bundle/state_nvim.vim
-rm -rf ~/.vim/bundle/cache_nvim
-```
-
 - Enable sign commits:
 
 ```zsh
@@ -208,14 +198,10 @@ brew cask install android-sdk (--force)
 ```zsh
 # decode to xml
 plutil -convert xml1 ~/Library/Preferences/com.charcoaldesign.shades.plist
-#edit
+# edit
 code ~/Library/Preferences/com.charcoaldesign.shades.plist
 # compile to binary
 plutil -convert binary1 ~/Library/Preferences/com.charcoaldesign.shades.plist
 ```
-
-- Remap caps lock to esc and Crtl
-  I've used karabiner elements version 0.90.90 with this instructions https://github.com/tekezo/Karabiner-Elements/issues/8#issuecomment-251142033 new versions isn't working.
-  This dotfiles work with last version of karabiner elements.
 
 - [upgrade ssh keys](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
