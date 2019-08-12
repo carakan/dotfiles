@@ -22,6 +22,7 @@ brew install neovim
 ```zsh
 brew install asdf
 ```
+
 register asdf plugins:
 
 ```zsh
