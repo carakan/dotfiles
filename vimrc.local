@@ -396,11 +396,10 @@ function! <SID>SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
-let g:vimade = {
-  \ 'fadelevel': 0.70,
-  \ 'enablefocusfading': 1,
-  \ 'enablesigns': 1
-\}
+let g:vimade = {}
+let g:vimade.fadelevel = 0.7
+let g:vimade.enablesigns = 1
+let g:vimade.enablefocusfading = 1
 
 let g:Hexokinase_highlighters = ['virtual', 'background', 'foreground']
 let g:Hexokinase_virtualText = '   ████'
