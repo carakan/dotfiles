@@ -1,19 +1,18 @@
 *.DS_Store
 *~
+._*
 .capistrano/*
+.elixir_ls/*
 .envrc
 .idea/*
 .tern-port
 .tern-project
 .tool-versions
 .vscode/*
-.elixir_ls/*
-tags
-tmp/**/*
-node_modules/*
-# Thumbnails
-._*
 GPATH
 GRTAGS
 GTAGS
 gems/*
+node_modules/*
+tags
+tmp/**/*
