@@ -8,13 +8,14 @@ export ZSH=/Users/carakan/.oh-my-zsh
 # ZSH_THEME="clean"
 DISABLE_UPDATE_PROMPT=true
  
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time os_icon)
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-POWERLEVEL9K_SHORTEN_DELIMITER=""
-POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
-POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M:%S}"
+P9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
+P9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs time)
+P9K_DIR_SHORTEN_LENGTH=1
+P9K_DIR_SHORTEN_DELIMITER=""
+P9K_DIR_SHORTEN_STRATEGY="truncate_from_right"
+# P9K_DIR_OMIT_FIRST_CHARACTER=true
+P9K_MODE="nerdfont-complete"
+P9K_TIME_FORMAT="%D{\uf017 %H:%M:%S}"
 ZSH_THEME="powerlevel9k/powerlevel9k"
  
 # export TERM=xterm-256color-italic

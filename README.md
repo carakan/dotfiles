@@ -49,7 +49,7 @@ git clone git://github.com/zsh-users/zsh-autosuggestions
 
 - Install patched fonts from:
 
-https://github.com/ryanoasis/nerd-fonts/releases/tag/v1.0.0
+https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/VictorMono
 
 or simple download and install fonts from directory fontpatched in this project
 
@@ -64,7 +64,7 @@ brew install --with-jansson universal-ctags/universal-ctags/universal-ctags
 
 ```zsh
 brew install zsh-syntax-highlighting
-brew install bat # for preview files
+brew install bat
 brew install htop
 ```
 
@@ -72,7 +72,6 @@ brew install htop
 
 ```zsh
 brew install fzf
-# Install shell extensions
 /usr/local/opt/fzf/install
 brew install git-cal
 ```
@@ -148,7 +147,7 @@ curl https://raw.githubusercontent.com/carakan/supra-vim/master/bootstrap.sh -L 
 
 call into vim:
 
-```
+```vim
 :call dein#update()
 " if you added/removed some plugins you need to run this
 :call map(dein#check_clean(), "delete(v:val, 'rf')")
