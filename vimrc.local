@@ -397,9 +397,22 @@ let g:vimade.fadelevel = 0.7
 let g:vimade.enablesigns = 1
 let g:vimade.enablefocusfading = 1
 
-let g:Hexokinase_highlighters = ['virtual', 'background', 'foreground']
-let g:Hexokinase_virtualText = '   ████'
-let g:Hexokinase_ftAutoload = ['*']
+let g:Hexokinase_optInPatterns = [
+\     'full_hex',
+\     'triple_hex',
+\     'rgb',
+\     'rgba',
+\     'hsl',
+\     'hsla'
+\ ]
+let g:Hexokinase_ftOptInPatterns = {
+\     'css': 'full_hex,triple_hex,rgb,rgba,hsl,hsla,colour_names',
+\     'html': 'full_hex,rgb,rgba,hsl,hsla',
+\     'javascript': 'full_hex,rgb,rgba,hsl,hsla'
+\ }
+let g:Hexokinase_checkBoundary = 1
+let g:Hexokinase_highlighters = ['foreground', 'virtual']
+let g:Hexokinase_virtualText = '    ████'
 
 " Coc Configuration
 let g:coc_global_extensions = [
