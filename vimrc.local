@@ -410,9 +410,10 @@ let g:Hexokinase_ftOptInPatterns = {
 \     'html': 'full_hex,rgb,rgba,hsl,hsla',
 \     'javascript': 'full_hex,rgb,rgba,hsl,hsla'
 \ }
-let g:Hexokinase_checkBoundary = 1
 let g:Hexokinase_highlighters = ['foreground', 'virtual']
-let g:Hexokinase_virtualText = '    ████'
+let g:Hexokinase_virtualText = '     ██████'
+
+let g:matchup_matchparen_offscreen = {'method': 'popup'}
 
 " Coc Configuration
 let g:coc_global_extensions = [
