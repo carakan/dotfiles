@@ -157,7 +157,9 @@ call into vim:
 
 from npm > 5.4.x npm gets stability, to upgrade only do that:
 
-`npm i -g npm`
+```
+npm i -g npm
+```
 
 # Install the bundle Homebrew
 
@@ -167,7 +169,14 @@ brew bundle
 
 # Notes
 
-- I patched or adjust Iterm2 to enable Crtl-h over neovim using this: https://github.com/neovim/neovim/issues/2048#issuecomment-98307896
+- To sync vscode _manually_ do this:
+
+```zsh
+# to backup:
+code --list-extensions > extensions.list
+# to restore
+cat extensions.list |% { code --install-extension $_}
+```
 
 - From MacOS Sierra ssh keys no longer added by default, I added a simple solution from https://github.com/lionheart/openradar-mirror/issues/15361 also you need to run this command for first time:
 
