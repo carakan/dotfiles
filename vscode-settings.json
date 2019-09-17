@@ -1,12 +1,35 @@
 {
-  "editor.fontFamily": "DankiMono Nerd Font",
-  "editor.fontLigatures": true,
-  "editor.fontSize": 16,
-  "editor.tabSize": 2,
-  "terminal.integrated.fontSize": 16,
   "window.zoomLevel": 1,
-  "workbench.colorCustomizations": {},
+  "editor.fontSize": 13,
+  "editor.fontFamily": "VictorMono-Medium",
   "workbench.colorTheme": "NewRailscasts",
+  "editor.fontLigatures": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.tabSize": 2,
   "workbench.fontAliasing": "antialiased",
-  "workbench.iconTheme": "material-icon-theme"
+  "terminal.integrated.fontSize": 14,
+  "workbench.colorCustomizations": {
+    //"sideBarSectionHeader.background": "#24121d",
+  },
+  "editor.tokenColorCustomizations": {
+    "[NewRailscasts]": {
+      "textMateRules": [
+        {
+          "name": "orange-yellow, bold",
+          "scope": [],
+          "settings": {
+            "fontStyle": "bold",
+            "foreground": "#D38E39"
+          }
+        },
+        {
+          "name": "White",
+          "scope": [],
+          "settings": {
+            "foreground": "#f1ecce"
+          }
+        }
+      ]
+    }
+  }
 }
