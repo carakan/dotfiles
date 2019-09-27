@@ -405,6 +405,9 @@ let g:Hexokinase_ftOptInPatterns = {
 let g:Hexokinase_virtualText = '     ██████'
 
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
+let g:matchup_matchparen_deferred = 1
+let g:matchup_matchparen_hi_surround_always = 1
+:hi MatchParen guibg=#422200 gui=bold,italic guifg=NONE blend=25
 
 " Coc Configuration
 let g:coc_global_extensions = [
