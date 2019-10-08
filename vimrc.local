@@ -122,7 +122,7 @@ let g:signify_sign_delete = '✖'
 let g:signify_sign_delete_first_line = '﫨'
 let g:signify_update_on_bufenter = 1
 let g:signify_update_on_focusgained = 1
-nmap <silent> <leader>pd :SignifyHunkPreview<CR>
+nmap <silent> <leader>pd :SignifyHunkDiff<CR>
 nmap <silent> <leader>pu :SignifyHunkUndo<CR>
 
 " Text Formatting/Layout                                                    "
