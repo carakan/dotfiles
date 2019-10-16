@@ -56,16 +56,17 @@ let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#error_symbol   = ' '
+let g:airline#extensions#ale#info_symbol = ' '
+let g:airline#extensions#ale#warning_symbol = ' '
 let g:bufferline_echo = 0
 
 " ALE
 let g:ale_set_highlights = 0
 let g:ale_completion_enabled = 1
 let g:ale_completion_max_suggestions = 10
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#ale#error_symbol   = ' '
-let g:airline#extensions#ale#info_symbol = ' '
-let g:airline#extensions#ale#warning_symbol = ' '
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_save = 1
@@ -281,8 +282,6 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
@@ -334,6 +333,23 @@ if exists('g:loaded_webdevicons')
   call webdevicons#refresh()
 endif
 
+" NERDTree
+let g:NERDTreeMapMenu = 'nt'
+let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeIgnore = [
+      \ '\.vim$',
+      \ '\~$',
+      \ '\.beam',
+      \ 'elm-stuff',
+      \ 'deps',
+      \ '_build',
+      \ '.git',
+      \ 'node_modules',
+      \ 'tags',
+      \ ]
+
 " vim-nerdtree-syntax-highlight:
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
@@ -348,11 +364,10 @@ let g:ember_tools_highlight_actions = 0
 let g:airline#extensions#cursormode#enabled = 0
 
 " Configure node, python executable
-" let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/10.16.1/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.11.0/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:python3_host_prog = '/usr/local/bin/python3'
 let g:loaded_python_provider = 1
 let g:bookmark_sign = ''
-let g:NERDTreeMapMenu = 'nt'
 
 vmap <leader>y :YankCode<CR>
 
@@ -417,6 +432,8 @@ let g:coc_global_extensions = [
   \ 'coc-emoji',
   \ 'coc-highlight',
   \ 'coc-html',
+  \ 'coc-sh',
+  \ 'coc-tailwindcss',
   \ 'coc-json',
   \ 'coc-lists',
   \ 'coc-snippets',
