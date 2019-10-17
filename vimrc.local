@@ -282,6 +282,11 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
+" fzf_preview
+let g:fzf_preview_layout = 'below split new'
+let g:fzf_preview_rate = 0.3
+let g:fzf_preview_command = 'bat {-1}'
+
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
@@ -439,7 +444,6 @@ let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-solargraph',
   \ 'coc-tag',
-  \ 'coc-todolist',
   \ 'coc-tsserver',
   \ 'coc-vetur',
   \ 'coc-vimlsp',
