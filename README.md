@@ -173,9 +173,9 @@ brew bundle
 
 ```zsh
 # to backup:
-code --list-extensions > extensions.list
+code --list-extensions > vscode-extensions.list
 # to restore
-cat extensions.list |% { code --install-extension $_}
+cat vscode-extensions.list |% { code --install-extension $_}
 ```
 
 - From MacOS Sierra ssh keys no longer added by default, I added a simple solution from https://github.com/lionheart/openradar-mirror/issues/15361 also you need to run this command for first time:
