@@ -290,7 +290,7 @@ nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
 
-nnoremap <silent> Q :CloseBuffers<CR>
+nnoremap <silent> Q :Bdelete menu<CR>
 
 let g:mustache_abbreviations = 1
 
