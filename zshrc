@@ -86,6 +86,8 @@ export LANG=en_US.UTF-8
 #   export EDITOR='mvim'
 # fi
 
+setopt HIST_IGNORE_SPACE
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
