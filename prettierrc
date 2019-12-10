@@ -25,6 +25,12 @@
       }
     },
     {
+      "files": "*.haml",
+      "options": {
+        "parser": "haml"
+      }
+    },
+    {
       "files": "*.eex",
       "options": {
         "parser": "html",
