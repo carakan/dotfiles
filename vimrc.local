@@ -438,6 +438,7 @@ let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:matchup_matchparen_deferred = 1
 let g:matchup_matchparen_hi_surround_always = 1
 :hi MatchParen guibg=#422200 gui=bold,italic guifg=NONE blend=25
+:highlight HighlightedyankRegion guibg=#482d00 blend=25
 
 " Coc Configuration
 let g:coc_global_extensions = [
