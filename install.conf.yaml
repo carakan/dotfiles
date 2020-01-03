@@ -26,6 +26,7 @@
     ~/.vimrc.before.local: vimrc.before.local
     ~/.vimrc.bundles.local: vimrc.bundles.local
     ~/.vimrc.local: vimrc.local
+    ~/.rubocop.yml: rubocop.yml
     ~/.zshrc: zshrc
 
 - shell:
