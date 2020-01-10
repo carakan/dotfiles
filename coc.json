@@ -1,8 +1,8 @@
 {
   "coc.preferences.autoTrigger": "always",
-  "coc.preferences.codeLens.enable": true,
+  "codeLens.enable": true,
   "coc.preferences.colorSupport": true,
-  "coc.preferences.diagnostic.displayByAle": true,
+  "diagnostic.displayByAle": true,
   "coc.preferences.diagnostic.enable": true,
   "coc.preferences.diagnostic.refreshOnInsertMode": false,
   "coc.preferences.extensionUpdateCheck": "daily",
