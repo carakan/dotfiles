@@ -30,7 +30,7 @@
       "command": "/Users/carakan/lsp/elixir-ls/language_server.sh",
       "filetypes": ["elixir", "eelixir"],
       "trace.server": "verbose",
-      "rootPatterns": ["mix.exs"],
+      "rootPatterns": ["mix.lock"],
       "initializationOptions": {},
       "settings": {
         "elixirLS": {
