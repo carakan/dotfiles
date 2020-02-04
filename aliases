@@ -1,7 +1,7 @@
 # Unix
-alias ls="colorls --sd -A"
-alias l="ls -lah"
-alias ll="ls -lah"
+alias ls="exa --icons -F1"
+alias l="exa -labghHFS --icons"
+alias ll="exa -labghHFS --icons "
 alias ln="ln -v"
 alias mkdir="mkdir -p"
 alias rmf='rm -rf'
