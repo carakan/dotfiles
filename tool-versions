@@ -2,4 +2,4 @@ elixir 1.10.0-otp-22
 erlang 22.2
 nodejs 12.14.0
 ruby 2.7.0
-yarn 1.21.1
+yarn 1.22.0

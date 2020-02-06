@@ -226,20 +226,19 @@ function! FZFOpen(command_str)
 endfunction
 
 nnoremap <silent> <C-c> :Commands<CR>
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <C-t> :BuffersPreview<CR>
+nnoremap <silent> <C-p> :<C-u>FzfPreviewProjectFiles<CR>
+nnoremap <silent> <C-t> :FzfPreviewBuffers<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <leader>A :Windows<CR>
 nnoremap <silent> <leader>O :BTags<CR>
-nnoremap <silent> <leader>a :Buffers<CR>
 nnoremap <silent> <leader>ft :Filetypes<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>m :Maps<CR>
 nnoremap <silent> <leader>o :Tags<CR>
-nnoremap <silent> F :ProjectGrepPreview<CR>
-vnoremap <silent> F :ProjectGrepPreview<CR>
+nnoremap <silent> F :FzfPreviewProjectGrep<CR>
+vnoremap <silent> F :FzfPreviewProjectGrep<CR>
 nnoremap <silent> <leader>M :FZFMru<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
