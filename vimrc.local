@@ -285,6 +285,7 @@ command! -bang -nargs=? -complete=dir Files
 let g:fzf_preview_command = 'bat --color=always --style=grid {-1}'
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore'
+" let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always'
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 

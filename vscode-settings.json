@@ -14,22 +14,7 @@
   "editor.tokenColorCustomizations": {
     "[NewRailscasts]": {
       "textMateRules": [
-        {
-          "name": "orange-yellow, bold",
-          "scope": [],
-          "settings": {
-            "fontStyle": "bold",
-            "foreground": "#D38E39"
-          }
-        },
-        {
-          "name": "White",
-          "scope": [],
-          "settings": {
-            "foreground": "#f1ecce"
-          }
-        }
-
+        
       ]
     }
   }
