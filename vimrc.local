@@ -238,9 +238,9 @@ nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>m :Maps<CR>
 nnoremap <silent> <leader>o :Tags<CR>
-nnoremap <silent> F :FzfPreviewProjectGrep<CR>
+nnoremap <silent> F :<C-u>FzfPreviewProjectGrep<CR>
 vnoremap <silent> F :call SearchVisualSelectionWithRg()<CR>
-nnoremap <silent> <leader>M :FzfPreviewProjectMruFiles<CR>
+nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewBookmarks<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
@@ -259,7 +259,6 @@ function! SearchVisualSelectionWithRg() range
 endfunction
 
 " fzf_preview
-let g:fzf_preview_command = 'bat --color=always --style=grid {-1}'
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore'
 " let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always'
@@ -462,6 +461,8 @@ endfunction
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+
+let g:vue_pre_processors = []
 
 " projectionist
 let g:rails_projections = {
