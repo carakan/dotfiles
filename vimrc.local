@@ -243,9 +243,6 @@ vnoremap <silent> F :call SearchVisualSelectionWithRg()<CR>
 nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewBookmarks<CR>
 
-imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-imap <C-x><C-l> <plug>(fzf-complete-line)
-
 function! SearchVisualSelectionWithRg() range
   let l:old_reg = getreg('"')
   let l:old_regtype = getregtype('"')
