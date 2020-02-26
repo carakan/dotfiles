@@ -259,6 +259,7 @@ endfunction
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore'
 let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
+let g:fzf_preview_floating_window_winblend = 10
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 

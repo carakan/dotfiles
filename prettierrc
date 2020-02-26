@@ -36,6 +36,14 @@
         "parser": "html",
         "singleQuote": false
       }
+    },
+    {
+      "files": "**/*.{markdown,md,mdx}",
+      "options": {
+        "printWidth": 80,
+        
+        "parser": "markdown"
+      }
     }
   ]
 }
