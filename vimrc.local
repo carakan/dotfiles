@@ -274,8 +274,6 @@ let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['html'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['ex'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['exs'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['json'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['jsx'] = ''
@@ -284,8 +282,6 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rabl'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rb'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['svg'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vim'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['yaml'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['yml'] = ''
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:webdevicons_enable_airline_statusline = 1
@@ -342,7 +338,7 @@ let g:ember_tools_highlight_actions = 0
 let g:airline#extensions#cursormode#enabled = 0
 
 " Configure node, python executable
-let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.14.0/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.16.1/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:python3_host_prog = '/usr/local/bin/python3'
 let g:loaded_python_provider = 1
 let g:bookmark_sign = ''
