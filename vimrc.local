@@ -238,7 +238,7 @@ nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>m :Maps<CR>
 nnoremap <silent> <leader>o :Tags<CR>
-nnoremap <silent> F :<C-u>FzfPreviewProjectGrep<CR>
+nnoremap <silent> F :<C-u>FzfPreviewProjectGrep .<CR>
 vnoremap <silent> F :call SearchVisualSelectionWithRg()<CR>
 nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewBookmarks<CR>
@@ -408,7 +408,7 @@ let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:matchup_matchparen_deferred = 1
 let g:matchup_matchparen_hi_surround_always = 1
 :hi MatchParen guibg=#422200 gui=bold,italic guifg=NONE blend=25
-:highlight HighlightedyankRegion guibg=#482d00 blend=25
+:hi HighlightedyankRegion guibg=#482d00 blend=25
 
 " Coc Configuration
 let g:coc_global_extensions = [
