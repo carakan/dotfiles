@@ -34,7 +34,7 @@
       "initializationOptions": {},
       "settings": {
         "elixirLS": {
-          "dialyzerEnabled": true
+          "dialyzerEnabled": false
         }
       }
     }
