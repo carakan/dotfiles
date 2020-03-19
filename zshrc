@@ -114,7 +114,7 @@ KEYTIMEOUT=1
 # export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 
 # Erlang elixir
-export ERL_AFLAGS="-kernel shell_history enabled"
+export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 1024000"
 
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null

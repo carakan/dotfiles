@@ -37,9 +37,6 @@ autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
 autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 
-" Enable ruby syntax
-let g:ruby_operators = 1
-
 " Disable arrows keys
 noremap   <Up>     <NOP>
 noremap   <Down>   <NOP>
