@@ -1,5 +1,4 @@
 bundler
-colorls
 pry
 rake
 reek
