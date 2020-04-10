@@ -324,12 +324,9 @@ let g:NERDTreeIgnore = [
       \ ]
 
 " vim-nerdtree-syntax-highlight:
-let g:NERDTreeExtensionHighlightColor = {}
-let g:NERDTreeExtensionHighlightColor['ex'] = '834F79'
-let g:NERDTreeExtensionHighlightColor['exs'] = 'c57bd8'
-let g:NERDTreeExtensionHighlightColor['yml'] = 'f4bf70'
-let g:NERDTreeExtensionHighlightColor['yaml'] = 'f4bf70'
 let g:NERDTreeChDirMode=0
+let g:NERDTreeHighlightFolders = 1
+let g:NERDTreeHighlightFoldersFullName = 1
 
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
