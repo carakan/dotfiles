@@ -315,12 +315,14 @@ let g:NERDTreeIgnore = [
       \ '\.vim$',
       \ '\~$',
       \ '\.beam',
-      \ 'elm-stuff',
       \ 'deps',
       \ '_build',
       \ '.git',
       \ 'node_modules',
       \ 'tags',
+      \ '.elixir_ls',
+      \ '.bundle',
+      \ 'tmp',
       \ ]
 
 " vim-nerdtree-syntax-highlight:
