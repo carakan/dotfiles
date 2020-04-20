@@ -18,4 +18,5 @@ node_modules/*
 public/uploads/*
 storage/*
 tags
+tags.*
 tmp/**/*
