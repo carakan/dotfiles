@@ -246,7 +246,6 @@ let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --smart-case --hidden --follow --no-messages --ignore-file $HOME/.ignore'
 let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
 let g:fzf_preview_floating_window_winblend = 10
-let g:fzf_preview_grep_cmd = 'rg --line-number --no-heading --color=always --smart-case --ignore-file $HOME/.ignore'
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
@@ -326,8 +325,6 @@ let g:airline#extensions#cursormode#enabled = 0
 
 " Configure node, python executable
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.16.1/.npm/lib/node_modules/neovim/bin/cli.js'
-let g:python3_host_prog = '/usr/local/bin/python3'
-let g:loaded_python_provider = 1
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>
