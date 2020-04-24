@@ -242,10 +242,12 @@ nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewMarks<CR>
 
 " fzf_preview
-let g:fzf_preview_use_dev_icons = 1
+let g:fzf_preview_use_dev_icons = 0
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --smart-case --hidden --follow --no-messages --ignore-file $HOME/.ignore'
 let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
 let g:fzf_preview_floating_window_winblend = 10
+let g:fzf_preview_command = 'bat --color=always --style=full {-1}' 
+let g:fzf_preview_floating_window_rate = 0.95
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
@@ -299,19 +301,6 @@ let g:NERDTreeMapMenu = 'nt'
 let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTreeShowHidden = 1
-let g:NERDTreeIgnore = [
-      \ '\.vim$',
-      \ '\~$',
-      \ '\.beam',
-      \ 'deps',
-      \ '_build',
-      \ '.git',
-      \ 'node_modules',
-      \ 'tags',
-      \ '.elixir_ls',
-      \ '.bundle',
-      \ 'tmp',
-      \ ]
 
 " vim-nerdtree-syntax-highlight:
 let g:NERDTreeChDirMode=0

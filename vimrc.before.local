@@ -7,8 +7,8 @@ let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript'
 let g:spf13_leader=' '
 let g:jsx_ext_required = 1
 " Python config
-let g:loaded_python_provider = 1
-let g:loaded_python3_provider = 1
+let g:loaded_python_provider = 0
+" let g:loaded_python3_provider = 1 " Don't enable explicitly python3
 " let g:python3_host_prog = '/usr/local/bin/python3'
 set pyxversion=3
 

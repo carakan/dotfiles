@@ -1,6 +1,6 @@
 *.DS_Store
 *.log
-.elixir_ls/*
+**/.elixir_ls/*
 .git/*
 .gitkeep
 .idea/*
@@ -20,3 +20,4 @@ storage/*
 tags
 tags.*
 tmp/**/*
+*.beam
