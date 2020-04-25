@@ -21,3 +21,4 @@ tags
 tags.*
 tmp/**/*
 *.beam
+*.keep
