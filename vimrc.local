@@ -90,7 +90,7 @@ let g:ale_linters = {
   \ 'html': [],
   \ 'javascript': ['eslint', 'tsserver'],
   \ 'json': ['prettier'],
-  \ 'ruby': ['rubocop', 'ruby', 'rails_best_practices', 'reek'],
+  \ 'ruby': ['rubocop', 'ruby'],
   \ 'scss': ['stylelint', 'prettier'],
   \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
   \ 'vim': ['vint'],
