@@ -21,6 +21,7 @@
     ~/.irbrc: irbrc
     ~/.prettierrc: prettierrc
     ~/.profile: profile
+    ~/.pk10.zsh: pk10.zsh
     ~/.tmux.conf: tmux.conf
     ~/.tool-versions: tool-versions
     ~/.vimrc.before.local: vimrc.before.local
