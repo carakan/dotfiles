@@ -1,3 +1,4 @@
+ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/carakan/.oh-my-zsh
 # Set name of the theme to load.
@@ -148,3 +149,5 @@ if [[ -z "$TMUX" ]]; then
     fi
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
