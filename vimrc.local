@@ -85,7 +85,7 @@ let g:ale_linters = {
   \ 'css': ['stylelint', 'prettier'],
   \ 'elixir': ['credo'],
   \ 'erb': ['erb', 'erubis'],
-  \ 'haml': ['haml-lint'],
+  \ 'haml': ['hamllint'],
   \ 'handlebars': ['ember-template-lint'],
   \ 'html': [],
   \ 'javascript': ['eslint', 'tsserver'],
