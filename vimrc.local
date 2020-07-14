@@ -241,7 +241,7 @@ nnoremap <silent> <leader>o :Tags<CR>
 nnoremap <silent> F :<C-u>FzfPreviewProjectGrep .<CR>
 xnoremap <silent> F "sy:FzfPreviewProjectGrep<Space>.<Space>-F<Space>-add-fzf-arg=--query="<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
 nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
-nnoremap <silent> <leader>b :<C-u>FzfPreviewMarks<CR>
+nnoremap <silent> <leader>b :<C-u>FzfPreviewBookmarks<CR>
 
 " fzf_preview
 let g:fzf_preview_use_dev_icons = 1
@@ -397,7 +397,8 @@ let g:coc_global_extensions = [
   \ 'coc-vetur',
   \ 'coc-markdownlint',
   \ 'coc-vimlsp',
-  \ 'coc-yaml'
+  \ 'coc-yaml',
+  \ 'coc-fzf-preview'
 \ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
