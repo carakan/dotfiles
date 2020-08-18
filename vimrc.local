@@ -168,6 +168,7 @@ nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
 
 " let g:test#javascript#mocha#executable = 'NODE_ENV=test mocha'
+" let test#ruby#rspec#executable = 'docker-compose exec -e RAILS_ENV=test -e BEAR_LOG_LEVEL=debug app rspec'
 let g:test#elixir#exunit#options = {
   \ 'nearest': '--trace --color',
   \ 'file':    '--trace --color',
