@@ -55,7 +55,9 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#cursormode#enabled = 0
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#ale#error_symbol   = ' '
 let g:airline#extensions#ale#info_symbol = ' '
@@ -305,8 +307,6 @@ let g:NERDTreeHighlightFoldersFullName = 1
 
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
-
-let g:airline#extensions#cursormode#enabled = 0
 
 " Configure node, python executable
 let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.18.0/.npm/lib/node_modules/neovim/bin/cli.js'
