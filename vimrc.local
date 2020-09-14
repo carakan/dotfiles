@@ -53,7 +53,6 @@ let g:airline_theme='bubblegum'
 let g:airline_detect_modified = 1
 let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#show_buffers = 1
@@ -299,6 +298,7 @@ let g:NERDTreeMapMenu = 'nt'
 let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTreeShowHidden = 1
+let g:andrews_nerdtree_all = 1
 
 " vim-nerdtree-syntax-highlight:
 let g:NERDTreeChDirMode=0
