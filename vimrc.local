@@ -380,58 +380,9 @@ let g:matchup_matchparen_hi_surround_always = 1
 
 let g:qs_highlight_on_keys = ['f', 't', 'T']
 
-" Coc Configuration
-let g:coc_global_extensions = [
-  \ 'coc-css',
-  \ 'coc-ember',
-  \ 'coc-emoji',
-  \ 'coc-highlight',
-  \ 'coc-html',
-  \ 'coc-sh',
-  \ 'coc-tailwindcss',
-  \ 'coc-json',
-  \ 'coc-lists',
-  \ 'coc-snippets',
-  \ 'coc-solargraph',
-  \ 'coc-tag',
-  \ 'coc-tsserver',
-  \ 'coc-vetur',
-  \ 'coc-markdownlint',
-  \ 'coc-vimlsp',
-  \ 'coc-yaml',
-  \ 'coc-fzf-preview'
-\ ]
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
 
-vmap <leader>a <Plug>(coc-codeaction)
-nmap <leader>a <Plug>(coc-codeaction)
-
-nnoremap <Leader>mf :CocCommand markdownlint.fixAll<CR>
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
 
 let g:vue_pre_processors = []
 
