@@ -229,8 +229,8 @@ function! FZFOpen(command_str)
 endfunction
 
 nnoremap <silent> <C-c> :Commands<CR>
-nnoremap <silent> <C-p> :<C-u>FzfPreviewProjectFiles<CR>
-nnoremap <silent> <C-t> :<C-u>FzfPreviewBuffers<CR>
+nnoremap <silent> <C-p> :<C-u>CocCommand fzf-preview.ProjectFiles<CR>
+nnoremap <silent> <C-t> :<C-u>CocCommand fzf-preview.AllBuffers<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <leader>A :Windows<CR>
@@ -239,11 +239,11 @@ nnoremap <silent> <leader>ft :Filetypes<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>m :Maps<CR>
-nnoremap <silent> <leader>o :Tags<CR>
-nnoremap <silent> F :<C-u>FzfPreviewProjectGrep .<CR>
+nnoremap <silent> <leader>o :<C-u>CocCommand fzf-preview.Ctags<CR>
+nnoremap <silent> F :<C-u>CocCommand fzf-preview.ProjectGrep  .<CR>
 xnoremap <silent> F "sy:FzfPreviewProjectGrep<Space>.<Space>-F<Space>-add-fzf-arg=--query="<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
 nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
-nnoremap <silent> <leader>b :<C-u>FzfPreviewBookmarks<CR>
+nnoremap <silent> <leader>b :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 " fzf_preview
 let g:fzf_preview_use_dev_icons = 1
