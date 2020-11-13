@@ -1,4 +1,5 @@
 set runtimepath+=/usr/local/opt/fzf
+set re=0
 if (has('termguicolors'))
  set termguicolors
 endif
