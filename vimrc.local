@@ -195,12 +195,17 @@ map <Leader>ct :call atags#generate()<cr>
 
 " Ultisnips
 let g:UltiSnipsEditSplit = 'context'
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
-let g:UltiSnipsJumpForwardTrigger = '<c-b>'
-let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'snips']
+let g:UltiSnipsExpandTrigger = '<Nop>'
+imap <tab> <Plug>(coc-snippets-expand)
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
 
-:set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+" Cursor: block in normal/visual, vertical blinking in insert/command, horizontal blinking in replace/operator pending
+if has('nvim')
+    let &guicursor = 'n-v-c-sm:block-Cursor-blinkon0,'
+        \          . 'i-c-ci-ve:ver25-blinkwait1000-blinkon500-blinkoff500,'
+        \          . 'r-cr-o:hor20-blinkwait1000-blinkon500-blinkoff500'
+endif
 
 " move lines in visual mode
 vnoremap J :m '>+1<CR>gv=gv
