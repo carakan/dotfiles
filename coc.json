@@ -21,6 +21,7 @@
   "coc.source.file.ignoreHidden": false,
   "coc.source.file.priority": 12,
   "coc.source.snippets.priority": 2,
+  "coc.source.word.filetypes": ["text", "markdown", "html"],
   "coc.source.ultisnips.priority": 2,
   "coc.source.word.priority": 21,
   "html.enable": true,

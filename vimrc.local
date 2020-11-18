@@ -67,6 +67,10 @@ let g:airline_stl_path_style = 'short'
 let g:airline_section_b = '%-0.12{getcwd()}'
 let g:airline_section_c = '%t'
 
+" TmuxNavigator
+let g:tmux_navigator_save_on_switch = 1
+let g:tmux_navigator_disable_when_zoomed = 1
+
 " ALE
 let g:ale_use_global_executables = 1
 let g:ale_set_highlights = 0
@@ -407,6 +411,7 @@ let g:coc_global_extensions = [
   \ 'coc-vetur',
   \ 'coc-markdownlint',
   \ 'coc-vimlsp',
+  \ 'coc-word',
   \ 'coc-yaml',
   \ 'coc-fzf-preview'
 \ ]
