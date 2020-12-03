@@ -59,7 +59,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
-          node npm git brew tmux asdf zsh-autosuggestions ember-cli osx zsh-completions)
+          node npm git brew tmux asdf zsh-autosuggestions osx zsh-completions )
 
 # User configuration
 
@@ -83,6 +83,9 @@ setopt HIST_IGNORE_SPACE
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
+if [ -r /usr/local/opt/mcfly/mcfly.zsh ]; then
+  . /usr/local/opt/mcfly/mcfly.zsh
+fi
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
