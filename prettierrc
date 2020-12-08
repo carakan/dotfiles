@@ -8,7 +8,9 @@
       "files": "*.rb",
       "options": {
         "parser": "ruby",
-        "inlineConditionals": false
+        "inlineConditionals": false,
+        "inlineLoops": false,
+        "rubyModifier": false
       }
     },
     {
