@@ -47,25 +47,20 @@ noremap   <Right>  <NOP>
 nnoremap <bs> <c-^>
 set undofile
 
-" airline customizations
-let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
-let g:airline_detect_modified = 1
-let g:airline_skip_empty_sections = 1
-" let g:airline_extensions = ['branch', 'tabline']
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline#extensions#tabline#show_buffers = 1
-let g:airline#extensions#cursormode#enabled = 0
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#ale#error_symbol   = ' '
-let g:airline#extensions#ale#info_symbol = ' '
-let g:airline#extensions#ale#warning_symbol = ' '
-let g:bufferline_echo = 0
-let g:airline_stl_path_style = 'short'
-let g:airline_section_b = '%-0.12{getcwd()}'
-let g:airline_section_c = '%t'
+let g:bubbly_palette = #{
+\   background: "#34343c",
+\   foreground: "#c5cdd9",
+\   black: "#3e4249",
+\   red: "#ec7279",
+\   green: "#a0c980",
+\   yellow: "#deb974",
+\   blue: "#6cb6eb",
+\   purple: "#d38aea",
+\   cyan: "#5dbbc1",
+\   white: "#c5cdd9",
+\   lightgrey: "#57595e",
+\   darkgrey: "#404247",
+\ }
 
 " TmuxNavigator
 let g:tmux_navigator_save_on_switch = 1
@@ -284,8 +279,6 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rabl'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['svg'] = ''
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:webdevicons_enable_airline_statusline = 1
-let g:webdevicons_enable_airline_tabline = 1
 
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {} " needed
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.keep'] = ''
