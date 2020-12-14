@@ -62,6 +62,17 @@ let g:bubbly_palette = #{
 \   darkgrey: "#404247",
 \ }
 
+
+:hi ScrollView ctermbg=159 guibg=#E4E4E4
+let g:scrollview_excluded_filetypes = ['nerdtree']
+let g:scrollview_current_only = 1
+let g:scrollview_winblend = 85
+
+" Fix error for any line plugin
+let g:bufferline_echo = 0
+
+lua require'bufferline'.setup()
+
 " TmuxNavigator
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1

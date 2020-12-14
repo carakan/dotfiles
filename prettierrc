@@ -10,7 +10,8 @@
         "parser": "ruby",
         "inlineConditionals": false,
         "inlineLoops": false,
-        "rubyModifier": false
+        "rubyModifier": false,
+        "rubyArrayLiteral": false
       }
     },
     {
