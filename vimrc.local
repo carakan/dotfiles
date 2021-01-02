@@ -63,10 +63,7 @@ let g:bubbly_palette = #{
 \ }
 
 
-:hi ScrollView ctermbg=159 guibg=#E4E4E4
-let g:scrollview_excluded_filetypes = ['nerdtree']
-let g:scrollview_current_only = 1
-let g:scrollview_winblend = 85
+let g:gitblame_date_format = '%d/%m/%Y %H:%M'
 
 " Fix error for any line plugin
 let g:bufferline_echo = 0
