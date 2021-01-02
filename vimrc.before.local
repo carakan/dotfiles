@@ -21,3 +21,12 @@ autocmd FileType javascript UltiSnipsAddFiletypes javascript-ember
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 
+augroup fzf_preview
+  autocmd!
+  autocmd User fzf_preview#initialized call s:fzf_preview_settings()
+augroup END
+
+function! s:fzf_preview_settings() abort
+  let g:fzf_preview_command = 'COLORTERM=truecolor ' . g:fzf_preview_command
+  let g:fzf_preview_grep_preview_cmd = 'COLORTERM=truecolor ' . g:fzf_preview_grep_preview_cmd
+endfunction
