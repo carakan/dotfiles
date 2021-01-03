@@ -323,7 +323,7 @@ let g:NERDTreeHighlightFoldersFullName = 1
 let g:ember_tools_highlight_actions = 0
 
 " Configure node, python executable
-let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/12.18.0/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/14.15.3/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>
