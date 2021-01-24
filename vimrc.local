@@ -219,6 +219,9 @@ endif
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" gutentags
+let g:gutentags_generate_on_write = 0 " Disble on extreme big monolitics
+
 " FZF integration
 let g:fzf_colors =
   \ { 'fg':      ['fg', 'Normal'],
