@@ -126,6 +126,8 @@ let g:ale_fixers = {
   \ 'haml': ['prettier']
   \}
 
+let g:ale_floating_preview = 1
+
 " Signify
 let g:signify_cursorhold_insert = 1
 let g:signify_cursorhold_normal = 1
@@ -166,6 +168,18 @@ nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
 nnoremap <Leader>* :Grepper -tool rg -cword -noprompt<CR>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
+nnoremap <leader>// :Grepper <cr>  
+let g:grepper               = {}
+let g:grepper.tools         = ['rg', 'git']
+" redefines the rg with defaults and only adds smart-case
+let g:grepper.rg = {
+    \ 'grepprg': 'rg -H --smart-case --no-heading --vimgrep' . (has('win32') ? ' $* .' : ''),
+    \ 'grepformat': '%f:%l:%c:%m,%f',
+    \ 'escape':      '\^$.*+?()[]{}|' ,
+    \ }
+let g:grepper.highlight = 1
+"" Grep for TODO
+command! Todo Grepper -noprompt -tool git -query -E '(TODO|FIXME|XXX):'
 
 " save files
 nnoremap <c-s> :w<CR>
