@@ -63,6 +63,8 @@ let g:bubbly_palette = #{
 \ }
 
 let g:bubbly_tabline = 0
+let g:bubbly_inactive_style = 'italic'
+let g:bubbly_statusline = ['mode', 'truncate', 'path', 'branch', 'signify', 'coc', 'divisor', 'filetype', 'progress']
 
 let g:gitblame_date_format = '%d/%m/%Y %H:%M'
 
