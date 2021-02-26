@@ -140,10 +140,11 @@ let g:signify_sign_delete = '✖'
 let g:signify_sign_delete_first_line = '﫨'
 let g:signify_update_on_bufenter = 1
 let g:signify_update_on_focusgained = 1
+let g:signify_sign_delete_first_line = '-'
 nmap <silent> <leader>pd :SignifyHunkDiff<CR>
 nmap <silent> <leader>pu :SignifyHunkUndo<CR>
 
-" Text Formatting/Layout                                                    "
+" Text Formatting/Layout
 set autoindent " auto-indent
 set expandtab  " use spaces instead of tabs
 set shiftround " always indent/outdent to the nearest tabstop
