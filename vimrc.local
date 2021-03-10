@@ -71,8 +71,6 @@ let g:gitblame_date_format = '%d/%m/%Y %H:%M'
 " Fix error for any line plugin
 let g:bufferline_echo = 0
 
-lua require'bufferline'.setup()
-
 " TmuxNavigator
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
@@ -237,7 +235,7 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " gutentags
-let g:gutentags_generate_on_write = 0 " Disble on extreme big monolitics
+let g:gutentags_generate_on_write = 0 " Disabled on extreme big monolitics
 
 " FZF integration
 let g:fzf_colors =
@@ -328,18 +326,6 @@ if exists('g:loaded_webdevicons')
   call webdevicons#refresh()
 endif
 
-" NERDTree
-let g:NERDTreeMapMenu = 'nt'
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDTreeShowHidden = 1
-let g:andrews_nerdtree_all = 1
-
-" vim-nerdtree-syntax-highlight:
-let g:NERDTreeChDirMode=0
-let g:NERDTreeHighlightFolders = 1
-let g:NERDTreeHighlightFoldersFullName = 1
-
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
 
@@ -350,6 +336,34 @@ let g:bookmark_sign = ''
 vmap <leader>y :YankCode<CR>
 
 lua <<EOF
+local colors = require("bufferline.colors")
+require("bufferline").setup(
+    {
+        options = {
+            view = "multiwindow",
+            numbers = "none",
+            number_style = "",
+            mappings = false,
+            buffer_close_icon = "",
+            modified_icon = "",
+            close_icon = "",
+            left_trunc_marker = "",
+            right_trunc_marker = "",
+            max_name_length = 20,
+            tab_size = 20,
+            show_buffer_close_icons = true,
+            separator_style = "slant",
+            enforce_regular_tabs = true,
+            always_show_bufferline = true
+        },
+        highlights = {
+            tab_selected = {
+                guibg = "A5C261",
+                gui = "italic"
+            }
+        }
+    }
+)
 require('hlslens').setup({
     override_line_lens = function(lnum, loc, idx, r_idx, count, hls_ns)
         local sfw = vim.v.searchforward == 1

@@ -3,6 +3,6 @@ eslint
 stylelint
 neovim
 prettier
-tslint
 typescript
 vue-language-server
+markdownlint
