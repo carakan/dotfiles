@@ -167,8 +167,8 @@ let &colorcolumn = '80,' . join(range(120, 999), ',')
 " Vim-grepper
 nnoremap <leader>ag  :Grepper -tool rg -open -switch<cr>
 nnoremap <Leader>* :Grepper -tool rg -cword -noprompt<CR>
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
+nmap gr <plug>(GrepperOperator)
+xmap gr <plug>(GrepperOperator)
 nnoremap <leader>// :Grepper <cr>  
 let g:grepper               = {}
 let g:grepper.tools         = ['rg', 'git']
@@ -491,18 +491,49 @@ nmap <leader>rn <Plug>(coc-rename)
 let g:vue_pre_processors = []
 
 " projectionist
+if !exists('g:rails_projections')
 let g:rails_projections = {
-  \  "app/controllers/*_controller.rb": {
+  \  "app/models/*.rb": {
   \     "test": [
-  \       "spec/requests/{}_spec.rb",
-  \       "spec/controllers/{}_controller_spec.rb",
-  \       "test/controllers/{}_controller_test.rb"
+  \       "spec/models/{}_spec.rb",
+  \       "test/models/{}_test.rb"
   \     ],
   \     "alternate": [
-  \       "spec/requests/{}_spec.rb",
-  \       "spec/controllers/{}_controller_spec.rb",
-  \       "test/controllers/{}_controller_test.rb"
+  \       "spec/models/{}_spec.rb",
+  \       "test/models/{}_test.rb"
   \     ],
+  \   },
+  \  "app/controllers/*_controller.rb": {
+  \     "test": [
+  \       "spec/controllers/{}_controller_spec.rb",
+  \       "test/controllers/{}_controller_test.rb",
+  \       "spec/requests/{}_spec.rb"
+  \     ],
+  \     "alternate": [
+  \       "spec/controllers/{}_controller_spec.rb",
+  \       "test/controllers/{}_controller_test.rb",
+  \       "spec/requests/{}_spec.rb"
+  \     ],
+  \   },
+  \  "spec/controllers/*_spec.rb": {
+  \    "command": "controller",
+  \    "alternate": "app/controllers/{}_controller.rb",
+  \    "template": [
+  \      "require 'rails_helper'",
+  \      "",
+  \      "RSpec.describe {camelcase|capitalize|colons}, type: :controller do",
+  \      "end"
+  \    ]
+  \   },
+  \  "spec/models/*_spec.rb": {
+  \    "command": "model",
+  \    "alternate": "app/models/{}.rb",
+  \    "template": [
+  \      "require 'rails_helper'",
+  \      "",
+  \      "RSpec.describe {camelcase|capitalize|colons}, type: :model do",
+  \      "end"
+  \    ]
   \   },
   \   "app/services/*.rb": {
   \     "command": "service",
@@ -518,23 +549,18 @@ let g:rails_projections = {
   \       "test/queries/%s_test.rb"
   \     ],
   \   },
-  \   "app/graphql/*.rb": {
-  \     "command": "graphql",
-  \     "test": [
-  \       "spec/graphql/{}_spec.rb",
-  \       "test/graphql/{}_test.rb"
-  \     ],
-  \   },
-  \   "config/routes.rb": { "command": "routes" },
-  \   "spec/*_spec.rb": {
-  \     "dispatch": "bin/rspec spec/{}_spec.rb`=v:lnum ? ':'.v:lnum : ''`",
-  \   },
-  \   "spec/requests/*_spec.rb": {
-  \     "command": "request",
-  \     "alternate": "app/controllers/{}_controller.rb"
-  \   },
+      \    "spec/requests/*_spec.rb": {
+      \      "template": [
+      \        "require 'rails_helper'",
+      \        "",
+      \        "RSpec.describe \"{underscore|capitalize|blank}\", type: :request do",
+      \        "end"
+      \      ],
+      \      "type": "integration test"
+      \    },
   \   "spec/features/*_spec.rb": { "command": "feature" },
   \ }
+endif
 
 let g:projectionist_heuristics = {
   \  "&mix.exs": {
