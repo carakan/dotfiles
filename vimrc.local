@@ -97,7 +97,7 @@ nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
   \ 'css': ['stylelint', 'prettier'],
   \ 'elixir': ['credo'],
-  \ 'erb': ['erb', 'erubis'],
+  \ 'eruby': ['erb', 'erubis'],
   \ 'haml': ['hamllint'],
   \ 'handlebars': ['ember-template-lint'],
   \ 'html': [],
@@ -123,7 +123,8 @@ let g:ale_fixers = {
   \ 'vue': ['prettier'],
   \ 'yaml': ['prettier'],
   \ 'html': ['prettier'],
-  \ 'haml': ['prettier']
+  \ 'haml': ['prettier'],
+  \ 'eruby': ['prettier']
   \}
 
 let g:ale_floating_preview = 1
@@ -336,7 +337,6 @@ let g:bookmark_sign = ''
 vmap <leader>y :YankCode<CR>
 
 lua <<EOF
-local colors = require("bufferline.colors")
 require("bufferline").setup(
     {
         options = {
@@ -349,48 +349,65 @@ require("bufferline").setup(
             close_icon = "",
             left_trunc_marker = "",
             right_trunc_marker = "",
-            max_name_length = 20,
-            tab_size = 20,
+            max_name_length = 25,
+            tab_size = 25,
+            show_tab_indicators = true,
             show_buffer_close_icons = true,
             separator_style = "slant",
             enforce_regular_tabs = true,
             always_show_bufferline = true
         },
         highlights = {
-            tab_selected = {
-                guibg = "A5C261",
+            buffer_visible = {
+                guifg = "#7b8391",
                 gui = "italic"
+            },
+            buffer_selected = {
+                guibg = "#3e4249",
+                guifg = "#ffebce",
+                gui = "bold"
             }
         }
     }
 )
 require('hlslens').setup({
-    override_line_lens = function(lnum, loc, idx, r_idx, count, hls_ns)
-        local sfw = vim.v.searchforward == 1
-        local indicator, text, chunks
-        local a_r_idx = math.abs(r_idx)
-        if a_r_idx > 1 then
-            indicator = string.format('%d%s', a_r_idx, sfw ~= (r_idx > 1) and '▲' or '▼')
-        elseif a_r_idx == 1 then
-            indicator = sfw ~= (r_idx == 1) and '▲' or '▼'
-        else
-            indicator = ''
-        end
-
-        if loc ~= 'c' then
-            text = string.format('[%s %d]', indicator, idx)
-            chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
-        else
-            if indicator ~= '' then
-                text = string.format('[%s %d/%d]', indicator, idx, count)
-            else
-                text = string.format('[%d/%d]', idx, count)
-            end
-            chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensCur'}}
-            vim.api.nvim_buf_clear_namespace(0, hls_ns, lnum - 1, lnum)
-        end
-        vim.api.nvim_buf_set_virtual_text(0, hls_ns, lnum - 1, chunks, {})
+  override_line_lens = function(lnum, loc, idx, r_idx, count, hls_ns)
+    local sfw = vim.v.searchforward == 1
+    local indicator, text, chunks
+    local a_r_idx = math.abs(r_idx)
+    if a_r_idx > 1 then
+        indicator = string.format('%d%s', a_r_idx, sfw ~= (r_idx > 1) and '▲' or '▼')
+    elseif a_r_idx == 1 then
+        indicator = sfw ~= (r_idx == 1) and '▲' or '▼'
+    else
+        indicator = ''
     end
+
+    if loc ~= 'c' then
+        text = string.format('[%s %d]', indicator, idx)
+        chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
+    else
+        if indicator ~= '' then
+            text = string.format('[%s %d/%d]', indicator, idx, count)
+        else
+            text = string.format('[%d/%d]', idx, count)
+        end
+        chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensCur'}}
+        vim.api.nvim_buf_clear_namespace(0, hls_ns, lnum - 1, lnum)
+    end
+    vim.api.nvim_buf_set_virtual_text(0, hls_ns, lnum - 1, chunks, {})
+  end
+})
+require('indent_guides').setup({
+  indent_levels = 30;
+  indent_guide_size = 1;
+  indent_start_level = 2;
+  indent_space_guides = true;
+  indent_tab_guides = true;
+  indent_soft_pattern = '\\s';
+  exclude_filetypes = {'help','dashboard','dashpreview','NvimTree','vista','sagahover'};
+  odd_colors = { fg ='#332717',bg='#332b36' };
+  even_colors = {fg='#332b36',bg='#332717'};
 })
 EOF
 highlight default link HlSearchLensCur Search
