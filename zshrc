@@ -7,6 +7,10 @@ export ZSH=/Users/carakan/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # Another powerful theme
 # ZSH_THEME="clean"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#726f5a,bold,italic"
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+
 DISABLE_UPDATE_PROMPT=true
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
