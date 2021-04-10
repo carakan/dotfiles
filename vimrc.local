@@ -409,7 +409,28 @@ require('indent_guides').setup({
   odd_colors = { fg ='#332717',bg='#332b36' };
   even_colors = {fg='#332b36',bg='#332717'};
 })
+require('bqf').setup({
+    auto_enable = true,
+    preview = {
+        win_height = 12,
+        win_vheight = 12,
+        delay_syntax = 80,
+        border_chars = {'│', '│', '─', '─', '╭', '╮', '╰', '╯', '█'}
+    },
+    func_map = {
+        vsplit = '',
+        ptogglemode = 'z,',
+        stoggleup = ''
+    },
+    filter = {
+        fzf = {
+            action_for = {['ctrl-s'] = 'split'},
+            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
+        }
+    }
+})
 EOF
+hi BqfPreviewBorder guifg=#385075 ctermfg=71
 highlight default link HlSearchLensCur Search
 highlight default link HlSearchLens ALEInfoSign
 highlight default link HlSearchCur Search
