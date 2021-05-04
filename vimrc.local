@@ -25,7 +25,6 @@ set modeline
 set nospell
 
 if has('nvim-0.4')
-  " Enable menu and window popup transparency (neovim >= 0.4)
   set pumblend=22
   set winblend=15
   set wildoptions+=pum,tagfile
@@ -74,6 +73,10 @@ let g:bufferline_echo = 0
 " TmuxNavigator
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
+
+" Nvim tree
+let g:nvim_tree_follow = 1
+let g:nvim_tree_width = 35
 
 " ALE
 let g:ale_use_global_executables = 1
@@ -140,6 +143,7 @@ let g:signify_sign_delete_first_line = '﫨'
 let g:signify_update_on_bufenter = 1
 let g:signify_update_on_focusgained = 1
 let g:signify_sign_delete_first_line = '-'
+
 nmap <silent> <leader>pd :SignifyHunkDiff<CR>
 nmap <silent> <leader>pu :SignifyHunkUndo<CR>
 
@@ -355,17 +359,44 @@ require("bufferline").setup(
             show_buffer_close_icons = true,
             separator_style = "slant",
             enforce_regular_tabs = true,
-            always_show_bufferline = true
+            always_show_bufferline = true,
+            sort_by = 'directory'
         },
         highlights = {
-            buffer_visible = {
-                guifg = "#7b8391",
-                gui = "italic"
+            background = {
+                guifg = "#3e4451",
+                guibg = "#181621"
+            },
+            fill = {
+                guifg = "#181621",
+                guibg = "#181621"
+                -- guibg = "NONE"
             },
             buffer_selected = {
-                guibg = "#3e4249",
-                guifg = "#ffebce",
+                guifg = "#d6d1c7",
+                guibg = "#282c34",
                 gui = "bold"
+            },
+            buffer_visible = {
+                guifg = "#564b3a",
+                guibg = "#181621",
+                gui = "italic,bold"
+            },
+            separator_visible = {
+                guifg = "#282c34",
+                guibg = "#181621"
+            },
+            separator_selected = {
+                guifg = "#181621",
+                guibg = "#282c34"
+            },
+            indicator_selected = {
+                guifg = "#ccaaff",
+                guibg = "#282c34"
+            },
+            modified_selected = {
+                guifg = "#ffffff",
+                guibg = "#282c34"
             }
         }
     }
@@ -429,6 +460,7 @@ require('bqf').setup({
         }
     }
 })
+require('numb').setup()
 EOF
 hi BqfPreviewBorder guifg=#385075 ctermfg=71
 highlight default link HlSearchLensCur Search
