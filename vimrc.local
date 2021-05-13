@@ -770,3 +770,10 @@ let g:projectionist_heuristics = {
   \   },
   \ },
   \ }
+
+let g:lens#disabled_filetypes = ['NvimTree', 'fzf', 'coc-explorer', 'qf', '']
+let g:lens#animate = 0
+let g:lens#height_resize_max = 50
+let g:lens#height_resize_min = 15
+let g:lens#width_resize_max = 130
+let g:lens#width_resize_min = 80
