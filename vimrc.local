@@ -77,6 +77,8 @@ let g:tmux_navigator_disable_when_zoomed = 1
 " Nvim tree
 let g:nvim_tree_follow = 1
 let g:nvim_tree_width = 35
+let g:nvim_tree_group_empty = 1
+let g:nvim_tree_highlight_opened_files = 2
 
 " ALE
 let g:ale_use_global_executables = 1
@@ -777,3 +779,5 @@ let g:lens#height_resize_max = 50
 let g:lens#height_resize_min = 15
 let g:lens#width_resize_max = 130
 let g:lens#width_resize_min = 80
+
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --follow --hidden --glob "!{.git/*,*.lock}" --color "always" -- ' . shellescape(<q-args>), 1, <bang>0)
