@@ -12,6 +12,9 @@
     ~/.ctags.d/global.ctags:
         create: true
         path: ctags
+    ~/.config/nvim/coc-settings.json:
+        create: true
+        path: coc.json
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
