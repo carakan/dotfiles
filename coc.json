@@ -34,7 +34,6 @@
       }
     }
   },
-  "solargraph.useBundler": false,
   "solargraph.bundlerPath": "~/.asdf/shims/bundle",
   "solargraph.commandPath": "~/.asdf/shims/solargraph",
   "suggest.completionItemKindLabels": {
