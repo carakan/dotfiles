@@ -11,7 +11,8 @@
           "basic.simultaneous_threshold_milliseconds": 50,
           "basic.to_delayed_action_delay_milliseconds": 500,
           "basic.to_if_alone_timeout_milliseconds": 1000,
-          "basic.to_if_held_down_threshold_milliseconds": 500
+          "basic.to_if_held_down_threshold_milliseconds": 500,
+          "mouse_motion_to_scroll.speed": 100
         },
         "rules": [
           {
@@ -21,7 +22,9 @@
                 "from": {
                   "key_code": "caps_lock",
                   "modifiers": {
-                    "optional": ["any"]
+                    "optional": [
+                      "any"
+                    ]
                   }
                 },
                 "to": [
@@ -93,7 +96,7 @@
             "key_code": "f5"
           },
           "to": {
-            "key_code": "illumination_decrement"
+            "key_code": "rewind"
           }
         },
         {
@@ -101,7 +104,7 @@
             "key_code": "f6"
           },
           "to": {
-            "key_code": "illumination_increment"
+            "key_code": "fastforward"
           }
         },
         {
@@ -109,7 +112,7 @@
             "key_code": "f7"
           },
           "to": {
-            "consumer_key_code": "rewind"
+            "consumer_key_code": "play_or_pause"
           }
         },
         {
@@ -117,7 +120,7 @@
             "key_code": "f8"
           },
           "to": {
-            "consumer_key_code": "play_or_pause"
+            "consumer_key_code": "stop"
           }
         },
         {
@@ -125,7 +128,7 @@
             "key_code": "f9"
           },
           "to": {
-            "consumer_key_code": "fastforward"
+            "consumer_key_code": "mute"
           }
         },
         {
@@ -133,7 +136,7 @@
             "key_code": "f10"
           },
           "to": {
-            "consumer_key_code": "mute"
+            "consumer_key_code": "volume_decrement"
           }
         },
         {
@@ -141,7 +144,7 @@
             "key_code": "f11"
           },
           "to": {
-            "consumer_key_code": "volume_decrement"
+            "consumer_key_code": "volume_increment"
           }
         },
         {
@@ -149,15 +152,19 @@
             "key_code": "f12"
           },
           "to": {
-            "consumer_key_code": "volume_increment"
+            "consumer_key_code": ""
           }
         }
       ],
       "name": "Default profile",
+      "parameters": {
+        "delay_milliseconds_before_open_device": 1000
+      },
       "selected": true,
       "simple_modifications": [],
       "virtual_hid_keyboard": {
-        "country_code": 0
+        "country_code": 0,
+        "mouse_key_xy_scale": 100
       }
     }
   ]

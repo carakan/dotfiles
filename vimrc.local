@@ -288,13 +288,18 @@ nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
 nnoremap <silent> <leader>b :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 " fzf_preview
+let g:fzf_layout = { 'window': { 'width': 0.7, 'height': 0.95 } }
+let g:coc_fzf_preview = 'right:60%'
+let g:fzf_preview_window = 'right:60%'
 let g:fzf_preview_use_dev_icons = 1
-let g:fzf_preview_dev_icons_limit = 1000
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --smart-case --hidden --follow --no-messages --ignore-file $HOME/.ignore'
 let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
 " let g:fzf_preview_floating_window_winblend = 10
 let g:fzf_preview_command = 'bat --color=always --style=full {-1}' 
 let g:fzf_preview_floating_window_rate = 0.95
+let g:fzf_preview_direct_window_option = ''
+let g:fzf_preview_default_fzf_options = { '--preview-window': 'wrap:60%' }
+let g:fzf_preview_dev_icons_limit = 5000
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
@@ -303,35 +308,6 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
 nnoremap <silent> Q :Bdelete menu<CR>
 
 let g:mustache_abbreviations = 1
-
-" WebDevIcons
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:WebDevIconsOS = 'Darwin'
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rabl'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['svg'] = ''
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:webdevicons_conceal_nerdtree_brackets = 1
-
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {} " needed
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.keep'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.rspec'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-gemset'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.ruby-version'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Rakefile'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['application.rb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['environment.rb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['package.json'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['routes.rb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['spring.rb'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['node_modules'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['ember-cli'] = ''
-
-" after a re-source, fix syntax matching issues (concealing brackets):
-if exists('g:loaded_webdevicons')
-  call webdevicons#refresh()
-endif
 
 " AndrewRadev/ember_tools.vim
 let g:ember_tools_highlight_actions = 0
