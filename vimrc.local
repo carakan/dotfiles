@@ -453,7 +453,7 @@ require'lualine'.setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', "diff"},
-    lualine_c = {{'filename', path = 1, color = { fg = '#FEF9E1' }}},
+    lualine_c = {{'filename', path = 1 }},
     lualine_x = {'encoding', 'fileformat', 'filetype', 'g:coc_status'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
@@ -468,6 +468,38 @@ require'lualine'.setup {
   },
   tabline = {},
   extensions = {'fzf', 'fugitive', 'nvim-tree', 'quickfix'},
+}
+require 'nvim-treesitter.configs'.setup {
+    ensure_installed = {
+      'bash', 'css', 'comment', 'dockerfile', 'elixir', 'erlang', 'glimmer', 'html', 'javascript', 'jsonc', 
+      'lua', 'php', 'python', 'regex', 'ruby', 'rust', 'scss', 'svelte', 
+      'toml', 'tsx', 'typescript', 'vue', 'yaml'
+    },
+    highlight = {
+        enable = true,
+    },
+    playground = {
+        enable = true,
+        disable = {},
+        updatetime = 25, -- debounced time for highlighting nodes in teh playground from source code
+        persist_queries = false, -- Whether the query persists across vim sessions
+    },
+    autotag = {
+        enable = true,
+    },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  indent = {
+    enable = true
+  },
+  folding = { enable = true }
 }
 EOF
 hi BqfPreviewBorder guifg=#385075 ctermfg=71
