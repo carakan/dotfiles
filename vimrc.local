@@ -441,7 +441,14 @@ require('bqf').setup({
 require('numb').setup()
 
 local custom_onedark = require'lualine.themes.onedark'
+custom_onedark.normal.b.bg = '#444444'
 custom_onedark.normal.c.bg = '#444444'
+custom_onedark.normal.c.fg = '#bfbbae'
+custom_onedark.normal.c.gui = 'bold'
+custom_onedark.inactive.b.bg = '#353535'
+custom_onedark.inactive.c.bg = '#353535'
+custom_onedark.inactive.c.fg = '#a8a494'
+
 require'lualine'.setup {
   options = {
     icons_enabled = true,
