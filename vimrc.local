@@ -552,6 +552,7 @@ let g:matchup_matchparen_hi_surround_always = 1
 let g:qs_highlight_on_keys = ['f', 't', 'T']
 
 " Coc Configuration
+let g:coc_default_semantic_highlight_groups = 1
 let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-ember',
@@ -632,6 +633,37 @@ let g:rails_projections = {
   \       "spec/requests/{}_spec.rb"
   \     ],
   \   },
+  \   "app/services/*.rb": {
+  \     "command": "service",
+  \     "test": [
+  \       "spec/services/%s_spec.rb",
+  \       "test/services/%s_test.rb"
+  \     ],
+  \     "alternate": [
+  \       "spec/services/{}_spec.rb",
+  \       "test/services/{}_test.rb"
+  \     ],
+  \     "template": [
+  \       "class {camelcase|capitalize|colons}Service",
+  \       "end"
+  \     ]
+  \   },
+  \   "app/queries/*_query.rb": {
+  \     "command": "query",
+  \     "test": [
+  \       "spec/queries/%s_spec.rb",
+  \       "test/queries/%s_test.rb"
+  \     ],
+  \   },
+  \   "spec/requests/*_spec.rb": {
+  \     "template": [
+  \       "require 'rails_helper'",
+  \       "",
+  \       "RSpec.describe \"{underscore|capitalize|blank}\", type: :request do",
+  \       "end"
+  \     ],
+  \     "type": "integration test"
+  \   },
   \  "spec/controllers/*_spec.rb": {
   \    "command": "controller",
   \    "alternate": "app/controllers/{}_controller.rb",
@@ -652,29 +684,16 @@ let g:rails_projections = {
   \      "end"
   \    ]
   \   },
-  \   "app/services/*.rb": {
-  \     "command": "service",
-  \     "test": [
-  \       "spec/services/%s_spec.rb",
-  \       "test/services/%s_test.rb"
-  \     ],
+  \  "spec/services/*_spec.rb": {
+  \    "command": "services",
+  \    "alternate": "app/services/{}.rb",
+  \    "template": [
+  \      "require 'rails_helper'",
+  \      "",
+  \      "RSpec.describe {camelcase|capitalize|colons} do",
+  \      "end"
+  \    ]
   \   },
-  \   "app/queries/*_query.rb": {
-  \     "command": "query",
-  \     "test": [
-  \       "spec/queries/%s_spec.rb",
-  \       "test/queries/%s_test.rb"
-  \     ],
-  \   },
-      \    "spec/requests/*_spec.rb": {
-      \      "template": [
-      \        "require 'rails_helper'",
-      \        "",
-      \        "RSpec.describe \"{underscore|capitalize|blank}\", type: :request do",
-      \        "end"
-      \      ],
-      \      "type": "integration test"
-      \    },
   \   "spec/features/*_spec.rb": { "command": "feature" },
   \ }
 endif
