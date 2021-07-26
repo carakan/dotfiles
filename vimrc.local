@@ -108,6 +108,7 @@ let g:ale_linters = {
   \ 'html': [],
   \ 'javascript': ['eslint', 'tsserver'],
   \ 'json': ['prettier'],
+  \ 'lua': ['luac', 'luacheck'], 
   \ 'ruby': ['rubocop', 'ruby'],
   \ 'scss': ['stylelint', 'prettier'],
   \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
@@ -121,6 +122,7 @@ let g:ale_fixers = {
   \ 'elixir': ['mix_format'],
   \ 'javascript': ['prettier', 'eslint'],
   \ 'json': ['prettier'],
+  \ 'lua': ['lua-format'],
   \ 'markdown': ['prettier'],
   \ 'ruby': ['prettier', 'rubocop'],
   \ 'scss': ['stylelint'],
@@ -479,8 +481,7 @@ require'lualine'.setup {
 require 'nvim-treesitter.configs'.setup {
     ensure_installed = {
       'bash', 'css', 'comment', 'dockerfile', 'elixir', 'erlang', 'glimmer', 'html', 'javascript', 'jsonc', 
-      'lua', 'php', 'python', 'regex', 'ruby', 'rust', 'scss', 'svelte', 
-      'toml', 'tsx', 'typescript', 'vue', 'yaml'
+      'lua', 'php', 'python', 'regex', 'ruby', 'rust', 'scss', 'toml', 'tsx', 'typescript', 'vue', 'yaml'
     },
     highlight = {
         enable = true,
