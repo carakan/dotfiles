@@ -338,9 +338,8 @@ require("bufferline").setup(
             show_tab_indicators = true,
             show_buffer_close_icons = true,
             separator_style = "slant",
-            enforce_regular_tabs = true,
             always_show_bufferline = true,
-            sort_by = 'directory'
+            sort_by = 'tabs'
         },
         highlights = {
             background = {
@@ -515,13 +514,8 @@ highlight default link HlSearchLensCur Search
 highlight default link HlSearchLens ALEInfoSign
 highlight default link HlSearchCur Search
 
-nmap <Leader>is :call <SID>SynStack()<CR>
-map <Leader>iS :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-function! <SID>SynStack()
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
+" Debug highlight
+nmap <silent> <leader>is :TSHighlightCapturesUnderCursor<CR>
 
 let g:vimade = {}
 let g:vimade.fadelevel = 0.7
