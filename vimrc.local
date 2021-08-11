@@ -225,8 +225,7 @@ nmap <silent> <leader>d <Plug>DashSearch
 " Auto tags generation
 map <Leader>ct :call atags#generate()<cr>
 
-" Ultisnips
-let g:UltiSnipsEditSplit = 'context'
+" coc-snipets
 let g:UltiSnipsExpandTrigger = '<Nop>'
 imap <tab> <Plug>(coc-snippets-expand)
 let g:coc_snippet_next = '<TAB>'
@@ -550,24 +549,26 @@ let g:qs_highlight_on_keys = ['f', 't', 'T']
 let g:coc_default_semantic_highlight_groups = 1
 let g:coc_global_extensions = [
   \ 'coc-css',
-  \ 'coc-ember',
+  \ 'coc-cssmodules',
   \ 'coc-emoji',
+  \ 'coc-fzf-preview',
   \ 'coc-highlight',
   \ 'coc-html',
-  \ 'coc-sh',
-  \ 'coc-tailwindcss',
   \ 'coc-json',
   \ 'coc-lists',
+  \ 'coc-lua',
+  \ 'coc-markdownlint',
+  \ 'coc-sh',
   \ 'coc-snippets',
   \ 'coc-solargraph',
+  \ 'coc-styled-components',
   \ 'coc-tag',
+  \ 'https://github.com/rodrigore/coc-tailwind-intellisense',
   \ 'coc-tsserver',
   \ 'coc-vetur',
-  \ 'coc-markdownlint',
   \ 'coc-vimlsp',
   \ 'coc-word',
-  \ 'coc-yaml',
-  \ 'coc-fzf-preview'
+  \ 'coc-yaml'
 \ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
