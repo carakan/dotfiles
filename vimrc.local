@@ -388,31 +388,31 @@ require("bufferline").setup(
     }
 )
 require('hlslens').setup({
-  override_line_lens = function(lnum, loc, idx, r_idx, count, hls_ns)
+  override_lens = function(render, plist, nearest, idx, r_idx)
     local sfw = vim.v.searchforward == 1
     local indicator, text, chunks
-    local a_r_idx = math.abs(r_idx)
-    if a_r_idx > 1 then
-        indicator = string.format('%d%s', a_r_idx, sfw ~= (r_idx > 1) and '▲' or '▼')
-    elseif a_r_idx == 1 then
-        indicator = sfw ~= (r_idx == 1) and '▲' or '▼'
+    local abs_r_idx = math.abs(r_idx)
+    if abs_r_idx > 1 then
+      indicator = ('%d%s'):format(abs_r_idx, sfw ~= (r_idx > 1) and '▲' or '▼')
+    elseif abs_r_idx == 1 then
+      indicator = sfw ~= (r_idx == 1) and '▲' or '▼'
     else
-        indicator = ''
+      indicator = ''
     end
-
-    if loc ~= 'c' then
-        text = string.format('[%s %d]', indicator, idx)
-        chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
+    local lnum, col = unpack(plist[idx])
+    if nearest then
+      local cnt = #plist
+      if indicator ~= '' then
+        text = ('[%s %d/%d]'):format(indicator, idx, cnt)
+      else
+        text = ('[%d/%d]'):format(idx, cnt)
+      end
+      chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensNear'}}
     else
-        if indicator ~= '' then
-            text = string.format('[%s %d/%d]', indicator, idx, count)
-        else
-            text = string.format('[%d/%d]', idx, count)
-        end
-        chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensCur'}}
-        vim.api.nvim_buf_clear_namespace(0, hls_ns, lnum - 1, lnum)
+      text = ('[%s %d]'):format(indicator, idx)
+      chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
     end
-    vim.api.nvim_buf_set_virtual_text(0, hls_ns, lnum - 1, chunks, {})
+    render.set_virt(0, lnum - 1, col - 1, chunks, nearest)
   end
 })
 require('indent_guides').setup({
@@ -516,10 +516,11 @@ require 'nvim-treesitter.configs'.setup {
   folding = { enable = true }
 }
 EOF
-hi BqfPreviewBorder guifg=#385075 ctermfg=71
-highlight default link HlSearchLensCur Search
-highlight default link HlSearchLens ALEInfoSign
-highlight default link HlSearchCur Search
+hi BqfPreviewBorder guifg=#385075
+hi link BqfPreviewRange Search
+hi default link HlSearchLensNear Search
+hi default link HlSearchLens ALEInfoSign
+hi HlSearchNear guibg=#1b3577 guifg=#FFC66D gui=bold,italic
 
 " Debug highlight
 nmap <silent> <leader>is :TSHighlightCapturesUnderCursor<CR>
