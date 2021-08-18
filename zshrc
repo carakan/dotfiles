@@ -14,6 +14,7 @@ ZSH_AUTOSUGGEST_USE_ASYNC=true
 DISABLE_UPDATE_PROMPT=true
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_TMUX_ITERM2=true
  
 # export TERM=xterm-256color-italic
 export TERM="tmux-256color"

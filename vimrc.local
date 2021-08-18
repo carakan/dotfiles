@@ -563,7 +563,7 @@ let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:matchup_matchparen_deferred = 1
 let g:matchup_matchparen_hi_surround_always = 1
 :hi MatchParen guibg=#422200 gui=bold,italic guifg=NONE blend=25
-:hi HighlightedyankRegion guibg=#482d00 blend=25
+:hi HighlightedyankRegion guibg=#482d00 blend=45 gui=bold
 
 let g:qs_highlight_on_keys = ['f', 't', 'T']
 
@@ -579,6 +579,7 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-lists',
   \ 'coc-lua',
+  \ 'coc-html-css-support',
   \ 'coc-markdownlint',
   \ 'coc-sh',
   \ 'coc-snippets',
@@ -587,10 +588,12 @@ let g:coc_global_extensions = [
   \ 'coc-tag',
   \ 'https://github.com/rodrigore/coc-tailwind-intellisense',
   \ 'coc-tsserver',
+  \ 'https://github.com/gianarb/coc-grammarly',
   \ 'coc-vetur',
   \ 'coc-vimlsp',
   \ 'coc-word',
-  \ 'coc-yaml'
+  \ 'coc-yaml',
+  \ 'coc-yank'
 \ ]
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -623,6 +626,8 @@ endfunction
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 let g:vue_pre_processors = []
 
