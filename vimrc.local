@@ -67,17 +67,34 @@ let g:bubbly_statusline = ['mode', 'truncate', 'path', 'branch', 'signify', 'coc
 
 let g:gitblame_date_format = '%d/%m/%Y %H:%M'
 
-call wilder#enable_cmdline_enter()
-set wildcharm=<Tab>
-cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
-cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
+call wilder#setup({'modes': [':', '/', '?']})
+call wilder#set_option('use_python_remote_plugin', 0)
 
-call wilder#set_option('modes', ['/', '?', ':'])
-call wilder#set_option('renderer', wilder#popupmenu_renderer({
-      \ 'highlighter': wilder#basic_highlighter(),
-      \ 'left': [
-      \   wilder#popupmenu_devicons(),
-      \ ],
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#cmdline_pipeline({
+      \       'use_python': 0,
+      \       'fuzzy': 1,
+      \       'fuzzy_filter': wilder#lua_fzy_filter(),
+      \     }),
+      \     wilder#vim_search_pipeline(),
+      \   ),
+      \ ])
+
+call wilder#set_option('renderer', wilder#renderer_mux({
+      \ ':': wilder#popupmenu_renderer({
+      \   'highlighter': wilder#lua_fzy_highlighter(),
+      \   'left': [
+      \     wilder#popupmenu_devicons(),
+      \   ],
+      \   'right': [
+      \     ' ',
+      \     wilder#popupmenu_scrollbar(),
+      \   ],
+      \ }),
+      \ '/': wilder#wildmenu_renderer({
+      \   'highlighter': wilder#lua_fzy_highlighter(),
+      \ }),
       \ }))
 
 " Fix error for any line plugin
@@ -346,8 +363,6 @@ require("bufferline").setup(
         options = {
             view = "multiwindow",
             numbers = "none",
-            number_style = "",
-            mappings = false,
             buffer_close_icon = "",
             modified_icon = "",
             close_icon = "",
