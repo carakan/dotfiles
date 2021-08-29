@@ -33,7 +33,7 @@
   "snippets.autoTrigger": true,
   "snippets.triggerCharacters": [],
   "snippets.loadFromExtensions": true,
-  "snippets.textmateSnippetsRoots": ["~/.config/nvim/snippets"],
+  "snippets.textmateSnippetsRoots": ["~/.vim/bundle/repos/github.com/rafamadriz/friendly-snippets/snippets"],
   "snippets.ultisnips.enable": true,
   "snippets.ultisnips.usePythonx": true,
   "snippets.snipmate.enable": true,
