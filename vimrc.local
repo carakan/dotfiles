@@ -192,6 +192,9 @@ set smarttab   " use tabs at the start of a line, spaces elsewhere
 " elixir config
 let g:elixir_use_markdown_for_docs = 1
 
+" Yank history
+nmap <space>h :<C-u>CocList -A --normal yank<cr>
+
 " Easier split navigations https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-J> <C-W><C-J>
