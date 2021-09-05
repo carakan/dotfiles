@@ -1,5 +1,5 @@
 {
-  "printWidth": 95,
+  "printWidth": 90,
   "singleQuote": true,
   "trailingComma": "es5",
   "arrowParens": "always",
@@ -8,10 +8,8 @@
       "files": "*.rb",
       "options": {
         "parser": "ruby",
-        "inlineConditionals": false,
-        "inlineLoops": false,
-        "rubyModifier": false,
-        "rubyArrayLiteral": false
+        "rubyArrayLiteral": false,
+        "trailingComma": "none"
       }
     },
     {

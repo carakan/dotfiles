@@ -18,7 +18,6 @@
   "diagnostic.virtualText": true,
   "html.enable": true,
   "html.format.enable": true,
-
   "snippets.priority": 2,
   "snippets.trace": "verbose",
   "snippets.enableStatusItem": false,
@@ -40,6 +39,30 @@
 
   "suggest.snippetIndicator": " ",
   "suggest.floatEnable": true,
+  "suggest.floatConfig": {
+    "border": true,
+    "highlight": "CocFloating",
+    "borderhighlight": "CocFloating",
+    "shadow": true
+  },
+  "diagnostic.floatConfig": {
+    "highlight": "CocFloating",
+    "borderhighlight": "CocFloating",
+    "border": true,
+    "shadow": true
+  },
+  "hover.floatConfig": {
+    "highlight": "CocFloating",
+    "borderhighlight": "CocFloating",
+    "border": true,
+    "shadow": true
+  },
+  "signature.floatConfig": {
+    "highlight": "CocFloating",
+    "borderhighlight": "CocFloating",
+    "border": true,
+    "shadow": true
+  },
   "languageserver": {
     "elixir": {
       "command": "~/lsp/elixir-ls/language_server.sh",
@@ -86,6 +109,8 @@
   "suggest.detailMaxLength": 30,
   "suggest.enablePreview": true,
   "suggest.minTriggerInputLength": 2,
+  "suggest.removeDuplicateItems": true,
+  "suggest.detailField": "preview",
   "yank.highlight.duration": 800,
   "yank.shortcut": "\u2602"
 }
