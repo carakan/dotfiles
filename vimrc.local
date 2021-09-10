@@ -400,6 +400,10 @@ require("bufferline").setup(
                 guibg = "#181621",
                 gui = "italic,bold"
             },
+            close_button_visible = {
+              guifg = "#3e4451",
+              guibg = "#181621",
+            },
             separator_visible = {
                 guifg = "#282c34",
                 guibg = "#181621"
