@@ -18,6 +18,7 @@ let g:node_client_debug = 1
 
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
+let g:loaded_matchit = 1
 
 augroup fzf_preview
   autocmd!

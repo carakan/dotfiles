@@ -497,8 +497,6 @@ require'lualine'.setup {
   options = {
     icons_enabled = true,
     theme = custom_onedark,
-    component_separators = {'', ''},
-    section_separators = {'', ''},
     disabled_filetypes = {}
   },
   sections = {
@@ -550,6 +548,48 @@ require 'nvim-treesitter.configs'.setup {
     enable = true
   },
   folding = { enable = true }
+}
+require("nvim-web-devicons").set_icon {
+  ["config.ru"] = {
+    icon = "",
+    color = "#e84e4e",
+    name = "ConfigRu"
+  };
+  erb = {
+    icon = "ﴜ",
+    color = "#e84e4e",
+    name = "Erb",
+  };
+  ["Gemfile$"] = {
+    icon = "",
+    color = "#e84e4e",
+    name = "Gemfile"
+  };
+  haml = {
+    icon = "",
+    color = "#e84e4e",
+    name = "Haml",
+  };
+  md = {
+    icon = "",
+    color = "#519aba",
+    name = "Md",
+  };
+  rake = {
+    icon = "",
+    color = "#e84e4e",
+    name = "Rake"
+  };
+  rakefile = {
+    icon = "",
+    color = "#e84e4e",
+    name = "Rakefile"
+  };
+  rb = {
+    icon = "",
+    color = "#e84e4e",
+    name = "Rb"
+  };
 }
 EOF
 hi BqfPreviewBorder guifg=#385075
@@ -733,6 +773,15 @@ let g:rails_projections = {
   \  "spec/services/*_spec.rb": {
   \    "command": "services",
   \    "alternate": "app/services/{}.rb",
+  \    "template": [
+  \      "require 'rails_helper'",
+  \      "",
+  \      "RSpec.describe {camelcase|capitalize|colons} do",
+  \      "end"
+  \    ]
+  \   },
+  \  "spec/lib/*_spec.rb": {
+  \    "alternate": "app/lib/{}.rb",
   \    "template": [
   \      "require 'rails_helper'",
   \      "",
