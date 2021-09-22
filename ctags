@@ -1,23 +1,27 @@
---langmap=vim:+(vimrc)
-
+--exclude=*.gem
 --exclude=.git
---exclude=.svn
 --exclude=.hg
---exclude=min
---exclude=vendor
+--exclude=.svn
 --exclude=\*.min.\*
---exclude=tags
---exclude=cscope.\*
 --exclude=\*.tar.\*
+--exclude=__test__
+--exclude=bower_components
+--exclude=build
+--exclude=coverage
+--exclude=cscope.\*
+--exclude=db
+--exclude=dist
+--exclude=log
+--exclude=min
+--exclude=node_modules
+--exclude=tags
 --exclude=test
 --exclude=tests
---exclude=__test__
---exclude=build
---exclude=dist
---exclude=node_modules
---exclude=bower_components
---exclude=db
---exclude=log
---exclude=vendor
 --exclude=tmp
---exclude=coverage
+--exclude=vendor
+
+--langmap=Ruby:+(Rakefile)
+--langmap=vim:+(vimrc)
+--regex-ruby=/(^|[:;])[ \t]*([A-Z][[:alnum:]_]+) *=/\2/c,class,constant/
+--regex-ruby=/^[ 	]*scope[ 	]*:([a-zA-Z0-9_]+)/\1/
+--regex-ruby=/^[ \t]*attr_(reader|writer|accessor) (:[a-z0-9_]+, )*:([a-z0-9_]+)/\3/A,attr/
