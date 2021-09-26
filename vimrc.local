@@ -386,9 +386,8 @@ require("bufferline").setup(
                 guibg = "#181621"
             },
             fill = {
-                guifg = "#181621",
-                guibg = "#181621"
-                -- guibg = "NONE"
+                guifg = "#c9a35c",
+                guibg = "#160a00"
             },
             buffer_selected = {
                 guifg = "#d6d1c7",
@@ -404,12 +403,24 @@ require("bufferline").setup(
               guifg = "#3e4451",
               guibg = "#181621",
             },
+            close_button = {
+              guifg = "#3e4451",
+              guibg = "#181621",
+            },
+            close_button_selected = {
+              guifg = "#c9a35c",
+              guibg = "#282c34",
+            },
+            separator = {
+                guifg = "#160a00",
+                guibg = "#181621"
+            }, 
             separator_visible = {
-                guifg = "#282c34",
+                guifg = "#160a00",
                 guibg = "#181621"
             },
             separator_selected = {
-                guifg = "#181621",
+                guifg = "#160a00",
                 guibg = "#282c34"
             },
             indicator_selected = {
