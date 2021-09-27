@@ -107,7 +107,6 @@ let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
 
 " Nvim tree
-let g:nvim_tree_follow = 1
 let g:nvim_tree_width = 35
 let g:nvim_tree_group_empty = 1
 let g:nvim_tree_highlight_opened_files = 2
@@ -601,6 +600,12 @@ require("nvim-web-devicons").set_icon {
     color = "#e84e4e",
     name = "Rb"
   };
+}
+require'nvim-tree'.setup {
+  update_focused_file = {
+    -- enables the feature
+    enable      = true
+  }
 }
 EOF
 hi BqfPreviewBorder guifg=#385075
