@@ -140,7 +140,7 @@ nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
   \ 'css': ['stylelint', 'prettier'],
   \ 'elixir': ['credo'],
-  \ 'eruby': ['erb', 'erubis'],
+  \ 'erb': ['erblint'],
   \ 'haml': ['hamllint'],
   \ 'handlebars': ['ember-template-lint'],
   \ 'html': [],
@@ -169,7 +169,7 @@ let g:ale_fixers = {
   \ 'yaml': ['prettier'],
   \ 'html': ['prettier'],
   \ 'haml': ['prettier'],
-  \ 'eruby': ['prettier']
+  \ 'erb': ['erblint']
   \}
 
 let g:ale_floating_preview = 1
@@ -515,19 +515,21 @@ require'lualine'.setup {
   options = {
     icons_enabled = true,
     theme = custom_onedark,
-    disabled_filetypes = {}
+    disabled_filetypes = {},
+    always_divide_middle = true,
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', "diff"},
+    lualine_b = {'branch', 'diff',
+                  {'diagnostics', sources={'nvim_lsp', 'coc'}}},
     lualine_c = {{'filename', path = 1 }},
-    lualine_x = {'encoding', 'fileformat', 'filetype', 'g:coc_status'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
   inactive_sections = {
     lualine_a = {},
-    lualine_b = {},
+    lualine_b = {'diff'},
     lualine_c = {{'filename', path = 1, color = { gui = 'italic,bold' }}},
     lualine_x = {'location'},
     lualine_y = {},
