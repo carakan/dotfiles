@@ -522,7 +522,7 @@ require'lualine'.setup {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff',
                   {'diagnostics', sources={'nvim_lsp', 'coc'}}},
-    lualine_c = {{'filename', path = 1 }},
+    lualine_c = {{'filename', path = 1, shorting_target = 80 }},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
@@ -611,12 +611,28 @@ require("nvim-web-devicons").set_icon {
     name = "Rb"
   };
 }
-require'nvim-tree'.setup {
+require'nvim-tree'.setup({
   update_focused_file = {
-    -- enables the feature
     enable      = true
-  }
-}
+  },
+  	filters = {
+		  custom = { ".bundle",
+                 ".elixir_ls",
+                 ".git",
+                 ".beam",
+                 ".swo$",
+                 ".swp$",
+                 ".vim$",
+                 "~$",
+                 "^ctags$",
+                 "^tmp",
+                 "_build",
+                 "deps",
+                 "node_modules",
+                 "tags",
+               },
+	}
+})
 EOF
 hi BqfPreviewBorder guifg=#385075
 hi link BqfPreviewRange Search
