@@ -64,7 +64,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
-          node npm git brew tmux asdf zsh-autosuggestions osx zsh-completions )
+          node npm git brew tmux asdf zsh-autosuggestions macos zsh-completions )
 
 # User configuration
 
