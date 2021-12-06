@@ -21,13 +21,6 @@
       }
     },
     {
-      "files": "*.erb",
-      "options": {
-        "parser": "html",
-        "singleQuote": false
-      }
-    },
-    {
       "files": "*.haml",
       "options": {
         "parser": "haml"
