@@ -152,4 +152,5 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 #load ASDF for homebrew installation
-. /usr/local/opt/asdf/asdf.sh
+export ASDF_DIR='/usr/local/opt/asdf/libexec'
+. /usr/local/opt/asdf/libexec/asdf.sh
