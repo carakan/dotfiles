@@ -7,3 +7,4 @@ rspec
 rubocop
 solargraph
 terminal-notifier
+erb_lint
