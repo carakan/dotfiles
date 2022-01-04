@@ -693,6 +693,7 @@ let g:coc_global_extensions = [
   \ 'coc-gist',
   \ 'coc-snippets',
   \ 'coc-solargraph',
+  \ 'coc-sql',
   \ 'coc-styled-components',
   \ 'coc-tag',
   \ 'https://github.com/rodrigore/coc-tailwind-intellisense',
