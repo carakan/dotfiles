@@ -84,7 +84,7 @@ let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_the
       \ 'border': 'rounded',
       \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
       \ 'highlighter': wilder#lua_fzy_highlighter(),
-      \ 'winblend': 20,
+      \ 'pumblend': 20,
       \ 'max_height': '20%',
       \ 'left': [
       \   ' ',
@@ -388,7 +388,8 @@ require("bufferline").setup(
             show_buffer_close_icons = true,
             separator_style = "slant",
             always_show_bufferline = true,
-            sort_by = 'tabs'
+            sort_by = 'directory',
+            diagnostics = "coc"
         },
         highlights = {
             background = {
@@ -418,7 +419,7 @@ require("bufferline").setup(
               guibg = "#181621",
             },
             close_button_selected = {
-              guifg = "#c9a35c",
+              guifg = "#a53726",
               guibg = "#282c34",
             },
             separator = {

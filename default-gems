@@ -8,3 +8,4 @@ rubocop
 solargraph
 terminal-notifier
 erb_lint
+docker-sync
