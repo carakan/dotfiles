@@ -544,8 +544,9 @@ require'lualine'.setup {
 }
 require 'nvim-treesitter.configs'.setup {
     ensure_installed = {
-      'bash', 'css', 'comment', 'dockerfile', 'elixir', 'erlang', 'glimmer', 'html', 'javascript', 'jsonc', 
-      'lua', 'markdown', 'php', 'python', 'regex', 'ruby', 'rust', 'scss', 'toml', 'tsx', 'typescript', 'vue', 'yaml'
+      'bash', 'css', 'comment', 'dockerfile', 'elixir', 'eex', 'erlang', 'glimmer', 'graphql', 'html', 
+      'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'php', 'python', 'regex', 
+      'ruby', 'rust', 'scss', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
     },
     highlight = {
         enable = true,
