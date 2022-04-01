@@ -140,7 +140,7 @@ nmap <leader>f <Plug>(ale_fix)
 let g:ale_linters = {
   \ 'css': ['stylelint', 'prettier'],
   \ 'elixir': ['credo'],
-  \ 'erb': ['erblint'],
+  \ 'eruby': ['erblint'],
   \ 'haml': ['hamllint'],
   \ 'handlebars': ['ember-template-lint'],
   \ 'html': [],
@@ -169,7 +169,7 @@ let g:ale_fixers = {
   \ 'yaml': ['prettier'],
   \ 'html': ['prettier'],
   \ 'haml': ['prettier'],
-  \ 'erb': ['erblint']
+  \ 'eruby': ['erblint']
   \}
 
 let g:ale_floating_preview = 1
