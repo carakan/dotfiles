@@ -3,7 +3,6 @@ debug
 pry
 rake
 reek
-rspec
 rubocop
 solargraph
 terminal-notifier
