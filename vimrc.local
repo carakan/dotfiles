@@ -2,11 +2,11 @@ set nobackup
 set cursorcolumn
 colorscheme new-railscasts
 set pyx=3
+set laststatus=3
 
 let g:indent_guides_auto_colors = 0
 " Set split separator to Unicode box drawing character
 set encoding=utf8
-set fillchars=vert:│
 
 " Uses tpope's vim-sensible defaults
 set hidden
@@ -521,12 +521,13 @@ require'lualine'.setup {
     theme = custom_onedark,
     disabled_filetypes = {},
     always_divide_middle = true,
+    globalstatus = true,
   },
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff',
                   {'diagnostics', sources={'coc'}}},
-    lualine_c = {{'filename', path = 1, shorting_target = 80 }},
+    lualine_c = {{'filename', path = 1, shorting_target = 180 }},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
