@@ -65,8 +65,6 @@ let g:bubbly_tabline = 0
 let g:bubbly_inactive_style = 'italic'
 let g:bubbly_statusline = ['mode', 'truncate', 'path', 'branch', 'signify', 'coc', 'divisor', 'filetype', 'progress']
 
-let g:gitblame_date_format = '%d/%m/%Y %H:%M'
-
 call wilder#setup({'modes': [':', '/', '?']})
 call wilder#set_option('use_python_remote_plugin', 0)
 
@@ -174,23 +172,8 @@ let g:ale_fixers = {
 
 let g:ale_floating_preview = 1
 
-" Signify
-let g:signify_cursorhold_insert = 1
-let g:signify_cursorhold_normal = 1
-let g:signify_disable_by_default = 0
-
-let g:signify_sign_add               = "▋"
-let g:signify_sign_change            = "▋"
-let g:signify_sign_delete_first_line = ""
-let g:signify_sign_delete            = "▋"
-let g:signify_sign_change_delete     = g:signify_sign_change . g:signify_sign_delete_first_line
-
-let g:signify_update_on_bufenter = 1
-let g:signify_update_on_focusgained = 1
-let g:signify_sign_delete_first_line = '-'
-
-nmap <silent> <leader>pd :SignifyHunkDiff<CR>
-nmap <silent> <leader>pu :SignifyHunkUndo<CR>
+nmap <silent> <leader>pd <cmd>Gitsigns preview_hunk<CR>
+nmap <silent> <leader>pu <cmd>Gitsigns undo_stage_hunk<CR>
 
 " Text Formatting/Layout
 set autoindent " auto-indent
@@ -505,6 +488,46 @@ require('bqf').setup({
     }
 })
 require('numb').setup()
+require('gitsigns').setup({
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '▋', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '▋', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '▍', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = true,
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol',
+    delay = 500,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter = ' <author>, <author_time:%Y-%m-%d> - <summary>',
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil,
+  max_file_length = 40000,
+  preview_config = {
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+})
 
 local custom_onedark = require'lualine.themes.onedark'
 custom_onedark.normal.b.bg = '#444444'
