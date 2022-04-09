@@ -114,6 +114,8 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
+export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 export BAT_CONFIG_PATH="/Users/carakan/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
