@@ -644,8 +644,18 @@ require'nvim-tree'.setup({
   update_focused_file = {
     enable      = true
   },
-  	filters = {
-		  custom = { ".bundle",
+  renderer = {
+    indent_markers = {
+      enable = true,
+      icons = {
+        corner = "└ ",
+        edge = "│ ",
+        none = "  ",
+      },
+    },
+  },
+  filters = {
+		custom = { ".bundle",
                  ".elixir_ls",
                  ".git",
                  ".beam",
