@@ -24,8 +24,8 @@ alias ssh="TERM=xterm-256color ssh"
 
 # Rails
 alias migrate="rake db:migrate db:rollback && rake db:migrate"
-alias s="rspec"
-alias rof="rspec --only-failures"
+alias s="bundle exec rspec"
+alias rof="bundle exec rspec --only-failures"
 
 # Pretty print the path
 alias path='echo $PATH | tr -s ":" "\n"'

@@ -9,8 +9,9 @@
       "files": "*.rb",
       "options": {
         "parser": "ruby",
-        "rubyArrayLiteral": false,
-        "trailingComma": "none"
+        "rubyArrayLiteral": true,
+        "trailingComma": "none",
+        "rubyModifier": false
       }
     },
     {
