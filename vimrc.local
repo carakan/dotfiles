@@ -329,13 +329,14 @@ let g:coc_fzf_preview = 'right:60%'
 let g:fzf_preview_window = 'right:60%'
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_filelist_command = 'rg --files --no-ignore-vcs --smart-case --hidden --follow --no-messages --ignore-file $HOME/.ignore'
-let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
 " let g:fzf_preview_floating_window_winblend = 10
 let g:fzf_preview_command = 'bat --color=always --style=full {-1}'
 let g:fzf_preview_floating_window_rate = 0.95
 let g:fzf_preview_direct_window_option = ''
 let g:fzf_preview_default_fzf_options = { '--preview-window': 'wrap:60%' }
 let g:fzf_preview_dev_icons_limit = 5000
+let g:fzf_preview_if_binary_command = '[[ "$(file --mime {})" =~ binary ]]'
+let g:fzf_binary_preview_command = 'echo "{} is a binary file"'
 
 nnoremap <silent> <leader>s :<C-u>call system('say ' . expand('<cword>'))<CR>
 
@@ -545,10 +546,9 @@ require'lualine'.setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff',
-                  {'diagnostics', sources={'coc'}}},
-    lualine_c = {{'filename', path = 1, shorting_target = 180 }},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_b = {'branch', 'diff', {'diagnostics', sources={'coc'}}},
+    lualine_c = {{'filename', path = 1, shorting_target = 80}, {'filetype', icon_only = true}},
+    lualine_x = {'encoding', 'fileformat'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -565,7 +565,7 @@ require'lualine'.setup {
 }
 require 'nvim-treesitter.configs'.setup {
     ensure_installed = {
-      'bash', 'css', 'comment', 'dockerfile', 'elixir', 'eex', 'erlang', 'glimmer', 'graphql', 'html', 
+      'bash', 'css', 'comment', 'dockerfile', 'elixir', 'eex', 'embedded_template', 'erlang', 'glimmer', 'graphql', 'html', 
       'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'php', 'python', 'regex', 
       'ruby', 'rust', 'scss', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
     },
