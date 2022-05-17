@@ -145,7 +145,7 @@ let g:ale_linters = {
   \ 'javascript': ['eslint', 'tsserver'],
   \ 'json': ['prettier'],
   \ 'lua': ['luac', 'luacheck'], 
-  \ 'ruby': ['rubocop', 'ruby'],
+  \ 'ruby': ['standardrb'],
   \ 'scss': ['stylelint', 'prettier'],
   \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
   \ 'vim': ['vint'],
@@ -160,7 +160,7 @@ let g:ale_fixers = {
   \ 'json': ['prettier'],
   \ 'lua': ['lua-format'],
   \ 'markdown': ['prettier'],
-  \ 'ruby': ['prettier', 'rubocop'],
+  \ 'ruby': ['prettier', 'standardrb'],
   \ 'scss': ['stylelint'],
   \ 'typescript': ['prettier', 'tslint'],
   \ 'vue': ['prettier'],
@@ -169,6 +169,11 @@ let g:ale_fixers = {
   \ 'haml': ['prettier'],
   \ 'eruby': ['erblint']
   \}
+
+if filereadable('Gemfile.lock') && !len(matchstr(readfile(expand('Gemfile.lock')), 'standard'))
+  let g:ale_fixers['ruby'] = ['prettier', 'rubocop']
+  let g:ale_linters['ruby'] = ['rubocop']
+endif
 
 let g:ale_floating_preview = 1
 
