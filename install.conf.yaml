@@ -15,6 +15,9 @@
     ~/.config/nvim/coc-settings.json:
         create: true
         path: coc.json
+    ~/.config/kitty/kitty.conf:
+        create: true
+        path: kitty/kitty.conf
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
