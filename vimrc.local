@@ -551,7 +551,7 @@ require'lualine'.setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', {'diagnostics', sources={'coc'}}},
+    lualine_b = {'branch', 'diff', {'diagnostics', sources={'coc'}}, 'grepper#statusline'},
     lualine_c = {{'filename', path = 1, shorting_target = 80}, {'filetype', icon_only = true}},
     lualine_x = {'encoding', 'fileformat'},
     lualine_y = {'progress'},
