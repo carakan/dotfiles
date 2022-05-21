@@ -42,7 +42,7 @@ bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 ```zsh
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
-cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
+cd ${ZSH_CUSTOM:-$ZSH/custom}/plugins
 git clone https://github.com/djui/alias-tips.git
 git clone https://github.com/zsh-users/zsh-completions
 git clone git://github.com/zsh-users/zsh-autosuggestions
