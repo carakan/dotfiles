@@ -311,9 +311,9 @@ function! FZFOpen(command_str)
   exe 'normal! ' . a:command_str . "\<cr>"
 endfunction
 
-nnoremap <silent> <C-c> :Commands<CR>
-nnoremap <silent> <C-p> :<C-u>CocCommand fzf-preview.ProjectFiles<CR>
-nnoremap <silent> <C-t> :<C-u>CocCommand fzf-preview.AllBuffers<CR>
+nnoremap <c-c> <cmd>lua require('fzf-lua').commands()<CR>
+nnoremap <c-p> <cmd>lua require('fzf-lua').files()<CR>
+nnoremap <c-t> <cmd>lua require('fzf-lua').buffers()<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>? :History<CR>
 nnoremap <silent> <leader>A :Windows<CR>
@@ -321,7 +321,7 @@ nnoremap <silent> <leader>O :BTags<CR>
 nnoremap <silent> <leader>ft :Filetypes<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>gl :Commits<CR>
-nnoremap <silent> <leader>m :Maps<CR>
+nnoremap <leader>m <cmd>lua require('fzf-lua').keymaps()<CR>
 nnoremap <silent> <leader>o :<C-u>CocCommand fzf-preview.Ctags<CR>
 nnoremap <silent> F :<C-u>CocCommand fzf-preview.ProjectGrep  .<CR>
 xnoremap <silent> F "sy:FzfPreviewProjectGrep<Space>.<Space>-F<Space>-add-fzf-arg=--query="<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
@@ -541,6 +541,34 @@ custom_onedark.inactive.b.bg = '#353535'
 custom_onedark.inactive.c.bg = '#353535'
 custom_onedark.inactive.c.fg = '#a8a494'
 
+require('fzf-lua').setup({
+  nbsp = '\xc2\xa0',
+  -- double-width icon rendering
+  file_icon_padding = ' ',
+  git = {
+    icons = {
+      ["M"] = { icon = "★", color = "blue" },
+      ["D"] = { icon = "✗", color = "red" },
+      ["A"] = { icon = "+", color = "green" },
+      ["?"] = { icon = "?", color = "red" },
+    },
+  },
+  previewers = {
+    bat = {
+      cmd             = "bat",
+      args            = "--style=numbers,changes --color always",
+      theme           = 'Coldark-Dark', -- bat preview theme (bat --list-themes)
+      config          = nil,            -- nil uses $BAT_CONFIG_PATH
+    },
+    builtin = {
+      extensions = {
+        ["png"] = { "viu", "-b" },
+        ["jpg"] = { "viu", "-b" },
+        ["gif"] = { "viu", "-b" },
+      },
+    },
+  },
+})
 require'lualine'.setup {
   options = {
     icons_enabled = true,
