@@ -112,11 +112,6 @@ let g:bufferline_echo = 0
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
 
-" Nvim tree
-let g:nvim_tree_width = 35
-let g:nvim_tree_group_empty = 1
-let g:nvim_tree_highlight_opened_files = 2
-
 " ALE
 let g:ale_use_global_executables = 1
 let g:ale_set_highlights = 1
@@ -671,17 +666,16 @@ require("nvim-web-devicons").set_icon {
   };
 }
 require'nvim-tree'.setup({
+  view = {
+    width = 35,
+  },
   update_focused_file = {
-    enable      = true
+    enable = true
   },
   renderer = {
+    highlight_opened_files = 'all',
     indent_markers = {
       enable = true,
-      icons = {
-        corner = "└ ",
-        edge = "│ ",
-        none = "  ",
-      },
     },
   },
   filters = {
