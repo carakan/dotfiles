@@ -10,10 +10,12 @@
   dump = cat-file -p
   fco = !git branch | fzf +m | awk '{print $1}' | xargs git checkout
 [user]
+	email = cramos@majorkeytech.com
+	name = Carlos A. Ramos
 
 [core]
-  editor = /usr/local/bin/nvim
-  excludesfile = ~/.gitignore_global
+	editor = /home/linuxbrew/.linuxbrew/bin/nvim
+	excludesfile = ~/.gitignore_global
   pager = delta
 [commit]
 [pull]

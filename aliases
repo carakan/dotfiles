@@ -127,3 +127,7 @@ alias mdca='mix deps.clean --all'
 alias mep='MIX_ENV=production'
 alias met='MIX_ENV=test'
 alias ecto.reset='mix ecto.drop && mix ecto.create && mix ecto.migrate && mix ecto.seed'
+
+
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'

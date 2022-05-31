@@ -98,7 +98,7 @@ let g:ale_linters = {
   \ 'javascript': ['eslint', 'tsserver'],
   \ 'json': ['prettier'],
   \ 'lua': ['luac', 'luacheck'], 
-  \ 'ruby': ['standardrb'],
+  \ 'ruby': ['rubocop'],
   \ 'scss': ['stylelint', 'prettier'],
   \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
   \ 'vim': ['vint'],
@@ -122,11 +122,6 @@ let g:ale_fixers = {
   \ 'haml': ['prettier'],
   \ 'eruby': ['erblint']
   \}
-
-if filereadable('Gemfile.lock') && !len(matchstr(readfile(expand('Gemfile.lock')), 'standard'))
-  let g:ale_fixers['ruby'] = ['prettier', 'rubocop']
-  let g:ale_linters['ruby'] = ['rubocop']
-endif
 
 "nmap <Leader>d :ALEDetail<CR>
 "nmap <Leader>dd :ALEHover<CR>
@@ -244,7 +239,7 @@ let g:mustache_abbreviations = 1
 let g:ember_tools_highlight_actions = 0
 
 " Configure node, python executable
-let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/16.13.0/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '/home/carakan/.asdf/installs/nodejs/16.15.0/.npm/lib/node_modules/neovim/bin/cli.js'
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>

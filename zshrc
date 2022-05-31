@@ -1,6 +1,6 @@
 export ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/carakan/.oh-my-zsh
+export ZSH=/home/carakan/.oh-my-zsh
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -120,7 +120,7 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
-export BAT_CONFIG_PATH="/Users/carakan/.bat.conf"
+export BAT_CONFIG_PATH="/home/carakan/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -162,7 +162,4 @@ fi
 
 # load ASDF for homebrew installation
 source "$(brew --prefix asdf)/libexec/asdf.sh"
-
-export PATH="/usr/local/opt/postgresql@13/bin:$PATH"
-
 eval "$(mcfly init zsh)"
