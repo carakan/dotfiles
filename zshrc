@@ -161,8 +161,7 @@ function update_brach(){
 export TERMINFO="$HOME/.terminfo"
 
 # this is for homebrew
-export PATH="/usr/local/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
 # Change open files limit and user processes limit.
