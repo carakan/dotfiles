@@ -143,11 +143,12 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # autostart tmux
 if [[ -z "$TMUX" ]]; then
-    if tmux has-session 2>/dev/null; then
-        exec tmux attach
-    else
-        exec tmux
-    fi
+  local n=${1-Main}
+  if tmux has-session -t $n 2>/dev/null; then
+    exec tmux a -t $n
+  else
+    exec tmux new -s $n
+  fi
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
