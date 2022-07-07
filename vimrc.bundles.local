@@ -76,3 +76,4 @@ call dein#add('Tummetott/reticle.nvim')
 " call dein#add('Dkendal/nvim-treeclimber')
 " call dein#add('stevearc/dressing.nvim')
 
+call dein#add('tpope/vim-rhubarb')
