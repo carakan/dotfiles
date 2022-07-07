@@ -183,8 +183,18 @@ vmap <C-c><C-c> <Plug>SendSelectionToTmux
 nmap <C-c><C-c> <Plug>NormalModeSendToTmux
 nmap <C-c>r <Plug>SetTmuxVars
 
-" dash integration
-nmap <silent> <leader>d <Plug>DashSearch
+" Zeal integration
+let zv_file_types = {
+\ 'cpp'                   : 'c++',
+\ 'cc'                    : 'c++',
+\ 'javascript'            : 'javascript,nodejs',
+\ '^(md|mdown|mkd|mkdn)$' : 'markdown',
+\ 'css'                   : 'css,foundation,bootstrap_4',
+\ 'python'                : 'python 3',
+\ 'ruby'                  : 'ruby,ruby 2,rails',
+\ }
+nmap <leader>d <Plug>Zeavim
+vmap <leader>d <Plug>ZVVisSelection
 
 " Auto tags generation
 map <Leader>ct :call atags#generate()<cr>
