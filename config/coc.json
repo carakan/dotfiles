@@ -19,7 +19,10 @@
   "diagnostic.virtualText": true,
   "html.enable": true,
   "html.format.enable": true,
-  "snippets.priority": 9,
+  "jira.workspaceUrl": "https://atriawealth.atlassian.net",
+  "jira.user.email": "cramos@majorkeytech.com",
+  "jira.user.apiKey": "fDeVvh7VEznjHkIJTQ0UE8DB",
+  "snippets.priority": 2,
   "snippets.trace": "verbose",
   "snippets.extends": {
     "javascriptreact": ["javascript"],
