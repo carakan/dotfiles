@@ -113,7 +113,7 @@ let g:ale_fixers = {
   \ 'json': ['prettier'],
   \ 'lua': ['lua-format'],
   \ 'markdown': ['prettier'],
-  \ 'ruby': ['prettier', 'standardrb'],
+  \ 'ruby': ['prettier', 'rubocop'],
   \ 'scss': ['stylelint'],
   \ 'typescript': ['prettier', 'tslint'],
   \ 'vue': ['prettier'],
