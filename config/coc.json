@@ -22,7 +22,7 @@
   "jira.workspaceUrl": "https://atriawealth.atlassian.net",
   "jira.user.email": "cramos@majorkeytech.com",
   "jira.user.apiKey": "fDeVvh7VEznjHkIJTQ0UE8DB",
-  "snippets.priority": 2,
+  "snippets.priority": 9,
   "snippets.trace": "verbose",
   "snippets.extends": {
     "javascriptreact": ["javascript"],
