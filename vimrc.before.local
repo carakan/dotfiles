@@ -1,4 +1,4 @@
-set runtimepath+=/usr/local/opt/fzf
+set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 set termguicolors
 set cmdheight=0
 set fillchars+=diff:╱,foldopen:▾,foldsep:│,foldclose:▸
