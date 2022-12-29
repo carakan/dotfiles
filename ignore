@@ -13,7 +13,7 @@ coverage/*
 deps/*
 dist/*
 gems/*
-node_modules/*
+**/node_modules/*
 public/uploads/*
 storage/*
 tags

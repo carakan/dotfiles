@@ -18,9 +18,8 @@
   "diagnostic.virtualText": true,
   "html.enable": true,
   "html.format.enable": true,
-  "snippets.priority": 2,
+  "snippets.priority": 9,
   "snippets.trace": "verbose",
-  "snippets.enableStatusItem": false,
   "snippets.extends": {
     "javascriptreact": ["javascript"],
     "typescript": ["javascript"],
@@ -34,34 +33,32 @@
   "snippets.loadFromExtensions": true,
   "snippets.textmateSnippetsRoots": ["~/.vim/bundle/repos/github.com/rafamadriz/friendly-snippets/snippets"],
   "snippets.ultisnips.enable": true,
-  "snippets.ultisnips.usePythonx": true,
   "snippets.snipmate.enable": true,
-
   "suggest.snippetIndicator": " ",
   "suggest.floatEnable": true,
   "suggest.floatConfig": {
     "border": true,
     "highlight": "CocFloating",
-    "borderhighlight": "CocFloating",
     "shadow": true
+    "borderhighlight": "CocFloatingBorder"
   },
   "diagnostic.floatConfig": {
     "highlight": "CocFloating",
-    "borderhighlight": "CocFloating",
-    "border": true,
     "shadow": true
+    "borderhighlight": "CocFloatingBorder",
+    "border": true
   },
   "hover.floatConfig": {
     "highlight": "CocFloating",
-    "borderhighlight": "CocFloating",
-    "border": true,
     "shadow": true
+    "borderhighlight": "CocFloatingBorder",
+    "border": true
   },
   "signature.floatConfig": {
     "highlight": "CocFloating",
-    "borderhighlight": "CocFloating",
-    "border": true,
     "shadow": true
+    "borderhighlight": "CocFloatingBorder",
+    "border": true
   },
   "languageserver": {
     "elixir": {
@@ -107,10 +104,10 @@
     "default": "\uf29c"
   },
   "suggest.detailMaxLength": 30,
-  "suggest.enablePreview": true,
+  "suggest.enablePreselect": true,
   "suggest.minTriggerInputLength": 2,
   "suggest.removeDuplicateItems": true,
   "suggest.detailField": "preview",
-  "yank.highlight.duration": 800,
-  "yank.shortcut": "\u2602"
+  "yank.highlight.duration": 500,
+  "yank.priority": 10
 }

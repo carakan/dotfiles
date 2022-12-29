@@ -8,6 +8,7 @@
 .byebug_history
 .tool-versions
 .vscode/*
+.solargraph.yml
 GPATH
 GRTAGS
 GTAGS

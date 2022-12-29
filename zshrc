@@ -57,13 +57,11 @@ export TERM="tmux-256color"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
+plugins=( zsh-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
           node npm git brew tmux asdf zsh-autosuggestions macos zsh-completions )
 
 # User configuration
@@ -134,10 +132,6 @@ export TERMINFO="$HOME/.terminfo"
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
-
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 

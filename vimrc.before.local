@@ -1,7 +1,24 @@
 set runtimepath+=/usr/local/opt/fzf
-if (has('termguicolors'))
- set termguicolors
-endif
+set termguicolors
+set cmdheight=1
+set fillchars+=diff:╱,foldopen:▾,foldsep:￨,foldclose:▸
+
+set diffopt+=algorithm:histogram,indent-heuristic,vertical,hiddenoff,linematch:60
+
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
+augroup diff
+  au!
+  autocmd OptionSet diff let &cursorline=!v:option_new
+  autocmd OptionSet diff silent! 1 | silent! normal! ]c
+augroup end
+
+augroup scrollbar_search_hide
+    autocmd!
+    autocmd CmdlineLeave : lua require('scrollbar.handlers.search').handler.hide()
+augroup END
+
 set signcolumn=auto:1
 let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript', 'html', 'ruby', 'elixir', 'misc']
 let g:spf13_leader = ' '
@@ -18,13 +35,3 @@ let g:loaded_ruby_provider = 0
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 let g:loaded_matchit = 1
-
-augroup fzf_preview
-  autocmd!
-  autocmd User fzf_preview#initialized call s:fzf_preview_settings()
-augroup END
-
-function! s:fzf_preview_settings() abort
-  let g:fzf_preview_command = 'COLORTERM=truecolor ' . g:fzf_preview_command
-  let g:fzf_preview_grep_preview_cmd = 'COLORTERM=truecolor ' . g:fzf_preview_grep_preview_cmd
-endfunction
