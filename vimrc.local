@@ -278,10 +278,9 @@ let g:bookmark_sign = ''
 vmap <leader>y :YankCode<CR>
 
 lua <<EOF
-vim.g.colors_name = 'new-railscasts'
-require("nvim-surround").setup({})
-require("bufferline").setup(
-    {
+vim.g.colors_name = 'new-railscasts';
+require("nvim-surround").setup({});
+require("bufferline").setup({
         options = {
           numbers = "none",
           buffer_close_icon = "",
@@ -351,8 +350,7 @@ require("bufferline").setup(
             bg = "#282c34",
           }
         }
-    }
-)
+})
 require('hlslens').setup({
   override_lens = function(render, posList, nearest, idx, relIdx)
     local sfw = vim.v.searchforward == 1
@@ -516,8 +514,7 @@ require('fzf-lua').setup({
 require("diffview").setup({
   enhanced_diff_hl = true,
 })
-
-require('lualine').setup {
+require('lualine').setup({
   options = {
     icons_enabled = true,
     theme = custom_onedark,
@@ -543,7 +540,7 @@ require('lualine').setup {
   },
   tabline = {},
   extensions = {'fzf', 'fugitive', 'nvim-tree', 'quickfix'},
-}
+})
 require('nvim-treesitter.configs').setup({
     matchup = {
       enable = true,              -- mandatory, false will disable the whole extension
@@ -580,7 +577,7 @@ require('nvim-treesitter.configs').setup({
     enable = true
   },
   folding = { enable = true }
-}
+})
 require("nvim-web-devicons").set_icon({
   ["config.ru"] = {
     icon = "",
