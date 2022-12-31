@@ -468,6 +468,10 @@ require('fzf-lua').setup({
   height           = 0.95,            -- window height
   width            = 0.80,
   winopts = {
+    height           = 0.95,            -- window height
+    width            = 0.85,            -- window width
+    row              = 0.25,            -- window row position (0=top, 1=bottom)
+    col              = 0.55,            -- window col position (0=left, 1=right)
     hl = {
       border = 'LineNr',
       title = 'Normal', 
@@ -689,6 +693,7 @@ require('scrollbar').setup({
         diagnostic = true,
         search = true, -- Requires hlslens to be loaded
         gitsigns = true, -- Requires gitsigns.nvim
+        ale = true, -- Requires ALE
     },
 })
 require('dressing').setup({})
