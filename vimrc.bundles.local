@@ -81,4 +81,3 @@ call dein#add('ruifm/gitlinker.nvim')
 " call dein#add('Dkendal/nvim-treeclimber')
 " call dein#add('stevearc/dressing.nvim')
 
-call dein#add('tpope/vim-rhubarb')
