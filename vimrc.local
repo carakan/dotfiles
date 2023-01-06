@@ -697,9 +697,21 @@ require('scrollbar').setup({
         gitsigns = true, -- Requires gitsigns.nvim
         ale = true, -- Requires ALE
     },
+    marks = {
+        Cursor = { color = '#000000', text = '', priority = 3 },
+        Search = { color = '#0095CB', text = { "", "", 'ﰧ' } },
+        Error = { color = '#FF5D4F', text = { "", "", 'ﰧ' } },
+        Warn = { color = '#FABD2F', text = { "", "", 'ﰧ' } },
+        Info = { color = '#458599', text = { "", "", 'ﰧ' } },
+        Hint = { color = '#689D6A', text = { "", "", 'ﰧ' } },
+        Misc = { color = '#B16286', text = { "", "", 'ﰧ' } },
+        GitAdd = { color = '#b9eeb8', text = '|' },
+        GitChange = { color = '#C643C6', text = '|' },
+        GitDelete = { color = '#ff8378', text = '|' },
+    },
 })
-require('dressing').setup({})
---require('nvim-treeclimber').setup()
+-- require('dressing').setup({})
+-- require('nvim-treeclimber').setup()
 EOF
 hi BqfPreviewBorder guifg=#385075
 hi link BqfPreviewRange Search
