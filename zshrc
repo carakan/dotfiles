@@ -135,7 +135,7 @@ function update_brach(){
 
 export TERMINFO="$HOME/.terminfo"
 
-# this is for homebrew
+# homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
@@ -143,6 +143,10 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 # See: https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
 ulimit -n 200000
 ulimit -u 2048
+
+export HOMEBREW_BAT=1
+export HOMEBREW_DISPLAY_INSTALL_TIMES=1
+export HOMEBREW_INSTALL_FROM_API=1
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
