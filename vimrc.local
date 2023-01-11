@@ -517,6 +517,7 @@ require('fzf-lua').setup({
     color_icons       = false,
   },
   git = {
+    color_icons   = false,
     icons = {
       ["M"] = { icon = "★", color = "#C643C6" },
       ["D"] = { icon = "✗", color = "red" },
@@ -526,6 +527,9 @@ require('fzf-lua').setup({
     stash = {
       preview = "git --no-pager stash show --patch --color {1} | delta --side-by-side --width 200",
     }
+  },
+  grep = {
+    color_icons       = false,
   },
   previewers = {
     bat = {
