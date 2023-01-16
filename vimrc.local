@@ -8,21 +8,7 @@ let g:indent_guides_auto_colors = 0
 " Set split separator to Unicode box drawing character
 set encoding=utf8
 
-" Uses tpope's vim-sensible defaults
-set hidden
-set notimeout
-set noswapfile
-set nowritebackup
-set nowrap
-set nofoldenable
-set lazyredraw
-set number
-set expandtab
-set ignorecase
-set smartcase
-set noshowmode
-set modeline
-set nospell
+let g:fugitive_dynamic_colors = 1
 
 if has('nvim-0.4')
   set pumblend=22
@@ -46,46 +32,6 @@ noremap   <Right>  <NOP>
 nnoremap <bs> <c-^>
 set undofile
 
-" Wilder
-call wilder#setup({'modes': [':', '/', '?']})
-call wilder#set_option('use_python_remote_plugin', 0)
-
-call wilder#set_option('pipeline', [
-      \   wilder#branch(
-      \     wilder#cmdline_pipeline({
-      \       'use_python': 0,
-      \       'fuzzy': 1,
-      \       'fuzzy_filter': wilder#lua_fzy_filter(),
-      \     }),
-      \     wilder#vim_search_pipeline(),
-      \   ),
-      \ ])
-let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-      \ 'border': 'rounded',
-      \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
-      \ 'highlighter': wilder#lua_fzy_highlighter(),
-      \ 'pumblend': 20,
-      \ 'max_height': '20%',
-      \ 'left': [
-      \   ' ',
-      \   wilder#popupmenu_devicons(),
-      \   wilder#popupmenu_buffer_flags({
-      \     'flags': ' a + ',
-      \     'icons': {'+': '', 'a': '', 'h': ''},
-      \   }),
-      \ ],
-      \ 'right': [
-      \   ' ',
-      \   wilder#popupmenu_scrollbar(),
-      \ ],
-      \ }))
-
-call wilder#set_option('renderer', wilder#renderer_mux({
-      \ ':': s:popupmenu_renderer,
-      \ '/': wilder#wildmenu_renderer({
-      \   'highlighter': wilder#lua_fzy_highlighter(),
-      \ }),
-      \ }))
 
 " Fix error for any line plugin
 let g:bufferline_echo = 0
@@ -418,11 +364,12 @@ require('bqf').setup({
 require('numb').setup()
 require('gitsigns').setup({
   signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '▋', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '▋', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    delete       = {hl = 'GitSignsDelete', text = '►', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    topdelete    = {hl = 'GitSignsDelete', text = '', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    changedelete = {hl = 'GitSignsChange', text = '▞', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    add          = { text = '▌' },
+    change       = { text = '▌' },
+    delete       = { text = '►' },
+    topdelete    = { text = '' },
+    changedelete = { text = '' },
+    untracked    = { text = '|' },
   },
   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
   numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -452,7 +399,7 @@ require('gitsigns').setup({
     row = 0,
     col = 1
   },
-  -- _signs_staged_enable = true,
+  _signs_staged_enable = true,
 })
 
 local custom_onedark = require'lualine.themes.onedark'
@@ -555,8 +502,8 @@ require('nvim-treesitter.configs').setup({
     ensure_installed = {
       'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
       'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
-      'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'php', 'python', 'regex', 
-      'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
+      'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'php',
+      'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
     },
     highlight = {
         enable = false,
@@ -705,13 +652,59 @@ require('scrollbar').setup({
         Info = { color = '#458599', text = { "", "", 'ﰧ' } },
         Hint = { color = '#689D6A', text = { "", "", 'ﰧ' } },
         Misc = { color = '#B16286', text = { "", "", 'ﰧ' } },
-        GitAdd = { color = '#b9eeb8', text = '|' },
-        GitChange = { color = '#C643C6', text = '|' },
-        GitDelete = { color = '#ff8378', text = '|' },
+        GitAdd = { color = '#b9eeb8', text = '┃' },
+        GitChange = { color = '#C643C6', text = '┃' },
+        GitDelete = { color = '#ff8378', text = '┃' },
     },
+})
+require("recorder").setup({
+  -- Named registers where macros are saved. The first register is the default
+	-- register/macro-slot used after startup. 
+	slots = {"a", "b", 'c', 'd', 'e', 'f'},
+
+	-- default keymaps, see README for description what the commands do
+	mapping = {
+		startStopRecording = "q",
+		playMacro = "Q",
+		switchSlot = "<C-q>",
+		editMacro = "cq",
+		yankMacro = "yq", -- also decodes it for turning macros to mappings
+		addBreakPoint = "#",
+	},
+
+	-- clears all macros-slots on startup
+	clear = false,
+
+	-- log level used for any notification, mostly relevant for nvim-notify
+	-- (note that by default, nvim-notify does not show the levels trace and debug.)
+	logLevel = vim.log.levels.INFO,
+
+	-- experimental, see README
+	dapSharedKeymaps = false,
 })
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
+require("noice").setup({
+  presets = {
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = false,
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
+  views = {
+      cmdline_popup = {
+        border = {
+          style = "none",
+          padding = { 2, 3 },
+        },
+        filter_options = {},
+        win_options = {
+          winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+        },
+      },
+  },
+})
 EOF
 hi BqfPreviewBorder guifg=#385075
 hi link BqfPreviewRange Search
@@ -728,10 +721,9 @@ hi ScrollbarGitDelete        guibg=#FF5D4F guifg=#ff8378
 hi ScrollbarGitDeleteHandle  guibg=#ff8378 guifg=#FF5D4F
 
 
-hi link HlSearchNear IncSearch
-hi link HlSearchLens WildMenu
-hi link HlSearchLensNear IncSearch
-hi link HlSearchFloat IncSearch
+hi GitSignsAdd guifg=#008700 guibg=#2d2d2d
+
+
 
 " Debug highlight
 nmap <silent> <leader>is :TSHighlightCapturesUnderCursor<CR>

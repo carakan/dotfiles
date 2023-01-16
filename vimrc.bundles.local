@@ -44,11 +44,17 @@ call dein#add('kevinhwang91/nvim-bqf')
 call dein#add('nacro90/numb.nvim')
 call dein#add('drzel/vim-repo-edit')
 call dein#add('carakan/lens.vim')
-call dein#add('gelguy/wilder.nvim')
 call dein#add('rafamadriz/friendly-snippets')
 call dein#add('lewis6991/gitsigns.nvim')
 call dein#add('ibhagwan/fzf-lua')
-call dein#add('romgrk/fzy-lua-native')
+
+call dein#add('chrisgrieser/nvim-recorder')
+
+
+call dein#add("MunifTanjim/nui.nvim")
+call dein#add("rcarriga/nvim-notify")
+call dein#add("folke/noice.nvim")
+
 
 call dein#add('tpope/vim-rhubarb')
 

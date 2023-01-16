@@ -1,7 +1,8 @@
 set runtimepath+=/usr/local/opt/fzf
 set termguicolors
-set cmdheight=1
+set cmdheight=0
 set fillchars+=diff:╱,foldopen:▾,foldsep:￨,foldclose:▸
+set nolazyredraw
 
 set diffopt+=algorithm:histogram,indent-heuristic,vertical,hiddenoff,linematch:60
 
@@ -28,7 +29,7 @@ let g:loaded_python_provider = 0
 " let g:loaded_python3_provider = 1 " Don't enable explicitly python3
 let g:python3_host_prog = '/usr/bin/python3'
 set pyxversion=3
-" Disable perl
+" Disable ruby and perl
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
 
