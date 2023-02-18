@@ -39,24 +39,24 @@
   "suggest.floatConfig": {
     "border": true,
     "highlight": "CocFloating",
-    "shadow": true
+    "shadow": true,
     "borderhighlight": "CocFloatingBorder"
   },
   "diagnostic.floatConfig": {
     "highlight": "CocFloating",
-    "shadow": true
+    "shadow": true,
     "borderhighlight": "CocFloatingBorder",
     "border": true
   },
   "hover.floatConfig": {
     "highlight": "CocFloating",
-    "shadow": true
+    "shadow": true,
     "borderhighlight": "CocFloatingBorder",
     "border": true
   },
   "signature.floatConfig": {
     "highlight": "CocFloating",
-    "shadow": true
+    "shadow": true,
     "borderhighlight": "CocFloatingBorder",
     "border": true
   },

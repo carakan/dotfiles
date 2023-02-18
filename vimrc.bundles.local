@@ -21,6 +21,7 @@ call dein#add('joukevandermaas/vim-ember-hbs')
 call dein#add('justinmk/vim-sneak')
 call dein#add('keith/rspec.vim')
 call dein#add('mattn/webapi-vim')
+call dein#add('windwp/nvim-spectre')
 call dein#add('plasticboy/vim-markdown')
 call dein#add('posva/vim-vue')
 call dein#add('rizzatti/dash.vim')
@@ -32,7 +33,7 @@ call dein#add('tpope/vim-obsession')
 call dein#add('tpope/vim-projectionist')
 call dein#add('dense-analysis/ale')
 call dein#add('wellle/targets.vim')
-call dein#add('direnv/direnv.vim')
+" call dein#add('direnv/direnv.vim')
 call dein#add('wesQ3/vim-windowswap')
 call dein#add('lifepillar/pgsql.vim')
 call dein#add('junegunn/vader.vim')
@@ -57,8 +58,8 @@ call dein#add("folke/noice.nvim")
 
 
 call dein#add('tpope/vim-rhubarb')
-
 call dein#add('kevinhwang91/promise-async')
+call dein#add('nvim-zh/colorful-winsep.nvim')
 call dein#add('kevinhwang91/nvim-ufo')
 
 call dein#add('nvim-lua/plenary.nvim')
@@ -66,11 +67,11 @@ call dein#add('sindrets/diffview.nvim')
 
 call dein#add('narutoxy/silicon.lua')
 call dein#add("petertriho/nvim-scrollbar")
-
 call dein#add('uga-rosa/ccc.nvim')
+call dein#add("luukvbaal/statuscol.nvim")
+call dein#add('Tummetott/reticle.nvim')
 
 " call dein#add('rktjmp/lush.nvim')
 " call dein#add('Dkendal/nvim-treeclimber')
-
-call dein#add('stevearc/dressing.nvim')
+" call dein#add('stevearc/dressing.nvim')
 

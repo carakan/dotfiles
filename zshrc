@@ -135,6 +135,11 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
+# Change open files limit and user processes limit.
+# See: https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
+ulimit -n 200000
+ulimit -u 2048
+
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # autostart tmux
@@ -151,5 +156,8 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 #load ASDF for homebrew installation
-export ASDF_DIR='/usr/local/opt/asdf/libexec'
 . /usr/local/opt/asdf/libexec/asdf.sh
+
+export PATH="/usr/local/opt/postgresql@13/bin:$PATH"
+
+eval "$(mcfly init zsh)"

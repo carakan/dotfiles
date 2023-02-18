@@ -18,6 +18,21 @@ if has('nvim-0.4')
   set pumheight=15
 endif
 
+" Needs to update to defaults for neovim
+set hidden
+set notimeout
+set noswapfile
+set nowritebackup
+set nowrap
+set nofoldenable
+set number
+set expandtab
+set ignorecase
+set smartcase
+set noshowmode
+set modeline
+set nospell
+
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
 autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
@@ -56,6 +71,18 @@ let g:ale_sign_style_warning=''
 let g:ale_sign_warning=''
 let g:ale_statusline_format = [' %d', ' %d', ' %d']
 let g:ale_virtualtext_cursor = 0
+
+let g:ale_echo_cursor = 0
+"let g:ale_virtualtext_cursor = 1
+"let g:ale_virtualtext_prefix = '▬▶  '
+"let g:ale_set_balloons = 1
+let g:ale_floating_window_border = repeat([''], 6)
+let g:ale_hover = 1
+let g:ale_floating_preview_cursor = 1
+let g:ale_floating_preview = 1
+let g:ale_hover_to_preview = 1
+let g:ale_hover_to_floating_preview = 1
+let g:ale_detail_to_floating_preview = 1
 
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
@@ -100,7 +127,8 @@ if filereadable('Gemfile.lock') && !len(matchstr(readfile(expand('Gemfile.lock')
   let g:ale_linters['ruby'] = ['rubocop']
 endif
 
-let g:ale_floating_preview = 1
+"nmap <Leader>d :ALEDetail<CR>
+"nmap <Leader>dd :ALEHover<CR>
 
 nmap <silent> <leader>pd <cmd>Gitsigns preview_hunk<CR>
 nmap <silent> <leader>pr <cmd>Gitsigns reset_hunk<CR>
@@ -243,7 +271,7 @@ require("bufferline").setup({
           show_buffer_close_icons = true,
           separator_style = "slant",
           always_show_bufferline = true,
-          sort_by = 'relative_directory',  
+          sort_by = 'relative_directory',
         },
         highlights = {
           background = {
@@ -337,7 +365,7 @@ require('indent_guides').setup({
   indent_space_guides = true;
   indent_tab_guides = true;
   indent_soft_pattern = '\\s';
-  exclude_filetypes = {'help','dashboard','dashpreview','NvimTree','vista','sagahover'};
+  exclude_filetypes = {'help','dashboard','dashpreview','NvimTree','vista','sagahover', 'fzf', 'noice', 'fugitive', 'git', 'ccc-ui'};
   odd_colors = { fg ='#332717',bg='#332b36' };
   even_colors = {fg='#332b36',bg='#332717'};
 })
@@ -361,25 +389,20 @@ require('bqf').setup({
         }
     }
 })
-require('numb').setup()
+require('numb').setup({})
 require('gitsigns').setup({
   signs = {
-    add          = { text = '▌' },
-    change       = { text = '▌' },
-    delete       = { text = '►' },
+    add          = { text = '▍' },
+    change       = { text = '▍' },
+    delete       = { text = '' },
     topdelete    = { text = '' },
     changedelete = { text = '' },
-    untracked    = { text = '|' },
+    untracked    = { text = '▏' },
   },
   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
   numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
   linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
   word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-  watch_gitdir = {
-    interval = 1000,
-    follow_files = true
-  },
-  attach_to_untracked = true,
   current_line_blame = true,
   current_line_blame_opts = {
     virt_text = true,
@@ -388,15 +411,11 @@ require('gitsigns').setup({
     ignore_whitespace = false,
   },
   current_line_blame_formatter = ' <author>, <author_time:%Y-%m-%d> - <summary> <abbrev_sha>',
-  sign_priority = 6,
-  update_debounce = 100,
-  status_formatter = nil,
-  max_file_length = 40000,
   preview_config = {
     border = 'single',
     style = 'minimal',
     relative = 'cursor',
-    row = 0,
+    row = 1,
     col = 1
   },
   _signs_staged_enable = true,
@@ -412,6 +431,7 @@ custom_onedark.inactive.c.bg = '#353535'
 custom_onedark.inactive.c.fg = '#a8a494'
 
 require('fzf-lua').setup({
+  -- fzf_bin         = 'fzf-tmux',
   nbsp = '\xc2\xa0',
   file_icon_padding = ' ',
   height           = 0.95,            -- window height
@@ -459,6 +479,7 @@ require('fzf-lua').setup({
         ["png"] = { "viu", "-b" },
         ["jpg"] = { "viu", "-b" },
         ["gif"] = { "viu", "-b" },
+        ["svg"] = { "chafa" },
       },
     },
   },
@@ -612,7 +633,12 @@ require('nvim-tree').setup({
 	}
 })
 require('silicon').setup({})
-require('ccc').setup({})
+local ccc = require("ccc")
+require('ccc').setup({
+  inputs = {
+    ccc.input.cmyk,
+  }
+})
 -- config = function()
 --   vim.o.winwidth = 20
 --   vim.o.winminwidth = 20
@@ -633,9 +659,8 @@ require('scrollbar').setup({
     max_lines = false, -- disables if no. of lines in buffer exceeds this
     handle = {
         text = " ",
-        color = nil,
+        color = '#4f4f4f',
         cterm = nil,
-        highlight = "StatusLine",
         hide_if_all_visible = true, -- Hides handle if all lines are visible
     },
     handlers = {
@@ -652,8 +677,8 @@ require('scrollbar').setup({
         Info = { color = '#458599', text = { "", "", 'ﰧ' } },
         Hint = { color = '#689D6A', text = { "", "", 'ﰧ' } },
         Misc = { color = '#B16286', text = { "", "", 'ﰧ' } },
-        GitAdd = { color = '#b9eeb8', text = '┃' },
-        GitChange = { color = '#C643C6', text = '┃' },
+        GitAdd = { color = '#a4d2a2', text = '┃' },
+        GitChange = { color = '#5b1f5b', text = '┃' },
         GitDelete = { color = '#ff8378', text = '┃' },
     },
 })
@@ -684,6 +709,25 @@ require("recorder").setup({
 })
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
+-- require('colorful-winsep').setup({
+--   highlight = {
+--     fg = "#686868",
+--     bg = "#3e4249",
+--   },
+-- })
+require("statuscol").setup({setopt = true, order = "FNsS"})
+require('reticle').setup({
+    never = {
+        cursorline = { 
+          'help', 'dashboard', 'noice', 'git', 'fzf', 'ccc-ui' 
+        },
+        cursorcolumn = {
+          'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
+        },
+    },
+    always_show_cl_number = true,
+    always_highlight_number = true,
+})
 require("noice").setup({
   presets = {
     bottom_search = true, -- use a classic bottom cmdline for search

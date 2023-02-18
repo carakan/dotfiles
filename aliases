@@ -44,9 +44,9 @@ gref() {
 # Git
 alias gap="git add -p"
 alias gnap='git add -N . && gap && gref'
-# disable zsh git plugin
-alias gsr='gst'
-alias gcd1='git clone --depth=1'
+# disable zsh git 
+alias gitls='git log --pretty=format:"%C(green)%h\ %C(yellow)[%ad]%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --date=relative'
+alias gitll='git log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --numstat'
 
 # usb
 alias usbtree='ioreg -p IOUSB -l -w 0'
@@ -101,7 +101,8 @@ alias zshconfig="vim -o ~/.zshrc && source ~/.zshrc"
 alias zshplugins="vim ~/.oh-my-zsh"
 
 # ripgrep - rg is taken by rails generate alias from the oh-my-zsh rails plugin
-alias rgrep='command rg'
+alias grep='rg'
+alias fo="fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim"
 
 # curl
 # usage postjson '{"key": "value"}' http://example.com/create_record

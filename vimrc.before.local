@@ -3,8 +3,10 @@ set termguicolors
 set cmdheight=0
 set fillchars+=diff:╱,foldopen:▾,foldsep:￨,foldclose:▸
 set nolazyredraw
+set splitkeep=topline
+" set splitkeep=screen
 
-set diffopt+=algorithm:histogram,indent-heuristic,vertical,hiddenoff,linematch:60
+set diffopt+=iblank,iwhite,algorithm:histogram,indent-heuristic,vertical,hiddenoff,linematch:60
 
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
@@ -36,3 +38,5 @@ let g:loaded_ruby_provider = 0
 let g:ale_disable_lsp = 1
 let g:ale_completion_enabled = 0
 let g:loaded_matchit = 1
+
+autocmd FileType noice,fugitive,help set cc=
