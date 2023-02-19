@@ -18,6 +18,9 @@
     ~/.config/kitty/kitty.conf:
         create: true
         path: kitty/kitty.conf
+    ~/.config/.ripgreprc:
+        create: true
+        path: config/ripgreprc
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc

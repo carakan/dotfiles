@@ -122,6 +122,8 @@ export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat 
 export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
+
 eval "$(direnv hook zsh)"
 
 function update_brach(){
