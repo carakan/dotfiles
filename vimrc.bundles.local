@@ -50,7 +50,8 @@ call dein#add('lewis6991/gitsigns.nvim')
 call dein#add('ibhagwan/fzf-lua')
 
 call dein#add('chrisgrieser/nvim-recorder')
-
+call dein#add("m4xshen/smartcolumn.nvim")
+call dein#add("lukas-reineke/indent-blankline.nvim")
 
 call dein#add("MunifTanjim/nui.nvim")
 call dein#add("rcarriga/nvim-notify")

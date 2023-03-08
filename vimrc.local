@@ -76,13 +76,13 @@ let g:ale_echo_cursor = 0
 "let g:ale_virtualtext_cursor = 1
 "let g:ale_virtualtext_prefix = '▬▶  '
 "let g:ale_set_balloons = 1
-let g:ale_floating_window_border = repeat([''], 6)
 let g:ale_hover = 1
 let g:ale_floating_preview_cursor = 1
 let g:ale_floating_preview = 1
 let g:ale_hover_to_preview = 1
 let g:ale_hover_to_floating_preview = 1
 let g:ale_detail_to_floating_preview = 1
+let g:ale_use_neovim_diagnostics_api = 1
 
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
@@ -358,17 +358,24 @@ require('hlslens').setup({
     require("scrollbar.handlers.search").handler.show(plist.start_pos)
   end,
 })
-require('indent_guides').setup({
-  indent_levels = 30;
-  indent_guide_size = 1;
-  indent_start_level = 2;
-  indent_space_guides = true;
-  indent_tab_guides = true;
-  indent_soft_pattern = '\\s';
-  exclude_filetypes = {'help','dashboard','dashpreview','NvimTree','vista','sagahover', 'fzf', 'noice', 'fugitive', 'git', 'ccc-ui'};
-  odd_colors = { fg ='#332717',bg='#332b36' };
-  even_colors = {fg='#332b36',bg='#332717'};
+vim.cmd [[highlight IndentBlanklineIndent1 guibg=#332717 gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent2 guibg=#332b36 gui=nocombine]]
+require("indent_blankline").setup({
+    char = " ",
+    char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
 })
+require("smartcolumn").setup(
+  {
+    colorcolumn = { "80", "100", "120" },
+    disabled_filetypes = { 
+      'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
+    },
+    scope = "window",
+  }
+)
 require('bqf').setup({
     auto_enable = true,
     preview = {
@@ -451,7 +458,9 @@ require('fzf-lua').setup({
     -- debug             = true,
     file_icons        = true,
     color_icons       = false,
-    rg_opts = '--color=never --files --no-ignore-vcs --smart-case --hidden --follow --no-messages --ignore-file $HOME/.ignore'
+  },
+  grep = {
+    color_icons       = false,
   },
   git = {
     icons = {
@@ -715,7 +724,20 @@ require("recorder").setup({
 --     bg = "#3e4249",
 --   },
 -- })
-require("statuscol").setup({setopt = true, order = "FNsS"})
+local builtin = require("statuscol.builtin")
+require("statuscol").setup({
+	relculright = true,
+	segments = {
+		{ text = { builtin.lnumfunc, " " }, condition = { true, builtin.not_empty }, click = "v:lua.ScLa", },
+    { text = { "%s" }, click = "v:lua.ScSa" },
+		{
+      text = { builtin.foldfunc },
+      condition = { builtin.not_empty },
+      click = "v:lua.ScFa"
+    },
+  }
+});
+-- require("statuscol").setup({setopt = true, order = "FNsS"})
 require('reticle').setup({
     never = {
         cursorline = { 
@@ -749,6 +771,14 @@ require("noice").setup({
       },
   },
 })
+
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  local linehl = "DiagnosticUnderline" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+end
+
 EOF
 hi BqfPreviewBorder guifg=#385075
 hi link BqfPreviewRange Search
