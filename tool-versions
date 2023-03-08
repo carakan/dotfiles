@@ -3,3 +3,4 @@ erlang 24.2
 ruby 3.2.0
 nodejs 16.13.0
 yarn 1.22.18
+bun 0.5.7
