@@ -6,11 +6,9 @@
 --colors=line:style:bold
 --colors=path:fg:0xFF,0xC6,0x6D
 
---hidden
 --smart-case
 --column
 --line-number
 --max-columns=4096
 --max-columns-preview
-
-
+--no-heading 
