@@ -366,9 +366,9 @@ require('hlslens').setup({
     local indicator, text, chunks
     local absRelIdx = math.abs(relIdx)
     if absRelIdx > 1 then
-      indicator = ('%d%s'):format(absRelIdx, sfw ~= (relIdx > 1) and '▲' or '▼')
+      indicator = ('%d%s'):format(absRelIdx, sfw ~= (relIdx > 1) and ' ▲' or '▼')
     elseif absRelIdx == 1 then
-      indicator = sfw ~= (relIdx == 1) and '▲' or '▼'
+      indicator = sfw ~= (relIdx == 1) and ' ▲' or '▼'
     else
       indicator = ''
     end
@@ -376,9 +376,9 @@ require('hlslens').setup({
     if nearest then
       local cnt = #posList
       if indicator ~= '' then
-          text = ('[%s %d/%d]'):format(indicator, idx, cnt)
+        text = ('[%s %d/%d]'):format(indicator, idx, cnt)
       else
-          text = ('[%d/%d]'):format(idx, cnt)
+        text = ('[%d/%d]'):format(idx, cnt)
       end
       chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensNear'}}
     else
@@ -386,10 +386,7 @@ require('hlslens').setup({
       chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
     end
     render.setVirt(0, lnum - 1, col - 1, chunks, nearest)
-  end,
-  build_position_cb = function(plist, _, _, _)
-    require("scrollbar.handlers.search").handler.show(plist.start_pos)
-  end,
+  end
 })
 vim.cmd [[highlight IndentBlanklineIndent1 guibg=#332717 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent2 guibg=#332b36 gui=nocombine]]
@@ -434,10 +431,10 @@ require('gitsigns').setup({
   signs = {
     add          = { text = '▍' },
     change       = { text = '▍' },
-    delete       = { text = '' },
-    topdelete    = { text = '' },
-    changedelete = { text = '' },
-    untracked    = { text = '▏' },
+    delete       = { text = '▸' },
+    topdelete    = { text = '◂' },
+    changedelete = { text = '◂' },
+    untracked    = { text = '|' },
   },
   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
   numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -564,7 +561,7 @@ require('nvim-treesitter.configs').setup({
     },
     ensure_installed = {
       'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
-      'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
+      'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
       'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'php',
       'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
     },
@@ -572,7 +569,7 @@ require('nvim-treesitter.configs').setup({
         enable = false,
     },
     playground = {
-        enable = false,
+        enable = true,
         disable = {},
         updatetime = 25, -- debounced time for highlighting nodes in teh playground from source code
         persist_queries = false, -- Whether the query persists across vim sessions
@@ -712,13 +709,13 @@ require('scrollbar').setup({
         ale = true, -- Requires ALE
     },
     marks = {
-        Cursor = { color = '#000000', text = '', priority = 3 },
-        Search = { color = '#0095CB', text = { "", "", 'ﰧ' } },
-        Error = { color = '#FF5D4F', text = { "", "", 'ﰧ' } },
-        Warn = { color = '#FABD2F', text = { "", "", 'ﰧ' } },
-        Info = { color = '#458599', text = { "", "", 'ﰧ' } },
-        Hint = { color = '#689D6A', text = { "", "", 'ﰧ' } },
-        Misc = { color = '#B16286', text = { "", "", 'ﰧ' } },
+        Cursor = { color = '#000000', text = '◂', priority = 3 },
+        Search = { color = '#0095CB', text = { "─", "", 'ﰧ' } },
+        Error = { color = '#FF5D4F', text = { "─", "", 'ﰧ' } },
+        Warn = { color = '#FABD2F', text = { "─", "", 'ﰧ' } },
+        Info = { color = '#458599', text = { "─", "", 'ﰧ' } },
+        Hint = { color = '#689D6A', text = { "─", "", 'ﰧ' } },
+        Misc = { color = '#B16286', text = { "─", "", 'ﰧ' } },
         GitAdd = { color = '#a4d2a2', text = '┃' },
         GitChange = { color = '#5b1f5b', text = '┃' },
         GitDelete = { color = '#ff8378', text = '┃' },
@@ -784,6 +781,14 @@ require('reticle').setup({
     always_highlight_number = true,
 })
 require("noice").setup({
+  lsp = {
+    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
+    },
+  },
   presets = {
     bottom_search = true, -- use a classic bottom cmdline for search
     command_palette = false,
