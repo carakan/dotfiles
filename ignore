@@ -21,3 +21,5 @@ tags.*
 tmp/**/*
 *.beam
 *.keep
+!.env*
+!/logs/*
