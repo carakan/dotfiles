@@ -153,11 +153,6 @@ nnoremap <C-L> <C-W><C-L>
 set splitbelow
 set splitright
 
-" Make it obvious where 80 characters is
-set textwidth=120
-set colorcolumn=+1
-let &colorcolumn = '80,' . join(range(120, 999), ',')
-
 " Vim-grepper (replaced)
 nnoremap <leader>ag  <cmd>lua require('fzf-lua').grep()<CR>
 

@@ -2,5 +2,5 @@ elixir 1.13.1-otp-24
 erlang 24.2
 ruby 3.2.0
 nodejs 16.13.0
-yarn 1.22.18
+yarn 1.22.19
 bun 0.5.7

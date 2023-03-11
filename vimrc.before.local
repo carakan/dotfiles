@@ -1,7 +1,7 @@
 set runtimepath+=/usr/local/opt/fzf
 set termguicolors
 set cmdheight=0
-set fillchars+=diff:╱,foldopen:▾,foldsep:￨,foldclose:▸
+set fillchars+=diff:╱,foldopen:▾,foldsep:│,foldclose:▸
 set nolazyredraw
 set splitkeep=topline
 " set splitkeep=screen
@@ -10,17 +10,6 @@ set diffopt+=iblank,iwhite,algorithm:histogram,indent-heuristic,vertical,hiddeno
 
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-
-augroup diff
-  au!
-  autocmd OptionSet diff let &cursorline=!v:option_new
-  autocmd OptionSet diff silent! 1 | silent! normal! ]c
-augroup end
-
-augroup scrollbar_search_hide
-    autocmd!
-    autocmd CmdlineLeave : lua require('scrollbar.handlers.search').handler.hide()
-augroup END
 
 set signcolumn=auto:1
 let g:spf13_bundle_groups=['general', 'programming', 'neocomplete', 'javascript', 'html', 'ruby', 'elixir', 'misc']
