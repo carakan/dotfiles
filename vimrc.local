@@ -261,12 +261,22 @@ require("bufferline").setup({
           right_trunc_marker = "",
           max_name_length = 25,
           tab_size = 25,
-          diagnostics = "coc",
+          diagnostics = "nvim_lsp",
           show_tab_indicators = true,
           show_buffer_close_icons = true,
           separator_style = "slant",
           always_show_bufferline = true,
           sort_by = 'relative_directory',
+          modified_icon = "",
+          hover = {
+            enabled = true,
+            delay = 200,
+            reveal = { 'close' }
+          },
+          diagnostics_indicator = function(count, level, diagnostics_dict, context)
+            local icon = level:match("error") and "" or ""
+            return " " .. icon .. count
+          end
         },
         highlights = {
           background = {
@@ -319,7 +329,35 @@ require("bufferline").setup({
           modified_selected = {
             fg = "#ffffff",
             bg = "#282c34",
-          }
+          },
+          warning = {
+            fb = "#4f4a3c",
+            bg = "#181621",
+          },
+          warning_visible = {
+            fb = "#4f4a3c",
+            bg = "#181621",
+          },
+          warning_selected = {
+            fg = "#d3c28f",
+            bg = "#282c34",
+          },
+          warning_diagnostic_selected = {
+            fg = "#f9b145",
+            bg = "#282c34",
+            italic = false,
+            bold = false,
+          },
+          error_selected = {
+            fg = "#d6b39e",
+            bg = "#282c34",
+          },
+          error_diagnostic_selected = {
+            fg = "#F47454",
+            bg = "#282c34",
+            italic = false,
+            bold = false,
+          },
         }
 })
 require('hlslens').setup({
@@ -364,7 +402,7 @@ require("indent_blankline").setup({
 })
 require("smartcolumn").setup(
   {
-    colorcolumn = { "80", "100", "120" },
+    colorcolumn = { "80", "120", "150" },
     disabled_filetypes = { 
       'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
     },
@@ -502,9 +540,9 @@ require('lualine').setup({
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', {'diagnostics', sources={'coc'}}, 'grepper#statusline'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {{'filename', path = 1, shorting_target = 80}, {'filetype', icon_only = true}},
-    lualine_x = {'encoding', 'fileformat'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -767,7 +805,7 @@ require("noice").setup({
   },
 })
 
-local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   local linehl = "DiagnosticUnderline" .. type
