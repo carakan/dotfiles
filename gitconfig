@@ -12,15 +12,15 @@
 [user]
 
 [core]
-	editor = /usr/local/bin/nvim
-	excludesfile = ~/.gitignore_global
+  editor = /usr/local/bin/nvim
+  excludesfile = ~/.gitignore_global
   pager = delta
 [commit]
 [pull]
   rebase = true
 [rebase]
   autoStash = true
-	updateRefs = true
+  updateRefs = true
 [color]
   ui = auto
 [fetch]
@@ -36,7 +36,7 @@
 
 [diff]
   colorMoved = default
-	context = 1
+  context = 1
 [stash]
   showStat = true
   showPatch = true

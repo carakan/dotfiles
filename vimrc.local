@@ -59,6 +59,7 @@ let g:tmux_navigator_disable_when_zoomed = 1
 let g:ale_use_global_executables = 1
 let g:ale_set_highlights = 1
 let g:ale_completion_enabled = 0
+let g:ale_lint_delay = 300
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_save = 1
@@ -73,14 +74,14 @@ let g:ale_statusline_format = [' %d', ' %d', ' %d']
 let g:ale_virtualtext_cursor = 0
 
 let g:ale_echo_cursor = 0
-"let g:ale_virtualtext_cursor = 1
-"let g:ale_virtualtext_prefix = '▬▶  '
-"let g:ale_set_balloons = 1
-let g:ale_hover = 1
-let g:ale_floating_preview_cursor = 1
-let g:ale_floating_preview = 1
-let g:ale_hover_to_preview = 1
-let g:ale_hover_to_floating_preview = 1
+" let g:ale_virtualtext_cursor = 1
+" let g:ale_virtualtext_prefix = '▬▶  '
+" let g:ale_set_balloons = 1
+" let g:ale_hover = 1
+" let g:ale_floating_preview_cursor = 1
+" let g:ale_floating_preview = 1
+" let g:ale_hover_to_preview = 1
+" let g:ale_hover_to_floating_preview = 1
 let g:ale_detail_to_floating_preview = 1
 let g:ale_use_neovim_diagnostics_api = 1
 
@@ -361,6 +362,9 @@ require("bufferline").setup({
         }
 })
 require('hlslens').setup({
+  calm_down = true,
+  virt_priority = 2,
+  nearest_only = true,
   override_lens = function(render, posList, nearest, idx, relIdx)
     local sfw = vim.v.searchforward == 1
     local indicator, text, chunks
@@ -555,28 +559,33 @@ require('lualine').setup({
   extensions = {'fzf', 'fugitive', 'nvim-tree', 'quickfix'},
 })
 require('nvim-treesitter.configs').setup({
-    matchup = {
-      enable = true,              -- mandatory, false will disable the whole extension
-      -- [options]
-    },
-    ensure_installed = {
-      'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
-      'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
-      'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'php',
-      'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
-    },
-    highlight = {
-        enable = false,
-    },
-    playground = {
-        enable = true,
-        disable = {},
-        updatetime = 25, -- debounced time for highlighting nodes in teh playground from source code
-        persist_queries = false, -- Whether the query persists across vim sessions
-    },
-    autotag = {
-        enable = false,
-    },
+  textobjects = {
+    select = {
+      enable = true,
+    }
+  },
+  matchup = {
+    enable = true,  -- mandatory, false will disable the whole extension
+    -- [options]
+  },
+  ensure_installed = {
+    'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
+    'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
+    'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'php',
+    'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
+  },
+  highlight = {
+    enable = false,
+  },
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- debounced time for highlighting nodes in teh playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+  },
+  autotag = {
+      enable = false,
+  },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -691,35 +700,36 @@ require('ccc').setup({
 --    }})
 -- end
 require('scrollbar').setup({
-    show = true,
-    show_in_active_only = false,
-    set_highlights = true,
-    folds = 1000, -- handle folds, set to number to disable folds if no. of lines in buffer exceeds this
-    max_lines = false, -- disables if no. of lines in buffer exceeds this
-    handle = {
-        text = " ",
-        color = '#4f4f4f',
-        cterm = nil,
-        hide_if_all_visible = true, -- Hides handle if all lines are visible
-    },
-    handlers = {
-        diagnostic = true,
-        search = true, -- Requires hlslens to be loaded
-        gitsigns = true, -- Requires gitsigns.nvim
-        ale = true, -- Requires ALE
-    },
-    marks = {
-        Cursor = { color = '#000000', text = '◂', priority = 3 },
-        Search = { color = '#0095CB', text = { "─", "", 'ﰧ' } },
-        Error = { color = '#FF5D4F', text = { "─", "", 'ﰧ' } },
-        Warn = { color = '#FABD2F', text = { "─", "", 'ﰧ' } },
-        Info = { color = '#458599', text = { "─", "", 'ﰧ' } },
-        Hint = { color = '#689D6A', text = { "─", "", 'ﰧ' } },
-        Misc = { color = '#B16286', text = { "─", "", 'ﰧ' } },
-        GitAdd = { color = '#a4d2a2', text = '┃' },
-        GitChange = { color = '#5b1f5b', text = '┃' },
-        GitDelete = { color = '#ff8378', text = '┃' },
-    },
+  show = true,
+  show_in_active_only = false,
+  set_highlights = true,
+  folds = 1000, -- handle folds, set to number to disable folds if no. of lines in buffer exceeds this
+  max_lines = false, -- disables if no. of lines in buffer exceeds this
+  handle = {
+    text = " ",
+    color = '#6f6f6f',
+    cterm = nil,
+    hide_if_all_visible = true, -- Hides handle if all lines are visible
+    blend = 40,
+  },
+  handlers = {
+    diagnostic = true,
+    search = true, -- Requires hlslens to be loaded
+    gitsigns = true, -- Requires gitsigns.nvim
+    ale = false, -- Requires ALE
+  },
+  marks = {
+    Cursor = { color = '#afafaf', text = '◂', priority = 3 },
+    Search = { color = '#0095CB', text = { "-", "", 'ﰧ' } },
+    Error = { color = '#FF5D4F', text = { "-", "", 'ﰧ' } },
+    Warn = { color = '#FABD2F', text = { "-", "", 'ﰧ' } },
+    Info = { color = '#458599', text = { "-", "", 'ﰧ' } },
+    Hint = { color = '#689D6A', text = { "-", "", 'ﰧ' } },
+    Misc = { color = '#B16286', text = { "-", "", 'ﰧ' } },
+    GitAdd = { color = '#a4d2a2', text = '┃' },
+    GitChange = { color = '#5b1f5b', text = '┃' },
+    GitDelete = { color = '#ff8378', text = '┃' },
+  },
 })
 require("recorder").setup({
   -- Named registers where macros are saved. The first register is the default
@@ -756,18 +766,22 @@ require("recorder").setup({
 -- })
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
-	relculright = true,
-	segments = {
-		{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
-		{
+  ft_ignore = {
+          'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
+        }, 
+  relculright = true,
+  setopt = true,
+  segments = {
+    { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+    {
       text = { builtin.foldfunc },
       hl = "FoldColumn",
-      click = "v:lua.ScFa"
+      click = "v:lua.ScFa",
+      maxwidth = 1,
     },
-    { text = { ' ', "%s" }, condition = { builtin.not_empty, true }, click = "v:lua.ScSa" },
+    { text = { ' ', "%s" }, maxwidth = 1, condition = { builtin.not_empty, true }, click = "v:lua.ScSa" },
   }
 });
--- require("statuscol").setup({setopt = true, order = "FNsS"})
 require('reticle').setup({
     never = {
         cursorline = { 
@@ -790,23 +804,26 @@ require("noice").setup({
     },
   },
   presets = {
-    bottom_search = true, -- use a classic bottom cmdline for search
+    bottom_search = false, -- use a classic bottom cmdline for search
     command_palette = false,
     long_message_to_split = true, -- long messages will be sent to a split
     inc_rename = false, -- enables an input dialog for inc-rename.nvim
     lsp_doc_border = false, -- add a border to hover docs and signature help
   },
   views = {
-      cmdline_popup = {
-        border = {
-          style = "none",
-          padding = { 2, 3 },
-        },
-        filter_options = {},
-        win_options = {
-          winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-        },
+    cmdline_popup = {
+      border = {
+        style = "none",
+        padding = { 2, 3 },
       },
+      filter_options = {},
+      win_options = {
+        winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+      },
+    },
+  },
+  messages = {
+    view_search = false, -- view for search count messages. Set to `false` to disable
   },
 })
 
