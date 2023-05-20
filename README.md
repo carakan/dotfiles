@@ -108,9 +108,12 @@ awk 'BEGIN{
 }'
 ```
 
-I use NeoVim because I have had a lot of problems switching from insert mode
-to normal using vim, I researching a lot and I'm not found a valid solution for that, the only solution for now is change
-to using neovim and looks more better/modern alternative.
+~~I use NeoVim because I have had a lot of problems switching from insert mode
+to normal using vim, I researching a lot and I'm not found a valid solution for
+that, the only solution for now is change to neovim and looks more better/modern
+alternative.~~
+
+This setup is for NeoVim.
 
 So you need to install python (3):
 

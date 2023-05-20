@@ -519,9 +519,9 @@ require('fzf-lua').setup({
     },
     builtin = {
       extensions = {
-        ["png"] = { "viu", "-b" },
-        ["jpg"] = { "viu", "-b" },
-        ["gif"] = { "viu", "-b" },
+        ["png"] = { "chafa" },
+        ["jpg"] = { "chafa" },
+        ["gif"] = { "chafa" },
         ["svg"] = { "chafa" },
       },
     },

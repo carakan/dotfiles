@@ -13,6 +13,7 @@ alias vs="nvr -cc vsplit"
 alias tree="tree -C"
 alias clear='clear && printf "\e[3J"'
 alias cat='bat'
+alias icat="kitty +kitten icat"
 alias c='cat'
 alias top='htop'
 
