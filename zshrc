@@ -1,4 +1,4 @@
-ZSH_DISABLE_COMPFIX=true
+export ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/carakan/.oh-my-zsh
 # Set name of the theme to load.
@@ -7,15 +7,18 @@ export ZSH=/Users/carakan/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # Another powerful theme
 # ZSH_THEME="clean"
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#726f5a,bold,italic"
-ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
-ZSH_AUTOSUGGEST_USE_ASYNC=true
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8e8a70,bold,italic"
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+export ZSH_AUTOSUGGEST_USE_ASYNC=true
 
-DISABLE_UPDATE_PROMPT=true
+export DISABLE_UPDATE_PROMPT=true
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_TMUX_ITERM2=true
- 
+export ZSH_THEME="powerlevel10k/powerlevel10k"
+
+export ZSH_TMUX_DEFAULT_SESSION_NAME=main
+export ZSH_TMUX_AUTOCONNECT=true
+export ZSH_TMUX_AUTOSTART=true
+
 # export TERM=xterm-256color-italic
 export TERM="tmux-256color"
 
