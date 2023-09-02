@@ -160,8 +160,8 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-#load ASDF for homebrew installation
-. /usr/local/opt/asdf/libexec/asdf.sh
+# load ASDF for homebrew installation
+source "$(brew --prefix asdf)/libexec/asdf.sh"
 
 export PATH="/usr/local/opt/postgresql@13/bin:$PATH"
 

@@ -438,7 +438,7 @@ require('gitsigns').setup({
     delete       = { text = '▸' },
     topdelete    = { text = '◂' },
     changedelete = { text = '◂' },
-    untracked    = { text = '|' },
+    untracked    = { text = '│' },
   },
   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
   numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -518,6 +518,7 @@ require('fzf-lua').setup({
       pager        = "delta",
     },
     builtin = {
+      treesitter = { enable = false},
       extensions = {
         ["png"] = { "chafa" },
         ["jpg"] = { "chafa" },
@@ -570,9 +571,9 @@ require('nvim-treesitter.configs').setup({
   },
   ensure_installed = {
     'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
-    'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'graphql', 'html', 'http',
-    'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'php',
-    'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'yaml'
+    'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 'graphql', 'html', 'http',
+    'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'pem', 'php',
+    'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
   },
   highlight = {
     enable = false,
@@ -731,31 +732,7 @@ require('scrollbar').setup({
     GitDelete = { color = '#ff8378', text = '┃' },
   },
 })
-require("recorder").setup({
-  -- Named registers where macros are saved. The first register is the default
-	-- register/macro-slot used after startup. 
-	slots = {"a", "b", 'c', 'd', 'e', 'f'},
-
-	-- default keymaps, see README for description what the commands do
-	mapping = {
-		startStopRecording = "q",
-		playMacro = "Q",
-		switchSlot = "<C-q>",
-		editMacro = "cq",
-		yankMacro = "yq", -- also decodes it for turning macros to mappings
-		addBreakPoint = "#",
-	},
-
-	-- clears all macros-slots on startup
-	clear = false,
-
-	-- log level used for any notification, mostly relevant for nvim-notify
-	-- (note that by default, nvim-notify does not show the levels trace and debug.)
-	logLevel = vim.log.levels.INFO,
-
-	-- experimental, see README
-	dapSharedKeymaps = false,
-})
+-- require("recorder").setup({});
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
 -- require('colorful-winsep').setup({
@@ -764,6 +741,7 @@ require("recorder").setup({
 --     bg = "#3e4249",
 --   },
 -- })
+-- require('modicator').setup({});
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
   ft_ignore = {
@@ -824,7 +802,7 @@ require("noice").setup({
   },
 })
 
-require("advanced_git_search.fzf").setup{
+require("advanced_git_search.fzf").setup({
   -- fugitive or diffview
   diff_plugin = "fugitive",
   -- customize git in previewer
@@ -835,7 +813,9 @@ require("advanced_git_search.fzf").setup{
   git_diff_flags = {},
   -- Show builtin git pickers when executing "show_custom_functions" or :AdvancedGitSearch
   show_builtin_git_pickers = false,
-}
+})
+require('flash').setup({})
+
 
 local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 for type, icon in pairs(signs) do
