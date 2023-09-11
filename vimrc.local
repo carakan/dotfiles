@@ -244,7 +244,8 @@ let g:mustache_abbreviations = 1
 let g:ember_tools_highlight_actions = 0
 
 " Configure node, python executable
-let g:node_host_prog = '/Users/carakan/.asdf/installs/nodejs/16.13.0/.npm/lib/node_modules/neovim/bin/cli.js'
+" let g:node_host_prog = '~/.bun/install/global/neovim/bin/cli.js'
+let g:node_host_prog = '~/.asdf/installs/nodejs/16.19.0/lib/node_modules/neovim/bin/cli.js'
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>
@@ -721,12 +722,12 @@ require('scrollbar').setup({
   },
   marks = {
     Cursor = { color = '#afafaf', text = '◂', priority = 3 },
-    Search = { color = '#0095CB', text = { "-", "", 'ﰧ' } },
-    Error = { color = '#FF5D4F', text = { "-", "", 'ﰧ' } },
-    Warn = { color = '#FABD2F', text = { "-", "", 'ﰧ' } },
-    Info = { color = '#458599', text = { "-", "", 'ﰧ' } },
-    Hint = { color = '#689D6A', text = { "-", "", 'ﰧ' } },
-    Misc = { color = '#B16286', text = { "-", "", 'ﰧ' } },
+    Search = { color = '#0095CB', text = { "-", "=" } },
+    Error = { color = '#FF5D4F', text = { "-", "=" } },
+    Warn = { color = '#FABD2F', text = { "-", "=" } },
+    Info = { color = '#458599', text = { "-", "=" } },
+    Hint = { color = '#689D6A', text = { "-", "=" } },
+    Misc = { color = '#B16286', text = { "-", "=" } },
     GitAdd = { color = '#a4d2a2', text = '┃' },
     GitChange = { color = '#5b1f5b', text = '┃' },
     GitDelete = { color = '#ff8378', text = '┃' },
@@ -899,9 +900,9 @@ let g:coc_global_extensions = [
   \ 'coc-sql',
   \ 'coc-styled-components',
   \ 'coc-tag',
-  \ 'https://github.com/rodrigore/coc-tailwind-intellisense',
+  \ '@yaegassy/coc-tailwindcss3',
   \ 'coc-tsserver',
-  \ 'https://github.com/gianarb/coc-grammarly',
+  \ 'coc-grammarly',
   \ 'coc-vetur',
   \ 'coc-vimlsp',
   \ 'coc-word',
