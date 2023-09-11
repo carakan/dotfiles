@@ -732,6 +732,8 @@ require('scrollbar').setup({
     GitDelete = { color = '#ff8378', text = '┃' },
   },
 })
+require("gitlinker").setup({});
+-- require("octo").setup({});
 -- require("recorder").setup({});
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
@@ -886,7 +888,6 @@ let g:coc_global_extensions = [
   \ 'coc-emoji',
   \ 'coc-highlight',
   \ 'coc-html',
-  \ 'coc-jira-complete',
   \ 'coc-json',
   \ 'coc-lists',
   \ 'coc-lua',
