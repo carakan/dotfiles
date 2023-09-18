@@ -168,7 +168,9 @@ npm i -g npm
 # Install the bundle Homebrew
 
 ```zsh
-brew bundle
+brew bundle dump # to create/update Brewfile
+brew bundle      # to install packages
+
 ```
 
 # Notes
