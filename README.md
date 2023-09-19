@@ -157,14 +157,6 @@ call into vim:
 :call map(dein#check_clean(), "delete(v:val, 'rf')")
 ```
 
-# UPGRADE NPM
-
-from npm > 5.4.x npm gets stability, to upgrade only do that:
-
-```
-npm i -g npm
-```
-
 # Install the bundle Homebrew
 
 ```zsh

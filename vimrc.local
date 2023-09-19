@@ -587,7 +587,7 @@ require('nvim-treesitter.configs').setup({
     'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
     'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 'graphql', 'html', 'http',
     'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'pem', 'php',
-    'python', 'regex', 'ruby', 'rust', 'scss', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
+    'python', 'regex', 'ruby', 'rust', 'scss', 'ssh_config', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
   },
   highlight = {
     enable = false,
