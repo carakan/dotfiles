@@ -151,6 +151,9 @@ defaults write com.apple.BluetoothAudioAgent "Stream - Flush Ring on Packet Drop
 defaults write com.apple.BluetoothAudioAgent "Stream - Max Outstanding Packets (editable)" 15
 defaults write com.apple.BluetoothAudioAgent "Stream Resume Delay" "0.75"
 
+defaults write bluetoothaudiod "Enable AptX codec" -bool true
+defaults write bluetoothaudiod "Enable AAC codec" -bool true
+
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
