@@ -395,13 +395,19 @@ require('hlslens').setup({
 })
 vim.cmd [[highlight IndentBlanklineIndent1 guibg=#332717 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent2 guibg=#332b36 gui=nocombine]]
-require("indent_blankline").setup({
-    char = " ",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
-})
+local highlight = {
+    "IndentBlanklineIndent1",
+    "IndentBlanklineIndent2",
+}
+require("ibl").setup {
+    indent = { highlight = highlight, char = " " },
+    --whitespace = {
+    --    highlight = highlight,
+    --    remove_blankline_trail = false,
+    --},
+    scope = { enabled = false },
+}
+
 require("smartcolumn").setup(
   {
     colorcolumn = { "80", "120", "150" },
