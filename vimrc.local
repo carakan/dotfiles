@@ -35,6 +35,8 @@ set nospell
 
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
 autocmd BufRead,BufNewFile *.html.eex set filetype=eelixir.html
+au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir.html
+au BufRead,BufNewFile mix.lock set filetype=elixir
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 
 " Disable arrows keys
@@ -906,6 +908,7 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-cssmodules',
   \ 'coc-emoji',
+  \ 'coc-elixir',
   \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-json',
