@@ -563,11 +563,11 @@ require('lualine').setup({
     globalstatus = false,
   },
   sections = {
-    lualine_a = {'mode'},
+    lualine_a = {'mode', 'searchcount'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {{'filename', path = 1, shorting_target = 80}, {'filetype', icon_only = true}},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
+    lualine_y = {'progress', 'tabs'},
     lualine_z = {'location'}
   },
   inactive_sections = {
@@ -782,6 +782,10 @@ require("statuscol").setup({
   }
 });
 require('reticle').setup({
+      on_startup = {
+        cursorline = true,
+        cursorcolumn = true,
+    },
     never = {
         cursorline = { 
           'help', 'dashboard', 'noice', 'git', 'fzf', 'ccc-ui' 
@@ -791,7 +795,6 @@ require('reticle').setup({
         },
     },
     always_show_cl_number = true,
-    always_highlight_number = true,
 })
 require("noice").setup({
   lsp = {
