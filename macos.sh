@@ -294,7 +294,11 @@ defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
 # Keep folders on top when sorting by name
-defaults write com.apple.finder _FXSortFoldersFirst -bool true
+# defaults write com.apple.finder _FXSortFoldersFirst -bool true
+defaults delete com.apple.finder "_FXSortFoldersFirst"
+
+defaults write com.apple.Finder NSUserKeyEquivalents -dict-add "Show Next Tab"       "@~\U2192"
+defaults write com.apple.Finder NSUserKeyEquivalents -dict-add "Show Previous Tab"   "@~\U2190"
 
 # When performing a search, search the current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
@@ -347,6 +351,7 @@ defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
 # Use list view in all Finder windows by default
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
+# TODO check this
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
 # Disable the warning before emptying the Trash
@@ -356,7 +361,7 @@ defaults write com.apple.finder WarnOnEmptyTrash -bool false
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 
 # Show the ~/Library folder
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+# chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
 # Show the /Volumes folder
 sudo chflags nohidden /Volumes
@@ -424,7 +429,7 @@ defaults write com.apple.dock mru-spaces -bool false
 # Remove the auto-hiding Dock delay
 defaults write com.apple.dock autohide-delay -float 0
 # Remove the animation when hiding/showing the Dock
-defaults write com.apple.dock autohide-time-modifier -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0.4
 
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
@@ -449,6 +454,34 @@ find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -dele
 #defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
 # Add a spacer to the right side of the Dock (where the Trash is)
 #defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
+
+
+# defaults write com.apple.safari NSUserKeyEquivalents -dict-add "Merge All Windows" "@~M"
+defaults write com.apple.Finder NSUserKeyEquivalents -dict-add "Merge All Windows" "@\$M"
+
+# Disable ⌃ + Space for "Select the previous input source"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌃ + ⌥ + Space for "Select next source in input menu"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌘ + Space for "Show Spotlight search"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌥ + ⌘ + Space for "Show Finder search window"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌃ + ↑ for "Mission Control"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 '<dict><key>enabled</key><false/></dict>'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 34 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌃ + ← for "Mission Control: Move left a space"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 '<dict><key>enabled</key><false/></dict>'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 '<dict><key>enabled</key><false/></dict>'
+# Disable ⌃ + → for "Mission Control: Move right a space"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 '<dict><key>enabled</key><false/></dict>'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 82 '<dict><key>enabled</key><false/></dict>'
+
+
+# Enable Text to Speech
+defaults write com.apple.speech.synthesis.general.prefs SpokenUIUseSpeakingHotKeyFlag -bool true
+# Speak selected text when the key is pressed. Option + Space : 2097
+defaults write com.apple.speech.synthesis.general.prefs SpokenUIUseSpeakingHotKeyCombo -int 2097
 
 # Hot corners
 # Possible values:
@@ -645,53 +678,6 @@ sudo mdutil -E / > /dev/null
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
 
-# Use a modified version of the Solarized Dark theme by default in Terminal.app
-osascript <<EOD
-
-tell application "Terminal"
-
-	local allOpenedWindows
-	local initialOpenedWindows
-	local windowID
-	set themeName to "Solarized Dark xterm-256color"
-
-	(* Store the IDs of all the open terminal windows. *)
-	set initialOpenedWindows to id of every window
-
-	(* Open the custom theme so that it gets added to the list
-	   of available terminal themes (note: this will open two
-	   additional terminal windows). *)
-	do shell script "open '$HOME/init/" & themeName & ".terminal'"
-
-	(* Wait a little bit to ensure that the custom theme is added. *)
-	delay 1
-
-	(* Set the custom theme as the default terminal theme. *)
-	set default settings to settings set themeName
-
-	(* Get the IDs of all the currently opened terminal windows. *)
-	set allOpenedWindows to id of every window
-
-	repeat with windowID in allOpenedWindows
-
-		(* Close the additional windows that were opened in order
-		   to add the custom theme to the list of terminal themes. *)
-		if initialOpenedWindows does not contain windowID then
-			close (every window whose id is windowID)
-
-		(* Change the theme for the initial opened terminal windows
-		   to remove the need to close them in order for the custom
-		   theme to be applied. *)
-		else
-			set current settings of tabs of (every window whose id is windowID) to settings set themeName
-		end if
-
-	end repeat
-
-end tell
-
-EOD
-
 # Enable “focus follows mouse” for Terminal.app and all X11 apps
 # i.e. hover over a window and start typing in it without clicking first
 #defaults write com.apple.terminal FocusFollowsMouse -bool true
@@ -703,9 +689,6 @@ defaults write com.apple.terminal SecureKeyboardEntry -bool true
 
 # Disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0
-
-# Install the Solarized Dark theme for iTerm
-open "${HOME}/init/Solarized Dark.itermcolors"
 
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false

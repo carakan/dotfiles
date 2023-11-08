@@ -75,6 +75,8 @@ call dein#add("luukvbaal/statuscol.nvim")
 call dein#add('Tummetott/reticle.nvim')
 
 call dein#add('aaronhallaert/advanced-git-search.nvim')
+call dein#add('mawkler/modicator.nvim')
+call dein#add('pwntester/octo.nvim')
 call dein#add('ruifm/gitlinker.nvim')
 " call dein#add('rktjmp/lush.nvim')
 " call dein#add('Dkendal/nvim-treeclimber')

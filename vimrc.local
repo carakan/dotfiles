@@ -755,7 +755,9 @@ require('scrollbar').setup({
   },
 })
 require("gitlinker").setup({});
--- require("octo").setup({});
+require("octo").setup({
+  picker = 'fzf-lua',
+});
 -- require("recorder").setup({});
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
@@ -794,7 +796,6 @@ require('reticle').setup({
           'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
         },
     },
-    always_show_cl_number = true,
 })
 require("noice").setup({
   lsp = {
