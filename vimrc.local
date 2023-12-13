@@ -230,7 +230,7 @@ nnoremap <leader>m <cmd>lua require('fzf-lua').keymaps()<CR>
 nnoremap <silent> <leader>o :<C-u>CocCommand fzf-preview.Ctags<CR>
 nnoremap <silent> F :<C-u>CocCommand fzf-preview.ProjectGrep  .<CR>
 xnoremap <silent> F "sy:FzfPreviewProjectGrep<Space>.<Space>-F<Space>-add-fzf-arg=--query="<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
-nnoremap <silent> <leader>M :<C-u>FzfPreviewProjectMruFiles<CR>
+nnoremap <silent> <leader>M <cmd>lua require('fzf-lua').resume()<cr>
 nnoremap <silent> <leader>b :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 " coc node
