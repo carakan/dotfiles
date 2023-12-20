@@ -130,6 +130,11 @@ KEYTIMEOUT=1
 # export ANDROID_HOME=/usr/local/share/android-sdk
 # export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 
+# neovim as default man reader
+if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
+  export MANPAGER="/usr/local/bin/nvr -c 'Man!' -o -"
+fi
+
 # Erlang elixir
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 1024000"
 

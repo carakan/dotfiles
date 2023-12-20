@@ -588,12 +588,14 @@ require('nvim-treesitter.configs').setup({
         lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
         keymaps = {
           -- You can use the capture groups defined in textobjects.scm
-          ['aa'] = '@parameter.outer',
-          ['ia'] = '@parameter.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
+            ["ak"] = { query = "@block.outer", desc = "around block" },
+            ["ik"] = { query = "@block.inner", desc = "inside block" },
+            ["ac"] = { query = "@class.outer", desc = "around class" },
+            ["ic"] = { query = "@class.inner", desc = "inside class" },
+            ["af"] = { query = "@function.outer", desc = "around function " },
+            ["if"] = { query = "@function.inner", desc = "inside function " },
+            ["aa"] = { query = "@parameter.outer", desc = "around argument" },
+            ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
         },
       },
       move = {
@@ -796,6 +798,9 @@ require('scrollbar').setup({
 require("gitlinker").setup({});
 require("octo").setup({
   picker = 'fzf-lua',
+  picker_config = {
+    use_emojis = true,
+  },
 });
 -- require("recorder").setup({});
 -- require('dressing').setup({})

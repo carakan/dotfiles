@@ -21,6 +21,12 @@
     ~/.config/.ripgreprc:
         create: true
         path: config/ripgreprc
+    ~/.config/yabai/yabairc:
+        create: true
+        path: config/yabai/yabairc
+    ~/.config/skhd/skhdrc:
+        create: true
+        path: config/skhd/skhdrc
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
