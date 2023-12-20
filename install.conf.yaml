@@ -2,22 +2,22 @@
 
 - link:
     ~/.aliases: aliases
-    ~/.asdfrc: asdfrc
+    ~/.asdfrc: config/asdfrc
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
     ~/.bat.conf: bat.conf
     ~/.config/karabiner/karabiner.json:
         create: true
-        path: karabiner.json
+        path: config/karabiner.json
     ~/.ctags.d/global.ctags:
         create: true
-        path: ctags
+        path: config/ctags
     ~/.config/nvim/coc-settings.json:
         create: true
-        path: coc.json
+        path: config/coc.json
     ~/.config/kitty/kitty.conf:
         create: true
-        path: kitty/kitty.conf
+        path: config/kitty/kitty.conf
     ~/.config/.ripgreprc:
         create: true
         path: config/ripgreprc
@@ -26,7 +26,7 @@
         path: config/yabai/yabairc
     ~/.config/skhd/skhdrc:
         create: true
-        path: config/skhd/skhdrc
+        path: config/yabai/skhdrc
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
