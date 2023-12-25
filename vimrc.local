@@ -496,6 +496,10 @@ require('fzf-lua').setup({
       title = 'Normal', 
     },
   },
+  -- preview = {
+  --   horizontal     = 'right:50%',
+  --   layout         = 'vertical',
+  -- },
   files = {
     -- multiprocess      = false,
     -- debug             = true,
