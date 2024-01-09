@@ -1,11 +1,42 @@
 #!/usr/bin/env sh
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+
+# SPACES
+yabai -m space 1 --label 1_work
+yabai -m space 2 --label 2_webs
+yabai -m space 3 --label 3_email
+yabai -m space 4 --label 4_code
+yabai -m space 5 --label 5_temp
+yabai -m space 6 --label 6_temp
+yabai -m space 7 --label 7_temp
+yabai -m space 8 --label 8_temp
+yabai -m space 9 --label 9_other
+
+yabai -m config --space 5_temp layout float
+yabai -m config --space 6_temp layout float
+yabai -m config --space 7_temp layout float
+
+yabai -m space 1_work --display 1
+yabai -m space 2_webs --display 1
+yabai -m space 3_email --display 1
+yabai -m space 4_code --display 1
+yabai -m space 5_temp --display 1
+yabai -m space 6_temp --display 1
+yabai -m space 7_temp --display 1
+yabai -m space 8_temp --display 2
+
+#======= Rules =======================
+yabai -m rule --add app="^(Visual Studio Code|kitty)$" space=4_code
+yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
+yabai -m rule --add app="^(Spark|Outlook)$" space=3_email
+yabai -m rule --add app="^(Adobe photoshop)$" space=6_temp
+yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp #opacity=1.00
 
 # ignore these apps
+yabai -m rule --add app=".*" layer=normal
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Little Snitch$" manage=off
-# yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^About This Mac" manage=off
 yabai -m rule --add app="^Activity Monitor" manage=off
 yabai -m rule --add app="^App Store" manage=off
@@ -24,59 +55,41 @@ yabai -m rule --add app="^CleanMyMac X$" manage=off
 yabai -m rule --add app="^1Password 7$" manage=off
 yabai -m rule --add app="^Dash$" manage=off
 yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^Preview$" manage=off
 yabai -m rule --add app="^zoom.us$" manage=off
+# firefox PIP
+yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
+
+# Do not manage windows with certain titles eg. Copying files or moving to bin
+yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
+yabai -m rule --add app="^Adobe (After Effects|Audition|Media Encoder)$" role="AXLayoutArea" subrole="AXFloatingWindow" manage=on
 
 
-# global settings
-# focus window that your mouse hovers on (disabled due to right click bugs)
-yabai -m config focus_follows_mouse          off
-yabai -m config mouse_follows_focus off
-# move mouse to focused window
+yabai -m config                              \
+    external_bar                off:41:0     \
+    mouse_follows_focus         off          \
+    focus_follows_mouse         off          \
+    window_placement            second_child \
+    window_shadow               off          \
+    window_animation_duration   0.0          \
+    window_opacity_duration     0.0          \
+    active_window_opacity       1.0          \
+    normal_window_opacity       0.9          \
+    window_opacity              on           \
+    insert_feedback_color       0xaad75f5f   \
+    split_ratio                 0.50         \
+    split_type                  auto         \
+    auto_balance                off          \
+    top_padding                 2            \
+    left_padding                2            \
+    right_padding               2            \
+    bottom_padding              2            \
+    window_gap                  2            \
+    layout                      bsp          \
+    mouse_modifier              fn           \
+    mouse_action1               move         \
+    mouse_action2               resize       \
+    mouse_drop_action           swap
 
 
-yabai -m config mouse_modifier fn
-
-yabai -m config window_placement             second_child
-
-# floating windows always stay on top
-yabai -m config window_topmost               on
-# enable borders
-yabai -m config window_border                on
-# no clue what this is
-yabai -m config insert_feedback_color        0xffd75f5f
-yabai -m config split_ratio                  0.50
-# don't automatically rebalance windows
-yabai -m config auto_balance                 off
-# swap windows if moved with mouse
-yabai -m config mouse_action1                move
-# resize windows if resized with mouse
-yabai -m config mouse_action2                resize
-yabai -m config mouse_drop_action            swap
-
-yabai -m config window_opacity on
-yabai -m config window_opacity_duration 0.0
-yabai -m config active_window_opacity 1.0
-yabai -m config normal_window_opacity 0.9
-
-
-
-yabai -m config window_animation_duration 0.0
-
-# general space settings
-yabai -m config layout                       bsp
-yabai -m config top_padding                  2
-yabai -m config bottom_padding               2
-yabai -m config left_padding                 2
-yabai -m config right_padding                2
-yabai -m config window_gap                   3
-
-
-
-# SIP Required
-# prevent border from being under the active window
-yabai -m config active_window_border_topmost on
-yabai -m config window_shadow                float
-yabai -m config window_border_width          3
-yabai -m config active_window_border_color   0xffff3050
-yabai -m config normal_window_border_color   0xffaaaaaa
-
+echo "yabai configuration loaded.."

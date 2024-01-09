@@ -16,6 +16,10 @@ shift + alt - 2 : yabai -m window --space 2
 shift + alt - 3 : yabai -m window --space 3
 shift + alt - 4 : yabai -m window --space 4
 shift + alt - 5 : yabai -m window --space 5
+shift + alt - 6 : yabai -m window --space 6
+shift + alt - 7 : yabai -m window --space 7
+shift + alt - 8 : yabai -m window --space 8
+shift + alt - 9 : yabai -m window --space 9
 
 # Resize windows
 ctrl + alt - h : \
@@ -38,6 +42,9 @@ ctrl + alt - l : \
 shift + alt - c : yabai -m window --toggle float;\
                 yabai -m window --grid 4:4:1:1:2:2
 
+ctrl + alt - p : yabai -m window --toggle sticky --toggle pip
+# alt - p : yabai -m window --toggle sticky --toggle pip
+
 # Set insertion point for focused container
 shift + ctrl + alt - h : yabai -m window --insert west
 shift + ctrl + alt - j : yabai -m window --insert south
@@ -48,6 +55,7 @@ shift + ctrl + alt - l : yabai -m window --insert east
 shift + alt - space : yabai -m window --toggle float
 
 # Make fullscreen
+alt - d : yabai -m window --toggle zoom-parent
 alt - f : yabai -m window --toggle zoom-fullscreen
 
 # Change desktop
