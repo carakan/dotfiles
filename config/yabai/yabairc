@@ -57,12 +57,13 @@ yabai -m rule --add app="^Finder$" manage=off
 yabai -m rule --add app="^Preview$" manage=off
 yabai -m rule --add app="^zoom.us$" manage=off
 # firefox PIP
-yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
-yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off layer=below
+#yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
+yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off
 
 # Do not manage windows with certain titles eg. Copying files or moving to bin
 yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
 yabai -m rule --add app="^Adobe (After Effects|Audition|Media Encoder)$" role="AXLayoutArea" subrole="AXFloatingWindow" manage=on
+yabai -m rule --add subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
 
 yabai -m config                              \
     external_bar                off:41:0     \
