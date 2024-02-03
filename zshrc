@@ -142,13 +142,15 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
+export FZF_DEFAULT_OPTS='--no-bold --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" " --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down --preview-window="right:60%:wrap"'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 export BAT_CONFIG_PATH="$HOME/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 
@@ -187,3 +189,6 @@ fi
 
 # load ASDF for homebrew installation
 source "$(brew --prefix asdf)/libexec/asdf.sh"
+
+# use python 3.10
+export PATH="$(brew --prefix)/opt/python@3.10/libexec/bin:$PATH"

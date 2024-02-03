@@ -43,9 +43,10 @@ bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 cd ${ZSH_CUSTOM:-$ZSH/custom}/plugins
-git clone https://github.com/djui/alias-tips.git
+git clone https://github.com/djui/alias-tips
 git clone https://github.com/zsh-users/zsh-completions
-git clone git://github.com/zsh-users/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting
 ```
 
 - Install patched fonts from:
@@ -86,7 +87,13 @@ cd ~/.dotfiles
 ./install
 ```
 
-## Install tmux with 24 bits support
+## Install tmux + TPM with 24 bits support
+
+Install TPM
+
+```zsh
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
 
 Only needs install tmux >= 2.2, this dotfiles is working with tmux 2.4
 
