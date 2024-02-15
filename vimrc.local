@@ -247,7 +247,7 @@ let g:ember_tools_highlight_actions = 0
 
 " Configure node, python executable
 " let g:node_host_prog = '~/.bun/install/global/neovim/bin/cli.js'
-let g:node_host_prog = '~/.asdf/installs/nodejs/16.19.0/lib/node_modules/neovim/bin/cli.js'
+let g:node_host_prog = '~/.asdf/installs/nodejs/18.19.0/lib/node_modules/neovim/bin/cli.js'
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>
@@ -640,7 +640,7 @@ require('nvim-treesitter.configs').setup({
     'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
     'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 'graphql', 'html', 'http',
     'heex', 'javascript', 'json', 'json5', 'jsonc', 'lua', 'markdown', 'markdown_inline', 'pem', 'php',
-    'python', 'regex', 'ruby', 'rust', 'scss', 'ssh_config', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
+    'python', 'readline', 'regex', 'ruby', 'rust', 'scss', 'ssh_config', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
   },
   highlight = {
     enable = false,
@@ -805,6 +805,9 @@ require("octo").setup({
   picker_config = {
     use_emojis = true,
   },
+  suppress_missing_scope = {
+    projects_v2 = true,
+  }
 });
 -- require("recorder").setup({});
 -- require('dressing').setup({})
