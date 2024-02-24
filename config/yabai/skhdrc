@@ -23,20 +23,20 @@ shift + alt - 9 : yabai -m window --space 9
 
 # Resize windows
 ctrl + alt - h : \
-    yabai -m window --resize left:-35:0 ; \
-    yabai -m window --resize right:-35:0
+    yabai -m window --resize left:-30:0 ; \
+    yabai -m window --resize right:-30:0
 
 ctrl + alt - j : \
-    yabai -m window --resize bottom:0:35 ; \
-    yabai -m window --resize top:0:35
+    yabai -m window --resize bottom:0:30 ; \
+    yabai -m window --resize top:0:30
 
 ctrl + alt - k : \
-    yabai -m window --resize top:0:-35 ; \
-    yabai -m window --resize bottom:0:-35
+    yabai -m window --resize top:0:-30 ; \
+    yabai -m window --resize bottom:0:-30
 
 ctrl + alt - l : \
-    yabai -m window --resize right:35:0 ; \
-    yabai -m window --resize left:35:0
+    yabai -m window --resize right:30:0 ; \
+    yabai -m window --resize left:30:0
 
 # Float and center window
 shift + alt - c : yabai -m window --toggle float;\

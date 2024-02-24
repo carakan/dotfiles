@@ -51,7 +51,6 @@ yabai -m rule --add app="^Music$" manage=off
 yabai -m rule --add app="^Slack$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^CleanMyMac X$" manage=off
-yabai -m rule --add app="^1Password 7$" manage=off
 yabai -m rule --add app="^Dash$" manage=off
 yabai -m rule --add app="^Finder$" manage=off
 yabai -m rule --add app="^Preview$" manage=off

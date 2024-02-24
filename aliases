@@ -1,7 +1,7 @@
 # Unix
-alias ls="eza --icons -F1"
-alias l="eza -lbF --git"
-alias ll="eza -labghHFS --icons --git"
+alias ls="eza --group-directories-first --icons --git"
+alias l="eza -lbF --git --icons --group-directories-first"
+alias ll="eza -labghHS -F --icons --git"
 
 alias llm='eza -lbGd --git --sort=modified'                            # long list, modified date sort
 alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list

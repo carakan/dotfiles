@@ -87,6 +87,8 @@ let g:ale_echo_cursor = 0
 let g:ale_detail_to_floating_preview = 1
 let g:ale_use_neovim_diagnostics_api = 1
 
+let g:ale_ruby_syntax_tree_options = "--print-width=90 --plugins=plugin/disable_auto_ternary,plugin/single_quotes"
+let g:ale_haml_syntax_tree_options = "--print-width=90 --plugins=haml"
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
 nmap <leader>f <Plug>(ale_fix)
@@ -115,7 +117,7 @@ let g:ale_fixers = {
   \ 'json': ['prettier'],
   \ 'lua': ['lua-format'],
   \ 'markdown': ['prettier'],
-  \ 'ruby': ['prettier', 'standardrb'],
+  \ 'ruby': ['syntax_tree'],
   \ 'scss': ['stylelint'],
   \ 'typescript': ['prettier', 'tslint'],
   \ 'vue': ['prettier'],
@@ -125,10 +127,10 @@ let g:ale_fixers = {
   \ 'eruby': ['erblint']
   \}
 
-if filereadable('Gemfile.lock') && !len(matchstr(readfile(expand('Gemfile.lock')), 'standard'))
-  let g:ale_fixers['ruby'] = ['prettier', 'rubocop']
-  let g:ale_linters['ruby'] = ['rubocop']
-endif
+" if filereadable('Gemfile.lock') && !len(matchstr(readfile(expand('Gemfile.lock')), 'standard'))
+"  let g:ale_fixers['ruby'] = ['prettier', 'rubocop']
+"  let g:ale_linters['ruby'] = ['rubocop']
+" endif
 
 "nmap <Leader>d :ALEDetail<CR>
 "nmap <Leader>dd :ALEHover<CR>
@@ -634,6 +636,7 @@ require('nvim-treesitter.configs').setup({
     },
   matchup = {
     enable = true,  -- mandatory, false will disable the whole extension
+    disable_virtual_text = false,
     -- [options]
   },
   ensure_installed = {
