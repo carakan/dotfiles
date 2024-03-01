@@ -39,29 +39,20 @@ yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Little Snitch$" manage=off
 yabai -m rule --add app="^About This Mac" manage=off
 yabai -m rule --add app="^Activity Monitor" manage=off
-yabai -m rule --add app="^App Store" manage=off
 yabai -m rule --add app="^Calendar" manage=off
 yabai -m rule --add app="^Calculator" manage=off
 yabai -m rule --add app="^Clock" manage=off
 yabai -m rule --add app="^Contacts" manage=off
-yabai -m rule --add app="^Books$" manage=off
 yabai -m rule --add app="^Alfred Preferences$" manage=off
 yabai -m rule --add app="^Messages$" manage=off
 yabai -m rule --add app="^Music$" manage=off
-yabai -m rule --add app="^Slack$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
-yabai -m rule --add app="^CleanMyMac X$" manage=off
-yabai -m rule --add app="^Dash$" manage=off
-yabai -m rule --add app="^Finder$" manage=off
-yabai -m rule --add app="^Preview$" manage=off
-yabai -m rule --add app="^zoom.us$" manage=off
 # firefox PIP
 #yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
 yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off
 
 # Do not manage windows with certain titles eg. Copying files or moving to bin
 yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
-yabai -m rule --add app="^Adobe (After Effects|Audition|Media Encoder)$" role="AXLayoutArea" subrole="AXFloatingWindow" manage=on
 yabai -m rule --add subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
 
 yabai -m config                              \
@@ -72,7 +63,6 @@ yabai -m config                              \
     window_placement            second_child \
     window_shadow               float        \
     window_animation_duration   0.05         \
-    window_animation_frame_rate 120          \
     window_opacity_duration     0.0          \
     active_window_opacity       1.0          \
     normal_window_opacity       0.92         \
