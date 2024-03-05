@@ -12,8 +12,12 @@
     ~/.ctags.d/global.ctags:
         create: true
         path: config/ctags
-    ~/.config/nvim/coc-settings.json:
+    ~/.config/nvim:
         create: true
+        path: ~/.vim
+    ~/.config/nvim/nvim.init:
+        path: ~/.vimrc
+    ~/.config/nvim/coc-settings.json:
         path: config/coc.json
     ~/.config/kitty/kitty.conf:
         create: true
@@ -46,8 +50,4 @@
     ~/.zshrc: zshrc
 
 - shell:
-  - chmod 755 ~/.dotfiles/tmuxterm
-  - ~/.dotfiles/tmuxterm
-  - ln -s ~/.vim ~/.config/nvim
-  - ln -s ~/.vimrc ~/.config/nvim/init.vim
   - sudo ln -s ~/.dotfiles/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist
