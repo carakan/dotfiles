@@ -236,7 +236,7 @@ nnoremap <silent> <leader>M <cmd>lua require('fzf-lua').resume()<cr>
 nnoremap <silent> <leader>b :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 " coc node
-let g:coc_node_path = '/home/carakan/.asdf/installs/nodejs/16.15.0/bin/node'
+let g:coc_node_path = '~/.asdf/installs/nodejs/16.20.2/bin/node'
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
 

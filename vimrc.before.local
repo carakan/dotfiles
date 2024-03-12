@@ -19,7 +19,7 @@ let g:jsx_ext_required = 1
 let g:loaded_python_provider = 0
 " let g:loaded_python3_provider = 1 " Don't enable explicitly python3
 let g:python3_host_prog = '/usr/local/opt/python@3.10/libexec/bin/python'
-let g:node_host_prog = '~/.asdf/installs/nodejs/18.19.0/bin/neovim-node-host'
+let g:node_host_prog = '~/.asdf/installs/nodejs/18.19.1/bin/neovim-node-host'
 set pyxversion=3
 " Disable ruby and perl
 let g:loaded_perl_provider = 0
