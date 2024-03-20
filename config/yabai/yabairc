@@ -27,36 +27,37 @@ yabai -m space 7_temp --display 1
 yabai -m space 8_temp --display 2
 
 #======= Rules =======================
-yabai -m rule --apply app="^(Spark|Outlook)$" space=1_work
-yabai -m rule --apply app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
-yabai -m rule --apply app="^(kitty)$" space=3_email
-yabai -m rule --apply app="^(Code)$" space=4_code
-yabai -m rule --apply app="^(Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2024|Topaz Photo AI|Python)$" space=5_temp
-yabai -m rule --apply app="^(1Password 7|Creative Cloud|Docker Desktop|Preview|WhatsApp|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
-yabai -m rule --apply app="^(Slack|zoom.us|Discord|Skype)$" space=7_temp
-yabai -m rule --apply app="^(Firefox|X|Spotify)$" space=8_temp #opacity=1.00
+yabai -m rule --add app="^(Spark|Outlook)$" space=1_work
+yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
+yabai -m rule --add app="^(kitty)$" space=3_email
+yabai -m rule --add app="^(Code)$" space=4_code
+yabai -m rule --add app="^(Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2024|Topaz Photo AI|Python)$" space=5_temp
+yabai -m rule --add app="^(Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|WhatsApp|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
+yabai -m rule --add app="^(Slack|zoom.us|Discord|Skype)$" space=7_temp
+yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp #opacity=1.00
 
 # ignore these apps
-yabai -m rule --apply app="^System Settings$" manage=off
-yabai -m rule --apply app="^Little Snitch$" manage=off
-yabai -m rule --apply app="^About This Mac" manage=off
-yabai -m rule --apply app="^Activity Monitor" manage=off
-yabai -m rule --apply app="^Calendar" manage=off
-yabai -m rule --apply app="^Calculator" manage=off
-yabai -m rule --apply app="^Clock" manage=off
-yabai -m rule --apply app="^Contacts" manage=off
-yabai -m rule --apply app="^Alfred Preferences$" manage=off
-yabai -m rule --apply app="^Messages$" manage=off
-yabai -m rule --apply app="^Music$" manage=off
-yabai -m rule --apply app="^Activity Monitor$" manage=off
+yabai -m rule --add app=".*" sub-layer=normal
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Little Snitch$" manage=off
+yabai -m rule --add app="^About This Mac" manage=off
+yabai -m rule --add app="^Activity Monitor" manage=off
+yabai -m rule --add app="^Calendar" manage=off
+yabai -m rule --add app="^Calculator" manage=off
+yabai -m rule --add app="^Clock" manage=off
+yabai -m rule --add app="^Contacts" manage=off
+yabai -m rule --add app="^Alfred Preferences$" manage=off
+yabai -m rule --add app="^Messages$" manage=off
+yabai -m rule --add app="^Music$" manage=off
+yabai -m rule --add app="^Activity Monitor$" manage=off
 # firefox PIP
 #yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
-yabai -m rule --apply app="^Spark$" subrole="AXDialog" manage=off
+yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off
 
 # Do not manage windows with certain titles eg. Copying files or moving to bin
-yabai -m rule --apply title="(Copy|Bin|About This Mac|Info)" manage=off
-yabai -m rule --apply subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
-
+yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
+yabai -m rule --add subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
+yabai -m rule --apply 
 yabai -m config                              \
     external_bar                off:41:0     \
     mouse_follows_focus         off          \
