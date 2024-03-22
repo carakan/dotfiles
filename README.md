@@ -60,13 +60,11 @@ or simple download and install fonts from directory fontpatched in this project
 
 ```zsh
 brew install ripgrep
-brew install --with-jansson --HEAD universal-ctags/universal-ctags/universal-ctags
+brew install universal-ctags
 ```
 
-- install syntax highlighting (this is added by default in last versions of zsh)
 
 ```zsh
-brew install zsh-syntax-highlighting
 brew install bat
 brew install htop
 ```
