@@ -64,7 +64,8 @@
   "elixir.pathToElixirLS": "~/.vim/plugged/coc-elixir/els-release/language_server.sh",
   "solargraph.bundlerPath": "~/.asdf/shims/bundle",
   "solargraph.commandPath": "~/.asdf/shims/solargraph",
-  "suggest.completionItemKindLabels": {
+  "solargraph.checkGemVersion": false,
+    "suggest.completionItemKindLabels": {
     "keyword": "\uf1de",
     "variable": "\ue79b",
     "value": "\uf89f",

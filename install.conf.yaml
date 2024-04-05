@@ -38,6 +38,7 @@
     ~/.gitignore_global: gitignore_global
     ~/.ignore: ignore
     ~/.irbrc: irbrc
+    ~/.pryrc: pryrc
     ~/.prettierrc: prettierrc
     ~/.profile: profile
     ~/.p10k.zsh: pk10.zsh
