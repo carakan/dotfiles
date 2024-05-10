@@ -32,8 +32,8 @@ yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
 yabai -m rule --add app="^(kitty)$" space=3_email
 yabai -m rule --add app="^(Code)$" space=4_code
 yabai -m rule --add app="^(Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2024|Topaz Photo AI|Python)$" space=5_temp
-yabai -m rule --add app="^(Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
-yabai -m rule --add app="^(Slack|zoom.us|Discord|Skype|WhatsApp)$" space=7_temp
+yabai -m rule --add app="^(Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
+yabai -m rule --add app="^(OpenVPN Connect|Slack|zoom.us|Discord|Skype|WhatsApp)$" space=7_temp
 yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp #opacity=1.00
 
 # ignore these apps
