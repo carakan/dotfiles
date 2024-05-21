@@ -40,6 +40,7 @@ export ZSH_TMUX_AUTOSTART=true
 
 # export TERM=xterm-256color-italic
 export TERM="tmux-256color"
+#   export TERM="xterm-kitty"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

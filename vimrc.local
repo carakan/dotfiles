@@ -968,6 +968,7 @@ let g:coc_global_extensions = [
   \ 'coc-elixir',
   \ 'coc-highlight',
   \ 'coc-html',
+  \ 'coc-db',
   \ 'coc-emmet',
   \ 'coc-json',
   \ 'coc-lists',

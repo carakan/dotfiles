@@ -50,5 +50,10 @@
     ~/.rubocop.yml: rubocop.yml
     ~/.zshrc: zshrc
 
+
+    ~/Library/Application Support/InvoicePro/Invoices.db:
+        force: true
+        path: ~/Dropbox/Aplicaciones/InvoicePro/Invoices.db
+
 - shell:
   - sudo ln -s ~/.dotfiles/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist

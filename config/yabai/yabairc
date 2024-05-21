@@ -69,7 +69,7 @@ yabai -m config                              \
     window_animation_easing     ease_in_out_quint \
     window_opacity_duration     0.0          \
     active_window_opacity       1.0          \
-    normal_window_opacity       0.95         \
+    normal_window_opacity       0.92         \
     window_opacity              on           \
     insert_feedback_color       0xaad75f5f   \
     split_ratio                 0.50         \
