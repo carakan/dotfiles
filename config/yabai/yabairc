@@ -47,9 +47,6 @@ yabai -m rule --add app="^Calculator" manage=off
 yabai -m rule --add app="^Clock" manage=off
 yabai -m rule --add app="^Contacts" manage=off
 yabai -m rule --add app="^Alfred Preferences$" manage=off
-yabai -m rule --add app="^Messages$" manage=off
-yabai -m rule --add app="^Music$" manage=off
-yabai -m rule --add app="^Activity Monitor$" manage=off
 # firefox PIP
 #yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
 yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off
@@ -85,5 +82,8 @@ yabai -m config                              \
     mouse_action1               move         \
     mouse_action2               resize       \
     mouse_drop_action           swap
+
+
+borders active_color=0xff494d64 inactive_color=0xff000000 width=3.0 &
 
 echo "yabai configuration loaded.."

@@ -467,7 +467,7 @@ require('gitsigns').setup({
     row = 1,
     col = 1
   },
-  _signs_staged_enable = true,
+  signs_staged_enable = true,
 })
 
 local custom_onedark = require'lualine.themes.onedark'
