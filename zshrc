@@ -142,14 +142,27 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 # this add every time the keys only for SIERRA MacOS
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS='--no-bold --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" " --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down --preview-window="right:60%:wrap"'
+# load fzf
+eval "$(fzf --zsh)"
+
+export FZF_DEFAULT_OPTS='--no-bold 
+  --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020
+  --color=pointer:#d4be98
+  --prompt=" "
+  --pointer=""
+  --height="40%"
+  --margin="1,3"
+  --layout="reverse"
+  --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down
+  --preview-window="right:60%:wrap"'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 export BAT_CONFIG_PATH="$HOME/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
+export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
 
 
 
