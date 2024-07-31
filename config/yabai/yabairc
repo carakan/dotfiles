@@ -47,6 +47,7 @@ yabai -m rule --add app="^Calculator" manage=off
 yabai -m rule --add app="^Clock" manage=off
 yabai -m rule --add app="^Contacts" manage=off
 yabai -m rule --add app="^Alfred Preferences$" manage=off
+yabai -m rule --add app="^zoom.us" manage=off
 # firefox PIP
 #yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
 yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off

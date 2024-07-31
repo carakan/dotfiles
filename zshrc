@@ -145,16 +145,30 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 # load fzf
 eval "$(fzf --zsh)"
 
-export FZF_DEFAULT_OPTS='--no-bold 
-  --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020
-  --color=pointer:#d4be98
-  --prompt=" "
-  --pointer=""
-  --height="40%"
-  --margin="1,3"
-  --layout="reverse"
+FZF_COLORS="bg:-1,\
+bg+:#282828,\
+fg:-1,\
+fg+:#FEF9E1,\
+hl:italic:#a9b665,\
+preview-bg:#202020,\
+hl+:bold:italic:#a9b665,\
+header:#ad9c8b,\
+border:#6B503C,\
+info:#d4be98,\
+prompt:#d4be98,\
+pointer:#d4be98,\
+marker:#7f61b3,\
+spinner:#6b503c"
+
+export FZF_DEFAULT_OPTS="--no-bold 
+  --color='$FZF_COLORS' \
+  --prompt=' '
+  --pointer=''
+  --height='40%'
+  --margin='1,3'
+  --layout='reverse'
   --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down
-  --preview-window="right:60%:wrap"'
+  --preview-window='right:60%:wrap'"
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 export BAT_CONFIG_PATH="$HOME/.bat.conf"
@@ -163,8 +177,6 @@ export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
 export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
-
-
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 
@@ -175,6 +187,9 @@ function update_brach(){
 }
 
 export TERMINFO="$HOME/.terminfo"
+
+#cargo setup
+export PATH=$PATH:~/.cargo/bin/
 
 # this is for homebrew
 export PATH="/usr/local/bin:$PATH"
