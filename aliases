@@ -1,7 +1,7 @@
 # Unix
-alias ls="exa --icons -F1"
-alias l="exa -labghHFS --icons"
-alias ll="exa -labghHFS --icons "
+alias ls="eza --icons -F1"
+alias l="eza -labghHFS --icons --git"
+alias ll="eza -labghHFS --icons --git"
 alias ln="ln -v"
 alias mkdir="mkdir -p"
 alias rmf='rm -rf'

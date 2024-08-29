@@ -64,7 +64,7 @@ export TERM="tmux-256color"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( zsh-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
+plugins=( fast-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
           node npm git brew tmux asdf zsh-autosuggestions macos zsh-completions )
 
 # User configuration
@@ -165,4 +165,13 @@ fi
 
 # load ASDF for homebrew installation
 source "$(brew --prefix asdf)/libexec/asdf.sh"
-eval "$(mcfly init zsh)"
+
+
+
+# ROCm
+alias python=python3
+export HSA_OVERRIDE_GFX_VERSION=10.3.0
+export HCC_AMDGPU_TARGET=gfx1030
+export PATH="/home/carakan/.local/bin:$PATH"
+export PATH=/opt/rocm/bin:$PATH
+export ROCM_HOME=/opt/rocm
