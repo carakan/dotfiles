@@ -32,7 +32,7 @@ yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
 yabai -m rule --add app="^(kitty)$" space=3_email
 yabai -m rule --add app="^(Code)$" space=4_code
 yabai -m rule --add app="^(Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2024|Topaz Photo AI|Python)$" space=5_temp
-yabai -m rule --add app="^(Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
+yabai -m rule --add app="^(OpenVPN Connect|OpenVPN|Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|1Password 7|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
 yabai -m rule --add app="^(OpenVPN Connect|Slack|zoom.us|Discord|Skype|WhatsApp)$" space=7_temp
 yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp #opacity=1.00
 
@@ -50,11 +50,9 @@ yabai -m rule --add app="^Alfred Preferences$" manage=off
 yabai -m rule --add app="^zoom.us" manage=off
 # firefox PIP
 #yabai -m rule --add app="^Firefox$" title="^$" manage=off layer=below
-yabai -m rule --add app="^Spark$" subrole="AXDialog" manage=off
 
 # Do not manage windows with certain titles eg. Copying files or moving to bin
 yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
-yabai -m rule --add subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
 yabai -m rule --apply 
 yabai -m config                              \
     external_bar                off:41:0     \
@@ -63,7 +61,7 @@ yabai -m config                              \
     focus_follows_mouse         off          \
     window_placement            second_child \
     window_shadow               float        \
-    window_animation_duration   0.05         \
+    window_animation_duration   0.0          \
     window_animation_easing     ease_in_out_quint \
     window_opacity_duration     0.0          \
     active_window_opacity       1.0          \

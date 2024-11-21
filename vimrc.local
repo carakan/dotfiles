@@ -566,6 +566,26 @@ require("gx").setup({
 require("diffview").setup({
   enhanced_diff_hl = true,
 })
+-- require("force-cul").setup();
+
+-- require('multicursors').setup {
+--     hint_config = {
+--         float_opts = {
+--             border = 'rounded',
+--         },
+--         position = 'bottom-right',
+--     },
+--     generate_hints = {
+--         normal = true,
+--         insert = true,
+--         extend = true,
+--         config = {
+--             column_count = 1,
+--         },
+--     },
+-- }
+require("markview").setup({});
+
 require('lualine').setup({
   options = {
     icons_enabled = true,
@@ -842,20 +862,7 @@ require("statuscol").setup({
     { text = { ' ', "%s" }, condition = { builtin.not_empty, true }, click = "v:lua.ScSa" },
   }
 });
-require('reticle').setup({
-      on_startup = {
-        cursorline = true,
-        cursorcolumn = true,
-    },
-    never = {
-        cursorline = { 
-          'help', 'dashboard', 'noice', 'git', 'fzf', 'ccc-ui' 
-        },
-        cursorcolumn = {
-          'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
-        },
-    },
-})
+
 require("noice").setup({
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
