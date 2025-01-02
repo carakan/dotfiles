@@ -85,7 +85,7 @@ export TERM="tmux-256color"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=( zsh-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
-          node npm bun git brew tmux asdf zsh-autosuggestions macos zsh-completions copypath )
+          node npm bun git brew tmux asdf zsh-autosuggestions macos zsh-completions copypath safe-paste)
 
 # User configuration
 
@@ -160,13 +160,18 @@ pointer:#d4be98,\
 marker:#7f61b3,\
 spinner:#6b503c"
 
-export FZF_DEFAULT_OPTS="--no-bold 
+export FZF_DEFAULT_OPTS="--ansi
+  --cycle
+  --info inline-right
   --color='$FZF_COLORS' \
   --prompt=' '
   --pointer=''
   --height='40%'
   --margin='1,3'
   --layout='reverse'
+  --filepath-word
+  --highlight-line
+  --history '$HOME/.local/state/fzf'
   --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down
   --preview-window='right:60%:wrap'"
 export FZF_TMUX=1

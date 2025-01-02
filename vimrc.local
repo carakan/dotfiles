@@ -499,10 +499,10 @@ require('fzf-lua').setup({
     width            = 0.85,            -- window width
     row              = 0.25,            -- window row position (0=top, 1=bottom)
     col              = 0.55,            -- window col position (0=left, 1=right)
-    hl = {
-      border = 'LineNr',
-      title = 'Normal', 
-    },
+  },
+  hls = {
+    border = 'LineNr',
+    title = 'Normal', 
   },
   -- preview = {
   --   horizontal     = 'right:50%',
@@ -539,12 +539,12 @@ require('fzf-lua').setup({
       pager        = "delta",
     },
     builtin = {
-      treesitter = { enable = false},
+      treesitter = { enabled = false},
       extensions = {
-        ["png"] = { "chafa" },
-        ["jpg"] = { "chafa" },
-        ["gif"] = { "chafa" },
-        ["svg"] = { "chafa" },
+        ["png"] = { "viu", "-b" },
+        ["jpg"] = { "ueberzug" },
+        ["gif"] = { "viu", "-b" },
+        ["svg"] = { "viu", "-b" },
       },
     },
   },
@@ -566,6 +566,10 @@ require("gx").setup({
 require("diffview").setup({
   enhanced_diff_hl = true,
 })
+require('neogit').setup({
+  graph_style = "kitty"
+})
+require('multicursor-nvim').setup({})
 -- require("force-cul").setup();
 
 -- require('multicursors').setup {
@@ -673,6 +677,7 @@ require('nvim-treesitter.configs').setup({
   },
   highlight = {
     enable = false,
+    additional_vim_regex_highlighting = false,
   },
   playground = {
     enable = true,
@@ -681,7 +686,7 @@ require('nvim-treesitter.configs').setup({
     persist_queries = false, -- Whether the query persists across vim sessions
   },
   autotag = {
-      enable = false,
+    enable = false,
   },
   incremental_selection = {
     enable = true,
