@@ -169,9 +169,24 @@ source "$(brew --prefix asdf)/libexec/asdf.sh"
 
 
 # ROCm
-alias python=python3
+alias python=python3.10
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 export HCC_AMDGPU_TARGET=gfx1030
+
+export HIP_VISIBLE_DEVICES=0
+export GFX_ARCH=gfx1030
+export ROCM_VERSION=6.3.3
+
+export CMAKE_HIP_COMPILER=$(hipconfig -l)/clang++
+export HIPCXX=$(hipconfig -l)/clang
+export HIP_PATH=$(hipconfig -p)
+export HIP_VISIBLE_DEVICES=$(hipconfig -R)
+
+# export TORCH_BLAS_PREFER_HIPBLASLT=0
+# export TORCH_BLAS_PREFER_CUBLASLT=1
+# export PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
+export PATH=$PATH:/opt/rocm-6.3.3/bin
 export PATH="/home/carakan/.local/bin:$PATH"
 export PATH=/opt/rocm/bin:$PATH
 export ROCM_HOME=/opt/rocm
+export LD_LIBRARY_PATH=/opt/rocm-6.3.3/lib

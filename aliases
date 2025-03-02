@@ -1,7 +1,8 @@
 # Unix
-alias ls="eza --icons -F1"
-alias l="eza -labghHFS --icons --git"
-alias ll="eza -labghHFS --icons --git"
+alias ls="eza --group-directories-first --icons --git"
+alias l="eza -lbF --git --icons --group-directories-first"
+alias ll="eza -labghHS -F --icons --git"
+
 alias ln="ln -v"
 alias mkdir="mkdir -p"
 alias rmf='rm -rf'
