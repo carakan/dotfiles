@@ -2,7 +2,7 @@
   "coc.preferences.colorSupport": true,
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnType": false,
-  "npm.binPath": "~/.asdf/installs/bun/1.0.0/bin/bun",
+  "npm.binPath": "~/.asdf/installs/bun/1.2.2/bin/bun",
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.watchmanPath": "/usr/local/bin/watchman",
   "coc.source.around.priority": 10,

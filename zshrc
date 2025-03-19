@@ -221,8 +221,8 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# load ASDF for homebrew installation
-source "$(brew --prefix asdf)/libexec/asdf.sh"
+# load ASDF
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # use python 3.10
 export PATH="$(brew --prefix)/opt/python@3.10/libexec/bin:$PATH"

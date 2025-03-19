@@ -56,11 +56,15 @@ yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
 yabai -m rule --apply 
 yabai -m config                              \
     external_bar                off:41:0     \
+    menubar_opacity             1.0          \
     mouse_follows_focus         off          \
-    window_zoom_persist         on           \
     focus_follows_mouse         off          \
+    display_arrangement_order   default      \
+    window_origin_display       default      \
     window_placement            second_child \
-    window_shadow               float        \
+    window_insertion_point      focused      \
+    window_zoom_persist         on           \
+    window_shadow               on           \
     window_animation_duration   0.0          \
     window_animation_easing     ease_in_out_quint \
     window_opacity_duration     0.0          \
@@ -72,10 +76,10 @@ yabai -m config                              \
     split_type                  auto         \
     auto_balance                off          \
     top_padding                 2            \
+    bottom_padding              2            \
     left_padding                2            \
     right_padding               2            \
-    bottom_padding              2            \
-    window_gap                  2            \
+    window_gap                  02           \
     layout                      bsp          \
     mouse_modifier              fn           \
     mouse_action1               move         \
