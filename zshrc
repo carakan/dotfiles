@@ -4,7 +4,7 @@ export ZSH_DISABLE_COMPFIX=true
 # (Save History to Dropbox if already set up)
 export PSY_HISTORY_FILE="$HOME/Dropbox/Apps/zsh/.zsh_history"
 [[ -f $PSY_HISTORY_FILE ]] && export HISTFILE=$PSY_HISTORY_FILE
-export HISTSIZE=50000
+export HISTSIZE=500000
 export SAVEHIST=$HISTSIZE
 
 # setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
