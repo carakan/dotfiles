@@ -438,7 +438,6 @@ require('bqf').setup({
         }
     }
 })
-require('numb').setup({})
 require('gitsigns').setup({
   signs = {
     add          = { text = '▍' },
@@ -477,7 +476,6 @@ require('gitsigns').setup({
   },
   signs_staged_enable = true,
 })
-
 local custom_onedark = require'lualine.themes.onedark'
 custom_onedark.normal.b.bg = '#444444'
 custom_onedark.normal.c.bg = '#444444'
@@ -671,9 +669,10 @@ require('nvim-treesitter.configs').setup({
   },
   ensure_installed = {
     'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
-    'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 'graphql', 'html', 'http',
-    'heex', 'javascript', 'json', 'json5', 'jsonc', 'latex', 'lua', 'markdown', 'markdown_inline', 'pem', 'php',
-    'python', 'readline', 'regex', 'ruby', 'rust', 'scss', 'ssh_config', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
+    'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 
+    'graphql', 'html', 'http', 'heex', 'javascript', 'json', 'json5', 'jsonc', 'latex', 'lua', 
+    'markdown', 'markdown_inline', 'pem', 'php', 'python', 'readline', 'regex', 'ruby', 'rust', 
+    'scss', 'ssh_config', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vue', 'xml', 'yaml'
   },
   highlight = {
     enable = false,
@@ -782,7 +781,7 @@ require('nvim-tree').setup({
                },
 	}
 })
-require('silicon').setup({})
+
 local ccc = require("ccc")
 require('ccc').setup({
   inputs = {

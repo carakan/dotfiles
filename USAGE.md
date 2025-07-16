@@ -157,3 +157,7 @@ Projectionist provides `:A`, `:AS`, `:AV`, and `:AT` to jump to an "alternate" f
 
 - First option is to write in the form: `"\u{HEXCODE}"`
 - Second option is: press `Crtl + v` next press `u` and finally the `HEXCODE`
+
+## copy URL from github 
+
+- <leader>gy for normal and visual mode
