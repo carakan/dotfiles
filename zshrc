@@ -143,7 +143,7 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
 # load fzf
-eval "$(fzf --zsh)"
+source <(fzf --zsh)
 
 FZF_COLORS="bg:-1,\
 bg+:#282828,\
@@ -158,7 +158,7 @@ info:#d4be98,\
 prompt:#d4be98,\
 pointer:#d4be98,\
 marker:#7f61b3,\
-spinner:#6b503c"
+spinner:#36c692"
 
 export FZF_DEFAULT_OPTS="--ansi
   --cycle

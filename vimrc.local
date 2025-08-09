@@ -244,9 +244,6 @@ nnoremap <silent> Q :Bdelete menu<CR>
 
 let g:mustache_abbreviations = 1
 
-" AndrewRadev/ember_tools.vim
-let g:ember_tools_highlight_actions = 0
-
 let g:bookmark_sign = ''
 
 vmap <leader>y :YankCode<CR>
