@@ -27,7 +27,7 @@ yabai -m space 7_temp --display 1
 yabai -m space 8_temp --display 2
 
 #======= Rules =======================
-yabai -m rule --add app="^(Spark|Outlook|Outlook \(PWA\))$" space=1_work
+yabai -m rule --add app="^(Proton Mail|Spark|Outlook|Outlook \(PWA\))$" space=1_work
 yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
 yabai -m rule --add app="^(kitty)$" space=3_email
 yabai -m rule --add app="^(Code)$" space=4_code

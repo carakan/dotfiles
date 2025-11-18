@@ -56,7 +56,6 @@ call dein#add("chrishrb/gx.nvim")
 
 call dein#add('tpope/vim-rhubarb')
 call dein#add('kevinhwang91/promise-async')
-call dein#add('nvim-zh/colorful-winsep.nvim')
 
 call dein#add('nvim-lua/plenary.nvim')
 call dein#add('sindrets/diffview.nvim')
@@ -76,7 +75,11 @@ call dein#add('jake-stewart/force-cul.nvim')
 call dein#add('OXY2DEV/markview.nvim')
 call dein#add("jake-stewart/multicursor.nvim")
 call dein#add("folke/snacks.nvim")
-call dein#add("bluz71/vim-moonfly-colors")
 
 " call dein#add('nvimtools/hydra.nvim')
 " call dein#add('smoka7/multicursors.nvim')
+
+
+call dein#add("olimorris/codecompanion.nvim")
+call dein#add("ravitemer/mcphub.nvim", {'build': 'npm install -g mcp-hub@latest'})
+" call dein#add('dlants/magenta.nvim')

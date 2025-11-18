@@ -842,12 +842,7 @@ require("octo").setup({
 -- require("recorder").setup({});
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
--- require('colorful-winsep').setup({
---   highlight = {
---     fg = "#686868",
---     bg = "#3e4249",
---   },
--- })
+
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
   ft_ignore = {
@@ -902,6 +897,49 @@ require("tailwind-tools").setup({
   -- your configuration
 })
 
+require('codecompanion').setup({
+  adapters = {
+    ollama = function()
+      return require('codecompanion.adapters').extend('ollama', {
+        schema = {
+          model = {
+            default = 'qwen3-coder',
+            -- default = 'codeqwen:7b',
+          },
+        },
+        env = {
+          url = 'http://192.168.0.4:11434',
+        },
+      })
+    end,
+  },
+  strategies = {
+    chat = {
+      adapter = 'ollama',
+      opts = {
+        completion_provider = "coc", -- blink|cmp|coc|default
+      }
+    },
+    inline = {
+      adapter = 'ollama',
+    },
+    agent = {
+      adapter = 'ollama',
+    },
+  },
+  extensions = {
+    mcphub = {
+      callback = "mcphub.extensions.codecompanion",
+      opts = {
+        make_vars = true,
+        make_slash_commands = true,
+        show_result_in_chat = true
+      }
+    }
+  }
+})
+
+require("mcphub").setup()
 
 local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 for type, icon in pairs(signs) do
@@ -980,7 +1018,6 @@ let g:coc_global_extensions = [
   \ 'coc-lua',
   \ 'coc-html-css-support',
   \ 'coc-markdownlint',
-  \ 'coc-sh',
   \ 'coc-snippets',
   \ 'coc-solargraph',
   \ 'coc-sql',
