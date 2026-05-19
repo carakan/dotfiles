@@ -199,6 +199,7 @@ export PATH=$PATH:~/.cargo/bin/
 # this is for homebrew
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
+export PATH="/Users/carakan/.local/bin:$PATH"
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
 # Change open files limit and user processes limit.
@@ -226,3 +227,5 @@ export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # use python 3.10
 export PATH="$(brew --prefix)/opt/python@3.10/libexec/bin:$PATH"
+eval "$(/usr/local/bin/zsh-patina activate)"
+
