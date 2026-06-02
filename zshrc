@@ -84,7 +84,7 @@ export TERM="tmux-256color"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( zsh-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
+plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
           node npm bun git brew tmux asdf zsh-autosuggestions macos zsh-completions copypath safe-paste)
 
 # User configuration
