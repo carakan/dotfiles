@@ -40,7 +40,7 @@ export ZSH_TMUX_AUTOSTART=true
 
 # export TERM=xterm-256color-italic
 export TERM="tmux-256color"
-#   export TERM="xterm-kitty"
+# export TERM="xterm-kitty"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -84,13 +84,10 @@ export TERM="tmux-256color"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
-          node npm bun git brew tmux asdf zsh-autosuggestions macos zsh-completions copypath safe-paste)
+plugins=( zsh-interactive-cd bgnotify history gem mix rails alias-tips node npm bun git 
+          brew tmux asdf zsh-autosuggestions macos zsh-completions copypath safe-paste)
 
 # User configuration
-
-export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-# export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -126,11 +123,6 @@ setopt noflowcontrol
 # 10ms for key sequences
 KEYTIMEOUT=1
 
-# android
-# export JAVA_HOME=$(/usr/libexec/java_home)
-# export ANDROID_HOME=/usr/local/share/android-sdk
-# export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-
 # neovim as default man reader
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
   export MANPAGER="/usr/local/bin/nvr -c 'Man!' -o -"
@@ -140,7 +132,10 @@ fi
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 1024000"
 
 # this add every time the keys only for SIERRA MacOS
-{ eval `ssh-agent`; ssh-add -A; } &>/dev/null
+if [[ -o login && -t 0 && -z "$SSH_AUTH_SOCK" ]]; then
+  eval "$(ssh-agent)" >/dev/null
+  ssh-add -A &>/dev/null
+fi
 
 # load fzf
 source <(fzf --zsh)
@@ -193,13 +188,16 @@ function update_brach(){
 
 export TERMINFO="$HOME/.terminfo"
 
-#cargo setup
-export PATH=$PATH:~/.cargo/bin/
+# Consolidated PATH — single mutation, no `brew --prefix` subprocess
+path=(~/.cargo/bin
+      /usr/local/bin /usr/local/sbin
+      ~/.local/bin
+      /usr/local/opt/python@3.14/libexec/bin
+      /usr/bin /bin /usr/sbin /sbin)
+typeset -U path; export PATH
 
-# this is for homebrew
-export PATH="/usr/local/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/Users/carakan/.local/bin:$PATH"
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
 # Change open files limit and user processes limit.
@@ -207,10 +205,10 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 ulimit -n 200000
 ulimit -u 2048
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-# autostart tmux
-if [[ -z "$TMUX" ]]; then
+# autostart tmux (only in interactive login TTY, never inside VS Code / scripts / SSH)
+if [[ -o login && -t 0 && -z "$TMUX" \
+   && -z "$VSCODE_PID" && -z "$SSH_CONNECTION" \
+   && -z "$INSIDE_EMACS" && -z "$VIM" ]]; then
   local n=${1-Main}
   if tmux has-session -t $n 2>/dev/null; then
     exec tmux a -t $n
@@ -222,10 +220,11 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# load ASDF
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+eval "$(atuin init zsh)"
 
-# use python 3.10
-export PATH="$(brew --prefix)/opt/python@3.10/libexec/bin:$PATH"
-eval "$(/usr/local/bin/zsh-patina activate)"
+# zsh-patina (syntax highlighting) — guard if binary is missing
+command -v zsh-patina >/dev/null && eval "$(zsh-patina activate)"
+
+# Conda: NOT auto-initialized (saves ~580ms per shell).
+# Use direnv's `layout python` in project .envrc, or `conda activate` explicitly.
 

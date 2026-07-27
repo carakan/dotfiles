@@ -236,7 +236,7 @@ nnoremap <silent> <leader>M <cmd>lua require('fzf-lua').resume()<cr>
 nnoremap <silent> <leader>b :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 " coc node
-let g:coc_node_path = '~/.asdf/installs/nodejs/16.20.2/bin/node'
+let g:coc_node_path = '~/.asdf/installs/nodejs/22.23.0/bin/node'
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.hbs,*.xml,*.vue'
 
@@ -899,11 +899,16 @@ require("tailwind-tools").setup({
 
 require("snacks").setup({
   bigfile = { enabled = true },
-  dashboard = { enabled = true },
-  explorer = { enabled = true },
-  indent = { enabled = true },
-  input = { enabled = true },
-  picker = { enabled = true },
+  dashboard = { enabled = false },
+  explorer = { enabled = false },
+  indent = { 
+    enabled = true,    
+    char = '█',
+    hl = { "IndentBlanklineIndent1", "IndentBlanklineIndent2"}, 
+  },
+  image = { enabled = true },
+  input = { enabled = false },
+  picker = { enabled = false },
   quickfile = { enabled = true },
   scope = { enabled = true },
   statuscolumn = { enabled = true },

@@ -31,6 +31,12 @@
     ~/.config/skhd/skhdrc:
         create: true
         path: config/yabai/skhdrc
+    ~/.config/zsh-patina/config.toml:
+        create: true
+        path: config/zsh-patina_config
+    ~/.config/atuin/config.toml:
+        create: true
+        path: config/atuin.toml
     ~/.default-gems: default-gems
     ~/.default-npm-packages: default-npm-packages
     ~/.gemrc: gemrc
