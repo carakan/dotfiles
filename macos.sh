@@ -2,11 +2,19 @@
 
 # ~/.macos — https://mths.be/macos
 # Modernized for macOS Sequoia (15.x)
+# Last Sequoia sync: 2026-07
 
-# Exit on error - stop script if any command fails
-set -e
+# Strict mode: exit on error, undefined vars are bugs, pipelines propagate failures
+set -euo pipefail
 
-# Close any open System Preferences/Settings panes to prevent override conflicts
+# Warn (don't abort) if running on a macOS other than Sequoia
+MACOS_VER="$(sw_vers -productVersion)"
+if [[ "${MACOS_VER}" != 15.* ]]; then
+	echo "Warning: this script is tuned for macOS 15 (Sequoia), detected ${MACOS_VER}." >&2
+	echo "Some keys may differ on other releases. Continuing anyway..." >&2
+fi
+
+# Close any open System Settings panes to prevent override conflicts
 osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
 osascript -e 'tell application "System Preferences" to quit' 2>/dev/null || true
 
@@ -21,8 +29,10 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Disable the sound effects on boot
-# Uses nvram to set system audio volume to empty (muted boot chime)
-sudo nvram SystemAudioVolume=" "
+# [MODIFIED: Apple Silicon uses StartupMute; SystemAudioVolume is Intel-era.
+#  Try both — the non-applicable one is a harmless no-op.]
+sudo nvram SystemAudioVolume=" " 2>/dev/null || true
+sudo nvram StartupMute=%01 2>/dev/null || true
 
 # Set sidebar icon size to medium (1=small, 2=medium, 3=large)
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
@@ -57,8 +67,12 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Reset Launch Services to clear duplicate "Open With" entries
-# [MODIFIED: Added error suppression - can cause issues on Sequoia with certain apps]
-/usr/sbin/systemextensionsctl reset 2>/dev/null || true
+# [FIXED: was `systemextensionsctl reset`, which resets SYSTEM EXTENSIONS
+#  (security/endpoint tools) — not Launch Services. Restored lsregister.]
+LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+if [[ -x "${LSREGISTER}" ]]; then
+	"${LSREGISTER}" -kill -r -domain local -domain system -domain user 2>/dev/null || true
+fi
 
 # Display ASCII control characters using caret notation in standard text views
 # e.g. Control+C shows as ^C instead of non-printable character
@@ -67,6 +81,10 @@ defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 # Disable Resume system-wide (don't restore windows on relaunch)
 # [MODIFIED: System Preferences → System Settings path changed in Sequoia]
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+
+# Don't restore windows at login either ("Reopen windows when logging back in")
+# [NEW: complements NSQuitAlwaysKeepsWindows; default unchecked]
+defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 
 # Disable automatic termination of inactive apps
 # Keeps apps in memory rather than suspending them
@@ -103,18 +121,32 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 ###############################################################################
-# Apple Intelligence (Sequoia 15+)                                           #
+# Privacy: Apple Intelligence, Siri & ads (Sequoia 15+)                       #
 ###############################################################################
 
-# Disable Apple Intelligence features
-# [NEW: Sequoia-specific - AI features are opt-in, disable for privacy]
-defaults write com.apple.AppleIntelligence CoreSettings -dict-add "P EnableAppleIntelligence" -bool false
+# Apple Intelligence
+# [FIXED: removed bogus `com.apple.AppleIntelligence CoreSettings` key — there
+#  is no stable documented defaults key for Apple Intelligence. The reliable
+#  opt-out is System Settings → Apple Intelligence & Siri, or Screen Time →
+#  Intelligence & Siri restrictions. The Siri keys below ARE documented.]
+
+# Disable Siri
+defaults write com.apple.assistant.support "Assistant Enabled" -bool false
+defaults write com.apple.Siri StatusMenuVisible -bool false
+defaults write com.apple.Siri UserHasDeclinedEnable -bool true
+
+# Disable personalized Apple advertising
+# [NEW: System Settings → Privacy & Security → Apple Advertising]
+defaults write com.apple.AdLib allowApplePersonalizedAdvertising -bool false
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input              #
 ###############################################################################
 
 # Enable tap to click for this user and for the login screen
+# [MODIFIED: added com.apple.AppleMultitouchTrackpad — the Bluetooth domain
+#  only covers external trackpads; the built-in one uses its own domain]
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -127,6 +159,10 @@ defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryCli
 
 # Disable "natural" (Lion-style) scrolling - use traditional direction
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
+# Increase sound quality for Bluetooth headphones/headsets
+# Forces a higher minimum bitpool for A2DP audio
+defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # Enable full keyboard access for all controls (e.g. Tab in modal dialogs)
 # Mode 3 = Full keyboard access with Tab and arrows
@@ -213,9 +249,45 @@ defaults write com.apple.screencapture type -string "png"
 # Disable shadow in screenshots (for cleaner captures)
 defaults write com.apple.screencapture disable-shadow -bool true
 
+# Skip the floating thumbnail after taking a screenshot
+# [NEW: saves the ~5s wait before the file lands on disk]
+defaults write com.apple.screencapture show-thumbnail -bool false
+
 # Enable subpixel font rendering on non-Apple LCDs
 # [MODIFIED: Simplified - removed duplicate CGFontRenderingFontSmoothingDisabled]
 defaults write NSGlobalDomain AppleFontSmoothing -int 1
+
+###############################################################################
+# Window Manager & Stage Manager (Sequoia 15+)                               #
+###############################################################################
+
+# Disable Stage Manager (default is already off; set explicitly for reproducibility)
+defaults write com.apple.WindowManager GloballyEnabled -bool false
+
+# Don't hide all windows when clicking on the wallpaper
+# [NEW: Sonoma+ default is "Always"; false = only in Stage Manager]
+defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
+
+# Remove the gaps around tiled windows (Sequoia window tiling)
+defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
+
+# Sequoia window tiling gestures — uncomment to disable:
+# defaults write com.apple.WindowManager EnableTilingByEdgeDrag -bool false       # drag window to screen edge
+# defaults write com.apple.WindowManager EnableTopTilingByEdgeDrag -bool false    # drag window to menu bar to fill
+# defaults write com.apple.WindowManager EnableTilingOptionAccelerator -bool false # hold Option while dragging
+
+###############################################################################
+# Control Center & menu bar                                                   #
+###############################################################################
+
+# Show battery percentage in the menu bar
+# [NEW: -currentHost required; 18=show icon, 24=hide icon]
+defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool true
+defaults -currentHost write com.apple.controlcenter "NSStatusItem Visible Sound" -int 18
+
+# Tighten menu bar item spacing (useful on notched Macs) — uncomment to enable:
+# defaults -currentHost write -globalDomain NSStatusItemSpacing -int 6
+# defaults -currentHost write -globalDomain NSStatusItemSelectionPadding -int 6
 
 ###############################################################################
 # Finder                                                                      #
@@ -264,6 +336,9 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Auto-remove items from the Trash after 30 days — uncomment to enable:
+# defaults write com.apple.finder FXRemoveOldTrashItems -bool true
 
 # Enable spring loading for directories (reveal contents on drag)
 defaults write NSGlobalDomain com.apple.springing.enabled -bool true
@@ -317,6 +392,11 @@ defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # Enable AirDrop over Ethernet and on unsupported Macs
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
+
+# Show the ~/Library folder (hidden by default since Lion)
+# [NEW: chflags alone can fail if FinderInfo xattr carries the hidden bit]
+chflags nohidden ~/Library 2>/dev/null || true
+xattr -d com.apple.FinderInfo ~/Library 2>/dev/null || true
 
 # Show the /Volumes folder in Finder
 # [NOTE: May fail on modern macOS with SIP]
@@ -381,7 +461,10 @@ defaults write com.apple.dock showhidden -bool true
 defaults write com.apple.dock show-recents -bool false
 
 # Reset Launchpad database
-find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete 2>/dev/null || true
+# [MODIFIED: ResetLaunchPad is the documented modern mechanism; replaces
+#  deleting *-*.db (which also had -maxdepth after -name, invalid order).
+#  Applied on next Dock restart — see killall at the end of this script.]
+defaults write com.apple.dock ResetLaunchPad -bool true
 
 # Disable system-wide symbolichotkeys that conflict with custom shortcuts
 # [MODIFIED: Consolidated all hotkey disables into one section]
@@ -550,11 +633,16 @@ defaults write com.apple.spotlight orderedItems -array \
 	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
 	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
 
-# Rebuild Spotlight index
-# [FIXED: All commands may fail on modern macOS without Full Disk Access]
+# Keep Spotlight indexing OFF on the boot volume (user preference: minimal
+# mds uptime; apps remain searchable via Launch Services).
+# [FIXED: previous version ended with `mdutil -i on` + `-E` (full erase &
+# rebuild), leaving the indexer permanently ON — opposite of the intent.]
+# To index newly installed apps on demand WITHOUT the background indexer:
+#   sudo mdimport -r /Applications
+# To do a full one-shot rebuild:
+#   sudo mdutil -i on / && sudo mdutil -E / && sudo mdutil -i off /
+sudo mdutil -i off / 2>/dev/null || true
 killall mds > /dev/null 2>&1 || true
-sudo mdutil -i on / > /dev/null 2>&1 || true
-sudo mdutil -E / > /dev/null 2>&1 || true
 
 ###############################################################################
 # Terminal & iTerm 2                                                          #
@@ -702,16 +790,29 @@ defaults write com.operasoftware.Opera PMPrintingExpandedStateForPrint2 -bool tr
 defaults write com.operasoftware.OperaDeveloper PMPrintingExpandedStateForPrint2 -bool true
 
 ###############################################################################
+# Optional: Touch ID for sudo (survives macOS updates)                        #
+###############################################################################
+
+# Sonoma+ supports /etc/pam.d/sudo_local, which /etc/pam.d/sudo includes and
+# which macOS updates do NOT overwrite (unlike editing /etc/pam.d/sudo).
+# Uncomment to enable Touch ID authentication for sudo:
+# if ! grep -q "pam_tid.so" /etc/pam.d/sudo_local 2>/dev/null; then
+# 	echo "auth       sufficient     pam_tid.so" | sudo tee /etc/pam.d/sudo_local > /dev/null
+# fi
+
+###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 
 # Restart affected applications to apply changes
 # [MODIFIED: Removed deprecated apps (Twitter, Tweetbot, GPGMail, SizeUp, Spectacle, Transmission)]
 # [MODIFIED: Added error suppression with || true for each killall]
+# [MODIFIED: Added ControlCenter for menu bar changes]
 for app in "Activity Monitor" \
 	"Calendar" \
 	"cfprefsd" \
 	"Contacts" \
+	"ControlCenter" \
 	"Dock" \
 	"Finder" \
 	"Google Chrome Canary" \
