@@ -39,7 +39,11 @@ export ZSH_TMUX_AUTOCONNECT=true
 export ZSH_TMUX_AUTOSTART=true
 
 # export TERM=xterm-256color-italic
-export TERM="tmux-256color"
+# Let kitty set TERM=xterm-kitty (its terminfo is installed in ~/.terminfo).
+# Only force tmux-256color as a fallback for other terminals.
+if [[ -z "$KITTY_WINDOW_ID" && -z "$TMUX" ]]; then
+  export TERM="tmux-256color"
+fi
 # export TERM="xterm-kitty"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -100,6 +104,13 @@ export LC_TYPE=en_US.UTF-8
 # history
 setopt HIST_IGNORE_SPACE
 
+# directory navigation (zsh 5.9)
+setopt AUTO_CD                 # `dir` == `cd dir`
+setopt AUTO_PUSHD              # cd pushes onto the dir stack (`cd -<tab>` to browse)
+setopt PUSHD_IGNORE_DUPS       # no duplicate entries in the stack
+setopt PUSHD_SILENT            # don't print the stack on every cd
+setopt INTERACTIVE_COMMENTS    # allow # comments in interactive shells
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 if [ -r /usr/local/opt/mcfly/mcfly.zsh ]; then
@@ -126,6 +137,8 @@ KEYTIMEOUT=1
 # neovim as default man reader
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
   export MANPAGER="/usr/local/bin/nvr -c 'Man!' -o -"
+elif command -v nvim >/dev/null; then
+  export MANPAGER="nvim +Man!"
 fi
 
 # Erlang elixir
@@ -177,6 +190,10 @@ export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
 export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
+# Alt-C: directory jumper with tree preview (falls back to ls)
+export FZF_ALT_C_OPTS="--walker=dir,hidden --preview '(eza --tree --level=2 --color=always {} || tree -C {} || ls -la {}) 2> /dev/null | head -200'"
+# fzf-tab style multi-select for Ctrl-T file picker
+export FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --multi"
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 

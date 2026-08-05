@@ -75,11 +75,12 @@ call dein#add('jake-stewart/force-cul.nvim')
 call dein#add('OXY2DEV/markview.nvim')
 call dein#add("jake-stewart/multicursor.nvim")
 call dein#add("folke/snacks.nvim")
+call dein#add("afonsofrancof/worktrees.nvim")
 
 " call dein#add('nvimtools/hydra.nvim')
 " call dein#add('smoka7/multicursors.nvim')
 
 
 
-call dein#add("ravitemer/mcphub.nvim", {'build': 'npm install -g mcp-hub@latest'})
+"call dein#add("ravitemer/mcphub.nvim", {'build': 'npm install -g mcp-hub@latest'})
 " call dein#add('dlants/magenta.nvim')

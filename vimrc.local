@@ -915,6 +915,15 @@ require("snacks").setup({
   words = { enabled = true },
 })
 
+require("worktrees").setup({
+  base_path = "..",
+  mappings = {
+    create = "<leader>wtc",
+    delete = "<leader>wtd",
+    switch = "<leader>wts",
+  },
+})
+
 local signs = { Error = "", Warn = "", Hint = "", Info = "" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
