@@ -153,47 +153,140 @@ fi
 # load fzf
 source <(fzf --zsh)
 
-FZF_COLORS="bg:-1,\
-bg+:#282828,\
+# fzf theme — harmonized with the kitty palette (bg #1e1e1e, fg #b8bcb9).
+# Typography: bold = interactive, italic = informational, dim = tertiary.
+export FZF_COLORS="dark,\
 fg:-1,\
-fg+:#FEF9E1,\
-hl:italic:#a9b665,\
+hl:italic:#ecb90f,\
+bg:-1,\
+list-fg:-1,\
+list-bg:-1,\
+preview-fg:#b8bcb9,\
 preview-bg:#202020,\
-hl+:bold:italic:#a9b665,\
-header:#ad9c8b,\
-border:#6B503C,\
-info:#d4be98,\
-prompt:#d4be98,\
-pointer:#d4be98,\
-marker:#7f61b3,\
-spinner:#36c692"
+input-bg:-1,\
+header-bg:-1,\
+footer-bg:-1,\
+selected-fg:#fcffb8,\
+selected-bg:#3a3e44,\
+hl:bold:#ecb90f,\
+selected-hl:bold:#ecb90f,\
+fg+:#FEF9E1,\
+bg+:#292c31,\
+hl+:bold:#f2bd09,\
+gutter:#232529,\
+alt-bg:#232529,\
+alt-gutter:#242629,\
+query:bold:-1,\
+ghost:italic:dim:#6e7681,\
+disabled:dim:#6e7681,\
+info:dim:#6e7681,\
+prompt:bold:#568ea3,\
+pointer:bold:#2cc55d,\
+marker:bold:#855b8d,\
+spinner:#568ea3,\
+border:#6e7681,\
+list-border:#6e7681,\
+input-border:#6e7681,\
+header-border:#6e7681,\
+footer-border:#6e7681,\
+preview-border:dim:#6e7681,\
+separator:dim:#6e7681,\
+gap-line:dim:#6e7681,\
+scrollbar:#6e7681,\
+preview-scrollbar:dim:#6e7681,\
+label:italic:#b8bcb9,\
+list-label:italic:#b8bcb9,\
+input-label:italic:#b8bcb9,\
+header-label:italic:#ad9c8b,\
+footer-label:italic:#b8bcb9,\
+preview-label:italic:#ad9c8b,\
+header:italic:#ad9c8b,\
+footer:dim:#6e7681,\
+nth:italic,\
+nomatch:dim"
 
-export FZF_DEFAULT_OPTS="--ansi
+# Modern fzf (0.74+) full style. All flags are literal; only vars expand.
+export FZF_DEFAULT_OPTS='--ansi
   --cycle
-  --info inline-right
-  --color='$FZF_COLORS' \
-  --prompt=' '
-  --pointer=''
-  --height='40%'
-  --margin='1,3'
-  --layout='reverse'
+  --style full
+  --layout=reverse
+  --info=inline-right
+  --border=rounded
+  --padding=1,2
+  --separator="─"
+  --border-label=" fzf "
+  --border-label-pos=3
+  --input-label=" Input "
+  --prompt="❯ "
+  --pointer="▶"
+  --marker="✓"
+  --gutter=" "
+  --gutter-raw=" "
   --filepath-word
   --highlight-line
-  --history '$HOME/.local/state/fzf'
-  --bind=ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-b:page-up,ctrl-f:page-down
-  --preview-window='right:60%:wrap'"
-export FZF_TMUX=1
+  --preview-window=right:60%:wrap
+  --footer=" C-a select-all · C-/ preview · C-d/u scroll · C-s sort · Alt-w wrap "
+  --footer-border
+  --bind="result:transform-list-label:
+      if [[ -z $FZF_QUERY ]]; then
+        echo \" $FZF_MATCH_COUNT items \"
+      else
+        echo \" $FZF_MATCH_COUNT matches for [ $FZF_QUERY ] \"
+      fi
+      "
+  --bind="focus:transform-preview-label:[[ -n {} ]] && printf \" Previewing [ %s ] \" {}"
+  --bind="ctrl-d:half-page-down"
+  --bind="ctrl-u:half-page-up"
+  --bind="ctrl-b:page-up"
+  --bind="ctrl-f:page-down"
+  --bind="pgup:preview-half-page-up"
+  --bind="pgdn:preview-half-page-down"
+  --bind="shift-up:preview-up"
+  --bind="shift-down:preview-down"
+  --bind="alt-up:preview-half-page-up"
+  --bind="alt-down:preview-half-page-down"
+  --bind="ctrl-/:change-preview-window(down|hidden|)"
+  --bind="ctrl-a:toggle-all"
+  --bind="ctrl-s:toggle-sort"
+  --bind="alt-w:toggle-wrap-word"
+  '"--color='$FZF_COLORS' --popup='center,60%,60%' --history='$HOME/.local/state/fzf'"
+
+# File walker (Ctrl-T source)
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
 export BAT_CONFIG_PATH="$HOME/.bat.conf"
-export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
-export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Completion (tab-completion in shell)
+export FZF_COMPLETION_OPTS="--preview-window=border-none --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
 export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
-# Alt-C: directory jumper with tree preview (falls back to ls)
-export FZF_ALT_C_OPTS="--walker=dir,hidden --preview '(eza --tree --level=2 --color=always {} || tree -C {} || ls -la {}) 2> /dev/null | head -200'"
-# fzf-tab style multi-select for Ctrl-T file picker
-export FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --multi"
+export FZF_COMPLETION_TRIGGER='**'
+
+# Ctrl-T: file picker. Multi-select + file-type header + named labels.
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--multi
+  --keep-right
+  --border-label=' Files '
+  --preview-window='right:60%:wrap'
+  --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'
+  --bind='focus:+transform-header:file --brief {} 2>/dev/null || echo \"No file selected\"'"
+
+# Alt-C: directory jumper (tree preview)
+export FZF_ALT_C_OPTS="--walker=dir,hidden
+  --border-label=' Dirs '
+  --preview-window='right:60%:nowrap'
+  --preview '(eza --icons=always --color=always --tree --level=2 {} 2>/dev/null || tree -C {} 2>/dev/null || ls -la {} 2>/dev/null) | head -200'"
+
+# Ctrl-R: history. Wrapped preview, copy, open-in-vim, delete-aware footer.
+export FZF_CTRL_R_OPTS="--wrap=word
+  --no-sort
+  --border-label=' History '
+  --preview 'echo {2..} | bat --color=always --plain --language=sh'
+  --preview-window='up:30%:nowrap'
+  --bind='ctrl-/:toggle-preview'
+  --bind='ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --bind='ctrl-v:execute(echo {2..} | nvim -R --clean - > /dev/tty)'
+  --bind='ctrl-t:track+clear-query'
+  --footer=' Enter: run · C-y: copy · C-v: view · C-/: preview · C-t: jump to latest '"
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 

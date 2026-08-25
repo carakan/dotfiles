@@ -633,16 +633,25 @@ defaults write com.apple.spotlight orderedItems -array \
 	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
 	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
 
-# Keep Spotlight indexing OFF on the boot volume (user preference: minimal
-# mds uptime; apps remain searchable via Launch Services).
-# [FIXED: previous version ended with `mdutil -i on` + `-E` (full erase &
-# rebuild), leaving the indexer permanently ON — opposite of the intent.]
-# To index newly installed apps on demand WITHOUT the background indexer:
-#   sudo mdimport -r /Applications
-# To do a full one-shot rebuild:
-#   sudo mdutil -i on / && sudo mdutil -E / && sudo mdutil -i off /
-sudo mdutil -i off / 2>/dev/null || true
-killall mds > /dev/null 2>&1 || true
+# Spotlight indexing strategy: build the index once, then disable the live
+# updater to save CPU. The existing index is PRESERVED and remains searchable
+# by Alfred/mdfind; only the background file-watcher is paused.
+#
+# This script turns indexing ON and triggers a full rebuild. Leave it ON until
+# `mdutil -s /System/Volumes/Data` no longer reports active indexing, then
+# disable manually:
+#   sudo mdutil -i off /System/Volumes/Data
+#
+# To refresh the index later (e.g., after installing new apps):
+#   sudo mdutil -i on /System/Volumes/Data
+#   # wait for indexing to finish, then:
+#   sudo mdutil -i off /System/Volumes/Data
+#
+# Do NOT use `killall mds` — it can corrupt the index and trigger reindex storms.
+# Do NOT use `mdutil -E` to disable — that ERASES the index.
+# Do NOT use `mdutil -X` — it disables searching too (Alfred breaks).
+sudo mdutil -i on /System/Volumes/Data 2>/dev/null || true
+sudo mdutil -E /System/Volumes/Data 2>/dev/null || true
 
 ###############################################################################
 # Terminal & iTerm 2                                                          #

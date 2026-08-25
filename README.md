@@ -7,6 +7,166 @@ very well on OSx, not sure on other OS).
 
 See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USAGE.md)
 
+# Window Management (yabai + skhd)
+
+[yabai](https://github.com/asmvik/yabai) is a tiling window manager for macOS.
+[skhd](https://github.com/koekeishiya/skhd) is the keyboard daemon that binds
+global shortcuts to yabai commands.
+
+## Setup
+
+```zsh
+brew install yabai skhd jq
+```
+
+Config lives in `config/yabai/` and is symlinked by dotbot:
+
+| File | Purpose |
+|------|---------|
+| `yabairc` | yabai config (spaces, rules, layout, signals) |
+| `skhdrc` | keyboard shortcuts |
+| `update_border_color.sh` | border color by window count |
+| `update_fullscreen.sh` | auto fullscreen when only 1 window in a space |
+| `save_layout.sh` | snapshot current window layout |
+| `restore_layout.sh` | restore saved window layout |
+
+LaunchAgents are at `~/Library/LaunchAgents/com.asmvik.yabai.plist` and
+`~/Library/LaunchAgents/com.koekeishiya.skhd.plist`.
+
+## Shortcuts
+
+All shortcuts are **global** (system-wide). skhd must be running.
+
+### Window Navigation
+
+| Shortcut | Action |
+|----------|--------|
+| `alt - h` | Focus west |
+| `alt - j` | Focus south |
+| `alt - k` | Focus north |
+| `alt - l` | Focus east |
+
+### Window Warp (move window into another container)
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + alt - h` | Warp west |
+| `shift + alt - j` | Warp south |
+| `shift + alt - k` | Warp north |
+| `shift + alt - l` | Warp east |
+
+### Move Window to Space
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + alt - 1..9` | Send window to space 1..9 |
+
+### Focus Space
+
+| Shortcut | Action |
+|----------|--------|
+| `ctrl - 1..9` | Switch to space 1..9 |
+
+### Resize
+
+| Shortcut | Action |
+|----------|--------|
+| `ctrl + alt - h` | Resize left (expand) |
+| `ctrl + alt - j` | Resize bottom (expand) |
+| `ctrl + alt - k` | Resize top (expand) |
+| `ctrl + alt - l` | Resize right (expand) |
+| `shift + alt - a` | Resize left (expand) |
+| `shift + alt - s` | Resize bottom (expand) |
+| `shift + alt - w` | Resize top (expand) |
+| `shift + alt - d` | Resize right (expand) |
+| `shift + cmd - a` | Resize left (shrink) |
+| `shift + cmd - s` | Resize bottom (shrink) |
+| `shift + cmd - w` | Resize top (shrink) |
+| `shift + cmd - d` | Resize right (shrink) |
+
+### Move (floating windows)
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + ctrl - a` | Move left |
+| `shift + ctrl - s` | Move down |
+| `shift + ctrl - w` | Move up |
+| `shift + ctrl - d` | Move right |
+
+### Insertion Point
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + ctrl + alt - h` | Insert west |
+| `shift + ctrl + alt - j` | Insert south |
+| `shift + ctrl + alt - k` | Insert north |
+| `shift + ctrl + alt - l` | Insert east |
+
+### Layout
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + alt - z` | BSP layout |
+| `shift + alt - x` | Float layout |
+| `shift + alt - s` | Stack layout |
+| `shift + alt - 0` | Balance windows |
+| `alt - e` | Toggle split orientation |
+| `alt - m` | Mirror layout (x-axis) |
+
+### Window Toggles
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + alt - space` | Float / unfloat |
+| `shift + alt - c` | Float and center |
+| `ctrl + alt - p` | Sticky + picture-in-picture |
+| `alt - d` | Zoom parent container |
+| `alt - f` | Zoom fullscreen |
+| `shift + alt - f` | Native macOS fullscreen |
+
+### Floating Grids
+
+| Shortcut | Action |
+|----------|--------|
+| `shift + alt - up` | Fill screen |
+| `shift + alt - left` | Left third |
+| `shift + alt - right` | Right third |
+| `shift + alt - down` | Center third |
+
+### Display (multi-monitor)
+
+| Shortcut | Action |
+|----------|--------|
+| `ctrl + alt - z` | Focus recent display |
+| `ctrl + cmd - c` | Send window to next display and follow |
+
+### Layout Save/Restore
+
+| Shortcut | Action |
+|----------|--------|
+| `ctrl + alt - s` | Save current window layout |
+| `ctrl + alt - r` | Restore saved window layout |
+
+## Auto-fullscreen
+
+When a space has exactly **1 window**, yabai automatically removes padding and
+gap and hides borders so the window fills the screen like native fullscreen.
+When a second window appears, padding/gap and borders are restored.
+
+## Spaces
+
+| Space | Label | Purpose |
+|-------|-------|---------|
+| 1 | `1_work` | Email clients |
+| 2 | `2_webs` | Browsers |
+| 3 | `3_email` | Terminal (kitty) |
+| 4 | `4_code` | VS Code |
+| 5 | `5_temp` | Media/AI tools (float) |
+| 6 | `6_temp` | Utilities (float) |
+| 7 | `7_temp` | Comms/VPN (float) |
+| 8 | `8_temp` | Firefox/Spotify (display 2) |
+| 9 | `9_other` | Overflow |
+
 # Requirements
 
 - install [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh)
@@ -218,3 +378,53 @@ plutil -convert binary1 ~/Library/Preferences/com.charcoaldesign.shades.plist
 ```
 
 - [upgrade ssh keys](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
+
+# Spotlight indexing
+
+Spotlight indexing is turned ON by `macos.sh` to build the initial index, then
+disabled manually once the build completes. This saves CPU (`mds_stores` stops
+watching for file changes) while keeping the existing index searchable — Alfred
+and `mdfind` continue to work.
+
+## Disable indexing without losing the index
+
+```zsh
+sudo mdutil -i off /System/Volumes/Data
+```
+
+The index is preserved and remains searchable. Only the background file-watcher
+is paused. Verify:
+
+```zsh
+mdutil -s /System/Volumes/Data                    # "Indexing disabled."
+mdfind -name 'kMDItemKind == "Application"' | wc -l  # still returns results
+```
+
+Newly installed apps won't appear in Alfred/Spotlight until you re-enable
+temporarily to refresh.
+
+## Refresh the index on demand
+
+```zsh
+sudo mdutil -i on /System/Volumes/Data
+# wait for indexing to finish (check with):
+mdutil -s /System/Volumes/Data
+# once caught up, disable again:
+sudo mdutil -i off /System/Volumes/Data
+```
+
+## Rebuild from scratch (erases the index)
+
+```zsh
+sudo mdutil -i on /System/Volumes/Data
+sudo mdutil -E /System/Volumes/Data
+# leave indexing ON until the rebuild completes, then disable if desired
+```
+
+## Pitfalls
+
+- `killall mds` — can corrupt the index and trigger reindex storms. Never use.
+- `mdutil -E` alone — erases the index. Only use when you want a full rebuild.
+- `mdutil -X` — disables searching too (Alfred breaks). Use `-i off` instead.
+- Only targeting `/` — on APFS, user files live on `/System/Volumes/Data`.
+  Always include the data volume.

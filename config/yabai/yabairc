@@ -53,7 +53,9 @@ yabai -m rule --add app="^zoom.us" manage=off
 
 # Do not manage windows with certain titles eg. Copying files or moving to bin
 yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
-yabai -m rule --apply 
+yabai -m rule --apply
+
+#======= Global Config =======================
 yabai -m config                              \
     external_bar                off:41:0     \
     menubar_opacity             1.0          \
@@ -79,23 +81,33 @@ yabai -m config                              \
     bottom_padding              2            \
     left_padding                2            \
     right_padding               2            \
-    window_gap                  02           \
+    window_gap                  2            \
     layout                      bsp          \
     mouse_modifier              fn           \
     mouse_action1               move         \
     mouse_action2               resize       \
     mouse_drop_action           swap
 
+#======= Auto-fullscreen when only 1 window =======================
+# When a space has exactly 1 window, remove padding/gap and hide borders
+# so it looks like native fullscreen. When a second window appears,
+# restore padding/gap and borders.
+FULLSCREEN_SCRIPT="/Users/carakan/.dotfiles/config/yabai/update_fullscreen.sh"
+yabai -m signal --add event=window_created   action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
+yabai -m signal --add event=window_destroyed action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
+yabai -m signal --add event=window_moved     action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
+yabai -m signal --add event=window_resized   action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
+yabai -m signal --add event=space_changed    action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
 
-# set the correct starting active_color upon initializing yabai, based on number of windows in current space
+#======= Border color based on window count =======================
+# Set initial border color
 n=$(yabai -m query --spaces --space | jq '.windows | length')
-if [ $n = 1 ]; then
+if [ "$n" = 1 ]; then
     borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0x00000000 &
 else
     borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0xffcccccc &
 fi
 
 yabai -m signal --add event=window_focused action="/Users/carakan/.dotfiles/config/yabai/update_border_color.sh"
-
 
 echo "yabai configuration loaded.."

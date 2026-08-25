@@ -534,12 +534,23 @@ require('fzf-lua').setup({
       pager        = "delta",
     },
     builtin = {
-      treesitter = { enabled = false},
+      treesitter = { enabled = false },
+      -- snacks.image renders via the kitty graphics protocol (works through
+      -- tmux thanks to `allow-passthrough on` in tmux.conf) and converts
+      -- svg/tiff/pdf via magick on the fly. Takes precedence over
+      -- `extensions` whenever the terminal supports it.
+      snacks_image = { enabled = true, render_inline = true },
+      -- shell fallback when snacks.image can't take over (unsupported term).
+      -- chafa renders raster AND svg, auto-selecting kitty protocol under
+      -- kitty/tmux-passthrough, sixel on sixel terms, block symbols otherwise.
       extensions = {
-        ["png"] = { "viu", "-b" },
-        ["jpg"] = { "ueberzug" },
-        ["gif"] = { "viu", "-b" },
-        ["svg"] = { "viu", "-b" },
+        ["gif"]  = { "chafa", "{file}" },
+        ["bmp"]  = { "chafa", "{file}" },
+        ["webp"] = { "chafa", "{file}" },
+        ["avif"] = { "chafa", "{file}" },
+        ["tif"]  = { "chafa", "{file}" },
+        ["tiff"] = { "chafa", "{file}" },
+        ["svg"]  = { "chafa", "{file}" },
       },
     },
   },

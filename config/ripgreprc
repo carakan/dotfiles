@@ -1,14 +1,42 @@
---colors=match:bg:0x07,0x2f,0x95
---colors=match:fg:white
---colors=match:style:bold
---colors=line:none
---colors=line:fg:0x00,0x95,0xCB
---colors=line:style:bold
---colors=path:fg:0xFF,0xC6,0x6D
+# ripgrep (rg 15+) configuration — symlinked to ~/.config/.ripgreprc
 
+# --- Search behavior ---
+# Case-insensitive unless the query contains capitals.
 --smart-case
---column
+# Search dotfiles and dot-dirs.
+--hidden
+# Follow symlinks (dotfiles are symlinked dotdirs).
+--follow
+# Deterministic, path-sorted output.
+--sort=path
+
+# --- Output format ---
+# Print line numbers and columns.
 --line-number
---max-columns=4096
---max-columns-preview
+--column
+# Group per line, not per file (pairs with --column).
 --no-heading
+# Ignore minified dumps / huge one-liners.
+--max-columns=4096
+# ...but still show a trimmed preview of long lines.
+--max-columns-preview
+
+# --- Terminal integration ---
+# Clickable file:line links in kitty (OSC 8 hyperlinks).
+--hyperlink-format=kitty
+
+# --- Never search these ---
+--glob=!{.git,.svn,node_modules,.venv,venv,__pycache__,.mypy_cache,target,dist,vendor,tealdeer,Trash}
+--glob=!*.lock
+--glob=!package-lock.json
+
+# --- Colors (harmonized with the kitty theme) ---
+# Match: bold black on yellow — same cue as fzf hl (#ecb90f).
+--colors=match:fg:0x1e,0x1e,0x1e
+--colors=match:bg:0xec,0xb9,0x0f
+--colors=match:style:bold
+# Path: cyan — same cue as fzf prompt (#568ea3).
+--colors=path:fg:0x56,0x8e,0xa3
+# Line & column numbers: muted grey — tertiary, like fzf info (#6e7681).
+--colors=line:fg:0x6e,0x72,0x81
+--colors=column:fg:0x6e,0x72,0x81
