@@ -1,65 +1,101 @@
+# install.conf.yaml — dotbot config-driven dotfile linkage
+# Packages: single source of truth for per-tool configs, symlinked by dotbot.
+
 - clean: ['~']
 
 - link:
-    ~/.aliases: aliases
-    ~/.asdfrc: config/asdfrc
-    ~/.bash_profile: bash_profile
-    ~/.bashrc: bashrc
-    ~/.bat.conf: bat.conf
-    ~/.config/karabiner/karabiner.json:
+    # ── shell (aliases / zsh / bash) ────────────────────────
+    ~/.aliases: packages/sh/aliases
+    ~/.bash_profile: packages/sh/bash_profile
+    ~/.bashrc: packages/sh/bashrc
+    ~/.zshrc: packages/sh/zshrc
+    ~/.p10k.zsh: packages/sh/pk10.zsh
+    ~/.profile: packages/sh/profile
+    ~/.prettierrc: packages/sh/prettierrc
+
+    # ── asdf / tool versions ───────────────────────────────
+    ~/.asdfrc: packages/asdf/asdfrc
+    ~/.tool-versions: packages/asdf/tool-versions
+    ~/.default-gems: packages/asdf/default-gems
+    ~/.default-npm-packages: packages/asdf/default-npm-packages
+
+    # ── bat ────────────────────────────────────────────────
+    ~/.bat.conf: packages/bat/bat.conf
+
+    # ── git ────────────────────────────────────────────────
+    ~/.gitconfig: packages/git/gitconfig
+    ~/.gitignore_global: packages/git/gitignore_global
+    ~/.ignore: packages/git/ignore
+
+    # ── gh (GitHub CLI; hosts.yml with tokens stays untracked) ──
+    ~/.config/gh/config.yml:
         create: true
-        path: config/karabiner.json
-    ~/.ctags.d/global.ctags:
-        create: true
-        path: config/ctags
+        path: packages/gh/config.yml
+
+    # ── vim / neovim ────────────────────────────────────────
+    ~/.vimrc.before.local: packages/vim/vimrc.before.local
+    ~/.vimrc.bundles.local: packages/vim/vimrc.bundles.local
+    ~/.vimrc.local: packages/vim/vimrc.local
     ~/.config/nvim:
         create: true
         path: ~/.vim
-    ~/.config/nvim/init.vim:
-        path: ~/.vimrc
-    ~/.config/nvim/coc-settings.json:
-        path: config/coc.json
+    ~/.config/nvim/init.vim: ~/.vimrc
+    ~/.config/nvim/coc-settings.json: packages/coc/coc.json
+
+    # ── kitty ──────────────────────────────────────────────
     ~/.config/kitty/kitty.conf:
         create: true
-        path: config/kitty/kitty.conf
+        path: packages/kitty/kitty.conf
+
+    # ── karabiner ──────────────────────────────────────────
+    ~/.config/karabiner/karabiner.json:
+        create: true
+        path: packages/karabiner/karabiner.json
+
+    # ── ripgrep ────────────────────────────────────────────
     ~/.config/.ripgreprc:
         create: true
-        path: config/ripgreprc
+        path: packages/ripgrep/.ripgreprc
+
+    # ── yabai & skhd ───────────────────────────────────────
     ~/.config/yabai/yabairc:
         create: true
-        path: config/yabai/yabairc
+        path: packages/yabai/yabairc
     ~/.config/skhd/skhdrc:
         create: true
-        path: config/yabai/skhdrc
-    ~/.config/zsh-patina/config.toml:
-        create: true
-        path: config/zsh-patina_config
+        path: packages/yabai/skhdrc
+
+    # ── atuin ──────────────────────────────────────────────
     ~/.config/atuin/config.toml:
         create: true
-        path: config/atuin.toml
-    ~/.default-gems: default-gems
-    ~/.default-npm-packages: default-npm-packages
-    ~/.gemrc: gemrc
-    ~/.gitconfig: gitconfig
-    ~/.gitignore_global: gitignore_global
-    ~/.ignore: ignore
-    ~/.irbrc: irbrc
-    ~/.pryrc: pryrc
-    ~/.prettierrc: prettierrc
-    ~/.profile: profile
-    ~/.p10k.zsh: pk10.zsh
-    ~/.tmux.conf: tmux.conf
-    ~/.tool-versions: tool-versions
-    ~/.vimrc.before.local: vimrc.before.local
-    ~/.vimrc.bundles.local: vimrc.bundles.local
-    ~/.vimrc.local: vimrc.local
-    ~/.rubocop.yml: rubocop.yml
-    ~/.zshrc: zshrc
+        path: packages/atuin/config.toml
 
+    # ── zsh-patina ─────────────────────────────────────────
+    ~/.config/zsh-patina/config.toml:
+        create: true
+        path: packages/zsh-patina/config.toml
 
+    # ── ruby (ctags / irb / pry / gems) ────────────────────
+    ~/.ctags.d/global.ctags:
+        create: true
+        path: packages/ruby/ctags
+    ~/.irbrc: packages/ruby/irbrc
+    ~/.pryrc: packages/ruby/pryrc
+    ~/.gemrc: packages/ruby/gemrc
+    ~/.rubocop.yml: packages/ruby/rubocop.yml
+
+    # ── tmux ────────────────────────────────────────────────
+    ~/.tmux.conf: packages/tmux/tmux.conf
+
+    # ── vscode ─────────────────────────────────────────────
+    ~/.config/Code/User/settings.json:
+        create: true
+        path: packages/vscode/settings.json
+
+    # ── external: Invoices database (Dropbox sync) ──────────
     ~/Library/Application Support/InvoicePro/Invoices.db:
         force: true
         path: ~/Dropbox/Aplicaciones/InvoicePro/Invoices.db
 
 - shell:
-  - sudo ln -s ~/.dotfiles/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist
+  - sudo ln -s ~/.dotfiles/packages/macos/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist
