@@ -302,7 +302,6 @@ export TERMINFO="$HOME/.terminfo"
 path=(~/.cargo/bin
       /usr/local/bin /usr/local/sbin
       ~/.local/bin
-      /usr/local/opt/python@3.13/libexec/bin
       /usr/bin /bin /usr/sbin /sbin)
 typeset -U path; export PATH
 

@@ -1,19 +1,84 @@
+# ~/.gitignore_global — applies to every repo (core.excludesFile)
+# Keep entries unordered-by-precedence: last match wins in git, but for
+# exclusions-only files ordering rarely matters. Grouped for readability.
+
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
 *.DS_Store
-*~
 ._*
-.capistrano/*
-.elixir_ls/*
-.envrc
-.idea/*
-.byebug_history
-.tool-versions
+.AppleDouble
+.Spotlight-V100
+.Trashes
+.iCloud*
+
+# ── editors / IDEs ───────────────────────────────────────
+.idea/
 .vscode/*
-.solargraph.yml
+!.vscode/settings.json
+!.vscode/extensions.json
+.history/
+*.swp
+*.swo
+*~
+.fleet/
+
+# ── vim / neovim ─────────────────────────────────────────
+*.swo
+.nvimlog
+.netrwhist
+vim/undle/
+
+# ── tags / code indexers ─────────────────────────────────
+tags
+.tag*
 GPATH
 GRTAGS
 GTAGS
+.solargraph.yml
+.solargraph/
+
+# ── ruby ─────────────────────────────────────────────────
+.byebug_history
+.rspec_status
+/*.gem
+/.bundle/
+coverage/
+pkg/
 gems/*
+
+# ── elixir / erlang ──────────────────────────────────────
+.elixir_ls/
+/deps/
+/_build/
+erl_crash.dump
+*.ez
+
+# ── node / bun ───────────────────────────────────────────
 node_modules/*
-tags
-tmp/**/*
-.nvimlog
+.npm/
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+*.tsbuildinfo
+.eslintcache
+
+# ── crystal ──────────────────────────────────────────────
+/lib/
+.shards/
+crystal-*
+
+# ── env & secrets (never leak by accident) ───────────────
+.env
+.env.*
+!.env.example
+.envrc
+
+# ── tooling state ────────────────────────────────────────
+.tool-versions
+.capistrano/*
+tmp/
+*.log
+.cache/
+
+# -- IA garbage ────────────────────────────────────────────
+.atl/
