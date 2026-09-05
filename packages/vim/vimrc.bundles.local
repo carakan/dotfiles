@@ -10,7 +10,7 @@ call dein#add('nvim-treesitter/playground')
 " call dein#add('arthurxavierx/vim-caser') " DELETED 11 Julio
 call dein#add('carakan/new-railscasts-theme')
 call dein#add('carakan/pmv.vim')
-call dein#add('christoomey/vim-sort-motion')
+" call dein#add('christoomey/vim-sort-motion')  " REPLACED 2026-09-04 by sQVe/sort.nvim (same gs keys)
 call dein#add('dhruvasagar/vim-prosession')
 " call dein#add('gorkunov/smartpairs.vim') " DELETED 11 Julio
 call dein#add('vim-test/vim-test')
@@ -74,6 +74,7 @@ call dein#add('luckasRanarison/tailwind-tools.nvim')
 call dein#add('jake-stewart/force-cul.nvim')
 call dein#add('OXY2DEV/markview.nvim')
 call dein#add("jake-stewart/multicursor.nvim")
+call dein#add('https://github.com/sQVe/sort.nvim')  " modern replacement for vim-sort-motion — same gs operator keys
 call dein#add("folke/snacks.nvim")
 call dein#add("afonsofrancof/worktrees.nvim")
 

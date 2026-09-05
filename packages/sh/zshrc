@@ -37,6 +37,10 @@ export ZSH_THEME="powerlevel10k/powerlevel10k"
 export ZSH_TMUX_DEFAULT_SESSION_NAME=main
 export ZSH_TMUX_AUTOCONNECT=true
 export ZSH_TMUX_AUTOSTART=true
+# FIXTERM=true (omz default) makes the tmux wrapper start the server with its
+# own tmux.extra.conf, bypassing ~/.tmux.conf (no tpm, no persist). With false
+# it passes -f $ZSH_TMUX_CONFIG, which defaults to ~/.tmux.conf.
+export ZSH_TMUX_FIXTERM=false
 
 # export TERM=xterm-256color-italic
 # Let kitty set TERM=xterm-kitty (its terminfo is installed in ~/.terminfo).

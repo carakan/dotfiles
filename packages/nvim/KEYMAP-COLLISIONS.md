@@ -1,5 +1,9 @@
 # Keymap Collision Audit
 
+> **STATUS 2026-09-04:** step-0 fixes APPLIED to the legacy config (coc demoted;
+> A/B/C/D verdicts fixed or scheduled — see MIGRATION.md §6 step 0). Remaining:
+> E behavior notes + F prefix hazards, resolved during phases 1–3.
+
 Generated: 2026-09-04 · auditor: M3
 inputs:
 - `/Users/carakan/.dotfiles/packages/vim/vimrc.local` (1341 lines)
@@ -89,7 +93,7 @@ spf13 default is `,` (`.vimrc:151`) but is overridden by the local.
 | `vimade` | `vimrc.local:968-971` (`g:vimade = {...}`, `g:vimade.fadelevel`, `g:vimade.enablesigns`, `g:vimade.enablefocusfading`) | NOT in `vimrc.bundles.local` or spf13 `vimrc.bundles`. §4a says "expect DELETE (unmaintained)". | **DISCARD** — open item §9 row 1 already asks where it loads; it doesn't. Delete the block. |
 | `vim-matchup` (`andymass/vim-matchup`) | `vimrc.local:991-994` (`g:matchup_matchparen_offscreen`, `g:matchup_matchparen_deferred`, `g:matchup_matchparen_hi_surround_always`, `:hi MatchParen`) | COMMENTED OUT in `.vimrc.bundles:25` (`" call dein#add('andymass/vim-matchup')`). vim's built-in matchparen + treesitter highlighter cover this. | **DISCARD** — delete `vimrc.local:991-994`. Keep the `:hi MatchParen` line if you want the styling; move it to a theme file or statusline group. |
 | `quick-scope` (`unblevable/quick-scope`) | `vimrc.local:997` (`g:qs_highlight_on_keys = ['f', 't', 'T']`) | NOT in either manifest. | **DISCARD** — flash.nvim + hlslens cover this. Delete line. |
-| `vim-hexokinase` (`RRethy/vim-hexokinase`) | `vimrc.local:973-989` (entire `g:Hexokinase_*` block) | LOADED (`vimrc.bundles.local:7`) — but §4a deletes hexokinase (unmaintained + Go build step; ccc.nvim covers colors). | **DISCARD** — delete `vimrc.local:973-989`. |
+| `vim-hexokinase` (`RRethy/vim-hexokinase`) | `vimrc.local:973-989` (entire `g:Hexokinase_*` block) | LOADED (`vimrc.bundles.local:7`) — §4a deletes hexokinase (unmaintained + Go build step; ccc.nvim covers colors). | **~~DISCARD~~ RESTORED 2026-09-04** — user overruled: plugin is ACTIVE in the manifest, so its config stays until migration phase 1. Rule recorded in MIGRATION.md §1: only commented-out/absent plugins lose their config. |
 | `vim-easytags` (xolox) | `vimrc.local:198` (`atags#generate()`) | NOT loaded. | **DISCARD** — covered under C above. |
 | `yank-code` (`AaronLasseigne/yank-code`) | `vimrc.local:250` (`:YankCode`) | NOT loaded (`vimrc.bundles.local:1` commented). | **DISCARD** — covered under C above. |
 | `zoomwintab` | (not present in vimrc.local) | n/a | **n/a** — false-positive in the audit brief; no orphan code. |
@@ -222,7 +226,7 @@ Keys below should be wired in `lua/config/keymaps.lua` (phase 1) and `lua/plugin
 - `nmap <silent> <leader>is :TSHighlightCapturesUnderCursor` — playground deleted (C.2).
 - `map <Leader>ct :call atags#generate()` — vim-gutentags/easytags deleted (C.3).
 - `nnoremap <silent> <leader>tt :TagbarToggle` — tagbar not loaded (C.4).
-- All `g:vimade_*` / `g:matchup_*` / `g:qs_highlight_on_keys` / `g:Hexokinase_*` / `:YankCode` / `atags#generate()` orphans — see D.
+- All `g:vimade_*` / `g:matchup_*` / `g:qs_highlight_on_keys` / `:YankCode` / `atags#generate()` orphans — see D. (`g:Hexokinase_*` was briefly deleted in step-0, RESTORED same day — plugin is active in the manifest.)
 
 ---
 
@@ -235,5 +239,356 @@ Building on `MIGRATION.md:163-171`:
 - [ ] **FIX B.2** — choose visual `S` owner (flash.nvim vs nvim-surround). Recommendation: disable flash visual `S`, keep nvim-surround wrap; flash has plenty of single `s` + `r` jumps already.
 - [ ] **DECIDE A.2** — `<leader>a` final owner per §4d (swap stays, code-action moves).
 - [ ] **FIX C.1-C.4** — delete stale bindings (yank, is, ct, tt).
-- [ ] **FIX D.1-D.5** — delete orphan config blocks (vimade, matchup, quick-scope, hexokinase, atags).
+- [ ] **FIX D.1-D.5** — delete orphan config blocks (vimade, matchup, quick-scope, atags; ~~hexokinase~~ restored — active plugin).
 - [ ] **UNVERIFIED E.12** — verify `<CR>` in insert with completion menu behaves correctly after blink.cmp port (spf13 `<CR>` map is currently inactive because `g:spf13_map_cr_omni_complete` is unset).
+
+---
+
+# System-layer audit — yabai + skhd + Karabiner + kitty + tmux + zle
+
+> **Scope:** every hotkey that fires before nvim sees the keystroke. nvim's own
+> internal maps are already covered in §A–G above; this section handles the
+> shell of daemons around it.
+>
+> **Inputs verified 2026-09-04:**
+> `packages/yabai/skhdrc` (150 ln) · `packages/yabai/yabairc` (113 ln) ·
+> `~/.config/karabiner/karabiner.json` (99 ln) · `~/.config/karabiner/karabiner_old.json` (317 ln) ·
+> `packages/kitty/kitty.conf` (3248 ln) · `packages/tmux/tmux.conf` (226 ln) ·
+> `packages/sh/zshrc` (347 ln).
+>
+> **Layer precedence (verified):**
+> 1. **Karabiner** — `virtual_hid_keyboard: ansi` (`karabiner.json:93-95`) → kernel-level remap BEFORE the OS sees the key.
+> 2. **macOS** — receives post-Karabiner events; forwards to focused app.
+> 3. **kitty** — terminal Cocoa app; explicit `map ...` in `kitty.conf` consumes the event before the TTY sees it.
+> 4. **tmux** — when inside a tmux pane, the prefix key (`tmux.conf:18` `prefix C-a`) plus any `bind-key -n` (no-prefix) grabs the event before the child app does.
+> 5. **zsh zle** — only active at the shell prompt; hands off to nvim once nvim takes the TTY.
+> 6. **nvim** — terminal app; receives everything that survived layers 1–4.
+>
+> **Modifier visibility for nvim (verified):**
+> - `cmd+key` combos are handled by the Cocoa app (kitty) first; they NEVER reach nvim/tmux unless explicitly injected via `send_text` (see `kitty.conf:2458, 2460`).
+> - `alt+key` reaches nvim unless kitty grabs it (kitty currently has NO active `alt+letter` map). On macOS, `kitty.conf:2323` `macos_option_as_alt yes` ensures alt acts as alt inside the TTY.
+> - `ctrl+key`, plain letters, function keys pass through to nvim unless a higher layer grabs them.
+> - `shift+key` — passes through; only collides with kitty/tmux if those layers explicitly bind it.
+>
+> **nvim `<leader>`** is verified as **space** (`vimrc.before.local:16` — `let g:spf13_leader = ' '`).
+
+---
+
+## H. System layer inventory
+
+### H.1 — skhd (yabai hotkey daemon) · `packages/yabai/skhdrc` (150 ln)
+
+**66 binds total**, all GLOBAL. yabairc (113 ln) defines no keys; it only owns space labels, rules and config.
+
+| Group | Key | Command | Line |
+|---|---|---|---|
+| Focus window | `alt - h/j/k/l` | `yabai -m window --focus west/south/north/east` | 10-13 |
+| Warp window | `shift + alt - h/j/k/l` | `yabai -m window --warp west/south/north/east` | 18-21 |
+| Send window to space | `shift + alt - 1..9` | `yabai -m window --space N` | 26-34 |
+| Focus space | `ctrl - 1..9` | `yabai -m space --focus N` | 39-47 |
+| Resize edge | `ctrl + alt - h/j/k/l` | `yabai -m window --resize left:-30/bottom:30/top:-30/right:30` | 52-55 |
+| Resize increase (alt-style) | `shift + alt - a/s/w/d` | `yabai -m window --resize left:-20/bottom:20/top:-20/right:20` | 58-61 |
+| Resize decrease (cmd-style) | `shift + cmd - a/s/w/d` | `yabai -m window --resize left:20/bottom:-20/top:20/right:-20` | 64-67 |
+| Move floating window | `shift + ctrl - a/s/w/d` | `yabai -m window --move rel:±20/0` | 72-75 |
+| Insertion point | `shift + ctrl + alt - h/j/k/l` | `yabai -m window --insert west/south/north/east` | 80-83 |
+| Layout switch | `shift + alt - z/x/s` | `yabai -m space --layout bsp/float/stack` | 88-90 |
+| Layout balance | `shift + alt - 0` | `yabai -m space --balance` | 91 |
+| Toggle split | `alt - e` | `yabai -m window --toggle split` | 94 |
+| Mirror layout | `alt - m` | `yabai -m space --mirror x-axis` | 97 |
+| Toggle float | `shift + alt - space` | `yabai -m window --toggle float` | 103 |
+| Float + center | `shift + alt - c` | `yabai -m window --toggle float --grid 8:6:1:1:4:6` | 106 |
+| Sticky + PIP | `ctrl + alt - p` | `yabai -m window --toggle sticky --toggle pip` | 109 |
+| Zoom parent / fullscreen | `alt - d / alt - f` | `yabai -m window --toggle zoom-parent / zoom-fullscreen` | 112-113 |
+| Native fullscreen | `shift + alt - f` | `yabai -m window --toggle native-fullscreen` | 117 |
+| Fill screen grid | `shift + alt - up` | `yabai -m window --toggle float --grid 1:1:0:0:1:1` | 123 |
+| Left/right/center third | `shift + alt - left/right/down` | `yabai -m window --toggle float --grid 1:3:{0,2,1}:0:1:1` | 126, 129, 132 |
+| Focus display | `ctrl + alt - z` | `yabai -m display --focus recent` | 138 |
+| Move to next display + follow | `ctrl + cmd - c` | `yabai -m window --display next; yabai -m display --focus next` | 141 |
+| Save layout | `ctrl + alt - s` | `~/.dotfiles/config/yabai/save_layout.sh` | 147 |
+| Restore layout | `ctrl + alt - r` | `~/.dotfiles/config/yabai/restore_layout.sh` | 150 |
+
+**No app-launching binds in skhdrc** (grep verified). System launching is via yabai rules (`yabairc:30-37`) which route already-open apps to spaces — not keys.
+
+### H.2 — Karabiner-Elements (kernel-level remap) · `~/.config/karabiner/karabiner.json` (99 ln)
+
+**13 active rules total** (1 complex + 2 simple + 10 fn). UNVERIFIED for runtime behavior — `~/.local/share/karabiner/log/grabber_agent.log` only logs device-open events, NOT per-key captures (verified by tail).
+
+| Layer | From | To | Line | Scope |
+|---|---|---|---|---|
+| Complex | `caps_lock` (+ optional any) | `left_control` (or `escape` alone) | 8-19 | All keyboards |
+| Simple (vendor 2821 / prod 6481) | `left_command` | `left_option` | 38-41 | **Apple keyboard only** |
+| Simple (vendor 2821 / prod 6481) | `left_option` | `left_command` | 43-45 | **Apple keyboard only** |
+| fn F3 | `f3` | `mission_control` | 50-53 | All keyboards |
+| fn F4 | `f4` | `launchpad` | 54-57 | All keyboards |
+| fn F5/F6 | `f5/f6` | `rewind/fastforward` | 58-65 | All keyboards |
+| fn F7/F8 | `f7/f8` | `play_or_pause/stop` | 66-73 | All keyboards |
+| fn F9/F10/F11 | `f9/f10/f11` | `mute/volume_decrement/volume_increment` | 74-85 | All keyboards |
+| fn F12 | `f12` | `apple_vendor_keyboard_key_code: mission_control` | 86-89 | All keyboards |
+
+**F1, F2 are NOT remapped in current config** (compare to old: see §K). Vendor 8738 / prod 24 (likely Topre/Realforce) has NO simple mods — only the Apple keyboard swaps cmd/option.
+
+### H.3 — kitty (terminal) · `packages/kitty/kitty.conf` (3248 ln)
+
+**22 active `map` directives** (counted via grep on `^\s*(map|map_)`). All others are commented `#` placeholders.
+
+| Modifiers | Key | Action | Line |
+|---|---|---|---|
+| `cmd` | `c` | `copy_to_clipboard` | 2454 |
+| `cmd` | `v` | `paste_from_clipboard` | 2455 |
+| `shift` | `insert` | `paste_from_clipboard` | 2456 |
+| `cmd` | `s` | `send_text all \x13` (injects `<C-s>` into TTY) | 2458 |
+| `cmd` | `p` | `send_text all \x10` (injects `<C-p>` into TTY) | 2460 |
+| `cmd` + `kitty_mod` (= ctrl+alt) | `up` | `scroll_page_up` | 2571-2572 |
+| `cmd` + `kitty_mod` | `down` | `scroll_page_down` | 2579-2580 |
+| `cmd` + `kitty_mod` | `home` | `scroll_home` | 2594-2595 |
+| `cmd` + `kitty_mod` | `end` | `scroll_end` | 2599-2600 |
+| `kitty_mod` (= ctrl+alt) | `equal` | `change_font_size all +2.0` | 2904 |
+| `kitty_mod` | `plus` | `change_font_size all +2.0` | 2905 |
+| `cmd` | `plus` | `change_font_size all +1.0` | 2907 |
+| `cmd` | `equal` | `change_font_size all +1.0` | 2908 |
+| `kitty_mod` | `minus` | `change_font_size all -2.0` | 2913 |
+| `cmd` | `minus` | `change_font_size all -1.0` | 2915 |
+| `shift + cmd` | `minus` | `change_font_size all -1.0` | 2916 |
+| `cmd` | `0` | `change_font_size all 0` (reset) | 2921 |
+| `ctrl + cmd` | `f` | `toggle_fullscreen` | 3036 |
+
+**Kitty settings that affect layer behavior:**
+
+| Setting | Value | Effect | Line |
+|---|---|---|---|
+| `kitty_mod` | `ctrl+alt` | Modifier alias used by the 4 scroll + 3 font maps | 2471 |
+| `macos_option_as_alt` | `yes` | Option key sent to kitty = Alt in TTY | 2323 |
+| `copy_on_select` | `yes` | Mouse-select auto-copies to clipboard | 711 |
+| `paste_actions` | `quote-urls-at-prompt,confirm-if-large,confirm` | Safety on paste | 741 |
+
+**NO active kitty map on plain `C-v`, `C-s`, `C-p`, `C-c`, `C-h`, `C-j`, `C-k`, `C-l`** (the commented `# map` lines at 2542, 2547, 2558 etc. do nothing).
+
+### H.4 — tmux · `packages/tmux/tmux.conf` (226 ln)
+
+**~40 binds total** across prefix, root (no-prefix), copy-mode and copy-mode-vi tables.
+
+| Table | Key | Action | Line |
+|---|---|---|---|
+| (global) | (prefix) | `C-a` (`send-prefix`) | 18, 20 |
+| (global) | `Escape-time` | `0` (no prefix-escape delay) | 2 |
+| (global) | `mode-keys` | `vi` | 60 |
+| root (no-prefix) | `C-h/C-j/C-k/C-l/C-\` | `if-shell $is_vim` forward to nvim; else `select-pane` | 84-88 |
+| root (no-prefix) | `S-PageUp` | `copy-mode -eu` (enter copy mode) | 159 |
+| root (no-prefix) | `tab` | `tmux-fzf/scripts/pane.sh switch` (fzf pane picker) | 151 |
+| copy-mode | `Enter` | enter copy-mode | 59 |
+| copy-mode | `WheelUpPane` / `WheelDownPane` | scroll up/down N2 | 63-64 |
+| copy-mode | `S-PageUp` / `S-PageDown` | page-up / page-down | 160-161 |
+| copy-mode-vi | `C-h/C-j/C-k/C-l/C-\` | `select-pane` | 90-94 |
+| copy-mode-vi | `v` | `begin-selection` | 153 |
+| copy-mode-vi | `C-v` | `rectangle-toggle` | 154 |
+| copy-mode-vi | `Enter` / `y` | `copy-pipe-and-cancel "pbcopy"` | 155-156 |
+| copy-mode-vi | `MouseDragEnd1Pane` | `copy-pipe-and-cancel "pbcopy"` | 157 |
+| prefix + `h/j/k/l` | (default) | `select-pane L/D/U/R` | 186-189 |
+| prefix + `<` / `>` | (repeatable) | `swap-window -d -t ±1` | 192-193 |
+| prefix + `H/J/K/L` | (repeatable) | `resize-pane ±5` | 196-199 |
+| prefix + `|` `\` `-` `_` | (default) | `split-window -h/-fh/-v/-fv` | 202-205 |
+| prefix + `c` | (default) | `new-window` | 208 |
+| prefix + `R` | (default) | `respawn-pane -k` | 211 |
+| prefix + `x` | (default) | `confirm-before kill-pane` | 212 |
+| prefix + `!` | (default) | `break-pane -d` | 213 |
+| prefix + `C-f` | (default) | `tmux-fzf` picker (`$TMUX_FZF_LAUNCH_KEY`) | 141 |
+| prefix + `C-g` | (default) | `tmux-persist` save (`@persist-save`) | 117 |
+
+**Note `set -sg escape-time 0`** (line 2) — a single C-a fires prefix immediately (no `EscapeTime` delay); to send literal `<C-a>` to the child app, you must press `C-a C-a` quickly (per tmux's `send-prefix` rule on line 20).
+
+### H.5 — zsh / zle · `packages/sh/zshrc` (347 ln)
+
+**0 custom `bindkey` directives** (grep verified — none in `packages/sh/`). ZLE inherits oh-my-zsh defaults, then is patched by:
+
+| Patch | Source | Effect |
+|---|---|---|
+| oh-my-zsh defaults (`source $ZSH/oh-my-zsh.sh`, line 100) | `oh-my-zsh/lib/key-bindings.zsh` | `<C-r>` history search (REPLACED by atuin below) · `<C-a>` beginning-of-line · `<C-e>` end-of-line · `<C-w>` backward-kill-word · `<C-u>` backward-kill-line · `<C-k>` kill-to-eol · `<C-y>` yank · `<C-d>` delete-char |
+| `KEYTIMEOUT=1` | `zshrc:139` | 10 ms for key sequences (instead of default 40) |
+| `setopt noflowcontrol` + `stty start undef` + `stty stop undef` | `zshrc:131-133` | Disables XOFF/XON so `<C-s>` and `<C-q>` reach the TTY app (essential for `<C-s>` save in nvim) |
+| Atuin (`eval "$(atuin init zsh)"`) | `zshrc:336` | Hijacks `<C-r>` for atuin's history search (replaces oh-my-zsh default) |
+| fzf key-bindings (`source <(fzf --zsh)`) | `zshrc:158` | `<C-t>` file picker · `<C-r>` history (now superseded by atuin) · `Alt-C` directory picker |
+| zsh-autosuggestions | `zshrc:96` plugin list | `<Up>`/`<Down>` accept suggestion (insert mode at prompt only) |
+| zsh-patina (syntax highlighting) | `zshrc:339` | None for keys |
+
+**`<C-c>` is NOT bound in zle** (default). It passes through to the foreground job — meaning when nvim is the foreground process (running in TTY), `<C-c>` reaches nvim as `<C-c>` (interrupt).
+
+---
+
+## I. Collisions WITHIN the system layer
+
+> Same combo bound by two layers from H.1–H.5. Layer precedence column follows
+> the chain in this file's intro (Karabiner → macOS → kitty → tmux → shell/nvim).
+
+| Combo | Competing owners (file:line) | Winner (layer order) | Verdict | Proposal |
+|---|---|---|---|---|
+| `C-a` | (a) tmux prefix `C-a` (`tmux.conf:18`) · (b) zsh default `beginning-of-line` (oh-my-zsh) · (c) `<C-a>` in nvim normal = beginning-of-line | tmux (prefix grabs before zle/nvim see it). Inside tmux, `<C-a>` to nvim requires `prefix C-a` (`bind-key C-a send-prefix`, `tmux.conf:20`). | **KEEP** (tmux prefix is intentional; user chose `C-a` over default `C-b` per `tmux.conf:19`). | Document for nvim: inside tmux, use `<Home>` or `0` for beginning-of-line in normal mode, or `C-a C-a` quickly. See J.5. |
+| `C-v` | (a) tmux copy-mode-vi `C-v rectangle-toggle` (`tmux.conf:154`) · (b) nothing in karabiner · (c) nothing active in kitty · (d) nothing in zle · (e) nvim insert `<C-v>` literal char / visual `<C-v>` block | tmux wins **only inside copy-mode-vi** (the bind is in `-T copy-mode-vi`). In nvim normal/insert/visual, tmux passes it through. | **KEEP** (no actual collision for nvim usage — see J.0 for explicit verdict). | None. Document J.0. |
+| `C-h/j/k/l` | (a) skhd `alt - h/j/k/l` window focus (`skhdrc:10-13`) · (b) tmux no-prefix nav via `is_vim` guard (`tmux.conf:84-87`) · (c) karabiner no remap · (d) kitty no map · (e) nvim `<C-h/j/k/l>` via vim-tmux-navigator (see §A.1) | skhd wins because it operates at the OS layer when nvim is in the background; but when nvim is foreground inside kitty inside tmux, `C-h/j/k/l` are intercepted by tmux's `is_vim` guard (line 84-87) which forwards to nvim. So the **same combo behaves differently based on whether nvim has focus**. | **KEEP** (intentional multi-layer split — skhd for app focus, tmux+nvim for pane nav). | A.1 fix from existing audit. Document the focus-dependent behavior. |
+| `cmd - s` | (a) kitty `map cmd+s send_text \x13` (kitty:2458) · (b) macOS default `cmd-s` (Save…, app-level) · (c) no skhd bind | kitty wins (kitty is the focused app; it consumes the event and synthesizes `<C-s>` into the TTY). macOS Save menu is shadowed for kitty windows. | **KEEP** (intentional passthrough — kitty injects `<C-s>` into TTY so nvim `<C-s>` save fires). | None. |
+| `cmd - p` | (a) kitty `map cmd+p send_text \x10` (kitty:2460) · (b) macOS default `cmd-p` (Print) | kitty wins. Inject `<C-p>` → nvim `<C-p>` triggers fzf-lua files (NEOVIM-USAGE.md:39). | **KEEP** (intentional — see `setopt noflowcontrol` enabling this in `zshrc:131-133`). | None. |
+| `cmd - c` | (a) kitty `map cmd+c copy_to_clipboard` (kitty:2454) · (b) macOS default copy · (c) no skhd bind | kitty wins. TTY sees nothing (no send_text). | **KEEP** (intentional — selection copy). | None. |
+| `cmd - v` | (a) kitty `map cmd+v paste_from_clipboard` (kitty:2455) · (b) macOS default paste · (c) no skhd bind | kitty wins. `paste_actions` filter (`kitty.conf:741`) gates safety. | **KEEP**. | None. |
+| `shift + insert` | (a) kitty `paste_from_clipboard` (kitty:2456) · (b) nothing else | kitty wins. | **KEEP**. | None. |
+| `F1/F2` | (a) karabiner **OLD** `display_brightness_decrement/increment` (`karabiner_old.json:184-201`) · (b) karabiner CURRENT: **no remap** · (c) no other layer | Current wins (dropped). F1/F2 reach nvim/TUIs as plain F1/F2. | **DISCARD** (old config; see §K). | None — already cleaned up. |
+| `C-f` | (a) tmux-fzf launch key (`$TMUX_FZF_LAUNCH_KEY` = `C-f`, `tmux.conf:141`) · (b) nothing else (nvim doesn't bind `C-f`) | tmux wins inside tmux. Outside tmux, nvim sees it (no bind). | **KEEP**. | None. |
+| `C-g` | (a) tmux-persist save (`@persist-save 'C-g'`, `tmux.conf:117`) · (b) nothing in nvim/karabiner/kitty | tmux wins inside tmux. | **KEEP**. | None. |
+| `S-PageUp / S-PageDown` | (a) tmux no-prefix `S-PageUp → copy-mode` (`tmux.conf:159`) · (b) tmux copy-mode `S-PageUp/Down → page-up/down` (`tmux.conf:160-161`) | tmux wins. nvim doesn't bind these. | **KEEP**. | None. |
+| `tab` (no prefix) | (a) tmux `bind-key tab ...` (`tmux.conf:151`, fzf pane switcher) · (b) nvim normal `<Tab>` (no default) · (c) nvim insert `<Tab>` completion jump | tmux wins for `tab` in nvim normal mode (no $is_vim guard for tab). | **KEEP** (harmless — nvim `<Tab>` in normal mode is not in the keymap contract, only insert mode `<Tab>` is documented in NEOVIM-USAGE.md:70). | Document: `<Tab>` inside tmux + nvim normal = pane picker. |
+| `ctrl - 1..9` | (a) skhd focus space (`skhdrc:39-47`) · (b) no tmux bind · (c) nvim count prefix `1..9` (unmodified, no ctrl) | skhd wins (OS layer). nvim's count prefix is `1..9` without ctrl — no collision. | **KEEP**. | None. |
+| `alt - f` / `alt - d` / `alt - e` / `alt - m` / `alt - h/j/k/l` | skhd window mgmt (`skhdrc:10-13, 94, 97, 112-113`) vs nothing else | skhd wins when OS focus is on any app. Alt doesn't reach nvim unless explicitly sent via TTY. | **KEEP**. | None. |
+| `ctrl + alt - h/j/k/l` | (a) skhd resize edge (`skhdrc:52-55`) · (b) kitty `kitty_mod+...` (kitty:2904-2916) — wait, kitty_mod is ctrl+alt but the active kitty_mod binds are on `equal/plus/minus/home/end/up/down`, **not on letters** | skhd wins for the letter binds. No collision. | **KEEP**. | None. |
+| `shift + alt - s` | (a) skhd resize increase + layout stack (`skhdrc:59, 90`) · (b) nothing else | skhd wins. | **KEEP**. | None. |
+| `shift + cmd - s/w/a/d` | (a) skhd resize decrease (`skhdrc:64-67`) · (b) macOS default shift+cmd+s (Save As) etc. when focused on a Cocoa app; nvim doesn't see this combo | skhd wins when skhd is loaded (it always is, per `yabai -m signal` setup). | **KEEP** (intentional — muscle memory for resize). | None. |
+| `caps_lock` (alone, no other key) | (a) karabiner complex → `escape` (`karabiner.json:14-15`) · (b) macOS default caps_lock | karabiner wins (it intercepts before macOS). | **KEEP** (intentional — caps as Esc). | None. |
+| `caps_lock` (with other key) | (a) karabiner complex → `left_control` (`karabiner.json:13-14`) · (b) macOS default | karabiner wins. | **KEEP** (intentional — caps as Ctrl). | None. |
+
+**Within-layer sanity check (no actual collisions found):**
+- skhd: each combo appears once.
+- kitty: `cmd+s` and `cmd+p` are the only `send_text` injections; the rest of cmd+/kitty_mod maps target different actions (copy/paste/scroll/font).
+- tmux: `S-PageUp` lives in both root and copy-mode tables, but they activate in different modes — no conflict.
+
+---
+
+## J. System ↔ nvim cross-layer collisions
+
+> Each row: does a system-layer hotkey shadow a key nvim uses (per
+> `NEOVIM-USAGE.md`)? Layer precedence is the chain from this file's intro.
+
+### J.0 — `<C-v>` verdict (user's explicit worry) — FIRST ROW BY DESIGN
+
+**`<C-v>` (no modifier):** SAFE. nvim insert/visual/operator-pending `<C-v>` is NEVER grabbed by any system layer.
+
+Evidence:
+- **Karabiner** (`karabiner.json`): only `caps_lock` is remapped (lines 8-19). `<C-v>` flows through unchanged.
+- **kitty** (`kitty.conf`): the only `v`-keyed map is `map cmd+v paste_from_clipboard` (line 2455) — `cmd+v` is a different modifier combo. Grep over the entire file shows NO active `map ... v` for plain `v` or `C-v` (the only `v` matches are inside `discard_event` and `unicode_input` examples, which are commented). The `mouse_map cmd+left release grabbed,ungrabbed mouse_handle_click link` at line 907 is cmd+left, irrelevant.
+- **tmux** (`tmux.conf:154`): `unbind-key -T copy-mode-vi C-v ; bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle` — this fires **only inside the `-T copy-mode-vi` table**, i.e. only after the user has already entered tmux copy mode (typically via `prefix [` or `Enter copy-mode`). It does not bind plain `<C-v>` in the root table. So when nvim is in normal/insert/visual mode inside a tmux pane, `<C-v>` reaches nvim.
+- **zsh/zle** (`zshrc`): no `bindkey` for `<C-v>` (grep confirmed); default zle widget is `vi-quoted-insert` but only at the shell prompt, never inside nvim.
+- **nvim** (`NEOVIM-USAGE.md` + `vimrc.local`): insert `<C-v>` literal char, visual `<C-v>` block-wise visual, operator `<C-v>` → block selection. All three reach nvim cleanly.
+
+**Verdict: SAFE.** Document the alternates instead of remapping:
+- Visual block: `C-v` works directly. From visual char `v`, use `C-v` toggle (`vimrc.local` has treesitter-textobjects swap at `<leader>a`/`<leader>A` for params, not for v→C-v).
+- Reselect last visual: `gv`.
+- One-shot block from insert: `C-o C-v` (vim normal mode for one cmd, then back to insert).
+
+No action needed. The worry is unfounded given the configs read.
+
+### J.1..J.N — rest of cross-layer
+
+| Combo | nvim key (NEOVIM-USAGE.md / vimrc.local) | System-layer owner (file:line) | Winner for nvim | Verdict | Proposal |
+|---|---|---|---|---|---|
+| `<C-s>` | save file (n/i/v) — `vimrc.local` save helper | nothing in karabiner · nothing active in kitty · no tmux bind · zsh disables XOFF (`zshrc:131`) | nvim wins (passthrough). `cmd+s` in kitty also injects `<C-s>` (intentional, line 2458). | **KEEP**. | None. |
+| `<C-p>` | fzf-lua files (NEOVIM-USAGE.md:39) | `cmd+p` in kitty injects `<C-p>` (line 2460) — same intent | nvim wins (both paths converge). | **KEEP**. | None. |
+| `<C-t>` | fzf-lua buffers (NEOVIM-USAGE.md:40) | nothing in skhd/kitty/karabiner · no tmux bind (C-a is prefix, not C-t) | nvim wins. | **KEEP**. | None. |
+| `<C-c>` | fzf-lua commands normal (NEOVIM-USAGE.md:41) AND `<C-c><C-c>` tslime prefix (`vimrc.local:190-191`) | no active kitty map · no skhd bind · tmux prefix is `C-a` (different) · zsh default has no `<C-c>` widget | nvim wins. | **KEEP**. | None. |
+| `<C-h>/<C-j>/<C-k>/<C-l>` | vim-tmux-navigator (NEOVIM-USAGE.md:31) AND `<C-W>h/j/k/l` window nav (`vimrc.local:155-158` — currently broken per §A.1) | tmux no-prefix `is_vim` guard (`tmux.conf:84-87`) → forwards to nvim when nvim is foreground | nvim wins (when nvim has focus inside tmux). When nvim is NOT focused (any other kitty pane / app), `<C-h/j/k/l>` is unhandled — kitty/tmux/skhd don't bind ctrl+letter. | **FIX A.1** (already in checklist). | See checklist row A.1. |
+| `<C-\>` | vim-tmux-navigator last pane (`tmux.conf:88`) | only the tmux no-prefix bind | nvim receives it via tmux forward. | **KEEP**. | None. |
+| `<C-x>` | nvim insert completion trigger (built-in, used by coc/blink.cmp) | nothing in any system layer | nvim wins. | **KEEP**. | None. |
+| `tab` (insert) | blink/cmp completion select/snippet jump (NEOVIM-USAGE.md:70) | tmux no-prefix `tab` → fzf pane picker (`tmux.conf:151`) — **steals tab in insert mode too** | **tmux wins**. nvim `<Tab>` in insert mode will not fire when inside tmux. | **UNVERIFIED** — but `bind-key -n 'tab'` has no `$is_vim` guard, so this likely fires before nvim sees it. Need a tmux bind-key like `bind-key -n 'tab' if-shell "$is_vim" 'send-keys Tab'` to forward. | Recommend adding `bind-key -n Tab if-shell "$is_vim" 'send-keys Tab'` to `tmux.conf` near the existing vim-tmux-navigator block (line 88 area). |
+| `<Tab>` (normal) | unused per keymap contract | tmux no-prefix `tab` pane picker | tmux wins. nvim normal `<Tab>` is not used. | **KEEP** (harmless today). | None until phase 2 if nvim normal `<Tab>` is reassigned. |
+| `<C-n>` / `<C-p>` (insert, pum visible) | cycle completion menu (NEOVIM-USAGE.md:71) | nothing in any system layer | nvim wins. | **KEEP**. | None. |
+| `<C-Space>` (insert) | blink/cmp trigger (NEOVIM-USAGE.md:69) | macOS Spotlight default (Ctrl-Space) — but inside kitty, `ctrl+space` reaches nvim unless skhd/kitty grab | nvim wins. | **KEEP**. | None. |
+| `<C-M-n>` / `<C-M-p>` | multicursor add next/prev (NEOVIM-USAGE.md:131) | nothing in any system layer | nvim wins. | **KEEP**. | Verify nvim 0.12 still recognizes `<C-M-n>` as Alt-Ctrl-n (already flagged in §B.3). |
+| `<leader>a` (normal + visual) | treesitter swap-parameter (post-migration) | nothing in skhd/kitty/karabiner/tmux uses `space+a` | nvim wins. | **KEEP** (already in §A.2). | None. |
+| `<C-v>` (insert / normal / visual) | literal char / block selection | **NOT grabbed by any layer** (see J.0) | nvim wins. | **SAFE** (J.0). | None. |
+| `v` (normal) | visual char mode | tmux copy-mode-vi `v begin-selection` (`tmux.conf:153`) — only inside copy-mode-vi | nvim wins (different layer). | **KEEP**. | None. |
+| `y` (visual / normal) | vim yank | tmux copy-mode-vi `y copy-pipe pbcopy` (`tmux.conf:156`) — only inside copy-mode-vi | nvim wins. | **KEEP**. | None. |
+| `F1` | vim help (`:h`) | karabiner **OLD** remapped; karabiner **CURRENT** does not (see §K) | nvim wins (current config). | **KEEP**. | None. |
+| `F2` | not bound | karabiner old remapped; current doesn't | nvim/TUI sees plain `F2`. | **KEEP**. | None. |
+| `F3-F12` | not bound by nvim contract | karabiner live (`karabiner.json:50-89`) → mission_control/launchpad/media keys | karabiner wins. | **KEEP** (intentional — macOS media keys). | None. |
+| `S-PageUp / S-PageDown` | not bound | tmux no-prefix / copy-mode (`tmux.conf:159-161`) | tmux wins. | **KEEP**. | None. |
+| `cmd+anything` | **NEVER reaches nvim** (Cocoa apps keep cmd combos) | various (see §I cmd rows) | n/a — nvim never sees these. | **KEEP**. | None. |
+| `alt+letter` | **NEVER reaches nvim** by default in terminal (Cocoa intercepts alt on macOS for special chars) — UNLESS `macos_option_as_alt yes` is set, which it is (`kitty.conf:2323`). So alt+letter DOES reach nvim as `<A-letter>`. | various skhd alt-binds (§H.1) | n/a — skhd wins when active. But skhd binds have to MATCH the alt+letter combo the user presses. | **UNVERIFIED** — depends on whether user's muscle memory targets the swapped physical keys on Apple kb (see K.3). | If apple kb cmd↔opt swap is causing surprises (see §K.3), either disable the swap or re-train. |
+| `caps_lock` alone | n/a | karabiner → escape (`karabiner.json:15`) | n/a (not a vim key). | **KEEP** (intentional). | None. |
+| `caps_lock + key` | n/a (treated as ctrl+key) | karabiner → left_control (`karabiner.json:14`) | n/a — reaches nvim as `<C-key>` (after karabiner). | **KEEP**. | None — but be aware: `<C-c>` triggered via caps+c means tmux prefix is NOT invoked (because `C-a` is prefix, not `C-c`). Verified by tmux.conf:18. |
+| `<C-a>` (normal) | beginning-of-line | tmux prefix `C-a` (`tmux.conf:18, 20`) | **tmux wins** when nvim is inside tmux. | **KEEP** (documented tmux trade-off). | Use `<Home>` or `0` for beginning-of-line inside tmux; or `C-a C-a` quickly for literal `<C-a>` (per `bind-key C-a send-prefix`, line 20). |
+| `<C-c><C-c>` (normal / visual) | tslime send selection / line | nothing in system layers (kitty has no `<C-c>` map; no skhd bind) | nvim wins. | **KEEP**. | None. |
+| `<C-c>r` (normal) | tslime reset pane target | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `<leader>fc` (normal) | git conflict marker jump (NEOVIM-USAGE.md:26) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `gx` (normal) | gx.nvim URL opener (NEOVIM-USAGE.md:190) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `<leader>e` (normal) | nvim-tree toggle (planned phase 2, NEOVIM-USAGE.md:197) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `<leader>w*` (normal) | worktrees (NEOVIM-USAGE.md:195) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `<leader>y` / `<leader>h` (normal) | fzf-lua registers (post-migration) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+| `<leader>?` (normal) | fzf-lua History (NEOVIM-USAGE.md:51) | nothing in system layers | nvim wins. | **KEEP**. | None. |
+
+**Layer summary for nvim cross-layer:**
+- All nvim `<C-s>`, `<C-p>`, `<C-c>`, `<C-h/j/k/l>`, `<C-v>`, `<leader>...`, `<Tab>` (insert), `<C-M-n/p>`, `<C-a>`, `gx`, `<leader>fc`, `<leader>e`, `<C-x>`, `<C-Space>` reach nvim cleanly given the configs as written — **with three real caveats**:
+  1. `<C-a>` is shadowed by tmux prefix (intentional, use `<Home>` or `C-a C-a` quickly).
+  2. `<Tab>` in insert mode is shadowed by tmux no-prefix `tab` pane picker — **latent bug for blink/cmp** (recommend adding tmux `if-shell "$is_vim" 'send-keys Tab'` forwarder).
+  3. Karabiner's left_cmd ↔ left_option swap on the Apple keyboard (§K.3) means physical-alt presses on that kb fire cmd-targeted skhd binds and vice-versa — silently inverting the entire alt/cmd skhd muscle memory.
+
+---
+
+## K. Karabiner historical delta (old vs current)
+
+`karabiner_old.json` (317 ln, Dec 2023, version 14.12.0) vs `karabiner.json` (99 ln, current, version 15.x). Compared via diff of the two files.
+
+### K.1 — KEPT (identical in both)
+
+| Rule | Both |
+|---|---|
+| Complex: `caps_lock` → `left_control` (with other) / `escape` (alone) | `karabiner.json:7-19` and `karabiner_old.json:20-46` |
+| fn F3 → mission_control | `karabiner.json:50-53`, `karabiner_old.json:204-211` |
+| fn F4 → launchpad | `karabiner.json:54-57`, `karabiner_old.json:213-221` |
+| fn F5 → rewind | `karabiner.json:58-61`, `karabiner_old.json:223-231` |
+| fn F6 → fastforward | `karabiner.json:62-65`, `karabiner_old.json:232-241` |
+| fn F7 → play_or_pause | `karabiner.json:66-69`, `karabiner_old.json:242-250` |
+| fn F8 → stop | `karabiner.json:70-73`, `karabiner_old.json:252-259` |
+| fn F9 → mute | `karabiner.json:74-77`, `karabiner_old.json:262-269` |
+| fn F10 → volume_decrement | `karabiner.json:78-81`, `karabiner_old.json:272-280` |
+| fn F11 → volume_increment | `karabiner.json:82-85`, `karabiner_old.json:282-290` |
+| fn F12 → mission_control (apple_vendor_keyboard_key_code) | `karabiner.json:86-89`, `karabiner_old.json:293-301` |
+
+### K.2 — DROPPED (in old, NOT in current)
+
+| Rule | Old line | Effect today |
+|---|---|---|
+| fn F1 → `display_brightness_decrement` | `karabiner_old.json:184-191` | F1 reaches the OS unchanged. F1 in vim = help. In TUIs = whatever the app binds. **Muscle-memory trap**: if the user is reaching for brightness-down via F1, it now does nothing on Karabiner's side — but `F1` is also the standard "help" key in vim/nvim (`:h`). If a vim mapping like `<F1>` was ever intended to be brightness-down via F1, it's been lost. The current `<F1>` reaches vim help. |
+| fn F2 → `display_brightness_increment` | `karabiner_old.json:193-200` | Same as F1 — dropped. |
+
+### K.3 — ADDED (NOT in old, IS in current)
+
+| Rule | Current line | Effect |
+|---|---|---|
+| Simple (vendor 2821 / prod 6481): `left_command` → `left_option` | `karabiner.json:38-41` | On the Apple keyboard only, physical left_cmd is reported to macOS as left_option. **Silently inverts cmd/alt for all layers below Karabiner** on that keyboard. |
+| Simple (vendor 2821 / prod 6481): `left_option` → `left_command` | `karabiner.json:43-45` | On the Apple keyboard only, physical left_option is reported as left_command. Combined with the above, the two modifiers are swapped. |
+
+### K.4 — Devices delta
+
+| Vendor / Product | In old | In current | Notes |
+|---|---|---|---|
+| 8738 / 24 | yes | yes | No simple mods in either. |
+| 9610 / 58 | yes | no | Dropped from device list (probably a now-disconnected keyboard). |
+| 2821 / 6481 | yes | yes | Empty simple_modifications in old; now has the cmd↔option swap (K.3). |
+| 1133 / 50489 (kb) | yes | no | Dropped (probably disconnected — it was already `ignore: true` in old). |
+| 1133 / 50489 (mouse) | yes | no | Same. |
+
+**Two devices removed from the active device list** between Dec 2023 and now; the Apple keyboard gained the swap. UNVERIFIED whether the removed devices were physically disconnected or simply removed from the Karabiner device list (the old config had them as `ignore: true`).
+
+### K.5 — Muscle-memory traps from K.2 / K.3
+
+| User expectation | Today reality |
+|---|---|
+| Press F1 to dim the display | F1 reaches the focused app — vim `<F1>` = help, kitty passthrough, etc. Brightness no longer tied to F1. (Was the user's old muscle memory.) |
+| Press F2 to brighten | Same — F2 passes through. |
+| Press physical-`cmd` on the Apple kb, expect macOS cmd | macOS sees `option`. Spotlight/cmd-tab/cmd-q etc. fire when user presses physical-`option`. **All cmd+key skhd binds (skhdrc) are inverted**: pressing physical-`cmd` triggers the bind on the `alt` slot and vice-versa. |
+| Press physical-`alt` on the Apple kb, expect macOS alt | macOS sees `cmd`. **`alt+key` skhd binds fire on physical-`option`** — same inversion. |
+
+**K.3 is the most impactful delta** and is **UNVERIFIED at runtime** (the log files only contain device-open events, not per-key traces). The user should test: open a Terminal, type something, press physical-`cmd` — does it produce `<D->` (cmd) or `<A->` (alt)? Same for physical-`alt`. If the latter, K.3 is active and inverting every cmd/alt skhd bind on the Apple kb.
+
+---
+
+## L. Recommended final system keymap notes
+
+One-liners, no new file. For inclusion in `NEOVIM-USAGE.md` (System appendix) or kept here.
+
+1. **`<C-v>` is SAFE.** Documented in J.0. No remap needed. Document vim built-ins (`gv`, `C-o C-v`) for muscle-memory alternatives.
+2. **`<C-a>` inside tmux is shadowed by the prefix.** Use `<Home>` (or `0` in normal mode). For literal `<C-a>`, press `C-a C-a` quickly (`tmux.conf:20` send-prefix + `set -sg escape-time 0` makes this work without delay).
+3. **`<Tab>` inside tmux is hijacked by `bind-key -n tab` pane picker.** Recommend adding `bind-key -n Tab if-shell "$is_vim" 'send-keys Tab'` near the vim-tmux-navigator block (`tmux.conf:84-88`) so insert-mode `<Tab>` completion survives inside tmux. Low-risk — does not affect tab behavior outside nvim.
+4. **Karabiner Apple-keyboard cmd/option swap (`karabiner.json:38-45`) silently inverts every cmd/alt skhd bind on that kb.** If physical-`cmd`+letter is doing nothing where the user expects "focus window left", verify the swap is actually wanted. Either keep (and re-train muscle memory) or delete both `simple_modifications` entries on vendor 2821.
+5. **Karabiner dropped F1/F2 brightness remaps** (`karabiner_old.json:184-200` vs current — absent). If the user still presses F1/F2 expecting brightness, that behavior is gone. Re-add only if needed; otherwise leave F1/F2 to reach apps.
+6. **`macos_option_as_alt yes` (`kitty.conf:2323`) ensures alt+letter reaches the TTY** — but it ALSO means alt+letter skhd binds fire only when the skhd-targeted app is in foreground AND the user uses the non-Apple kb (Apple kb is inverted per K.3). Confirm with: focus kitty, press `alt-h`, expected: yabai focus west. If nothing happens, K.3 is biting.
+7. **`cmd+s` and `cmd+p` in kitty (`kitty.conf:2458, 2460`) inject `<C-s>` / `<C-p>` into the TTY** — this is the intentional bridge from Cocoa cmd to vim ctrl. Combined with `stty start undef` (`zshrc:131`), nvim `<C-s>` save fires correctly. Do NOT remove.
+8. **`kitty_mod = ctrl+alt` (`kitty.conf:2471`)** is reserved for kitty's scroll + font-size maps (lines 2571-2580, 2904-2916). It does NOT collide with tmux prefix (which is `C-a`) or with any active skhd bind on the same letters (kitty binds ctrl+alt on `home/end/up/down/equal/plus/minus` — not letters). Safe.
+9. **No app-launching skhd binds exist.** App routing is via yabai rules (`yabairc:30-37`) which only assign apps to spaces on launch — keys do not launch apps. If the user wants cmd-1..9 to "go to space 1..9", that lives in skhd (`ctrl - 1..9`, `skhdrc:39-47`); app launching (e.g., `cmd-shift-L` to open Slack) is not currently wired.
+10. **No `bindkey` in `zshrc`.** ZLE runs on defaults + oh-my-zsh + atuin (which hijacks `<C-r>`) + fzf. If a key stops working at the shell prompt and not inside nvim, suspect one of those four layers — not zshrc.
+

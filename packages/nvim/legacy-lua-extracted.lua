@@ -1,17 +1,22 @@
 -- ============================================================================
--- LEGACY LUA EXTRACTION — review artifact, NOT a runnable config
+-- LEGACY LUA EXTRACTION — LIVE SOURCE (loaded by the legacy config)
 -- ============================================================================
--- Purpose: single-file inventory of ALL Lua code currently living inside the
--- vimscript config, produced as step 1 of the nvim migration plan.
--- Sources (as of 2026-09-04):
---   ~/.vimrc.local  (= dotfiles/packages/vim/vimrc.local, 1341 lines)
---     - SECTION 1: inline <cmd>lua ... keymap expressions, lines 163-236
---     - SECTION 2: the monolithic `lua << EOF` block, lines 253-943
---   No other file contains Lua (checked: .vimrc, .vimrc.before*,
---   .vimrc.bundles* — only directory-existence checks).
--- Requires plugin context (fzf-lua, gitsigns, noice, snacks, ...) — will not
--- load standalone. Syntax-checked with luajit -bl.
--- Migration note: treesitter block below uses the LEGACY
+-- vimrc.local no longer embeds the lua block: at the exact point where
+-- `lua << EOF … EOF` used to run, it now calls:
+--     lua dofile(vim.fn.expand('~/.dotfiles/packages/nvim/legacy-lua-extracted.lua'))
+-- Execution order is preserved (same position in the file).
+--
+-- History:
+--   2026-09-04 created as step-0 review artifact (all legacy Lua inventoried)
+--   2026-09-04 step-0 collision fixes folded in (flash visual-S restored to nvim-surround)
+--   2026-09-04 became the live source — vimrc.local's embedded block deleted
+--
+-- Sources: ~/.vimrc.local (= dotfiles/packages/vim/vimrc.local)
+--   - SECTION 1: inline <cmd>lua keymap expressions (commented reference —
+--     these stay as vimscript mappings in vimrc.local)
+--   - SECTION 2: the former `lua << EOF` block, verbatim
+-- Requires plugin context (fzf-lua, gitsigns, noice, snacks, ...).
+-- Migration note: the treesitter block below uses the LEGACY
 -- require('nvim-treesitter.configs').setup API (pre-main-branch rewrite);
 -- it must be rewritten, not ported verbatim.
 -- ============================================================================
@@ -35,7 +40,7 @@
 -- :236  nnoremap <silent> <leader>M <cmd>lua require('fzf-lua').resume()<cr>
 
 -- ----------------------------------------------------------------------------
--- SECTION 2 — the monolithic `lua << EOF` block, verbatim (vimrc.local:253-943)
+-- SECTION 2 — the former `lua << EOF` block, verbatim (now executed via dofile)
 -- ----------------------------------------------------------------------------
 vim.g.colors_name = 'new-railscasts';
 require("nvim-surround").setup({});
@@ -462,6 +467,11 @@ require('nvim-treesitter.configs').setup({
         },
       },
     },
+  matchup = {
+    enable = true,  -- mandatory, false will disable the whole extension
+    disable_virtual_text = false,
+    -- [options]
+  },
   ensure_installed = {
     'bash', 'css', 'comment', 'diff', 'dockerfile', 'eex', 'elixir', 'embedded_template', 'erlang', 
     'git_rebase', 'git_config', 'gitattributes', 'gitcommit', 'gitignore', 'glimmer', 'gpg', 
@@ -691,6 +701,9 @@ require("noice").setup({
 })
 
 require('flash').setup({})
+-- restore nvim-surround's visual-mode S (flash is sourced later and stole it)
+pcall(vim.keymap.del, "x", "S")
+vim.keymap.set("x", "S", "<Plug>(nvim-surround-visual)", { remap = true, silent = true })
 require("tailwind-tools").setup({
   -- your configuration
 })
@@ -729,3 +742,23 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
 end
 
+-- nvim 0.12 fix: diagnostic signs are extmark-based and sign_define no longer
+-- feeds their text (hence the bare "W"/"E" letters). ALE runs with
+-- g:ale_use_neovim_diagnostics_api=1, so its signs flow through here too.
+-- Icons are reused from the `signs` table above, byte-for-byte.
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = signs.Error,
+      [vim.diagnostic.severity.WARN] = signs.Warn,
+      [vim.diagnostic.severity.INFO] = signs.Info,
+      [vim.diagnostic.severity.HINT] = signs.Hint,
+    },
+  },
+})
+
+
+-- sort.nvim (sQVe) — modern replacement for the deleted vim-sort-motion.
+-- Reuses its gs operator (gsip / gsii / gs2j / gsi( / visual gs) plus :Sort.
+-- Defaults are sane; custom delimiters/presets via setup opts (see :h sort.nvim).
+require("sort").setup({})

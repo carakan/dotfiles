@@ -35,6 +35,12 @@
 | 2026-09-04 | Usage doc | `USAGE.md` renamed → **`NEOVIM-USAGE.md`** (repo root), refreshed with all current plugins + keymaps. It doubles as the keymap contract: swapping a plugin is fine, its shortcuts are not |
 | 2026-09-04 | Local AI models | **NO research, NO benchmark** (user directive). A server already runs at **`http://127.0.0.1:8080/v1`** (toshLLM + llama.cpp, OpenAI-compatible). Migration connects THAT for **autocomplete** (FIM) |
 | 2026-09-04 | Keymap collision audit | Dispatched to M3 agent → artifact: [`KEYMAP-COLLISIONS.md`](./KEYMAP-COLLISIONS.md). Scope: ALL global mappings across the 4 vimscript files + plugin defaults; each collision gets a verdict tied to §4 disposition (plugin kept → fix, plugin deleted → auto-resolves) |
+| 2026-09-04 | Collision resolution rule | **coc.nvim always loses.** Until phase 3 removes it, coc is demoted: any kept plugin wins a contested key. Applied as step-0 (§6) |
+| 2026-09-04 | Directory hierarchy | Phase-1 scaffold mirrors **[gh0stzk/dotfiles `config/nvim`](https://github.com/gh0stzk/dotfiles/tree/master/config/nvim)**: `init.lua` + `lua/{vim-options,keymaps,cmds,theme,plugins}.lua` + `lua/plugins/*.lua` (one file per plugin). Addition: `lua/autocmds.lua` if the port needs it |
+| 2026-09-04 | Plugin-config rule | Config blocks are deleted **ONLY** for plugins absent/commented-out in the dein manifests. ACTIVE plugins keep their config until their §4 disposition executes (hexokinase briefly deleted in step-0, restored same day per user) |
+| 2026-09-04 | Lua externalized | `vimrc.local` no longer embeds Lua: the `lua <<EOF…EOF` block was replaced by one call — `lua dofile('~/.dotfiles/packages/nvim/legacy-lua-extracted.lua')` — at the same position (order preserved). `legacy-lua-extracted.lua` is now the live single source (744 lines, headless nvim verified, exit 0). Future lua edits happen THERE, not in vimrc.local |
+| 2026-09-04 | Manager → vim.pack | User override: target manager is **`vim.pack`** (nvim 0.12 built-in), NOT lazy.nvim. Phase-1 `lua/plugins.lua` becomes the vim.pack spec/bootstrap; hierarchy (gh0stzk layout) unchanged. Sort plugin also swapped: sQVe/sort.nvim added (explicit URL), christoomey/vim-sort-motion commented out — it was STILL ACTIVE at manifest line 13, silently owning `gs` after being declared deleted |
+| 2026-09-04 | 0.12 diagnostic-signs fix | ALE signs showed bare `W`/`E`: nvim 0.11 made diagnostic signs extmark-based (`vim.diagnostic.config().signs.text`) and 0.12 dropped the legacy `sign_define` path — with `g:ale_use_neovim_diagnostics_api=1` ALE flows through it. Fixed in `legacy-lua-extracted.lua` by wiring the existing icon table into `vim.diagnostic.config` (byte-identical glyphs, verified len=3/0xEF). Same config serves phase-3 native LSP diagnostics — keep it in the port |
 
 ---
 
@@ -71,7 +77,7 @@ ollama:           NOT installed (phase 4 gate)
 ## 3. Architecture decisions
 
 - [x] **D1 Framework: hand-rolled modular** (`init.lua` + `lua/config/` + `lua/plugins/`, one file per plugin). Rejected LazyVim/kickstart: user's heavy customizations (own colorscheme fork, custom bufferline/lualine, fzf-lua everywhere) would fight any distro
-- [x] **D2 Manager: dein.vim → lazy.nvim**
+- [x] ~~**D2 Manager: dein.vim → lazy.nvim**~~ **AMENDED 2026-09-04 (user): dein.vim → `vim.pack`** — Neovim 0.12's built-in plugin manager, zero third-party deps on an already-installed 0.12.5. Tradeoff accepted: no lazy-loading (vim.pack.add is eager; per-plugin deferred `add()` calls can be introduced later if startup feels slow)
 - [x] **D3 LSP: nvim 0.12 native** `vim.lsp.config` / `lsp.enable`; servers via **Homebrew** (dotfiles philosophy) — EXCEPT `ruby-lsp`/`lexical`: per-project via Bundler (7 asdf rubies; a brew-pinned ruby-lsp mis-serves all but one)
 - [x] **D4 Completion: coc.nvim → blink.cmp** (+ friendly-snippets; test a Ruby block snippet end-to-end)
 - [x] **D5 Lint/format: ALE → nvim-lint + conform.nvim**, porting existing linter/fixer tables. ALE's `tsserver`/`typecheck`/`vls` entries move to LSP diagnostics, NOT nvim-lint
@@ -111,7 +117,7 @@ ollama:           NOT installed (phase 4 gate)
 - [ ] emmet-vim (markup expansion — explicitly deleted)
 - [ ] vim-closetag (auto-closing tags while typing)
 - [ ] vim-endwise (auto `end` for ruby blocks — AI writes complete blocks)
-- [ ] vim-sort-motion (`:sort` built-in suffices)
+- [ ] vim-sort-motion → **REPLACED by sQVe/sort.nvim** (installed 2026-09-04 in legacy config, same `gs` operator keys; old plugin commented out of manifest — it had remained active, silently owning `gs`)
 - [ ] auto-pairs → **replace with nvim-autopairs (lua)** — pairing still helps when tweaking AI output *(swap, not delete)*
 
 **Optional lua swaps (decide during phase 2, not urgent):**
@@ -151,8 +157,18 @@ ollama:           NOT installed (phase 4 gate)
 
 ## 6. Phases
 
+- [x] **Step 0 — collision fixes in the LEGACY config** (applied 2026-09-04, rule: coc loses; uncommitted, awaiting user review). Edits in `packages/vim/vimrc.local` + `~/.supra-vim/.vimrc`:
+  - [x] `<C-h/j/k/l>` restored to vim-tmux-navigator (plain window-move overrides deleted; `<C-w>h/j/k/l` still available)
+  - [x] `<leader>a` → treesitter swap-parameter (sole owner); coc code-action moved to `<leader>ca`
+  - [x] visual `S` restored to nvim-surround (flash override deleted via `vim.keymap.del` + `<Plug>(nvim-surround-visual)` re-map)
+  - [x] `<leader>f` fires instantly (fold-level maps `<leader>f0–f9` deleted — folds disabled via `nofoldenable`)
+  - [x] Stale bindings deleted: `<leader>y` (YankCode), `<Leader>ct` (atags), `<leader>is` (playground → `:Inspect` native), `<leader>tt` (tagbar guard block)
+  - [x] Orphan config blocks deleted: vimade, matchup, quick-scope *(hexokinase was also deleted, then RESTORED same day — active plugin, see §1 rule)*
+  - [x] **Lua externalized**: embedded `lua <<EOF…EOF` block replaced by one `dofile` call to [`legacy-lua-extracted.lua`](./legacy-lua-extracted.lua) (regenerated first to fold in the step-0 lua edits; luajit syntax OK; `nvim --headless +qa` exit 0). vimrc.local shrank by ~700 lines; the extracted file is now the live source
+  - Remaining audit verdicts (B/D leftovers, E behavior notes, F prefix hazards) auto-resolve during phases 1–3 per KEYMAP-COLLISIONS.md
+  - **System layer audited 2026-09-04** (§H–§L, +351 lines): skhd 66 binds, karabiner 13 rules, kitty 22 maps, tmux ~40 binds inventoried; **`<C-v>` visual-block verdict = SAFE** (J.0); no hard FIX in cross-layer — two system findings queued below
 - [x] **Phase 0 — Extract legacy Lua** → [`legacy-lua-extracted.lua`](./legacy-lua-extracted.lua) (731 lines, luajit syntax-checked) · 2026-09-04
-- [ ] **Phase 1 — Scaffold**: `packages/nvim/{init.lua,lua/config/{options,keymaps,autocmds,lazy}.lua,lua/plugins/*.lua}`; lazy.nvim bootstrap; run via `NVIM_APPNAME=nvim2`; port options/keymaps from the 3 vimscript files; theme + UI plugins (bufferline colors, lualine, statuscol, scrollbar, noice, snacks); treesitter new API + capture-mapping pass for railscasts (R3)
+- [ ] **Phase 1 — Scaffold** (gh0stzk hierarchy, see §1 log): `packages/nvim/init.lua` + `lua/vim-options.lua` + `lua/keymaps.lua` + `lua/cmds.lua` + `lua/theme.lua` + `lua/plugins.lua` (**vim.pack** spec/bootstrap — `vim.pack.add{ … }`, updates via `vim.pack.update()`) + `lua/plugins/*.lua` (one file per plugin, e.g. `bufferline.lua`, `fzf-lua.lua`); (+`lua/autocmds.lua` if needed); run via `NVIM_APPNAME=nvim2`; port options/keymaps from the 3 vimscript files; theme + UI plugins (bufferline colors, lualine, statuscol, scrollbar, noice, snacks); treesitter new API + capture-mapping pass for railscasts (R3)
 - [ ] **Phase 2 — Fuzzy + git + editing**: fzf-lua (all 13 keymaps from extraction §1), gitsigns/diffview/neogit/octo/gitlinker, sessions (obsession/prosession, snacks modules off), mini/nvim-autopairs decisions from §4b. **Resolve KEYMAP-COLLISIONS.md verdicts**: A.1 `<C-h/j/k/l>` tmux-nav restore, A.x `[c/]c` hunks→`]h/[h`, B flash-visual `S` disable, C/D stale + orphan deletions (`<leader>y`, `<Leader>ct`, `<leader>tt`, vimade/matchup/qs/hexokinase/atags blocks), `<leader>a` → swap keeps key, code-action moves (§4d)
 - [ ] **Phase 3 — LSP big-bang**: native LSP + blink.cmp + conform/nvim-lint land together; coc + ALE + 25 node extensions die. Full keymap checklist below
 - [ ] **Phase 4 — AI**: connect local toshLLM endpoint to blink.cmp for autocomplete; opencode.nvim; omp review-mode integration
@@ -212,7 +228,9 @@ ollama:           NOT installed (phase 4 gate)
 - [ ] Where does `vimade` actually load from? (§4a)
 - [ ] nvim-recorder & force-cul: commented-out in setup — port or drop?
 - [ ] omp review-mode docs reading (JS page) — do in phase 4
-- [ ] `<leader>a` final owner + ALL other collisions: resolve per [`KEYMAP-COLLISIONS.md`](./KEYMAP-COLLISIONS.md) audit (keep plugin → fix mapping; deleted plugin → auto-resolves)
+- [x] `<leader>a` final owner + step-0 collisions — RESOLVED (§6 step 0; swap keeps `<leader>a`, code-action on `<leader>ca`)
+- [ ] Remaining KEYMAP-COLLISIONS.md verdicts (E behavior notes, F prefix hazards like `<C-c>` interplay with `notimeout`) — resolve during phases 1–3
+- [ ] tmux: bare `<Tab>` pane picker hijacks nvim completion-Tab inside tmux → add `bind-key -n Tab if-shell "$is_vim" 'send-keys Tab'` next to the vim-tmux-navigator block (`tmux.conf` ~151) — benefits TODAY's coc too (audit J, phase-2 scope)
 - [ ] mini.ai / coerce.nvim optional swaps (§4b)
 - [ ] nvim-tree has NO toggle keymap today → define `<leader>e` in phase 2 (discovered writing NEOVIM-USAGE.md)
 - [ ] Stale USAGE.md entries already dropped in NEOVIM-USAGE.md: vim-grepper (fzf-lua took over `<leader>ag`), ember-tools, zoomwintab, vim-select-replace, sort-motion (deleted) — verify none are silently expected during phase 2 keymap port
