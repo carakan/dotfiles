@@ -132,7 +132,7 @@ ollama:           NOT installed (phase 4 gate)
 - [ ] tpope: vim-dadbod + vim-dadbod-ui + vim-dadbod-completion, vim-projectionist (Rails/Ember/Elixir heuristics — big block, port carefully), vim-rails, vim-ruby, vim-rhubarb, vim-repeat, vim-abolish*, vim-obsession + vim-prosession, vim-commentary/nerdcommenter
 - [ ] vim-elixir (treesitter highlights it but elixir ftplugin/indent still owned here)
 - [ ] vim-tmux-navigator, vim-rooter, vim-automkdir, close-buffers, conflict-marker, targets.vim*, splitjoin.vim*, vim-closetag→DELETED, lifepillar/pgsql.vim, dash.vim, vim-hexokinase→DELETED
-- [ ] Modern Lua natives (port setup from extracted file): snacks, flash, noice, nvim-notify, fzf-lua, gitsigns, diffview, neogit, octo, gitlinker, bufferline, lualine, statuscol, scrollbar, smartcolumn, ibl, nvim-surround, nvim-tree, nvim-web-devicons (custom icons block), markview, multicursor, worktrees, ccc, gx, tailwind-tools, hlslens, nvim-bqf, nvim-recorder (commented — decide), force-cul (commented — decide), friendly-snippets, plenary, nui, promise-async
+- [ ] Modern Lua natives (port setup from extracted file): snacks, flash, noice, nvim-notify, fzf-lua, gitsigns, diffview, neogit, octo, gitlinker, bufferline, lualine, statuscol, scrollbar, smartcolumn, ibl, nvim-surround, nvim-tree, nvim-web-devicons (custom icons block), markview, worktrees, ccc, gx, tailwind-tools, hlslens, nvim-bqf, nvim-recorder (commented — decide), force-cul (commented — decide), friendly-snippets, plenary, nui, promise-async. ~~multicursor~~ (deleted — native 0.13 wins)
 - [ ] **snacks overlaps:** explicitly disable snacks' session/dashboard modules (prosession/obsession own sessions)
 
 ### d) REPLACE / ADAPT
@@ -155,6 +155,24 @@ ollama:           NOT installed (phase 4 gate)
 
 ---
 
+## 5b. Roadmap niceties to adopt (0.12/0.13 built-ins that shrink the plugin list)
+
+Source: [neovim roadmap](https://neovim.io/roadmap/) · running nightly `0.13.0-dev` ("Batteries Included" milestone) has all ✅ items.
+
+| Nicety | Status | Replaces / affects | Action & phase |
+|---|---|---|---|
+| **Native multicursor** | ✅ 0.13 | `jake-stewart/multicursor.nvim` | **DECIDED 2026-09-04 — native wins, plugin DELETED** (manifest commented, repo dir removed). Commands: Q/{Visual}Q/gQ/]C/g CTRL-A/<C-LeftMouse>. Plain `Q` stays with close-buffers (contract tradeoff) |
+| **Load hierarchy** | — | supra-vim layering × gh0stzk modularity | Phase-1 scaffold keeps spf13's best idea — fixed layer order + optional `*.local.lua` override files (the `.vimrc.local` escape hatch, modernized) on top of the gh0stzk layout. See Phase 1 |
+| **Treesitter incremental selection via `in`/`an` textobjects** | ✅ 0.12 | legacy `incremental_selection` module (gnn/grn/grc/grm) lost in the treesitter main-branch rewrite (R4) | Phase 1: use native `in`/`an` instead of porting the module; keep old keys as aliases if wanted |
+| **LSP default mappings + `:lsp` command** | ✅ 0.12 | part of the coc → native-LSP port (phase 3) | Prefer built-in defaults where they match the contract (`gd`/`K`/`gr`…); only bind what differs |
+| **Default statusline: diagnostics + LSP progress-status** | ✅ 0.12 | keeps lualine thin | Keep custom lualine (railscasts look), but drop any hand-rolled LSP-progress components; revisit whether lualine earns its keep later |
+| **Image API `vim.ui.img`** | ✅ 0.13 (tmux wrap pending) | eventually `snacks.image` | Already documented in NEOVIM-USAGE.md — inside tmux stays on snacks until nvim adds the Ptmux wrap |
+| **`dir.lua` directory browser (netrw replacement)** | ✅ 0.13 | candidate for the unbound `<leader>e` (§9) | Phase 2: bind `<leader>e` to nvim-tree now (mature); re-evaluate native browser when 0.13 stabilizes |
+| **Interactive `:!` (`:[range]terminal`, `:write !sudo tee %`)** | 0.13 (in progress) | niche vim-test/pipe patterns | Keep vim-test+tslime (tmux workflow); adopt `:terminal`-range tricks opportunistically |
+| **File-change detection (improved `'autoread'`)** | ✅ 0.13 | guard scripts | Set `autoread` in `vim-options.lua`; no plugin needed |
+| **`vim.async` structured concurrency / CmdAtom events** | ✅ 0.13 | future config internals | No action now — enables cleaner autocommand/async code in the new config |
+| **vim.pack** | ✅ 0.12 | dein.vim | Already the chosen manager (D2) |
+
 ## 6. Phases
 
 - [x] **Step 0 — collision fixes in the LEGACY config** (applied 2026-09-04, rule: coc loses; uncommitted, awaiting user review). Edits in `packages/vim/vimrc.local` + `~/.supra-vim/.vimrc`:
@@ -168,9 +186,36 @@ ollama:           NOT installed (phase 4 gate)
   - Remaining audit verdicts (B/D leftovers, E behavior notes, F prefix hazards) auto-resolve during phases 1–3 per KEYMAP-COLLISIONS.md
   - **System layer audited 2026-09-04** (§H–§L, +351 lines): skhd 66 binds, karabiner 13 rules, kitty 22 maps, tmux ~40 binds inventoried; **`<C-v>` visual-block verdict = SAFE** (J.0); no hard FIX in cross-layer — two system findings queued below
 - [x] **Phase 0 — Extract legacy Lua** → [`legacy-lua-extracted.lua`](./legacy-lua-extracted.lua) (731 lines, luajit syntax-checked) · 2026-09-04
-- [ ] **Phase 1 — Scaffold** (gh0stzk hierarchy, see §1 log): `packages/nvim/init.lua` + `lua/vim-options.lua` + `lua/keymaps.lua` + `lua/cmds.lua` + `lua/theme.lua` + `lua/plugins.lua` (**vim.pack** spec/bootstrap — `vim.pack.add{ … }`, updates via `vim.pack.update()`) + `lua/plugins/*.lua` (one file per plugin, e.g. `bufferline.lua`, `fzf-lua.lua`); (+`lua/autocmds.lua` if needed); run via `NVIM_APPNAME=nvim2`; port options/keymaps from the 3 vimscript files; theme + UI plugins (bufferline colors, lualine, statuscol, scrollbar, noice, snacks); treesitter new API + capture-mapping pass for railscasts (R3)
-- [ ] **Phase 2 — Fuzzy + git + editing**: fzf-lua (all 13 keymaps from extraction §1), gitsigns/diffview/neogit/octo/gitlinker, sessions (obsession/prosession, snacks modules off), mini/nvim-autopairs decisions from §4b. **Resolve KEYMAP-COLLISIONS.md verdicts**: A.1 `<C-h/j/k/l>` tmux-nav restore, A.x `[c/]c` hunks→`]h/[h`, B flash-visual `S` disable, C/D stale + orphan deletions (`<leader>y`, `<Leader>ct`, `<leader>tt`, vimade/matchup/qs/hexokinase/atags blocks), `<leader>a` → swap keeps key, code-action moves (§4d)
-- [ ] **Phase 3 — LSP big-bang**: native LSP + blink.cmp + conform/nvim-lint land together; coc + ALE + 25 node extensions die. Full keymap checklist below
+- [ ] **Phase 1 — Scaffold** (gh0stzk layout + supra-vim layering, see §1 log):
+
+  ```text
+  packages/nvim/
+    init.lua            — sources layers in fixed order, then any local/*.local.lua
+    lua/
+      vim-options.lua   — layer 1 · options/env (the old .vimrc.before role)
+      keymaps.lua       — layer 2 · keymap contract
+      cmds.lua          — layer 2b · user commands
+      autocmds.lua      — layer 2c
+      theme.lua         — layer 3 · railscasts + treesitter @capture mapping
+      plugins.lua       — layer 4 · vim.pack manifest (the .vimrc.bundles role)
+      plugins/*.lua     — layer 5 · one file per plugin (bufferline.lua, fzf-lua.lua, …)
+      local/            — layer 6 · USER OVERRIDES, sourced only if present:
+                          options.local.lua · keymaps.local.lua · cmds.local.lua ·
+                          autocmds.local.lua · plugins.local.lua
+  ```
+
+  ```lua
+  -- init.lua sourcing order (the spf13 escape-hatch pattern, modernized)
+  require('vim-options'); require('keymaps'); require('cmds')
+  require('autocmds'); require('theme'); require('plugins')
+  for _, n in ipairs({ 'options','keymaps','cmds','autocmds','plugins' }) do
+    pcall(dofile, vim.fn.stdpath('config') .. '/lua/local/' .. n .. '.local.lua')
+  end
+  ```
+
+  `local/` may hold machine-specific tweaks (gitignore-able) — tweak behavior without touching managed files. Run via `NVIM_APPNAME=nvim2`; theme + UI plugins first (bufferline colors, lualine, statuscol, scrollbar, noice, snacks); treesitter new API + railscasts capture-mapping (R3) + native `in`/`an` incremental selection (§5b); `autoread` on (0.13 file-watch)
+- [ ] **Phase 2 — Fuzzy + git + editing**: fzf-lua (all 13 keymaps from extraction §1), gitsigns/diffview/neogit/octo/gitlinker, sessions (obsession/prosession, snacks modules off), mini/nvim-autopairs decisions from §4b. ~~Trial native multicursor~~ **DECIDED: native 0.13 multicursor adopted, plugin deleted (§5b) — port nothing, just document Q-family keys**. **Resolve KEYMAP-COLLISIONS.md verdicts**: A.1 `<C-h/j/k/l>` tmux-nav restore, A.x `[c/]c` hunks→`]h/[h`, B flash-visual `S` disable, C/D stale + orphan deletions (`<leader>y`, `<Leader>ct`, `<leader>tt`, vimade/matchup/qs/atags blocks), `<leader>a` → swap keeps key, code-action moves (§4d)
+- [ ] **Phase 3 — LSP big-bang**: native LSP + blink.cmp + conform/nvim-lint land together; coc + ALE + 25 node extensions die. Prefer 0.12 **LSP default mappings + `:lsp` command** wherever they match the keymap contract (bind only the deltas). Full keymap checklist below
 - [ ] **Phase 4 — AI**: connect local toshLLM endpoint to blink.cmp for autocomplete; opencode.nvim; omp review-mode integration
 - [ ] **Phase 5 — Verification & teardown**: run §6 checklist → dotbot cutover (§7) → delete `~/.supra-vim`, `~/.vimrc*` links, `packages/vim/`, dein bundles. **Tag repo + `tar czf ~/backups/supra-vim-$(date +%F).tgz ~/.supra-vim ~/.vimrc` BEFORE teardown**
 
@@ -218,7 +263,7 @@ ollama:           NOT installed (phase 4 gate)
 - **R1 — AI stack design**: ~~Intel iMac = CPU-only local models, benchmark gate~~ **RESOLVED 2026-09-04**: a toshLLM + llama.cpp server already runs at `http://127.0.0.1:8080/v1` — migration consumes it as-is (user: no research, no benchmark). Only unknown is FIM latency on Intel CPU; note tokens/s in this file when first wired
 - **R2 — Parallel-run mechanism**: `~/.config/nvim` is symlinked to `~/.vim` until teardown day → new config MUST live at `~/.config/nvim2` via `NVIM_APPNAME=nvim2`
 - **R3 — Colors break first**: railscasts fork styles legacy groups (`Keyword`, `String`); treesitter emits `@keyword`/`@string` captures. Budget a capture-mapping pass in phase 1 — the "migration looks broken" moment is planned for
-- **R4 — treesitter main-branch rewrite** drops `incremental_selection` (gnn/grn/grc/grm), `indent`, `playground` modules; textobjects is a separate repo with its own rewrite; `ensure_installed` becomes explicit installs; `comment` parser removed upstream. Port each module deliberately, not wholesale
+- **R4 — treesitter main-branch rewrite** drops `incremental_selection` (gnn/grn/grc/grm), `indent`, `playground` modules; textobjects is a separate repo with its own rewrite; `ensure_installed` becomes explicit installs; `comment` parser removed upstream. Port each module deliberately, not wholesale. **Mitigated 2026-09-04**: incremental selection is now NATIVE via 0.12 treesitter `in`/`an` textobjects (§5b) — one less port
 - **R5 — blink + noice/notify float styling**: custom `winhighlight` (vimrc.local:897) needs a pass against blink menus (cosmetic, noticed first)
 
 ---
@@ -232,5 +277,5 @@ ollama:           NOT installed (phase 4 gate)
 - [ ] Remaining KEYMAP-COLLISIONS.md verdicts (E behavior notes, F prefix hazards like `<C-c>` interplay with `notimeout`) — resolve during phases 1–3
 - [ ] tmux: bare `<Tab>` pane picker hijacks nvim completion-Tab inside tmux → add `bind-key -n Tab if-shell "$is_vim" 'send-keys Tab'` next to the vim-tmux-navigator block (`tmux.conf` ~151) — benefits TODAY's coc too (audit J, phase-2 scope)
 - [ ] mini.ai / coerce.nvim optional swaps (§4b)
-- [ ] nvim-tree has NO toggle keymap today → define `<leader>e` in phase 2 (discovered writing NEOVIM-USAGE.md)
+- [ ] nvim-tree has NO toggle keymap → `<leader>e` now opens the NATIVE 0.13 dir browser (trial, `edit .`); nvim-tree reachable via `:NvimTreeToggle` — phase 2 picks one
 - [ ] Stale USAGE.md entries already dropped in NEOVIM-USAGE.md: vim-grepper (fzf-lua took over `<leader>ag`), ember-tools, zoomwintab, vim-select-replace, sort-motion (deleted) — verify none are silently expected during phase 2 keymap port

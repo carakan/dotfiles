@@ -93,7 +93,7 @@ fi
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=( zsh-interactive-cd bgnotify history gem mix rails alias-tips node npm bun git 
-          brew tmux asdf zsh-autosuggestions macos zsh-completions copypath safe-paste)
+          brew tmux asdf deja macos zsh-completions copypath safe-paste)
 
 # User configuration
 

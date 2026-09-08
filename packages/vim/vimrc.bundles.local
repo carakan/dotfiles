@@ -73,7 +73,7 @@ call dein#add('ruifm/gitlinker.nvim')
 call dein#add('luckasRanarison/tailwind-tools.nvim')
 call dein#add('jake-stewart/force-cul.nvim')
 call dein#add('OXY2DEV/markview.nvim')
-call dein#add("jake-stewart/multicursor.nvim")
+" call dein#add("jake-stewart/multicursor.nvim")  " REPLACED 2026-09-04 by nvim 0.13 native multicursor (was loaded but never bound keys)
 call dein#add('https://github.com/sQVe/sort.nvim')  " modern replacement for vim-sort-motion — same gs operator keys
 call dein#add("folke/snacks.nvim")
 call dein#add("afonsofrancof/worktrees.nvim")

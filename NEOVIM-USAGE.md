@@ -30,7 +30,7 @@ Last updated: 2026-09-04 · nvim v0.12.5
 | `zh` / `zl` | Horizontal scroll |
 | `<C-h><C-j><C-k><C-l>` | Navigate splits **and tmux panes** seamlessly (vim-tmux-navigator) — fixed in step-0 (plain window-move overrides deleted; window motion remains via `<C-w>h/j/k/l`) |
 | `<leader>ew` / `es` / `ev` / `et` | Edit file relative to current one (same window / split / vsplit / tab) |
-| `Q` | Pick a buffer to close (close-buffers menu) |
+| `Q` | Pick a buffer to close (close-buffers menu) — **shadows native multicursor's `Q`**; multicursor trial uses `{Visual}Q` / `gQ` / `]C` instead |
 
 ## Fuzzy finding — fzf-lua *(keys stay identical after migration)*
 
@@ -128,7 +128,13 @@ Tests run **inside the current tmux pane** (`strategy = tslime`) — core of the
 | `f`/`t`/`T` | Jump-highlight for find/till (qs + hlslens lens below) |
 | `n` / `N` | Search with virtual lens showing `[count] ▲▼` (hlslens) |
 | `:Inspect` | Show treesitter highlight captures under cursor *(native; replaces old `<leader>is`)* |
-| `<C-M-n>` | Multicursor: start / add next match (repeat to grow); `<C-M-p>` previous; `:MCstart`, `:MCvisual`, `:MCclear` |
+| **Multicursor — NATIVE 0.13** *(trial; multicursor.nvim was loaded but never bound any keys — `<C-M-n>` never actually existed)* |
+| `Q` / `{Visual}Q` | Place/remove multicursor; with `[count]`: place at each search match (normal `Q` = close-buffers here, use Visual `Q`) |
+| `gQ` | Multicursor command (see `:h Q`, source header lists gQ) |
+| `]C` | Jump to next multicursor |
+| `g CTRL-A` | Insert ascending number at each multicursor ("counter") |
+| `<C-LeftMouse>` | Toggle multicursor · `CTRL-L` clears all (also does nohl + diffupdate) |
+| Rendering | kitty cursors protocol if the terminal chain supports it, else `hl-MCursor` highlights — inside tmux expect the highlight fallback |
 
 ### Surround examples (nvim-surround — same UX as tpope/vim-surround)
 
@@ -160,6 +166,64 @@ No layer grabs `<C-v>`: not Karabiner (only caps remapped), not kitty (`cmd+v` p
 | `:%Sort` | Whole buffer |
 
 Delimiter-aware: sorts segmented lines (comma lists, `{ a, b, c }`-style) keeping structure — not just whole-line sort. Supports natural ordering and custom delimiters/presets via setup opts (`:h sort.nvim`). Mind the trio: `gs` sort (this) · `gS`/`gJ` splitjoin · `s`/`S` flash jump (normal) / surround (visual).
+
+## GitHub in the editor — octo.nvim
+
+Configured with **fzf-lua as picker** (every list opens in fzf-lua), emojis on, projects_v2 scope warnings suppressed.
+
+### The workflow
+
+```vim
+:Octo pr list          " open PR picker (fzf-lua) — filter by author/state/label
+:Octo pr search author:@me is:open
+:Octo pr create        " from current branch: title/body buffer → submit with :Octo pr create (again)
+:Octo pr checkout 123  " checkout PR #123 locally (branch + review)
+:Octo pr changes       " review the diff of the PR under cursor
+:Octo pr merge squash  " or merge/rebase — closes with confirmation
+:Octo pr commits       " commits of PR under cursor
+:Octo pr browse        " open in browser
+:Octo issue list       " issue picker; :Octo issue create → template buffer
+:Octo repo browse      " open repo home
+:Octo review start     " enter review mode on the PR under cursor
+:Octo review submit    " submit pending review comments (comment/approve/request-changes)
+```
+
+### Inside octo buffers (issues, PRs, diffs)
+
+| Key / Command | Action |
+|---|---|
+| `<CR>` on a `#123` / URL / sha | Open that issue/PR/commit |
+| `:Octo comment add` (visual on diff lines) | Attach a review comment to those exact lines |
+| `:Octo comment add` (issue/PR buffer) | Top-level comment (opens editable buffer, `:wq`-style submit via `:Octo comment submit`... follow the buffer hint) |
+| `:Octo reload` | Refresh the buffer from GitHub |
+| `:Octo pr url` / `:Octo issue url` | Copy the URL (gitlinker-friendly) |
+| `:h octo` | Full command + buffer-map reference |
+
+Review flow that fits the AI-code era: checkout PR → `:Octo pr changes` → select suspicious lines in visual → `:Octo comment add` → `:Octo review submit` — everything without leaving nvim, and every list is fzf-lua so muscle memory from `<leader>gl`/`ga` applies.
+
+## Git worktrees — `<leader>wt` family (worktrees.nvim)
+
+A worktree = a second checkout of the same repo in another directory, on a
+different branch, sharing `.git`. Perfect for the review workflow: run the AI
+agent's branch in `../feature-x` while your current tree stays untouched — no
+stashing, tests can run in one tree while you edit another.
+
+Configured with `base_path = ".."` → worktrees are created as **sibling
+directories** of the current project root.
+
+| Key | Action |
+|---|---|
+| `<leader>wtc` | **Create**: prompts for a branch name, creates `../<branch>/` checked out on that branch and registers it |
+| `<leader>wts` | **Switch**: pick an existing worktree (fuzzy) → change to it |
+| `<leader>wtd` | **Delete**: pick a worktree → remove its directory + registration (guarded against the primary tree) |
+
+Plumbing equivalents when scripting outside nvim: `git worktree add ../fix-42 fix-42` · `git worktree list` · `git worktree remove ../fix-42`.
+
+**Tips**
+- Each worktree has its own session: prosession keeps a separate buffer layout per directory.
+- octo + worktrees compose: checkout a PR (`:Octo pr checkout`) inside a worktree and your main checkout stays clean.
+- Servers/tests: run `mix test`/`rspec` in worktree A via tslime while editing worktree B — no state collisions.
+- `nvim-tree`/fzf-lua always operate on the *current* tree; `<C-t>` buffers list is per-worktree.
 
 ## AI agents *(phase 4 — slots reserved; keys defined when wired)*
 
@@ -220,7 +284,7 @@ engine, dadbod-ui the drawer/sidebar; both share the same connection.
 | `:TailwindSort` etc. | tailwind-tools utilities |
 | `<leader>wtc` / `wts` / `wtd` | Git worktree create / switch / delete |
 | `<leader>M` | (see fzf-lua resume) |
-| nvim-tree | File tree — **no toggle bound today**; `<leader>e` to be defined in phase 2 (MIGRATION.md §9) |
+| `<leader>e` | **Native 0.13 directory browser** (`nvim-dir`, netrw replacement) — trial; compare with `:NvimTreeToggle` (nvim-tree still installed, phase-2 decides) |
 | smartcolumn | Auto color-column at 80/120/150 per window (no keys) |
 | indent-blankline + snacks.indent | Indent guides (no keys) |
 | noice + nvim-notify | Cmdline/messages/notifications UI (no keys) |
@@ -244,6 +308,18 @@ Spec templates auto-scaffold RSpec describe blocks; Elixir `mix.exs` projects ge
 - **tmux binds bare `<Tab>` as pane picker** (`bind-key -n tab`) — it hijacks `<Tab>` inside nvim (completion select/jump) today; fix queued in MIGRATION.md phase 2 (send-keys Tab when `$is_vim`).
 - **Karabiner swaps left_cmd ↔ left_option on the Apple keyboard only** (`karabiner.json:38-45`) — on that board, skhd binds respond to the *opposite* physical modifier vs the built-in/external boards. Muscle-memory trap, intentional, KEEP.
 - Karabiner historically dropped F1/F2 brightness remaps and added the cmd/opt swap + fn-keys passthrough (see audit §K for the 2023→now delta).
+
+## Image rendering *(nvim 0.13 nightly `vim.ui.img` era)*
+
+| Context | Path | Status |
+|---|---|---|
+| nvim in kitty, **no tmux** | native `vim.ui.img` — `:checkhealth vim.images` passes; API: `vim.ui.img.set(blob, {width, height, row, col}) → id`, `get(id)`, `del(math.huge)` clears all | ✅ |
+| nvim **inside tmux** (normal case) | **snacks.image only** (wraps kitty protocol in tmux passthrough; powers fzf-lua previews via `snacks_image`) | ✅ |
+| nvim inside tmux, native `vim.ui.img` | ❌ false negative — nightly's `vim.tty` sends raw kitty APC without the `Ptmux` wrap, tmux swallows it | until nvim adds it |
+
+- tmux side is already correct: `allow-passthrough on` + kitty `terminal-features` RGB (tmux.conf:3,46).
+- The `:checkhealth vim.images` "not supported" inside tmux is a **known false negative**, not a config problem. Test in a plain kitty window to confirm the stack.
+- Example/demo API code: <https://github.com/FractalCodeRicardo/dev-config/tree/master/nvim/lua/my/vim-img>
 
 ## Vim common (timeless)
 

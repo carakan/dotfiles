@@ -372,7 +372,7 @@ require("diffview").setup({
 require('neogit').setup({
   graph_style = "kitty"
 })
-require('multicursor-nvim').setup({})
+-- multicursor-nvim REMOVED 2026-09-04 — native 0.13 multicursor (see trial block at bottom)
 -- require("force-cul").setup();
 
 -- require('multicursors').setup {
@@ -762,3 +762,12 @@ vim.diagnostic.config({
 -- Reuses its gs operator (gsip / gsii / gs2j / gsi( / visual gs) plus :Sort.
 -- Defaults are sane; custom delimiters/presets via setup opts (see :h sort.nvim).
 require("sort").setup({})
+
+-- [TRIAL · nvim 0.13] native multicursor is CORE — no plugin needed.
+-- Commands: Q (place/remove; [count]Q = at each search match), {Visual}Q,
+-- ]C (jump to next cursor), g CTRL-A (counter), <C-LeftMouse> (toggle), CTRL-L clears.
+-- Plain Q stays owned by close-buffers (keymap contract) — use {Visual}Q / gQ / ]C.
+-- Old multicursor.nvim remains loaded but NEVER bound keys (<C-M-n> was never real).
+-- <leader>e → native 0.13 directory browser (nvim-dir, netrw replacement) — trial
+-- vs :NvimTreeToggle (nvim-tree stays available for comparison; phase-2 decision).
+vim.keymap.set('n', '<leader>e', '<cmd>edit .<CR>', { silent = true, desc = 'Native dir browser (0.13)' })
