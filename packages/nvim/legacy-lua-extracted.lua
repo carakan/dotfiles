@@ -186,18 +186,8 @@ require('hlslens').setup({
 })
 vim.cmd [[highlight IndentBlanklineIndent1 guibg=#332717 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent2 guibg=#332b36 gui=nocombine]]
-local highlight = {
-    "IndentBlanklineIndent1",
-    "IndentBlanklineIndent2",
-}
-require("ibl").setup {
-    indent = { highlight = highlight, char = " " },
-    --whitespace = {
-    --    highlight = highlight,
-    --    remove_blankline_trail = false,
-    --},
-    scope = { enabled = false },
-}
+-- indent-blankline REMOVED 2026-09-04 — snacks.indent replaces it (keeps these
+-- IndentBlanklineIndent1/2 highlight groups, see the snacks.setup indent block below)
 
 require("smartcolumn").setup(
   {
@@ -369,9 +359,8 @@ require("gx").setup({
 require("diffview").setup({
   enhanced_diff_hl = true,
 })
-require('neogit').setup({
-  graph_style = "kitty"
-})
+-- neogit REMOVED 2026-09-08 — replaced by snacks.lazygit (see <leader>gg + Git section in NEOVIM-USAGE.md)
+vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit.open() end, { silent = true, desc = 'LazyGit' })
 -- multicursor-nvim REMOVED 2026-09-04 — native 0.13 multicursor (see trial block at bottom)
 -- require("force-cul").setup();
 
@@ -484,10 +473,11 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = false,
   },
   playground = {
-    enable = true,
+    enable = false, -- archived upstream (nvim-treesitter/playground); likely source of the
+    -- VimEnter→BufEnter treesitter 'range' (nil) crash on 0.12.5. Native :Inspect covers it.
     disable = {},
-    updatetime = 25, -- debounced time for highlighting nodes in teh playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
+    updatetime = 25,
+    persist_queries = false,
   },
   autotag = {
     enable = false,
@@ -651,10 +641,48 @@ require("octo").setup({
 -- require('dressing').setup({})
 -- require('nvim-treeclimber').setup()
 
+-- statuscol.nvim REMOVED 2026-09-04 — snacks.statuscolumn replaces it
+-- (snacks.setup below has statuscolumn = { enabled = true }). Revert path:
+-- uncomment the manifest line + restore this block if the custom segments
+-- (lnum + fold + sign with click handlers) are missed.
+
+-- statuscol.nvim RESTORED 2026-09-08 (snacks.statuscolumn didn't work out)
+-- Click handlers finally wired 2026-09-08: statuscol ships _G.ScFa/ScSa/ScLa dispatchers
+-- but clickhandlers = {} by default, so clicks did nothing. Sign clicks route by SIGN NAME
+-- (patterns allowed); fold/lnum by exact key.
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
   ft_ignore = {
     'help', 'dashboard', 'noice', 'NvimTree', 'fugitive', 'git', 'fzf', 'ccc-ui'
+  },
+  clickhandlers = {
+    Lnum = function(args)
+      pcall(vim.api.nvim_win_set_cursor, args.mousepos.winid, { args.mousepos.line, 0 })
+    end,
+    FoldOpen = function(args)  -- clicked an OPEN fold marker → close it
+      pcall(function()
+        vim.api.nvim_win_set_cursor(args.mousepos.winid, { args.mousepos.line, 0 })
+        vim.cmd('silent! normal! zc')
+      end)
+    end,
+    FoldClose = function(args) -- clicked a CLOSED fold marker → open it
+      pcall(function()
+        vim.api.nvim_win_set_cursor(args.mousepos.winid, { args.mousepos.line, 0 })
+        vim.cmd('silent! normal! zo')
+      end)
+    end,
+    ["^Diagnostic"] = function(args) -- clicked a diagnostic sign → float the message
+      pcall(function()
+        vim.api.nvim_win_set_cursor(args.mousepos.winid, { args.mousepos.line, 0 })
+        vim.diagnostic.open_float(nil, { focusable = true, border = 'rounded', source = 'if_many' })
+      end)
+    end,
+    ["^GitSigns"] = function(args) -- clicked a gitsign → preview the hunk
+      pcall(function()
+        vim.api.nvim_win_set_cursor(args.mousepos.winid, { args.mousepos.line, 0 })
+        require('gitsigns').preview_hunk()
+      end)
+    end,
   },
   segments = {
     { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
@@ -714,15 +742,26 @@ require("snacks").setup({
   explorer = { enabled = false },
   indent = { 
     enabled = true,    
-    char = '█',
+    char = ' ',  -- ibl mimic: space char + background stripes (was '█' — loud blocks, not the old look)
     hl = { "IndentBlanklineIndent1", "IndentBlanklineIndent2"}, 
   },
   image = { enabled = true },
+  lazygit = {
+    enabled = true,
+    configure = false, -- theme comes from dotfiles packages/lazygit/config.yml (Solarized Osaka Dark);
+    -- snacks' auto-colorscheme theme would override it — keep false until phase-1 theme lands
+    -- flat integration look (chrome only — lazygit's own theme stays in config.yml)
+    -- winblend=0: opaque float — the global set winblend=15 washes TUI floats out
+    win = {
+      style = "lazygit",
+      wo = { winhighlight = "NormalFloat:Normal,FloatBorder:Normal", winblend = 0 },
+    },
+  },
   input = { enabled = false },
   picker = { enabled = false },
   quickfile = { enabled = true },
   scope = { enabled = true },
-  statuscolumn = { enabled = true },
+  statuscolumn = { enabled = false }, -- RESTORED statuscol.nvim 2026-09-08 (snacks version didn't work out)
   words = { enabled = true },
 })
 

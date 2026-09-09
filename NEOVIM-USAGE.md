@@ -106,8 +106,56 @@ Tests run **inside the current tmux pane** (`strategy = tslime`) — core of the
 | `<leader>gy` (n/v) | Copy GitHub URL of selection/line (gitlinker) |
 | `:DiffviewOpen [ref]` | Diff view against ref |
 | `:DiffviewFileHistory` | File/repo history |
-| `:Neogit` | Full git UI (kitty graph) |
+| `<leader>gg` | **LazyGit** float (snacks) — full git UI, see section below |
 | `:Octo` | GitHub PRs/issues from nvim (picker: fzf-lua) |
+
+## LazyGit — `<leader>gg` (snacks.lazygit, replaces neogit)
+
+Floating lazygit terminal themed from your highlight groups (nixvi-style flat
+look: `NormalFloat:Normal`, borderless feel). LazyGit is a TUI — its own keys
+apply inside the float. Press `?` anytime for the live keybindings menu, `x`
+to quit... actually `q` quits. Panels: `1` status · `2` files · `3` branches ·
+`4` commits · `5` stash.
+
+### Everyday flow (files panel = your staging area)
+
+| Key | Action |
+|---|---|
+| `space` | **Stage / unstage** the selected file (toggle) |
+| `a` | Stage **all** changes |
+| `u` | Unstage selected (when staged change selected, `d` unstages too) |
+| `c` | **Commit** staged changes (message prompt inside lazygit) |
+| `C` | Commit using `$GIT_EDITOR` |
+| `A` | Amend last commit |
+| `d` | Discard changes (careful — offers choices on staged items) |
+| `e` | Open file in editor (opens in **this nvim**, not an external one) |
+
+### History, stash, rebase
+
+| Key | Panel | Action |
+|---|---|---|
+| `4` → `enter` | commits | **Diff** of the selected commit |
+| `4` → `<ctrl+o>` | commits | **Copy abbreviated SHA** to clipboard |
+| `4` → `r` | commits | Reword commit message |
+| `4` → `e` | commits | Start **interactive rebase** from selected commit |
+| `4` → `d` | commits | Drop commit (via rebase) |
+| `4` → `s` / `f` | commits | Squash / fixup into the commit below |
+| `4` → `m` | commits | View merge/rebase options (abort/continue/skip) |
+| `3` → `B` | branches | Mark base commit for `--onto` rebase |
+| `2` → `s` | files | **Stash** all changes (`S` = stash options: staged, unstaged, keep-index) |
+| `5` | stash | Stash list: `space` apply, `g` pop, `d` drop |
+| `z` | any | **Undo** last git action (reflog-based) · `Z` redo |
+| `` ` `` | files | Toggle flat ↔ **tree view** of changed files |
+| `p` / `P` | any | Pull / Push |
+
+### Integration notes
+
+- **Config**: `packages/lazygit/config.yml` → `~/Library/Application Support/lazygit/config.yml` (**real macOS path** — Go `os.UserConfigDir`; a `~/.config/lazygit/config.yml` XDG fallback symlink also points there). **Theme: Solarized Osaka Dark** (craftzdog extra) — snacks passes `configure = false` so the yml theme rules inside the float too. Delta side-by-side pager + `lazygit-theme` delta feature (Solarized accents, defined in `packages/delta/themes.gitconfig`); colored graph branch log; `notARepository: skip`.
+- `e` opens files in the **hosting nvim** when inside the float (`$NVIM` remote trick from r4ppz), standalone nvim otherwise.
+- Extra scrolling: `J`/`K`/`ctrl-d`/`ctrl-u` scroll the main panel; `q`/`esc` quit; startup popups disabled.
+- Worktrees: run `<leader>gg` inside any worktree — lazygit operates on that tree (see §worktrees).
+- octo + lazygit: checkout a PR via `:Octo pr checkout`, then `<leader>gg` for stage/commit.
+
 
 ## Editing — motions & text objects *(keys stay identical)*
 
@@ -286,9 +334,10 @@ engine, dadbod-ui the drawer/sidebar; both share the same connection.
 | `<leader>M` | (see fzf-lua resume) |
 | `<leader>e` | **Native 0.13 directory browser** (`nvim-dir`, netrw replacement) — trial; compare with `:NvimTreeToggle` (nvim-tree still installed, phase-2 decides) |
 | smartcolumn | Auto color-column at 80/120/150 per window (no keys) |
-| indent-blankline + snacks.indent | Indent guides (no keys) |
+| snacks.indent | Indent guides (no keys) — indent-blankline deleted 2026-09-04, snacks replaces it |
 | noice + nvim-notify | Cmdline/messages/notifications UI (no keys) |
-| statuscol / scrollbar | Sign column segments + minimap-ish scrollbar with search/git/diag marks |
+| statuscol.nvim | Status column: line numbers + fold column + signs (restored 2026-09-08 — snacks.statuscolumn didn't work out) |
+| scrollbar | Minimap-ish scrollbar with search/git/diagnostic marks |
 
 ## Rails / Elixir — projectionist *(keys stay identical)*
 

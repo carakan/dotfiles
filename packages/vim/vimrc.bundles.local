@@ -6,7 +6,7 @@ call dein#add('Asheq/close-buffers.vim')
 call dein#add('alvan/vim-closetag')
 call dein#add('RRethy/vim-hexokinase', {'build': 'make hexokinase'})
 call dein#add('nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'})
-call dein#add('nvim-treesitter/playground')
+" call dein#add('nvim-treesitter/playground')  " REMOVED 2026-09-04 — archived upstream; module disabled (crash source); :Inspect covers it
 " call dein#add('arthurxavierx/vim-caser') " DELETED 11 Julio
 call dein#add('carakan/new-railscasts-theme')
 call dein#add('carakan/pmv.vim')
@@ -46,7 +46,7 @@ call dein#add('ibhagwan/fzf-lua')
 call dein#add("nvim-treesitter/nvim-treesitter-textobjects")
 call dein#add('chrisgrieser/nvim-recorder')
 call dein#add("m4xshen/smartcolumn.nvim")
-call dein#add("lukas-reineke/indent-blankline.nvim")
+" call dein#add("lukas-reineke/indent-blankline.nvim")  " REPLACED 2026-09-04 by snacks.indent
 
 call dein#add("MunifTanjim/nui.nvim")
 call dein#add("rcarriga/nvim-notify")
@@ -62,7 +62,7 @@ call dein#add('sindrets/diffview.nvim')
 
 call dein#add("petertriho/nvim-scrollbar")
 call dein#add('uga-rosa/ccc.nvim')
-call dein#add("luukvbaal/statuscol.nvim")
+call dein#add("luukvbaal/statuscol.nvim")  " RESTORED 2026-09-08 — snacks.statuscolumn didn't work out
 
 " call dein#add('aaronhallaert/advanced-git-search.nvim')
 call dein#add('pwntester/octo.nvim')

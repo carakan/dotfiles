@@ -1,0 +1,88 @@
+# lazygit — Solarized Osaka Dark theme (craftzdog solarized-osaka.nvim extra,
+# via amandeepmittal/dotfiles). Structure: ideas from bluz71/dotfiles +
+# r4ppz/Arch-dotfiles, enhanced for the nvim-snacks float workflow (2026-09-08).
+# Docs: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+
+disableStartupPopups: true
+notARepository: skip
+promptToReturnFromSubprocess: false
+
+gui:
+  nerdFontsVersion: "3"
+  showIcons: true
+  border: single
+  tabWidth: 2
+  # side panel behaviour (r4ppz)
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 2
+  mainPanelSplitMode: flexible
+  showPanelJumps: true
+  showCommandLog: false
+  showFileTree: true
+  authorColors:
+    "*": cyan
+  theme: # Solarized Osaka Dark — verbatim from craftzdog's solarized-osaka.nvim extra
+    activeBorderColor:
+      - "#c94c16"
+      - "bold"
+    inactiveBorderColor:
+      - "#664c00"
+    searchingActiveBorderColor:
+      - "#c94c16"
+      - "bold"
+    optionsTextColor:
+      - "#268bd3"
+    selectedLineBgColor:
+      - "#1a6397"
+    cherryPickedCommitFgColor:
+      - "#268bd3"
+    cherryPickedCommitBgColor:
+      - "#d23681"
+    markedBaseCommitFgColor:
+      - "#268bd3"
+    markedBaseCommitBgColor:
+      - "#b28500"
+    unstagedChangesColor:
+      - "#f55350"
+    defaultFgColor:
+      - "#FEF9E1"
+
+git:
+  autoFetch: true
+  autoRefresh: true
+  overrideGpg: true
+
+  diffRenderers:
+    - colorArg: always
+      command: delta --features=lazygit-theme --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  branchLogCmd: 'git log --graph --color=always --date=human --format="%C(#268bd3)%h%C(#f55350)%d%C(reset) - %C(##FEF9E1)(%ad)%C(reset) %s %C(#b28500){%an}%C(reset)" {{branchName}} --'
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --side-by-side --line-numbers
+
+os:
+  # `e` opens files in the HOSTING nvim when inside a snacks float ($NVIM set),
+  # standalone nvim otherwise (r4ppz pattern)
+  editInTerminal: true
+  edit: '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'
+  editAtLine: '[ -z "$NVIM" ] && (nvim +{{line}} -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}} && nvim --server "$NVIM" --remote-send ":{{line}}<CR>")'
+  openDirInEditor: '[ -z "$NVIM" ] && (nvim -- {{dir}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{dir}})'
+
+keybinding:
+  universal:
+    # bluz71
+    return: 'q'
+    submitEditorText: '<c-c>'
+    appendNewline: '<enter>'
+    quit: '<esc>'
+    # r4ppz main-panel scrolling (vim muscle memory)
+    scrollDownMain:
+      - '<pgdown>'
+      - 'J'
+      - '<ctrl+d>'
+      - '<ctrl+down>'
+    scrollUpMain:
+      - '<pgup>'
+      - 'K'
+      - '<ctrl+u>'
+      - '<ctrl+up>'

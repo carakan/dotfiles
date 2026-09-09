@@ -47,6 +47,20 @@
         create: true
         path: packages/kitty/kitty.conf
 
+    # ── lazygit ────────────────────────────────────────────
+    # (real path on macOS — Go os.UserConfigDir = ~/Library/Application Support;
+    # ~/.config/lazygit kept as XDG fallback symlink)
+    ~/Library/Application Support/lazygit/config.yml:
+        create: true
+        path: packages/lazygit/config.yml
+    ~/.config/lazygit/config.yml:
+        create: true
+        path: packages/lazygit/config.yml
+
+    ~/.config/delta/themes.gitconfig:
+        create: true
+        path: packages/delta/themes.gitconfig
+
     # ── karabiner ──────────────────────────────────────────
     ~/.config/karabiner/karabiner.json:
         create: true

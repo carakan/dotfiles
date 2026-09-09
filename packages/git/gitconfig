@@ -29,9 +29,21 @@
 [interactive]
   diffFilter = delta --color-only
 [delta]
+  features = collared-trogon custom-dark
   navigate = true  # use n and N to move between diff sections
   light = false    # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
   line-numbers = true
+[delta "custom-dark"]
+  # custom theme layer on top of collared-trogon (see ~/.config/delta/themes.gitconfig)
+  file-style = bold "#e5ca81"
+  hunk-header-style = file line-number syntax
+  hunk-header-decoration-style = none
+  line-numbers-left-style = dim "#5b6078"
+  line-numbers-right-style = "#5b6078"
+  line-numbers-minus-style = bold "#9e5757"
+  line-numbers-plus-style = bold "#799e57"
+[include]
+  path = ~/.config/delta/themes.gitconfig
 [merge]
   conflictstyle = diff3
 
