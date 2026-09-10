@@ -318,18 +318,6 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 ulimit -n 200000
 ulimit -u 2048
 
-# autostart tmux (only in interactive login TTY, never inside VS Code / scripts / SSH)
-if [[ -o login && -t 0 && -z "$TMUX" \
-   && -z "$VSCODE_PID" && -z "$SSH_CONNECTION" \
-   && -z "$INSIDE_EMACS" && -z "$VIM" ]]; then
-  local n=${1-Main}
-  if tmux has-session -t $n 2>/dev/null; then
-    exec tmux a -t $n
-  else
-    exec tmux new -s $n
-  fi
-fi
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

@@ -63,13 +63,11 @@ node_modules/*
 .eslintcache
 
 # ── crystal ──────────────────────────────────────────────
-/lib/
 .shards/
 crystal-*
 
 # ── env & secrets (never leak by accident) ───────────────
 .env
-.env.*
 !.env.example
 .envrc
 
