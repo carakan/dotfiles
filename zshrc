@@ -64,7 +64,7 @@ export TERM="tmux-256color"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( fast-syntax-highlighting zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
+plugins=( zsh-interactive-cd bgnotify dnf history github gem mix rails vscode alias-tips sudo 
           node npm git brew tmux asdf zsh-autosuggestions macos zsh-completions )
 
 # User configuration
@@ -142,7 +142,7 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 # Change open files limit and user processes limit.
 # See: https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
 ulimit -n 200000
-ulimit -u 2048
+ulimit -u 8192
 
 export HOMEBREW_BAT=1
 export HOMEBREW_DISPLAY_INSTALL_TIMES=1
@@ -166,27 +166,34 @@ fi
 # load ASDF for homebrew installation
 source "$(brew --prefix asdf)/libexec/asdf.sh"
 
-
+eval "$(zsh-patina activate)"
 
 # ROCm
-alias python=python3.10
+alias python=python3.13
+alias pip=pip3.13
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 export HCC_AMDGPU_TARGET=gfx1030
 
 export HIP_VISIBLE_DEVICES=0
 export GFX_ARCH=gfx1030
-export ROCM_VERSION=6.3.3
+export ROCM_VERSION=10.0.0
+
 
 export CMAKE_HIP_COMPILER=$(hipconfig -l)/clang++
 export HIPCXX=$(hipconfig -l)/clang
 export HIP_PATH=$(hipconfig -p)
-export HIP_VISIBLE_DEVICES=$(hipconfig -R)
+# HIP_VISIBLE_DEVICES=0 (set above) selects the 6800 XT; do NOT set it to $(hipconfig -R):
+# that returns a filesystem path, and an empty/invalid value hides ALL GPUs from PyTorch
+
+
+# export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
 
 # export TORCH_BLAS_PREFER_HIPBLASLT=0
 # export TORCH_BLAS_PREFER_CUBLASLT=1
-# export PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
-export PATH=$PATH:/opt/rocm-6.3.3/bin
+export PYTORCH_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
+export PATH=$PATH:/opt/rocm/bin
 export PATH="/home/carakan/.local/bin:$PATH"
 export PATH=/opt/rocm/bin:$PATH
 export ROCM_HOME=/opt/rocm
-export LD_LIBRARY_PATH=/opt/rocm-6.3.3/lib
+export LD_LIBRARY_PATH=/opt/rocm/lib
+
