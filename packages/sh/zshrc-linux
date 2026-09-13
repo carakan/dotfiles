@@ -1,0 +1,20 @@
+# zshrc-linux — Linux-only shell setup, sourced at the tail of zshrc.
+# Deliberately feature-detected (no distro assumptions): works on Ubuntu
+# with linuxbrew today and on Omarchy (Arch) later.
+
+# Consolidated PATH — single mutation
+path=(~/.cargo/bin
+      ~/.local/bin
+      /usr/local/bin /usr/local/sbin
+      /usr/bin /bin /usr/sbin /sbin)
+typeset -U path; export PATH
+
+# linuxbrew, if present (Ubuntu pattern from the old ubuntu branches)
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+# Omarchy note: see PLATFORMS.md before adding anything that competes with
+# omarchy-owned config (kitty/tmux/bashrc/hypr/waybar).

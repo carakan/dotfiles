@@ -1,0 +1,23 @@
+# zshrc-darwin — macOS-only shell setup, sourced at the tail of zshrc.
+
+# Consolidated PATH — single mutation, no `brew --prefix` subprocess
+path=(~/.cargo/bin
+      /usr/local/bin /usr/local/sbin
+      ~/.local/bin
+      /usr/bin /bin /usr/sbin /sbin)
+typeset -U path; export PATH
+
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+export HOMEBREW_AUTO_UPDATE_SECS=600000
+
+# Change open files limit and user processes limit.
+# See: https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
+ulimit -n 200000
+ulimit -u 2048
+
+# macOS ssh-agent: load keys from the login keychain on interactive TTYs
+if [[ -o login && -t 0 && -z "$SSH_AUTH_SOCK" ]]; then
+  eval "$(ssh-agent)" >/dev/null
+  ssh-add -A &>/dev/null
+fi

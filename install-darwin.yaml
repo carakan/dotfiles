@@ -1,0 +1,50 @@
+# install-darwin.yaml — macOS-only links (loaded by ./install on Darwin).
+# Everything here either targets macOS-specific paths or configs that
+# Omarchy owns on Linux (kitty, tmux, bashrc) — see PLATFORMS.md.
+
+- link:
+    # ── shell (bash is omarchy's user-extension file on Linux) ──
+    ~/.bash_profile: packages/sh/bash_profile
+    ~/.bashrc: packages/sh/bashrc
+
+    # ── terminal (omarchy may own kitty; decide at omarchy install) ──
+    ~/.config/kitty/kitty.conf:
+        create: true
+        path: packages/kitty/kitty.conf
+
+    # ── tmux (omarchy ships its own tmux.conf — either/or, PLATFORMS.md) ──
+    ~/.tmux.conf: packages/tmux/tmux.conf
+
+    # ── macOS window managers / system ──────────────────────
+    ~/.config/karabiner/karabiner.json:
+        create: true
+        path: packages/karabiner/karabiner.json
+    ~/.config/yabai/yabairc:
+        create: true
+        path: packages/yabai/yabairc
+    ~/.config/skhd/skhdrc:
+        create: true
+        path: packages/yabai/skhdrc
+
+    # ── macOS real config paths (Go os.UserConfigDir) ───────
+    ~/Library/Application Support/lazygit/config.yml:
+        create: true
+        path: packages/lazygit/config.yml
+    # force: only safe after Dropbox has synced on a NEW machine
+    ~/Library/Application Support/InvoicePro/Invoices.db:
+        force: true
+        path: ~/Dropbox/Aplicaciones/InvoicePro/Invoices.db
+
+    # ── vim era + legacy nvim link (machine-local ~/.vim state;
+    #    the packages/nvim FLIP replaces these in place, macOS first) ──
+    ~/.vimrc.before.local: packages/vim/vimrc.before.local
+    ~/.vimrc.bundles.local: packages/vim/vimrc.bundles.local
+    ~/.vimrc.local: packages/vim/vimrc.local
+    ~/.config/nvim:
+        create: true
+        path: ~/.vim
+    ~/.config/nvim/init.vim: ~/.vimrc
+    ~/.config/nvim/coc-settings.json: packages/coc/coc.json
+
+- shell:
+  - sudo ln -sf ~/.dotfiles/packages/macos/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist

@@ -1,13 +1,17 @@
-# install.conf.yaml — dotbot config-driven dotfile linkage
+# install.conf.yaml — dotbot config-driven dotfile linkage.
+# COMMON (cross-platform) links only. Platform-specific links live in
+# install-darwin.yaml / install-linux.yaml, chosen by ./install via uname.
 # Packages: single source of truth for per-tool configs, symlinked by dotbot.
 
 - clean: ['~']
 
+- defaults:
+    link:
+      create: true
+
 - link:
-    # ── shell (aliases / zsh / bash) ────────────────────────
+    # ── shell (aliases / zsh; bash is darwin-only — omarchy owns .bashrc) ──
     ~/.aliases: packages/sh/aliases
-    ~/.bash_profile: packages/sh/bash_profile
-    ~/.bashrc: packages/sh/bashrc
     ~/.zshrc: packages/sh/zshrc
     ~/.p10k.zsh: packages/sh/pk10.zsh
     ~/.profile: packages/sh/profile
@@ -29,87 +33,35 @@
 
     # ── gh (GitHub CLI; hosts.yml with tokens stays untracked) ──
     ~/.config/gh/config.yml:
-        create: true
         path: packages/gh/config.yml
-
-    # ── vim / neovim ────────────────────────────────────────
-    ~/.vimrc.before.local: packages/vim/vimrc.before.local
-    ~/.vimrc.bundles.local: packages/vim/vimrc.bundles.local
-    ~/.vimrc.local: packages/vim/vimrc.local
-    ~/.config/nvim:
-        create: true
-        path: ~/.vim
-    ~/.config/nvim/init.vim: ~/.vimrc
-    ~/.config/nvim/coc-settings.json: packages/coc/coc.json
-
-    # ── kitty ──────────────────────────────────────────────
-    ~/.config/kitty/kitty.conf:
-        create: true
-        path: packages/kitty/kitty.conf
-
-    # ── lazygit ────────────────────────────────────────────
-    # (real path on macOS — Go os.UserConfigDir = ~/Library/Application Support;
-    # ~/.config/lazygit kept as XDG fallback symlink)
-    ~/Library/Application Support/lazygit/config.yml:
-        create: true
-        path: packages/lazygit/config.yml
-    ~/.config/lazygit/config.yml:
-        create: true
-        path: packages/lazygit/config.yml
-
-    ~/.config/delta/themes.gitconfig:
-        create: true
-        path: packages/delta/themes.gitconfig
-
-    # ── karabiner ──────────────────────────────────────────
-    ~/.config/karabiner/karabiner.json:
-        create: true
-        path: packages/karabiner/karabiner.json
 
     # ── ripgrep ────────────────────────────────────────────
     ~/.config/.ripgreprc:
-        create: true
         path: packages/ripgrep/.ripgreprc
-
-    # ── yabai & skhd ───────────────────────────────────────
-    ~/.config/yabai/yabairc:
-        create: true
-        path: packages/yabai/yabairc
-    ~/.config/skhd/skhdrc:
-        create: true
-        path: packages/yabai/skhdrc
 
     # ── atuin ──────────────────────────────────────────────
     ~/.config/atuin/config.toml:
-        create: true
         path: packages/atuin/config.toml
 
     # ── zsh-patina ─────────────────────────────────────────
     ~/.config/zsh-patina/config.toml:
-        create: true
         path: packages/zsh-patina/config.toml
+
+    # ── lazygit (XDG fallback; the macOS real path is in darwin) ──
+    ~/.config/lazygit/config.yml:
+        path: packages/lazygit/config.yml
+
+    ~/.config/delta/themes.gitconfig:
+        path: packages/delta/themes.gitconfig
 
     # ── ruby (ctags / irb / pry / gems) ────────────────────
     ~/.ctags.d/global.ctags:
-        create: true
         path: packages/ruby/ctags
     ~/.irbrc: packages/ruby/irbrc
     ~/.pryrc: packages/ruby/pryrc
     ~/.gemrc: packages/ruby/gemrc
     ~/.rubocop.yml: packages/ruby/rubocop.yml
 
-    # ── tmux ────────────────────────────────────────────────
-    ~/.tmux.conf: packages/tmux/tmux.conf
-
-    # ── vscode ─────────────────────────────────────────────
+    # ── vscode (~/.config/Code/User is the path on BOTH macOS and Linux) ──
     ~/.config/Code/User/settings.json:
-        create: true
         path: packages/vscode/settings.json
-
-    # ── external: Invoices database (Dropbox sync) ──────────
-    ~/Library/Application Support/InvoicePro/Invoices.db:
-        force: true
-        path: ~/Dropbox/Aplicaciones/InvoicePro/Invoices.db
-
-- shell:
-  - sudo ln -s ~/.dotfiles/packages/macos/limit.maxfiles /Library/LaunchDaemons/limit.maxfiles.plist

@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
+# install — dotbot dispatcher. Common links + per-platform links.
+# Platforms: install-darwin.yaml (macOS), install-linux.yaml (Linux/omarchy).
 
 set -e
 
-CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
-
 DOTBOT_BIN="bin/dotbot"
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cd "${BASEDIR}"
 git submodule update --init --recursive "${DOTBOT_DIR}"
 
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+case "$(uname -s)" in
+  Darwin) PLATFORM="darwin" ;;
+  Linux)  PLATFORM="linux"  ;;
+  *) echo "Unsupported platform: $(uname -s)" >&2; exit 1 ;;
+esac
+
+CONFIGS=(-c "install.conf.yaml")
+[[ -f "install-${PLATFORM}.yaml" ]] && CONFIGS+=(-c "install-${PLATFORM}.yaml")
+
+"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" "${CONFIGS[@]}" "${@}"

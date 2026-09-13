@@ -1,0 +1,6 @@
+# install-linux.yaml — Linux-only links (loaded by ./install on Linux).
+# Intentionally near-empty: on Omarchy, this file only grows AFTER checking
+# the deny-list in PLATFORMS.md (omarchy owns kitty/tmux/bashrc/hypr/waybar/
+# omarchy paths and re-verifying against the current omarchy manual).
+
+- link: {}
