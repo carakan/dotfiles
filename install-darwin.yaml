@@ -3,9 +3,11 @@
 # Omarchy owns on Linux (kitty, tmux, bashrc) — see PLATFORMS.md.
 
 - link:
-    # ── shell (bash is omarchy's user-extension file on Linux) ──
+    # ── shell (bash_profile is darwin-only; bashrc is in COMMON — see install.conf.yaml) ──
     ~/.bash_profile: packages/sh/bash_profile
-    ~/.bashrc: packages/sh/bashrc
+
+    # ── asdf tool versions — machine-local on Linux; darwin keeps the shared copy ──
+    ~/.tool-versions: packages/asdf/tool-versions
 
     # ── terminal (omarchy may own kitty; decide at omarchy install) ──
     ~/.config/kitty/kitty.conf:

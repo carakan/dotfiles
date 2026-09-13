@@ -10,8 +10,9 @@
       create: true
 
 - link:
-    # ── shell (aliases / zsh; bash is darwin-only — omarchy owns .bashrc) ──
+    # ── shell (aliases / zsh; bashrc is cross-platform, bash_profile is darwin-only) ──
     ~/.aliases: packages/sh/aliases
+    ~/.bashrc: packages/sh/bashrc
     ~/.zshrc: packages/sh/zshrc
     ~/.p10k.zsh: packages/sh/pk10.zsh
     ~/.profile: packages/sh/profile
@@ -19,12 +20,16 @@
 
     # ── asdf / tool versions ───────────────────────────────
     ~/.asdfrc: packages/asdf/asdfrc
-    ~/.tool-versions: packages/asdf/tool-versions
     ~/.default-gems: packages/asdf/default-gems
     ~/.default-npm-packages: packages/asdf/default-npm-packages
 
     # ── bat ────────────────────────────────────────────────
     ~/.bat.conf: packages/bat/bat.conf
+
+    # ── bin scripts (cross-platform; clipcopy backs tmux/fzf copy binds) ──
+    ~/.local/bin/clipcopy:
+        create: true
+        path: bin/clipcopy
 
     # ── git ────────────────────────────────────────────────
     ~/.gitconfig: packages/git/gitconfig

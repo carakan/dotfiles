@@ -17,7 +17,11 @@ case "$(uname -s)" in
   *) echo "Unsupported platform: $(uname -s)" >&2; exit 1 ;;
 esac
 
-CONFIGS=(-c "install.conf.yaml")
-[[ -f "install-${PLATFORM}.yaml" ]] && CONFIGS+=(-c "install-${PLATFORM}.yaml")
+CONFIGS=("install.conf.yaml")
+[[ -f "install-${PLATFORM}.yaml" ]] && CONFIGS+=("install-${PLATFORM}.yaml")
 
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" "${CONFIGS[@]}" "${@}"
+# One dotbot invocation PER config: this vendored dotbot (v1.19+22) keeps only
+# the last -c file (argparse overwrite); multi-config merge needs a newer build.
+for config in "${CONFIGS[@]}"; do
+  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${config}" "${@}"
+done

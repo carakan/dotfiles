@@ -18,3 +18,32 @@ export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # Omarchy note: see PLATFORMS.md before adding anything that competes with
 # omarchy-owned config (kitty/tmux/bashrc/hypr/waybar).
+
+# ROCm 10 (gfx1030) — see docs/ubuntu/OS-TWEAKS.md.
+if [[ -d /opt/rocm ]]; then
+  alias python=python3.13
+  alias pip=pip3.13
+  export HSA_OVERRIDE_GFX_VERSION=10.3.0
+  export HCC_AMDGPU_TARGET=gfx1030
+
+  export HIP_VISIBLE_DEVICES=0
+  export GFX_ARCH=gfx1030
+  export ROCM_VERSION=10.0.0
+
+  # HIP_VISIBLE_DEVICES=0 (set above) selects the 6800 XT; do NOT set it to $(hipconfig -R):
+  # that returns a filesystem path, and an empty/invalid value hides ALL GPUs from PyTorch
+  if command -v hipconfig >/dev/null 2>&1; then
+    export CMAKE_HIP_COMPILER=$(hipconfig -l)/clang++
+    export HIPCXX=$(hipconfig -l)/clang
+    export HIP_PATH=$(hipconfig -p)
+  fi
+
+  # export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+
+  # export TORCH_BLAS_PREFER_HIPBLASLT=0
+  # export TORCH_BLAS_PREFER_CUBLASLT=1
+  export PYTORCH_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
+  export PATH="/opt/rocm/bin:$PATH"
+  export ROCM_HOME=/opt/rocm
+  export LD_LIBRARY_PATH=/opt/rocm/lib
+fi

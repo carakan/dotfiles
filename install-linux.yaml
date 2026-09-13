@@ -1,6 +1,19 @@
-# install-linux.yaml — Linux-only links (loaded by ./install on Linux).
-# Intentionally near-empty: on Omarchy, this file only grows AFTER checking
-# the deny-list in PLATFORMS.md (omarchy owns kitty/tmux/bashrc/hypr/waybar/
-# omarchy paths and re-verifying against the current omarchy manual).
+# install-linux.yaml — plain Ubuntu links. NOT omarchy (see PLATFORMS.md).
 
-- link: {}
+- link:
+    # ── terminal (kitty shared with macOS; macos_* directives are inert on Linux) ──
+    ~/.config/kitty/kitty.conf:
+        create: true
+        path: packages/kitty/kitty.conf
+
+    # ── tmux (requires tmux >= 3.4 for pane-scrollbars / popups) ──
+    ~/.tmux.conf: packages/tmux/tmux.conf
+
+    # ── vim era (master's curated vimrc.local is cross-platform-safe) ──
+    ~/.vimrc.local: packages/vim/vimrc.local
+    ~/.vimrc.bundles.local: packages/vim/vimrc.bundles.local
+
+    # ── bin scripts (clean is apt/linux-specific; clipcopy is in COMMON) ──
+    ~/.local/bin/clean:
+        create: true
+        path: bin/ubuntu_clean_rocm.sh
