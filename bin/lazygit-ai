@@ -1,0 +1,70 @@
+#!/bin/sh
+# lazygit-ai — single entry point for lazygit's AI commit actions.
+# All logic lives here (prompt, API call, guards, footer); the lazygit custom
+# commands in packages/lazygit/config.yml are one-liners.
+#
+# Usage:
+#   lazygit-ai message   write qwen's message to the commit-panel draft
+#                        ($GIT_DIR/LAZYGIT_PENDING_COMMIT); lazygit `c` reviews it
+#   lazygit-ai commit    generate and commit immediately
+#
+# Prompt: packages/lazygit/prompt (linked to ~/.config/lazygit-ai/prompt),
+# override with LAZYGIT_AI_PROMPT. Other env: LAZYGIT_AI_URL,
+# LAZYGIT_AI_MODEL, LAZYGIT_AI_TIMEOUT, TOSHLLM_API_KEY.
+set -eu
+
+MODE=${1:-}
+[ "$MODE" = "message" ] || [ "$MODE" = "commit" ] || {
+	echo "usage: lazygit-ai message|commit" >&2
+	exit 2
+}
+
+URL=${LAZYGIT_AI_URL:-http://127.0.0.1:8080/v1/chat/completions}
+MODEL=${LAZYGIT_AI_MODEL:-qwen}
+TIMEOUT=${LAZYGIT_AI_TIMEOUT:-120}
+PROMPT_FILE=${LAZYGIT_AI_PROMPT:-$HOME/.config/lazygit-ai/prompt}
+KEY=${TOSHLLM_API_KEY:-}
+[ -n "$KEY" ] || KEY=$(cat "$HOME/.config/toshllm/api-key" 2>/dev/null || true)
+[ -n "$KEY" ] || {
+	echo "lazygit-ai: no API key (TOSHLLM_API_KEY or ~/.config/toshllm/api-key)" >&2
+	exit 1
+}
+[ -f "$PROMPT_FILE" ] || {
+	echo "lazygit-ai: prompt file not found: $PROMPT_FILE" >&2
+	exit 1
+}
+
+DIFF=$(git diff --cached)
+[ -n "$DIFF" ] || { echo "No staged changes." >&2; exit 1; }
+
+PROMPT=$(cat "$PROMPT_FILE")
+
+MSG=$(curl -sS --max-time "$TIMEOUT" "$URL" \
+	-H "Authorization: Bearer $KEY" \
+	-H "Content-Type: application/json" \
+	-d "$(jq -n --arg model "$MODEL" --arg prompt "$PROMPT" --arg diff "$DIFF" \
+		'{model:$model, messages:[{role:"system",content:$prompt},{role:"user",content:$diff}]}')" \
+	| jq -r '.choices[0].message.content | split("</think>")[-1] | gsub("^\\s+|\\s+$";"")') || {
+	echo "lazygit-ai: LLM call failed or returned nothing" >&2
+	exit 1
+}
+[ -n "$MSG" ] || { echo "lazygit-ai: LLM call failed or returned nothing" >&2; exit 1; }
+
+footer() {
+	if [ -n "${TMUX:-}" ]; then tmux display-message -d 5000 "$1"; fi
+	return 0
+}
+
+case "$MODE" in
+message)
+	# lazygit preserved-draft format: summary \n body (first line = summary).
+	printf '%s' "$MSG" |
+		jq -rRs 'rtrimstr("\n") | split("\n") as $l | $l[0] + "\n" + (($l[1:] | join("\n")) | sub("^\\n+";""))' \
+			> "$(git rev-parse --absolute-git-dir)/LAZYGIT_PENDING_COMMIT"
+	footer "Ready to commit with LLM - press c to review and commit"
+	;;
+commit)
+	git commit -m "$MSG"
+	footer "LLM commit done: $(printf '%s' "$MSG" | head -n 1)"
+	;;
+esac

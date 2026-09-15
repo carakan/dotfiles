@@ -1,0 +1,6 @@
+Write a commit message from that diff:
+- Subject: conventional-commits style (feat|fix|refactor|chore|test|docs|perf): <imperative summary, ≤72 chars>
+- then a blank line
+- Body: 2–5 bullets explaining WHY, not a file listing
+- Infer the scope (e.g. feat(deposits):) from the files changed
+- Reply with the message only - no preamble, no signatures.

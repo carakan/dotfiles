@@ -6,7 +6,9 @@
 disableStartupPopups: true
 notARepository: skip
 promptToReturnFromSubprocess: false
-
+# return-at-top-level quits lazygit — with <esc> bound to return (below), ESC
+# closes the lazygit float inside nvim, like the old `quit: '<esc>'` did.
+quitOnTopLevelReturn: true
 gui:
   nerdFontsVersion: "3"
   showIcons: true
@@ -34,6 +36,9 @@ gui:
       - "#268bd3"
     selectedLineBgColor:
       - "#1a6397"
+    # dimmed variant of selectedLineBgColor for unfocused views (0.65 inactive look)
+    inactiveViewSelectedLineBgColor:
+      - "#143b56"
     cherryPickedCommitFgColor:
       - "#268bd3"
     cherryPickedCommitBgColor:
@@ -46,20 +51,20 @@ gui:
       - "#f55350"
     defaultFgColor:
       - "#FEF9E1"
-
 git:
   autoFetch: true
   autoRefresh: true
   overrideGpg: true
-
+  # 0.64 renamed git.pagers -> git.diffRenderers; cycle with | (name shows in
+  # the status toast). Diff context ({ } keys) flows through via git's -U.
   diffRenderers:
-    - colorArg: always
+    - name: delta
+      colorArg: always
       command: delta --features=lazygit-theme --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - name: delta sbs
+      colorArg: always
+      command: delta --dark --paging=never --side-by-side --line-numbers
   branchLogCmd: 'git log --graph --color=always --date=human --format="%C(#268bd3)%h%C(#f55350)%d%C(reset) - %C(##FEF9E1)(%ad)%C(reset) %s %C(#b28500){%an}%C(reset)" {{branchName}} --'
-  pagers:
-    - colorArg: always
-      pager: delta --dark --paging=never --side-by-side --line-numbers
-
 os:
   # `e` opens files in the HOSTING nvim when inside a snacks float ($NVIM set),
   # standalone nvim otherwise (r4ppz pattern)
@@ -67,14 +72,16 @@ os:
   edit: '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'
   editAtLine: '[ -z "$NVIM" ] && (nvim +{{line}} -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}} && nvim --server "$NVIM" --remote-send ":{{line}}<CR>")'
   openDirInEditor: '[ -z "$NVIM" ] && (nvim -- {{dir}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{dir}})'
-
 keybinding:
   universal:
-    # bluz71
-    return: 'q'
+    # return on BOTH 'q' and <esc>: closes popups/menus, steps back through
+    # contexts (incl. safely leaving the merge conflicts view), and at top
+    # level quits via quitOnTopLevelReturn — closing the nvim float. This
+    # replaces the old `quit: '<esc>'`, whose fall-through killed lazygit
+    # mid-merge. Hard quit remains on the default <c-c>.
+    return: ['q', '<esc>']
     submitEditorText: '<c-c>'
     appendNewline: '<enter>'
-    quit: '<esc>'
     # r4ppz main-panel scrolling (vim muscle memory)
     scrollDownMain:
       - '<pgdown>'
@@ -84,5 +91,19 @@ keybinding:
     scrollUpMain:
       - '<pgup>'
       - 'K'
-      - '<ctrl+u>'
-      - '<ctrl+up>'
+customCommands:
+  # ── AI commit messages via local qwen — all logic (prompt, API, guards,
+  # footer) lives in bin/lazygit-ai; the prompt is packages/lazygit/prompt.
+  # Both act on the STAGED diff; failures surface as error popups.
+  - key: '<c-g>' # generate draft -> review in commit panel -> commit yourself
+    context: 'files'
+    description: 'Generate AI commit message (local qwen)'
+    loadingText: 'Asking local qwen for a commit message...'
+    output: none
+    command: lazygit-ai message
+  - key: '<c-c>' # generate + AUTO-COMMIT (old one-shot behavior)
+    context: 'files'
+    description: 'Generate AI commit message and commit (local qwen)'
+    loadingText: 'Asking local qwen to generate and commit...'
+    output: none
+    command: lazygit-ai commit

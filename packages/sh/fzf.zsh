@@ -61,9 +61,13 @@ preview-label:italic:#ad9c8b,\
 header:italic:#ad9c8b,\
 footer:dim:#6e7681,\
 nth:italic,\
-nomatch:dim"
+nomatch:dim:strip"
 
-# Modern fzf (0.74+) full style. All flags are literal; only vars expand.
+# Modern fzf full style. Requires fzf >= 0.74 (Homebrew: 0.74.4) for: raw
+# mode + toggle-raw + nomatch strip (0.66), word wrap (0.68), --id-nth and
+# walker follow (0.71), inline footer border (0.72), next preview position +
+# every(N)/FZF_IDLE_TIME (0.73), non-modal floating pane (0.74). All flags
+# are literal; only vars expand.
 export FZF_DEFAULT_OPTS='--ansi
   --cycle
   --style full
@@ -82,7 +86,7 @@ export FZF_DEFAULT_OPTS='--ansi
   --gutter-raw=" "
   --filepath-word
   --highlight-line
-  --preview-window=right:60%:wrap
+  --preview-window=right:60%:wrap-word
   --footer=" C-a select-all · C-/ preview · C-d/u scroll · C-s sort · Alt-w wrap "
   --footer-border
   --bind="result:transform-list-label:
@@ -103,11 +107,15 @@ export FZF_DEFAULT_OPTS='--ansi
   --bind="shift-down:preview-down"
   --bind="alt-up:preview-half-page-up"
   --bind="alt-down:preview-half-page-down"
-  --bind="ctrl-/:change-preview-window(down|hidden|)"
+  --bind="ctrl-/:change-preview-window(next:wrap-word|down:50%:wrap-word|hidden|)"
   --bind="ctrl-a:toggle-all"
   --bind="ctrl-s:toggle-sort"
   --bind="alt-w:toggle-wrap-word"
+  --bind="alt-r:toggle-raw"
   '"--color='$FZF_COLORS' --popup='center,60%,60%' --history='$HOME/.local/state/fzf'"
+# tmux >= 3.7 note: the explicit --border above keeps --popup as the classic
+# modal popup with fzf's own rounded border/labels. Drop --border (or pass
+# border-native) to get the 0.74 non-modal floating pane instead.
 
 # File walker (Ctrl-T source)
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
@@ -115,8 +123,8 @@ export BAT_CONFIG_PATH="$HOME/.bat.conf"
 
 # Completion (tab-completion in shell)
 export FZF_COMPLETION_OPTS="--preview-window=border-none --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
-export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
-export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
+export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden,follow"
+export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden,follow"
 export FZF_COMPLETION_TRIGGER='**'
 
 # Ctrl-T: file picker. Multi-select + file-type header + named labels.
@@ -124,12 +132,12 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--multi
   --keep-right
   --border-label=' Files '
-  --preview-window='right:60%:wrap'
+  --preview-window='right:60%:wrap-word'
   --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'
   --bind='focus:+transform-header:file --brief {} 2>/dev/null || echo \"No file selected\"'"
 
 # Alt-C: directory jumper (tree preview)
-export FZF_ALT_C_OPTS="--walker=dir,hidden
+export FZF_ALT_C_OPTS="--walker=dir,hidden,follow
   --border-label=' Dirs '
   --preview-window='right:60%:nowrap'
   --preview '(eza --icons=always --color=always --tree --level=2 {} 2>/dev/null || tree -C {} 2>/dev/null || ls -la {} 2>/dev/null) | head -200'"

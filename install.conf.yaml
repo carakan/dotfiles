@@ -30,6 +30,13 @@
     ~/.local/bin/clipcopy:
         create: true
         path: bin/clipcopy
+    ~/.local/bin/lazygit-ai:
+        create: true
+        path: bin/lazygit-ai
+    # AI prompt for lazygit commit commands (read by bin/lazygit-ai)
+    ~/.config/lazygit-ai/prompt:
+        create: true
+        path: packages/lazygit/prompt
 
     # ── git ────────────────────────────────────────────────
     ~/.gitconfig: packages/git/gitconfig
