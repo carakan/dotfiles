@@ -17,11 +17,19 @@ Theme: Solarized Osaka Dark, nerd fonts v3, custom `delta` diff renderer.
 All logic lives in **`bin/lazygit-ai`** (one script, one prompt — edit
 `packages/lazygit/prompt` to change how qwen replies; it's linked to
 `~/.config/lazygit-ai/prompt` by dotbot). The custom commands in
-`config.yml` are one-liners calling it. Both act on the **staged** diff
-(`git diff --cached`). Feedback is a **tmux status-line message** (5 s,
+`config.yml` are one-liners calling it. Both act on the **staged** diff, split
+in two: **modified tracked files** (`git diff --cached --diff-filter=M`) go in
+as the full analyzable diff; everything else — added/deleted/renamed
+(`--diff-filter=m --name-status`) — is passed as **name + status reference
+only**, so huge new files (lockfiles, blobs) can't overflow the model's
+64k-token context. The prompt tells qwen to treat that second section as
+reference. Feedback is a **tmux status-line message** (5 s,
 non-blocking); outside tmux it degrades to silent. Failures (no staged
-changes, server down, empty reply) surface as a lazygit error popup and never
-leave a draft behind. Env overrides: `LAZYGIT_AI_URL`, `LAZYGIT_AI_MODEL`,
+changes, server down, empty reply) surface as a lazygit error popup **with
+the server's reason** — e.g. a huge staged diff that exceeds the model's
+64k-token context reports the token counts; no draft is left behind. The
+diff is streamed (stdin → jq → curl), so its size never hits the OS argv
+limit. Env overrides: `LAZYGIT_AI_URL`, `LAZYGIT_AI_MODEL`,
 `LAZYGIT_AI_TIMEOUT`, `LAZYGIT_AI_PROMPT`, `TOSHLLM_API_KEY`.
 
 ### `Ctrl+G` — generate, review, commit yourself
@@ -34,6 +42,10 @@ leave a draft behind. Env overrides: `LAZYGIT_AI_URL`, `LAZYGIT_AI_MODEL`,
    description (body).
 5. Edit as needed → submit with **`Ctrl+C`** (`submitEditorText`). `<enter>`
    inserts a newline instead (see overrides below).
+
+Commit + push is deliberately two keys: `c` (panel) then `P` (push). lazygit
+has no auto-push-on-commit option; rebinding `c` to `git commit && git push`
+would trade the message panel for git's editor.
 
 Draft lives in `$GIT_DIR/LAZYGIT_PENDING_COMMIT` (per-worktree; worktrees don't
 share drafts). `esc` in the panel clears it; lazygit deletes it after committing.

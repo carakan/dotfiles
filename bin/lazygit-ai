@@ -34,22 +34,41 @@ KEY=${TOSHLLM_API_KEY:-}
 	exit 1
 }
 
-DIFF=$(git diff --cached)
-[ -n "$DIFF" ] || { echo "No staged changes." >&2; exit 1; }
+M_DIFF=$(git diff --cached --diff-filter=M)
+OTHER=$(git diff --cached --diff-filter=m --name-status)
+[ -n "$M_DIFF" ] || [ -n "$OTHER" ] || { echo "No staged changes." >&2; exit 1; }
 
 PROMPT=$(cat "$PROMPT_FILE")
 
-MSG=$(curl -sS --max-time "$TIMEOUT" "$URL" \
-	-H "Authorization: Bearer $KEY" \
-	-H "Content-Type: application/json" \
-	-d "$(jq -n --arg model "$MODEL" --arg prompt "$PROMPT" --arg diff "$DIFF" \
-		'{model:$model, messages:[{role:"system",content:$prompt},{role:"user",content:$diff}]}')" \
-	| jq -r '.choices[0].message.content | split("</think>")[-1] | gsub("^\\s+|\\s+$";"")') || {
+# Stream the whole chain: the diff never travels through argv (macOS E2BIG
+# cap is ~256 KB per argument). Only MODIFIED tracked files go in as a real
+# diff; everything else (added/deleted/renamed) is passed as name/status
+# reference so huge new files can't overflow the model context. Response is
+# captured so the guard can surface the server's own error message.
+RESP=$(
+	git diff --cached --diff-filter=M |
+	jq -Rs --arg model "$MODEL" --arg prompt "$PROMPT" --arg other "$OTHER" \
+		'(. | rtrimstr("\n")) as $mdiff |
+		{model:$model, messages:[
+			{role:"system", content:$prompt},
+			{role:"user", content:("## Modified files (full diff)\n" + $mdiff +
+				"\n\n## Other staged files (names only - contents NOT included)\n" + $other)}
+		]}' |
+	curl -sS --max-time "$TIMEOUT" "$URL" \
+		-H "Authorization: Bearer $KEY" \
+		-H "Content-Type: application/json" \
+		--data-binary @-
+) || {
 	echo "lazygit-ai: LLM call failed or returned nothing" >&2
 	exit 1
 }
-[ -n "$MSG" ] || { echo "lazygit-ai: LLM call failed or returned nothing" >&2; exit 1; }
 
+MSG=$(printf '%s' "$RESP" | jq -r '.choices[0]?.message.content? // "" | split("</think>")[-1] | gsub("^\\s+|\\s+$";"")' 2>/dev/null) || true
+[ -n "$MSG" ] || {
+	ERR=$(printf '%s' "$RESP" | jq -r '.error.message // empty' 2>/dev/null || true)
+	echo "lazygit-ai: LLM call failed${ERR:+: $ERR}" >&2
+	exit 1
+}
 footer() {
 	if [ -n "${TMUX:-}" ]; then tmux display-message -d 5000 "$1"; fi
 	return 0

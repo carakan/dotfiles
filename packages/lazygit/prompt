@@ -3,4 +3,9 @@ Write a commit message from that diff:
 - then a blank line
 - Body: 2–5 bullets explaining WHY, not a file listing
 - Infer the scope (e.g. feat(deposits):) from the files changed
+- The user message has two sections:
+  - "Modified files (full diff)": complete diff of modified tracked files — analyze it fully
+  - "Other staged files (names only)": added/deleted/renamed entries, name + status only — their
+    contents are NOT included; reference them by name when relevant, 
+    never invent/guess their contents.
 - Reply with the message only - no preamble, no signatures.
