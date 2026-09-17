@@ -666,32 +666,36 @@
     hunk-header-line-number-style = orange
     hunk-header-style = file line-number darkviolet
 
-[delta "lazygit-theme"]
+[delta "lazygit-carakan"]
     # author: https://github.com/carakan
     dark = true
     side-by-side = false
     line-numbers = true
     syntax-theme = Solarized (dark)
-    file-style = "#EAE3D9" bold                       # diffNewFile
+    file-style = "#dfd2c0" bold                       # diffNewFile
     file-decoration-style = none
-    file-added-label = [+]
-    file-copied-label = [==]
-    file-modified-label = [*]
-    file-removed-label = [-]
-    file-renamed-label = [->]
-    hunk-header-style = "#7aa2be" "#3A3A3A"   # diffLine fg+bg
+    merge-conflict-begin-symbol = 
+    merge-conflict-end-symbol = 
+    file-added-label = "  "
+    file-copied-label = "  "
+    file-modified-label = " 󰛄 "
+    file-removed-label = "  "
+    file-renamed-label = "  "
+    hunk-header-style = "#a5acb7" italic   # diffLine fg+bg
     hunk-header-line-number-style = "#b599af" bold italic "#4e4d4d"        # diffSubname
-    hunk-header-decoration-style = ul         # diffLine underline (decoration layer)
-    line-numbers-left-style = "#3d3c3c"
-    line-numbers-right-style = "#3d3c3c"
-    line-numbers-minus-style = "#FF5D4F"              # SignifySignDelete
-    line-numbers-plus-style = "#007600"               # SignifySignAdd
-    line-numbers-zero-style = "#2d2d2d"
+    hunk-header-decoration-style = "#414036" box ul
+    line-numbers-left-style = "#504f4f"
+    line-numbers-right-style = "#504f4f"
+    line-numbers-minus-style = "#99372e" bold             # SignifySignDelete
+    line-numbers-plus-style = "#016201" bold               # SignifySignAdd
+    line-numbers-zero-style = "#303030" bold
+    line-numbers-left-format = " {nm:>3} │"
+    line-numbers-right-format = " {np:>3} "
     minus-style = normal bold "#332222"               # DiffDelete (whole-line bg, bold)
-    minus-emph-style = "#ff8378" italic "#302221"     # diffRemoved (fg #ff8378, bg #302221, italic)
+    minus-emph-style = "#f89188" italic "#4e2c2b"     # diffRemoved (fg #ff8378, bg #302221, italic)
     minus-non-emph-style = normal bold "#332222"
     plus-style = normal "#213022"                     # DiffAdd (whole-line bg)
-    plus-emph-style = normal bold "#0d6d0d"           # DiffText (word-level emphasis)
+    plus-emph-style = "#72b88d" bold "#304632"        # DiffText (bright green fg on lifted bg — matches minus side's pop)
     plus-non-emph-style = plus-style
     zero-style = syntax
     right-arrow = >
@@ -705,3 +709,4 @@
     plus-empty-line-marker-style = syntax forestgreen
     whitespace-error-style = black ghostwhite
     hunk-header-file-style = darkgoldenrod
+    hunk-header-active-border-color = "#6c8aae"

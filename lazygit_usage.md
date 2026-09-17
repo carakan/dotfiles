@@ -8,7 +8,7 @@ the AI commands — the local qwen llama-server (ToshLLM) at
 (untracked, chmod 600; same pattern as `gh` hosts.yml — never hardcode it).
 Runs inside tmux (footer messages) and inside the nvim snacks float (`<leader>gg`).
 
-Theme: Solarized Osaka Dark, nerd fonts v3, custom `delta` diff renderer.
+Theme: Solarized Osaka Dark, nerd fonts v3, custom `delta` diff renderer (`lazygit-carakan` — shared by lazygit and git CLI).
 
 ---
 

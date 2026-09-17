@@ -20,10 +20,10 @@ gui:
     "*": cyan
   theme: # Solarized Osaka Dark — verbatim from craftzdog's solarized-osaka.nvim extra
     activeBorderColor:
-      - '#268bd3'
-      - bold
+      - "#4a7ebe"
+      - "bold"
     inactiveBorderColor:
-      - "#2f5065"
+      - "#63696d"
     searchingActiveBorderColor:
       - "#268bd3"
       - "bold"
@@ -56,10 +56,10 @@ git:
   diffRenderers:
     - name: delta
       colorArg: always
-      command: delta --features=lazygit-theme --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+      command: delta --features=lazygit-carakan --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
     - name: delta sbs
       colorArg: always
-      command: delta --dark --paging=never --side-by-side --line-numbers
+      command: delta --features=lazygit-theme --side-by-side --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
   branchLogCmd: 'git log --graph --color=always --date=human --format="%C(#268bd3)%h%C(#f55350)%d%C(reset) - %C(##FEF9E1)(%ad)%C(reset) %s %C(#b28500){%an}%C(reset)" {{branchName}} --'
 os:
   # `e` opens files in the HOSTING nvim when inside a snacks float ($NVIM set),
