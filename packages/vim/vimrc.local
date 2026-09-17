@@ -57,6 +57,19 @@ let g:bufferline_echo = 0
 let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
 
+" vim-rooter: resolve the project root ONCE at startup, then never re-cd on
+" BufEnter — `:Rooter` stays available for manual re-rooting
+let g:rooter_manual_only = 1
+let g:rooter_cd_cmd = 'cd'
+let g:rooter_silent_changetocwd = 1
+augroup rooter_once
+	autocmd!
+	" ++once: fires on the FIRST file read — startup root; nested lets
+	" DirChanged watchers react to the cd
+	autocmd BufReadPost * ++once nested silent Rooter
+	autocmd VimEnter * silent Rooter
+augroup END
+
 " ALE
 let g:ale_use_global_executables = 1
 let g:ale_set_highlights = 1

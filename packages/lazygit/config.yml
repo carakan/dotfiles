@@ -1,8 +1,3 @@
-# lazygit — Solarized Osaka Dark theme (craftzdog solarized-osaka.nvim extra,
-# via amandeepmittal/dotfiles). Structure: ideas from bluz71/dotfiles +
-# r4ppz/Arch-dotfiles, enhanced for the nvim-snacks float workflow (2026-09-08).
-# Docs: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
-
 disableStartupPopups: true
 notARepository: skip
 promptToReturnFromSubprocess: false
@@ -25,30 +20,31 @@ gui:
     "*": cyan
   theme: # Solarized Osaka Dark — verbatim from craftzdog's solarized-osaka.nvim extra
     activeBorderColor:
-      - "#c94c16"
-      - "bold"
+      - '#268bd3'
+      - bold
     inactiveBorderColor:
-      - "#664c00"
+      - "#2f5065"
     searchingActiveBorderColor:
-      - "#c94c16"
+      - "#268bd3"
       - "bold"
     optionsTextColor:
       - "#268bd3"
     selectedLineBgColor:
-      - "#1a6397"
+      - "#0f3045"
+      - "bold"
     # dimmed variant of selectedLineBgColor for unfocused views (0.65 inactive look)
     inactiveViewSelectedLineBgColor:
       - "#143b56"
     cherryPickedCommitFgColor:
       - "#268bd3"
     cherryPickedCommitBgColor:
-      - "#d23681"
+      - "#d26681"
     markedBaseCommitFgColor:
       - "#268bd3"
     markedBaseCommitBgColor:
       - "#b28500"
     unstagedChangesColor:
-      - "#f55350"
+      - "#d26681"
     defaultFgColor:
       - "#FEF9E1"
 git:

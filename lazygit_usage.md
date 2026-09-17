@@ -133,6 +133,7 @@ Custom commands: `<c-g>` / `<c-c>` (Files panel only — full docs above).
 
 | Key | Action |
 |---|---|
+| `<ctrl+b>` | Filter by status: `s` staged · `u` unstaged · `t` tracked · `T` untracked · `r` reset to all |
 | `space` | Stage / unstage file |
 | `a` | Stage / unstage all |
 | `enter` | Stage individual lines (staging view); on a directory, collapse |
@@ -154,6 +155,7 @@ Custom commands: `<c-g>` / `<c-c>` (Files panel only — full docs above).
 
 | Key | Action |
 |---|---|
+| `h` / `l` (`←`/`→`) | Jump to previous / next hunk |
 | `space` | Stage / unstage selected lines or hunk |
 | `a` | Toggle line-by-line vs hunk selection |
 | `v` | Range select |
