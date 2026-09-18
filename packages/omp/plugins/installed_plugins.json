@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "plugins": {
+    "ecc@ecc": [
+      {
+        "scope": "user",
+        "installPath": "/Users/carakan/.omp/plugins/cache/plugins/ecc___ecc___2.2.1",
+        "version": "2.2.1",
+        "installedAt": "2026-09-03T22:05:51.928Z",
+        "lastUpdated": "2026-09-03T22:05:51.928Z"
+      }
+    ]
+  }
+}

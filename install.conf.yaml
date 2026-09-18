@@ -77,3 +77,51 @@
     # ── vscode (~/.config/Code/User is the path on BOTH macOS and Linux) ──
     ~/.config/Code/User/settings.json:
         path: packages/vscode/settings.json
+
+    # ── opencode (AI agent; per-file/dir links — live dir also holds runtime
+    #    state: .atl cache + node_modules stay real. opencode.json is NOT
+    #    linked: it holds the local llama.cpp apiKey (gh hosts.yml pattern:
+    #    secret file stays real and untracked)) ──
+    ~/.config/opencode/tui.json:
+        path: packages/opencode/tui.json
+    ~/.config/opencode/AGENTS.md:
+        path: packages/opencode/AGENTS.md
+    ~/.config/opencode/AGENTS-advisor.md:
+        path: packages/opencode/AGENTS-advisor.md
+    ~/.config/opencode/AGENTS-orchestrator.md:
+        path: packages/opencode/AGENTS-orchestrator.md
+    ~/.config/opencode/.gentle-ai-default-agent.json:
+        path: packages/opencode/.gentle-ai-default-agent.json
+    ~/.config/opencode/package.json:
+        path: packages/opencode/package.json
+    ~/.config/opencode/agent:
+        path: packages/opencode/agent
+    ~/.config/opencode/commands:
+        path: packages/opencode/commands
+    ~/.config/opencode/plugins:
+        path: packages/opencode/plugins
+    ~/.config/opencode/skills:
+        path: packages/opencode/skills
+    # vendor/ (i-have-adhd plugin) intentionally untracked — lives only at ~/.config/opencode/vendor
+    ~/.config/opencode/benchmarks:
+        path: packages/opencode/benchmarks
+
+    # ── oh-my-pi (config + prompts; agent/ DBs, logs and sessions stay real.
+    #    plugins/installed_plugins.json is an auto-written registry — copied
+    #    for reference, not linked) ──
+    ~/.omp/marketplaces.json:
+        path: packages/omp/marketplaces.json
+    ~/.omp/agent/config.yml:
+        path: packages/omp/agent/config.yml
+    ~/.omp/agent/mcp.json:
+        path: packages/omp/agent/mcp.json
+    ~/.omp/agent/RULES.md:
+        path: packages/omp/agent/RULES.md
+    ~/.omp/agent/agents/sonic.md:
+        path: packages/omp/agent/agents/sonic.md
+    ~/.omp/agent/agents/advisor.md:
+        path: packages/omp/agent/agents/advisor.md
+    ~/.omp/agent/extensions/fff-preferred.ts:
+        path: packages/omp/agent/extensions/fff-preferred.ts
+    ~/.omp/plugins/package.json:
+        path: packages/omp/plugins/package.json

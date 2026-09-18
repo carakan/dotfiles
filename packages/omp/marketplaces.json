@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "marketplaces": [
+    {
+      "name": "ecc",
+      "sourceType": "git",
+      "sourceUri": "https://github.com/affaan-m/ECC",
+      "catalogPath": "/Users/carakan/.omp/plugins/cache/marketplaces/ecc/marketplace.json",
+      "addedAt": "2026-09-03T22:05:45.697Z",
+      "updatedAt": "2026-09-17T16:20:21.684Z"
+    }
+  ]
+}

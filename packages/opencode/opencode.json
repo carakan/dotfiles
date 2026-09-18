@@ -1,0 +1,247 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "gentleman",
+  "small_model": "llamacpp/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf",
+  "agent": {
+    "gentleman": {
+      "description": "Senior Architect mentor - helpful first, challenging when it matters",
+      "mode": "primary",
+      "model": "zai-coding-plan/glm-5.3-flash",
+      "steps": 30,
+      "tools": {
+        "grep": false,
+        "glob": false,
+        "fff_find_files": true,
+        "fff_grep": true,
+        "fff_multi_grep": true
+      },
+      "prompt": "{file:./AGENTS.md}\n\n{file:./AGENTS-orchestrator.md}",
+      "permission": {
+        "edit": "allow",
+        "write": "allow",
+        "read": "allow",
+        "bash": "allow",
+        "task": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "todowrite": "allow",
+        "question": "allow"
+      }
+    },
+    "sdd-orchestrator": {
+      "description": "SDD orchestrator — delegates to sdd-* skills by default, edits directly only for mechanical steps",
+      "mode": "all",
+      "prompt": "{file:./AGENTS.md}\n\n{file:./AGENTS-orchestrator.md}",
+      "model": "zai-coding-plan/glm-5.3-flash",
+      "steps": 30,
+      "tools": {
+        "grep": false,
+        "glob": false,
+        "fff_find_files": true,
+        "fff_grep": true,
+        "fff_multi_grep": true
+      },
+      "permission": {
+        "edit": "allow",
+        "write": "allow",
+        "read": "allow",
+        "bash": "allow",
+        "task": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "webfetch": "allow",
+        "todowrite": "allow",
+        "question": "allow"
+      }
+    },
+    "general": {
+      "description": "Multi-file implementation needing judgment (built-in). Default model overridden to use Minimax M3.",
+      "mode": "subagent",
+      "model": "minimax-coding-plan/MiniMax-M3"
+    },
+    "glm-advisor": {
+      "description": "Strategic advisor for second opinions, plan critique, and architecture tradeoffs. Read-only. Dispatch via task tool when judgment is needed.",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "zai-coding-plan/glm-5.2",
+      "steps": 15,
+      "temperature": 0.3,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "question": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "bash": "deny",
+        "task": "deny",
+        "todowrite": "deny"
+      },
+      "prompt": "{file:./AGENTS-advisor.md}"
+    },
+    "qwen-local": {
+      "description": "Local zero-token-cost worker for well-bounded mechanical tasks: file edits from a complete spec, running verification and reporting results, 2-3 step read-edit-verify chains, boilerplate generation, symbol renames, and self-debugging when the cause is known. Best for >=2 files or >=10 lines; smaller edits should be done inline. CANNOT do: architectural judgment, multi-file design without exact spec, debugging without a known cause, plan decomposition, or sub-agent orchestration. For those, use `general`.",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "llamacpp/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf",
+      "steps": 40,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "bash": "allow",
+        "todowrite": "allow",
+        "question": "allow",
+        "task": "deny",
+        "webfetch": "deny"
+      },
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "edit": true,
+        "write": true,
+        "bash": true,
+        "todowrite": true,
+        "question": true,
+        "skill": false,
+        "task": false,
+        "webfetch": false,
+        "delegate": false,
+        "delegation*": false,
+        "list_mcp_*": false,
+        "read_mcp_resource": false,
+        "context7*": false,
+        "engram*": false,
+        "fff_find_files": true,
+        "fff_grep": true,
+        "fff_multi_grep": true
+      },
+      "prompt": "Mechanical code worker on local Qwen3.8-27B. Zero token cost. No sub-agents.\n\n# Refuse — reply \"REFUSE: <reason>\"\n- Design, architecture, planning, debugging unknown causes, orchestration.\n- Incomplete spec → ask. Never guess.\n- Under ~10 lines in 1-2 files → caller handles inline.\n- Pre-existing bugs outside the spec → flag in reply. Don't fix.\n\n# Accept\n- Mechanical edits: exact path, exact change.\n- Complete specs: template + tests.\n- Known-cause debugging: read failure, targeted fix, re-verify.\n- Run command, paste output.\n\n# Process\n1. Read referenced files and their context (validators, siblings, parent classes) in parallel before editing.\n2. Smallest change. Match neighboring style. No comments unless asked.\n3. Verify with the project's command. Paste real output — \"should work\" is failure.\n4. Failed verification → locate cause, fix, re-verify. Never stop at reporting a failure.\n5. Re-read your git diff. Lines you didn't intend to change = fix before reporting.\n6. Reply: files touched (absolute), output verbatim, deviations, noticed bugs, uncertainty.\n7. Never commit unless the dispatch says \"you may commit\".\n\n# Search — FFF only\n- File/code search: `fff_find_files`, `fff_grep`, `fff_multi_grep`. No shell grep/find/cat/ls.\n- Exact paths given → `read` directly.\n- Every FFF call: `maxResults: 100`. Never pass `cursor`. Never paginate.\n- Bare identifiers, not multi-token regex. Naming variants → one `fff_multi_grep`.\n- 2 greps max, then read the top hit.\n\n# Budget — ~40 turns\n- Read everything first. Batch edits. Verify as soon as code compiles.\n- Past ~25 turns → ship smallest working version, flag what's left.\n- Server failure or empty results → reply \"DISPATCH FAILED: <error>\".\n\n# Pitfalls (seen before — don't repeat)\n- ISO8601 uses `T`: `2024-01-15T12:34:56Z`. Never dash-separated date regexes.\n- Read model validators before creating test records. To violate a constraint, use native setters or `Object#stub`.\n- Editing a method → read the whole method first. Line count dropped in the diff = you deleted something.\n- Bulk-action buttons go inside the same `<form>` as their checkboxes.\n",
+      "temperature": 0.1,
+      "top_p": 0.95
+    }
+  },
+  "mcp": {
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "engram": {
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "fff": {
+      "command": [
+        "fff-mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    }
+  },
+  "plugin": [
+    "/Users/carakan/.config/opencode/vendor/i-have-adhd/.opencode/plugins/i-have-adhd.mjs"
+  ],
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git commit *": "ask",
+      "git push": "ask",
+      "git push *": "ask",
+      "git push --force *": "ask",
+      "git rebase *": "ask",
+      "git reset --hard *": "ask"
+    },
+    "read": {
+      "*": "allow",
+      "**/.env": "deny",
+      "**/.env.*": "deny",
+      "**/credentials.json": "deny",
+      "**/secrets/**": "deny",
+      "*.env": "deny",
+      "*.env.*": "deny"
+    }
+  },
+  "provider": {
+    "llamacpp": {
+      "name": "llama.cpp (local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1",
+        "apiKey": "llama-local"
+      },
+      "models": {
+        "Qwen3.6-14B-A3B-FableVibes-Q5_K_M.gguf": {
+          "name": "Qwen3.6-14B-A3B (FableVibes Q5_K_M)",
+          "tool_call": true,
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "pixtral-12b-Q4_K_M.gguf": {
+          "name": "Pixtral 12B (vision, Q4_K_M)",
+          "tool_call": false,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "Qwen3.8-27B-UD-IQ2_S.gguf": {
+          "name": "Qwen3.8-27B (Unsloth Dynamic IQ2_S)",
+          "tool_call": true,
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "Qwen3.8-27B-UD-Q2_K_XL.gguf": {
+          "name": "Qwen3.8-27B (Unsloth Dynamic Q2_K_XL)",
+          "tool_call": true,
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "Qwen3.8-27B-UD-IQ3_S.gguf": {
+          "name": "Qwen3.8-27B (Unsloth Dynamic IQ3_S)",
+          "tool_call": true,
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf": {
+          "name": "Qwen3.8-27B (GSQ RCO IQ3_XXS + MTP) — current",
+          "tool_call": true,
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        }
+      }
+    }
+  }
+}

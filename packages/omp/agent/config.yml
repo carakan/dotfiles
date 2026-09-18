@@ -1,0 +1,68 @@
+setupVersion: 2
+modelRoles:
+  commit: llama.cpp//Users/carakan/models/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf:medium
+  tiny: llama.cpp//Users/carakan/models/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf:medium
+  worker: minimax-code/MiniMax-M3
+  advisor: zai/glm-5.3:high
+  review: zai/glm-5.3-flash:high
+  default: zai/glm-5.3-flash:high
+skills:
+  # Prompt-budget diet: the full 286-skill ECC catalog cost ~22k tokens in
+  # every agent prompt (main + subagents), which overflowed the 32k local
+  # model. Allowlist only the workflows actually used; skill://<name> reads
+  # still work for anything on this list, and the list is easy to extend.
+  includeSkills:
+    - tdd-workflow
+    - verification-loop
+    - search-first
+    - deep-research
+    - security-review
+    - continuous-learning-v2
+    - git-workflow
+    - github-ops
+    - coding-standards
+    - e2e-testing
+    - canary-watch
+    - deployment-patterns
+    - benchmark
+task:
+  agentModelOverrides:
+    task: "@worker"
+    sonic: "@tiny"
+    scout: "@worker"
+    reviewer: "@review"
+    security-reviewer: "@review"
+advisor:
+  enabled: false
+loop:
+  mode: prompt
+memory:
+  backend: local
+bash:
+  enabled: true
+eval:
+  rb: true
+grep:
+  enabled: true
+dev:
+  autoqaConsent: granted
+symbolPreset: nerd
+colorBlindMode: false
+statusLine:
+  preset: nerd
+  separator: pipe
+  contextLine: embedded
+  sessionAccent: false
+  transparent: false
+  compactThinkingLevel: false
+  showHookStatus: true
+tui:
+  resizeScrollback: rebuild
+  textSizing: false
+  codexResetFireworks: true
+  tight: false
+display:
+  shimmer: classic
+  showTokenUsage: true
+composer:
+  shape: box
