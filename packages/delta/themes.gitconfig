@@ -701,8 +701,8 @@
     right-arrow = >
     blame-format = " ({commit:>7}) {author:<18} {timestamp:^13} "
     blame-palette = "powderblue papayawhip thistle skyblue lavender plum paleturquoise lightcyan violet"
-    commit-decoration-style = none
-    commit-style = bold black orange
+    commit-decoration-style ="#002e6d" box
+    commit-style = "#3273c7" bold italic
     grep-file-style = darkgoldenrod
     grep-line-number-style = darkgoldenrod
     minus-empty-line-marker-style = syntax orangered
