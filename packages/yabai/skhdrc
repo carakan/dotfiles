@@ -144,7 +144,7 @@ ctrl + cmd - c : yabai -m window --display next; yabai -m display --focus next
 # Layout save/restore (per space)
 # ------------------------------------------------------------------------------
 # Save current window layout to /tmp/yabai_layout_<space>.json
-ctrl + alt - s : /Users/carakan/.dotfiles/config/yabai/save_layout.sh
+ctrl + alt - s : /Users/carakan/.dotfiles/packages/yabai/save_layout.sh
 
 # Restore saved window layout
-ctrl + alt - r : /Users/carakan/.dotfiles/config/yabai/restore_layout.sh
+ctrl + alt - r : /Users/carakan/.dotfiles/packages/yabai/restore_layout.sh

@@ -143,8 +143,11 @@ export FZF_ALT_C_OPTS="--walker=dir,hidden,follow
   --preview '(eza --icons=always --color=always --tree --level=2 {} 2>/dev/null || tree -C {} 2>/dev/null || ls -la {} 2>/dev/null) | head -200'"
 
 # Ctrl-R: history. Wrapped preview, copy, open-in-vim, delete-aware footer.
+# --gap (0.70+) spaces multi-line entries apart; gap-line color is in FZF_COLORS.
 export FZF_CTRL_R_OPTS="--wrap=word
   --no-sort
+  --gap=1
+  --gap-line='┈'
   --border-label=' History '
   --preview 'echo {2..} | bat --color=always --plain --language=sh'
   --preview-window='up:30%:nowrap'

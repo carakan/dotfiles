@@ -92,7 +92,7 @@ yabai -m config                              \
 # When a space has exactly 1 window, remove padding/gap and hide borders
 # so it looks like native fullscreen. When a second window appears,
 # restore padding/gap and borders.
-FULLSCREEN_SCRIPT="/Users/carakan/.dotfiles/config/yabai/update_fullscreen.sh"
+FULLSCREEN_SCRIPT="/Users/carakan/.dotfiles/packages/yabai/update_fullscreen.sh"
 yabai -m signal --add event=window_created   action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
 yabai -m signal --add event=window_destroyed action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
 yabai -m signal --add event=window_moved     action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
@@ -108,6 +108,6 @@ else
     borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0xffcccccc &
 fi
 
-yabai -m signal --add event=window_focused action="/Users/carakan/.dotfiles/config/yabai/update_border_color.sh"
+yabai -m signal --add event=window_focused action="/Users/carakan/.dotfiles/packages/yabai/update_border_color.sh"
 
 echo "yabai configuration loaded.."

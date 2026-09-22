@@ -9,6 +9,7 @@ Store every future run as `results/YYYY-MM-DD_<model-shortname>.md` so runs stay
 |---|---|---|
 | `bench.py` | 15-task reliability battery: Tier 1 mechanical edits (8), Tier 2 edge cases (4), Tier 3 out-of-scope behavior (3) | `python3 bench.py <key>` — keys: `qwen`, `ds`, `rco`, `ud3x`, or `auto` (uses whatever model is loaded) |
 | `tools_bench.py` | 7 tool-calling tests: exact paths, tool selection among distractors, path composition, similar-path mutation, no-tool restraint, no fabrication on missing files | edit `MODEL` var or use the loaded-model pattern; tests whatever you point it at |
+| `deep_bench.py` | Long-context needle recall (5 exact-value needles at 2/25/50/75/98% depth, line-indexed), 3 multi-hop reasoning, 10 knowledge facts | `python3 deep_bench.py [n_lines ...]` (default 2200 ≈106k tok, 560 ≈27k, 80 ≈3.8k; filler ≈48 tok/line) |
 
 Both read the API key from `LLAMACPP_API_KEY` env var, falling back to the key in `opencode.json`.
 
@@ -150,3 +151,13 @@ env: GGML_METAL_VRAM_RESERVE_MB=1024 TOSH_FA_AMD=1
 \* bench pins temp 0.1; server default 0.6.
 
 Stable expected fails everywhere: T1.6 (no tools raw), T3.1 (overreach). Borderline: T1.8, T2.2.
+
+## deep_bench.py reference scores (2026-09-21, fixed line-index test)
+
+| Model | Recall 106k/27k/3.8k | Reasoning | Knowledge |
+|---|---|---|---|
+| GSQ-RCO-IQ3_XXS | 5/5 · 5/5 · 5/5 | 2/3 (Q2 catches the equal-$76 trap; Q3 wrong: Blue) | 10/10 |
+| Ternary-Bonsai-2-27B-PQ2_0 | 5/5 · 5/5 · 5/5 | 0/3 (Q2 unstable wrong across runs) | 10/10 |
+
+Probe gen: RCO ~27 t/s, Bonsai ~41 t/s. Prefill @106k: RCO 143, Bonsai 162 t/s.
+Q3 correct answer is **red** — both models get it wrong; don't Panic.

@@ -265,83 +265,13 @@ custom_onedark.inactive.b.bg = '#353535'
 custom_onedark.inactive.c.bg = '#353535'
 custom_onedark.inactive.c.fg = '#a8a494'
 
-require('fzf-lua').setup({
-  -- fzf_bin         = 'fzf-tmux',
-  nbsp = '\xc2\xa0',
-  --file_icon_padding = ' ',
-  height           = 0.95,            -- window height
-  width            = 0.80,
-  formatter = "path.filename_first",
-  winopts = {
-    height           = 0.95,            -- window height
-    width            = 0.85,            -- window width
-    row              = 0.25,            -- window row position (0=top, 1=bottom)
-    col              = 0.55,            -- window col position (0=left, 1=right)
-  },
-  defaults = {
-    -- git_icons = true,
-  },
-  hls = {
-    border = 'LineNr',
-    title = 'Normal', 
-  },
-  winopts = {
-    preview = {
-      horizontal = 'right:55%',  -- image previews get the right pane
-    },
-  },
-  files = {
-    -- multiprocess      = false,
-    -- debug             = true,
-    file_icons        = true,
-    color_icons       = true,
-  },
-  grep = {
-    color_icons       = false,
-  },
-  git = {
-    icons = {
-      ["M"] = { icon = "★", color = "#C643C6" },
-      ["D"] = { icon = "✗", color = "red" },
-      ["A"] = { icon = "+", color = "green" },
-      ["?"] = { icon = "?", color = "red" },
-    },
-    stash = {
-      preview = "git --no-pager stash show --patch --color {1} | delta --side-by-side --width 200",
-    }
-  },
-  previewers = {
-    bat = {
-      cmd             = "bat",
-      args            = "--style=numbers,changes --color always",
-      theme           = 'Coldark-Dark', -- bat preview theme (bat --list-themes)
-      config          = nil,            -- nil uses $BAT_CONFIG_PATH
-    },
-    git_diff = {
-      pager        = "delta",
-    },
-    builtin = {
-      treesitter = { enabled = false },
-      -- snacks.image renders via the kitty graphics protocol (works through
-      -- tmux thanks to `allow-passthrough on` in tmux.conf) and converts
-      -- svg/tiff/pdf via magick on the fly. Takes precedence over
-      -- `extensions` whenever the terminal supports it.
-      snacks_image = { enabled = true, render_inline = true },
-      -- shell fallback when snacks.image can't take over (unsupported term).
-      -- chafa renders raster AND svg, auto-selecting kitty protocol under
-      -- kitty/tmux-passthrough, sixel on sixel terms, block symbols otherwise.
-      extensions = {
-        ["gif"]  = { "chafa", "{file}" },
-        ["bmp"]  = { "chafa", "{file}" },
-        ["webp"] = { "chafa", "{file}" },
-        ["avif"] = { "chafa", "{file}" },
-        ["tif"]  = { "chafa", "{file}" },
-        ["tiff"] = { "chafa", "{file}" },
-        ["svg"]  = { "chafa", "{file}" },
-      },
-    },
-  },
-})
+-- fzf-lua — single source of truth: lua/plugins/fzf-lua.lua (enhanced 2026-09
+-- against upstream doc/fzf-lua-opts.txt; git icons, stash delta preview, bat
+-- theme, chafa/snacks previews all preserved there). The block that lived here
+-- was removed: it carried a duplicate `winopts` key whose second table silently
+-- discarded the window geometry (height/width/row/col). Loading instead of
+-- duplicating keeps the legacy config and the FLIP plugin dir in lockstep:
+dofile(vim.fn.expand('~/.dotfiles/packages/nvim/lua/plugins/fzf-lua.lua')).setup()
 
 require("gx").setup({
   handlers = {
