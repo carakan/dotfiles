@@ -88,26 +88,23 @@ yabai -m config                              \
     mouse_action2               resize       \
     mouse_drop_action           swap
 
-#======= Auto-fullscreen when only 1 window =======================
-# When a space has exactly 1 window, remove padding/gap and hide borders
-# so it looks like native fullscreen. When a second window appears,
-# restore padding/gap and borders.
-FULLSCREEN_SCRIPT="/Users/carakan/.dotfiles/packages/yabai/update_fullscreen.sh"
-yabai -m signal --add event=window_created   action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
-yabai -m signal --add event=window_destroyed action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
-yabai -m signal --add event=window_moved     action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
-yabai -m signal --add event=window_resized   action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
-yabai -m signal --add event=space_changed    action="${FULLSCREEN_SCRIPT}" label=auto_fullscreen
+#======= Border color by real occupancy (no geometry changes) ==========
+# update_border_color.sh hides the border when the space has exactly 1
+# VISIBLE managed window (hidden helper windows make the raw count useless),
+# and shows it otherwise. Pure borders IPC -> no resizes, no kitty/tmux
+# flicker. Labels are unique per event and removed before adding so
+# re-running yabairc stays clean.
+BORDER_SCRIPT="/Users/carakan/.dotfiles/packages/yabai/update_border_color.sh"
+add_border_signal() {
+    yabai -m signal --remove "label=border_$1" 2>/dev/null
+    yabai -m signal --add event="$1" action="${BORDER_SCRIPT}" "label=border_$1"
+}
+for event in window_created window_destroyed window_focused space_changed; do
+    add_border_signal "$event"
+done
 
-#======= Border color based on window count =======================
-# Set initial border color
-n=$(yabai -m query --spaces --space | jq '.windows | length')
-if [ "$n" = 1 ]; then
-    borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0x00000000 &
-else
-    borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0xffcccccc &
-fi
-
-yabai -m signal --add event=window_focused action="/Users/carakan/.dotfiles/packages/yabai/update_border_color.sh"
+# Launch the borders daemon with defaults, then set the correct color now
+borders width=3.0 hidpi=off inactive_color=0x00000000 active_color=0xffcccccc &
+"${BORDER_SCRIPT}"
 
 echo "yabai configuration loaded.."

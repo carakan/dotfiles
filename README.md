@@ -25,8 +25,7 @@ Config lives in `config/yabai/` and is symlinked by dotbot:
 |------|---------|
 | `yabairc` | yabai config (spaces, rules, layout, signals) |
 | `skhdrc` | keyboard shortcuts |
-| `update_border_color.sh` | border color by window count |
-| `update_fullscreen.sh` | auto fullscreen when only 1 window in a space |
+| `update_border_color.sh` | hides border on 1-visible-window spaces (IPC only, no flicker) |
 | `save_layout.sh` | snapshot current window layout |
 | `restore_layout.sh` | restore saved window layout |
 
