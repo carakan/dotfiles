@@ -42,6 +42,8 @@
     ~/.gitconfig: packages/git/gitconfig
     ~/.gitignore_global: packages/git/gitignore_global
     ~/.ignore: packages/git/ignore
+    # fd reads this global ignore everywhere (rg reads ~/.ignore via .ripgreprc)
+    ~/.fdignore: packages/git/ignore
 
     # ── gh (GitHub CLI; hosts.yml with tokens stays untracked) ──
     ~/.config/gh/config.yml:

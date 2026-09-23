@@ -7,6 +7,10 @@
 --hidden
 # Follow symlinks (dotfiles are symlinked dotdirs).
 --follow
+# Ignore the global gitignore (~/.gitignore_global) — env/secrets and
+# tooling-state rules are git's business; rg lists everything and lets
+# ~/.ignore decide. Project .gitignore and .git/info/exclude still apply.
+--no-ignore-global
 # Deterministic, path-sorted output.
 --sort=path
 
@@ -26,9 +30,10 @@
 --hyperlink-format=kitty
 
 # --- Never search these ---
---glob=!{.git,.svn,node_modules,.venv,venv,__pycache__,.mypy_cache,target,dist,vendor,tealdeer,Trash}
---glob=!*.lock
---glob=!package-lock.json
+# Exclusions live in ~/.ignore (shared with fd via ~/.fdignore), which also
+# carries the !negations. ~/.ignore alone is inert in rg 15 for subtree
+# searches, so it is wired explicitly below.
+--ignore-file=/Users/carakan/.ignore
 
 # --- Colors (harmonized with the kitty theme) ---
 # Match: bold black on yellow — same cue as fzf hl (#ecb90f).

@@ -1,25 +1,97 @@
+# ~/.ignore — global ignore file, read by ripgrep (and fd, ag) on top of
+# per-repo .gitignore/.rgignore. Linked from packages/git/ignore.
+# Git does NOT read this file; that is ~/.gitignore_global's job.
+# Keep !negations at the bottom — later rules win.
+
+# --- OS / editor / tool metadata ---
 *.DS_Store
-**/.elixir_ls/*
-.git/*
+Thumbs.db
+desktop.ini
+**/.git/*
+**/.svn/*
 .gitkeep
+*.keep
 .idea/*
 .vscode/*
+*.swp
+*.swo
+tags
+tags.*
 GPATH
 GRTAGS
 GTAGS
-_build/*
-bower_components/*
+Trash/*
+
+# --- Caches / build outputs (any language) ---
 coverage/*
-deps/*
 dist/*
-gems/*
+build/*
+tmp/**/*
+out/*
+.cache/*
+.eslintcache
+*.tsbuildinfo
+.direnv/*
+.tox/*
+.hypothesis/*
+tealdeer/*
+
+# --- JavaScript / frontend ---
 **/node_modules/*
+bower_components/*
+.next/*
+.nuxt/*
+.svelte-kit/*
+.turbo/*
+.parcel-cache/*
+.yarn/*
+*.min.js
+*.min.css
+*.map
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.lock
+
+# --- Python ---
+.venv/*
+venv/*
+__pycache__/*
+.mypy_cache/*
+.pytest_cache/*
+.ruff_cache/*
+*.egg-info/*
+.eggs/*
+htmlcov/*
+.coverage*
+
+# --- Ruby / Elixir / Erlang ---
+gems/*
+vendor/*
+.elixir_ls/*
+_build/*
+deps/*
+*.beam
+
+# --- Rust / Go / Swift ---
+target/*
+DerivedData/*
+*.xcuserdata/*
+Pods/*
+.swiftpm/*
+*.tfstate*
+
+# --- App data ---
 public/uploads/*
 storage/*
-tags
-tags.*
-tmp/**/*
-*.beam
-*.keep
+
+# --- Negations: always searchable (original entries, kept verbatim) ---
 !.env*
+!*.env
 !/logs/*
+# config databases stay listed for editing even when project gitignores
+# (or rules above like storage/*) hide them — this file outranks gitignores
+!database.yml
+!*.db
+!*.sqlite
+!*.sqlite3

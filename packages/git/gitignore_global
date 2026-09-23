@@ -66,10 +66,13 @@ node_modules/*
 .shards/
 crystal-*
 
-# ── env & secrets (never leak by accident) ───────────────
+# ── env & secrets (never leak by accident; rg still lists them via
+#    ~/.ignore negations for editing) ──────────────────────
 .env
-!.env.example
+.env.*
+*.env
 .envrc
+!.env.example
 
 # ── tooling state ────────────────────────────────────────
 .tool-versions
