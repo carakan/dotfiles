@@ -95,6 +95,15 @@ fi
 plugins=( zsh-interactive-cd bgnotify history gem mix rails alias-tips node npm bun git
           tmux asdf zsh-completions copypath safe-paste)
 # Platform plugin delta (must be final before oh-my-zsh sources below)
+# deja tuning — exported BEFORE omz loads the plugin (env is read at source
+# time). Keeps deja conservative, close to old zsh-autosuggestions behavior:
+export DEJA_HIGHLIGHT_STYLE="fg=#8e8a70,bold,italic" # ghost style zsh-autosuggestions used
+export DEJA_FUZZY=tight           # near-adjacent matches only; prefix anchors unchanged
+export DEJA_EMPTY=off             # no ghost predictions on an empty prompt
+export DEJA_CYCLE_KEY=            # Tab stays with fzf/completion — no alternatives picker
+export DEJA_TOGGLE_EMPTY_KEY=     # Shift+↑ flips a persisted GLOBAL setting; too easy to hit
+export DEJA_CYCLE_FUZZY_KEY=      # Shift+→ would persist a global preset change; unbind
+export DEJA_CYCLE_FUZZY_BACK_KEY= # Shift+← ditto
 case "$(uname -s)" in
   Darwin) plugins+=(brew macos deja) ;;
   Linux)  plugins+=(brew zsh-autosuggestions) ;;
