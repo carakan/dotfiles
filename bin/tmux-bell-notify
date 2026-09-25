@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# tmux-bell-notify - macOS desktop notification for tmux window bells.
+# Used by the tmux alert-bell hook (see packages/tmux/tmux.conf). Covers
+# background agents, long builds and the prefix+M silence watchdog.
+# NOTE: #{window_name} expands empty inside alert hooks, so the ringing
+# window is discovered here instead.
+
+ringing=$(tmux list-windows -a -F '#{window_bell_flag} #{session_name}:#{window_name}' 2>/dev/null | awk '$1 == 1 {print $2; exit}')
+name="${ringing:-window}"
+osascript -e "display notification \"bell in $name\" with title \"tmux\""

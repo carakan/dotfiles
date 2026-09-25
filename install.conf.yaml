@@ -33,6 +33,9 @@
     ~/.local/bin/lazygit-ai:
         create: true
         path: bin/lazygit-ai
+    ~/.local/bin/tmux-bell-notify:
+        create: true
+        path: bin/tmux-bell-notify
     # AI prompt for lazygit commit commands (read by bin/lazygit-ai)
     ~/.config/lazygit-ai/prompt:
         create: true
