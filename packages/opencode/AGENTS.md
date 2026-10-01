@@ -11,6 +11,10 @@ Short on purpose — long prompts make agents hallucinate. Loaded by every agent
 - No AI attribution in commits.
 - Disagree with a prior user decision → surface it, don't silently override.
 
+## Verify delegated work
+
+A worker reporting "done" without pasted output gave a claim, not evidence. Before acting: `git status --short`, `git diff`, then run the tests yourself. Treat it as unverified until diff and tests agree.
+
 ## Config scope
 
 `~/.config/opencode/` is shared across all projects — tech-stack and project-name agnostic. Project conventions live in each project's `./AGENTS.md`. Orchestration rules live in `AGENTS-orchestrator.md` (primary agents only).

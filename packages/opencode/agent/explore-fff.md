@@ -1,7 +1,7 @@
 ---
 description: Fast codebase search using the FFF MCP server. Use for "where is X?" lookups, locating identifiers by name, or grep-style searches across a file type or directory. Prefer over `explore` for single-shot searches.
 mode: subagent
-model: llamacpp/Qwen3.8-27B-UD-Q2_K_XL.gguf
+model: llamacpp/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf
 steps: 30
 permission:
   edit: deny
