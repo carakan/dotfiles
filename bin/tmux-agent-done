@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# tmux-agent-done - desktop notification when a long command finishes in a
+# tmux pane you are not looking at. Called by the tmux 3.8 monitor hooks in
+# packages/tmux/tmux.conf ("3.8 agentic" section); requires a HEAD (3.8+)
+# server since monitors use `set-hook -B`.
+#
+# Usage: tmux-agent-done
+#   No arguments: the @agent-done hook fires per pane with no payload, so the
+#   panes to consider are found by scanning for a recorded @busy-since-* that
+#   is now idle. The previous signature (<pane-id> [socket-path]) relied on
+#   #{pane_id} interpolated into a nested quoted run-shell, which never ran.
+# Tunables (tmux options):
+#   @agentic-notify-secs  minimum runtime to notify (default 30)
+#   @agentic-skip-cmds    skip-list, comma-separated globs, e.g. *vim*,*ssh*
+#
+# Set TMUX_AGENT_DONE_TEST=1 to log to /tmp/tmux-agent-done.log instead of
+# notifying (used by the config test).
+
+set -u
+
+sock=""
+if [ -n "${TMUX:-}" ]; then
+    sock="${TMUX%%,*}"
+fi
+t() { tmux ${sock:+-S "$sock"} "$@"; }
+
+min=$(t show -gv @agentic-notify-secs 2>/dev/null)
+min=${min:-30}
+now=$(date +%s)
+
+for pane in $(t list-panes -a -F '#{pane_id}'); do
+    since=$(t show -pqv -t "$pane" "@busy-since-$pane" 2>/dev/null)
+    cmd=$(t show -pqv -t "$pane" "@busy-cmd-$pane" 2>/dev/null)
+    t set -pq -t "$pane" "@busy-since-$pane" "" 2>/dev/null
+    t set -pq -t "$pane" "@busy-cmd-$pane" "" 2>/dev/null
+    [ -n "$since" ] || continue
+    [ -n "$cmd" ] || continue
+
+    elapsed=$((now - since))
+    [ "$elapsed" -ge "$min" ] || continue
+
+    # defense: state written outside the start monitor (tests, residue from a
+    # previous registration) must not turn interactive apps into notifications
+    case "$cmd" in
+        nvim|nvim*|vim|vim*|vi|ssh*|less|less*|lazygit|lazygit*|fzf|fzf*) continue ;;
+    esac
+
+    info=$(t display -p -t "$pane" '#{session_name}:#{window_name}|#{pane_title}|active=#{window_active}') || continue
+    win=$(echo "$info" | cut -d'|' -f1)
+    ptitle=$(echo "$info" | cut -d'|' -f2)
+    active=${info##*active=}
+    [ "$active" = "1" ] && continue   # you are watching this window
+
+    # contextual: command + runtime in the message, window + agent pane title
+    # in the title line so the notification reads at a glance
+    msg="$cmd finished in ${elapsed}s${ptitle:+ — $ptitle}"
+    if [ -n "${TMUX_AGENT_DONE_TEST:-}" ]; then
+        echo "[$win] $msg" >> /tmp/tmux-agent-done.log
+    else
+        osascript -e "display notification \"$msg\" with title \"tmux agent · $win\"" >/dev/null 2>&1
+    fi
+done
+

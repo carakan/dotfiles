@@ -425,5 +425,70 @@ sudo mdutil -E /System/Volumes/Data
 - `killall mds` — can corrupt the index and trigger reindex storms. Never use.
 - `mdutil -E` alone — erases the index. Only use when you want a full rebuild.
 - `mdutil -X` — disables searching too (Alfred breaks). Use `-i off` instead.
-- Only targeting `/` — on APFS, user files live on `/System/Volumes/Data`.
+- Only targeting `/` — on APFS, user files live in `/System/Volumes/Data`.
   Always include the data volume.
+
+## Terminal (kitty)
+
+`packages/kitty/` holds three files, all linked into `~/.config/kitty/`:
+
+| File | Role |
+|---|---|
+| `kitty.conf` | the config — upstream's annotated `kitty.conf` with overrides |
+| `open-actions.conf` | what a click on a detected URL does |
+| `shaders/subtle.pipeline` | the `custom_shaders` pipeline |
+
+Requires kitty ≥ 0.49 (2026-09-21) for `custom_shaders`, vertical tabs and
+`detect_url_regex`.
+
+### Custom shaders
+
+`custom_shaders subtle` loads two passes, both chosen for **cost per frame,
+not for looks**:
+
+- **Dim inactive panes** — `animation_step 0`, so it repaints only when the
+  content or the focused pane changes. Zero frames while idle.
+- **Motion-blurred cursor trail** — gated on `cursor-trail-move`, and the
+  shader early-outs on pixels the trail did not sweep this frame. Cost is
+  bounded by the trail, not by the window.
+
+The ambient shaders kitty ships (`inside-the-matrix`, `northern-lights`,
+`fireworks`, `water`, `crt`, `tft`, `spotlight`) all run a full-viewport GPU
+pass on a timer, forever. That is what makes a terminal feel laggy, so they
+are deliberately off. To try one: set `custom_shaders spotlight` (it does stop
+on focus-out / user-idle) and revert by restoring the value above.
+
+Tuning lives in the pipeline, not the shader source: `var <type> <name>
+<value>` overrides any `static const` in the `.slang` at pipeline load time.
+The `INACTIVE_DIM`/`INACTIVE_DIM_COLOR` pair is the interesting one —
+`0.2158605` is `#808080` in linear RGB.
+
+### Clickable `file:line`
+
+`detect_url_regex` turns `path/to/file.ext:42` in compiler and agent output
+into a hoverable link; `open-actions.conf` routes it to `open-file-ref`, which
+opens it in `$EDITOR` at that line.
+
+The extension list is explicit on purpose. The upstream example
+(`[[:alnum:]_./-]+\.[[:alnum:]]+:[0-9]+`) also matches
+`host.example.com:8080`, so every port in a log becomes a fake link. **If you
+add an extension, add it to both files** — `detect_url_regex` in `kitty.conf`
+and the `url` criterion in `open-actions.conf`. A reference detected but not
+matched by `open-actions.conf` falls through to the OS URL handler.
+
+### Layout
+
+Vertical tab bar on the left (`tab_bar_edge left`), slanted powerline style.
+Switch back with `tab_bar_edge top`.
+
+| Binding | Action |
+|---|---|
+| `kitty_mod+p>s` | session picker |
+| `kitty_mod+p>a` | active sessions only |
+| `kitty_mod+p>-` | previous session |
+| `kitty_mod+p>p` | browse `~/.local/share/kitty/sessions` |
+| `kitty_mod+p>w` | save current layout to a session file |
+| `kitty_mod+p>d` | drag-and-drop target |
+| `kitty_mod+p>t` | select tab by name |
+| `kitty_mod+shift+comma` / `.` | move tab backward / forward |
+

@@ -1,10 +1,36 @@
 #!/usr/bin/env bash
-# tmux-bell-notify - macOS desktop notification for tmux window bells.
-# Used by the tmux alert-bell hook (see packages/tmux/tmux.conf). Covers
-# background agents, long builds and the prefix+M silence watchdog.
-# NOTE: #{window_name} expands empty inside alert hooks, so the ringing
-# window is discovered here instead.
+# tmux-bell-notify - macOS desktop notification for tmux window events that
+# fire the bell action. Used by the alert-bell hook in packages/tmux/tmux.conf.
+#
+# Deliberately notifies ONLY for the silence watchdog (prefix M): a window
+# armed with monitor-silence that produced no output for N minutes. Program
+# bells — including agents ringing a bell when they finish — are dropped:
+# those completions are already covered contextually by tmux-agent-done, so
+# notifying here duplicated every agent finish (audited 2026-10-07). Bells
+# stay visible the quiet way: the onedark activity marker on the window tab.
+#
+# NOTE: formats expand empty inside alert hooks, so the event context is
+# discovered here by scanning. The silenced window carries
+# window_silence_flag=1; a program bell does not.
+#
+# Set TMUX_NOTIFY_TEST=1 to log to /tmp/tmux-bell-notify.log instead of
+# notifying (used by the config test).
 
-ringing=$(tmux list-windows -a -F '#{window_bell_flag} #{session_name}:#{window_name}' 2>/dev/null | awk '$1 == 1 {print $2; exit}')
-name="${ringing:-window}"
-osascript -e "display notification \"bell in $name\" with title \"tmux\""
+set -u
+
+row=$(tmux list-windows -a -F '#{window_silence_flag}|#{session_name}:#{window_name}|#{pane_current_command}|#{pane_title}' 2>/dev/null |
+  awk -F'|' '$1 == 1 { print; exit }')
+
+# No silenced window → program bell → visual flag only, no notification.
+[ -n "$row" ] || exit 0
+
+win=$(echo "$row" | cut -d'|' -f2)
+cmd=$(echo "$row" | cut -d'|' -f3)
+title=$(echo "$row" | cut -d'|' -f4)
+
+msg="no output for the watchdog interval — ${cmd:-?}${title:+ — $title}"
+if [ -n "${TMUX_NOTIFY_TEST:-}" ]; then
+  echo "[$win] $msg" >> /tmp/tmux-bell-notify.log
+else
+  osascript -e "display notification \"$msg\" with title \"tmux silence watchdog · $win\"" >/dev/null 2>&1
+fi

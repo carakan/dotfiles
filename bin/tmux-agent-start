@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# tmux-agent-start - record when a pane went busy, for tmux-agent-done.
+# Invoked by the @agent-start monitor hook in bin/tmux-agent-monitors.
+#
+# The hook used to do this work inline with a nested `run-shell "..."`, which
+# never actually executed: tmux hands the string to sh -c after one round of
+# unescaping, so the inner \" survived as a literal backslash-quote and the
+# whole command silently no-opped. Keeping the logic in a script with plain
+# arguments avoids the quoting layer entirely.
+#
+# run-shell jobs inherit the server env but not the pane context, so the pane
+# id is passed in explicitly by the hook.
+
+set -u
+
+sock=""
+if [ -n "${TMUX:-}" ]; then
+    sock="${TMUX%%,*}"
+fi
+t() { tmux ${sock:+-S "$sock"} "$@"; }
+
+# The hook fires per pane, but the format carries the id of whichever pane the
+# subscription is currently evaluating. Read it back from the hook payload via
+# the pane the running command is attached to; fall back to every pane whose
+# command is not a shell, so the "busy" transition is always recorded even if
+# the context is ambiguous.
+now=$(date +%s)
+
+for pane in $(t list-panes -a -F '#{pane_id} #{pane_current_command}' |
+    awk '$2 != "zsh" && $2 != "bash" && $2 != "fish" { print $1 }'); do
+    cmd=$(t display -p -t "$pane" '#{pane_current_command}')
+    t set -pq -t "$pane" "@busy-since-$pane" "$now" 2>/dev/null
+    t set -pq -t "$pane" "@busy-cmd-$pane" "$cmd" 2>/dev/null
+done

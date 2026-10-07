@@ -9,10 +9,8 @@
     # ── asdf tool versions — machine-local on Linux; darwin keeps the shared copy ──
     ~/.tool-versions: packages/asdf/tool-versions
 
-    # ── terminal (omarchy may own kitty; decide at omarchy install) ──
-    ~/.config/kitty/kitty.conf:
-        create: true
-        path: packages/kitty/kitty.conf
+    # ── terminal (kitty — kitty.conf, open-actions.conf and shaders/ are
+    #    cross-platform and linked from COMMON in install.conf.yaml) ──
 
     # ── tmux (omarchy ships its own tmux.conf — either/or, PLATFORMS.md) ──
     ~/.tmux.conf: packages/tmux/tmux.conf

@@ -18,7 +18,10 @@ Plain Ubuntu is feature-detected, not distro-locked:
   `packages/tmux/tmux.conf` need it. Ubuntu 22.04's stock tmux is too old —
   install via the tmux PPA or via linuxbrew (`brew install tmux`).
 - **kitty**: shared with macOS. The `macos_*` directives in
-  `packages/kitty/kitty.conf` are inert on Linux (kitty ignores them).
+  `packages/kitty/kitty.conf` are inert on Linux (kitty ignores them). Needs
+  kitty ≥ 0.49 for `custom_shaders`; the shipped
+  `packages/kitty/shaders/subtle.pipeline` fails to load on older builds and
+  kitty then warns on every start.
 - **Font dependency**: Maple Mono NF (the ligature-bearing variant used in
   kitty, tmux-fzf statusline, fzf border labels). Install via linuxbrew
   `brew install --cask font-maple-mono-nf`, or drop the .ttf into
@@ -60,7 +63,7 @@ conventions between generations.
 |---|---|---|
 | `~/.config/omarchy/**` | omarchy | never touch |
 | `~/.config/hypr/**` | omarchy | never touch |
-| `~/.config/kitty/` | conditional — foot is omarchy's default terminal | our kitty link is **darwin-only**; revisit only if omarchy's terminal is switched to kitty |
+| `~/.config/kitty/` | conditional — foot is omarchy's default terminal | our kitty links (`kitty.conf`, `open-actions.conf`, `shaders/`) moved to COMMON in `install.conf.yaml`, so they apply on Ubuntu; if omarchy is adopted, **drop them from `install-linux.yaml`** and resolve the conflict explicitly first |
 | `~/.tmux.conf` | omarchy ships its own (different prefix/layouts) | **either/or** — darwin-only link today; add to `install-linux.yaml` only as a deliberate decision |
 | `~/.bashrc` | omarchy's sanctioned user-extension file | our bash links are **darwin-only**; Linux aliases go *inside* omarchy's .bashrc or a file it sources |
 | `~/.config/nvim/` | future conflict — omarchy ships a Neovim setup | decided at omarchy install time (our packages/nvim migration lands on macOS first) |

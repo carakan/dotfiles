@@ -36,6 +36,24 @@
     ~/.local/bin/tmux-bell-notify:
         create: true
         path: bin/tmux-bell-notify
+    # image viewer that picks the right graphics protocol for kitty vs tmux
+    ~/.local/bin/showimg:
+        create: true
+        path: bin/showimg
+    # tmux 3.8: float/tiled toggle (prefix+f / prefix+F)
+    ~/.local/bin/tmux-float-toggle:
+        create: true
+        path: bin/tmux-float-toggle
+    # tmux 3.8 monitor hooks + long-command finish notification
+    ~/.local/bin/tmux-agent-monitors:
+        create: true
+        path: bin/tmux-agent-monitors
+    ~/.local/bin/tmux-agent-start:
+        create: true
+        path: bin/tmux-agent-start
+    ~/.local/bin/tmux-agent-done:
+        create: true
+        path: bin/tmux-agent-done
     # AI prompt for lazygit commit commands (read by bin/lazygit-ai)
     ~/.config/lazygit-ai/prompt:
         create: true
@@ -82,6 +100,18 @@
     # ── vscode (~/.config/Code/User is the path on BOTH macOS and Linux) ──
     ~/.config/Code/User/settings.json:
         path: packages/vscode/settings.json
+
+    # ── kitty (cross-platform; the shaders/ subdir holds custom_shaders
+    #    pipeline files, which kitty resolves relative to this dir) ──
+    ~/.config/kitty/kitty.conf:
+        create: true
+        path: packages/kitty/kitty.conf
+    ~/.config/kitty/open-actions.conf:
+        create: true
+        path: packages/kitty/open-actions.conf
+    ~/.config/kitty/shaders:
+        create: true
+        path: packages/kitty/shaders
 
     # ── opencode (AI agent; per-file/dir links — live dir also holds runtime
     #    state: .atl cache + node_modules stay real. opencode.json is NOT

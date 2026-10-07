@@ -1,0 +1,50 @@
+#!/bin/sh
+# tmux-float-toggle — float the current pane, or tile it back if it floats.
+#
+# tmux 3.8 made join-pane accept a floating source, which is what makes the
+# tile-again half possible; 3.7c could only float, never un-float. Both
+# directions need a *second* pane as the other end, because move-pane and
+# join-pane both reject a pane that is source and target at once. Finding that
+# other pane is the only real work here.
+#
+#   prefix+f  -> float the current pane
+#   prefix+F  -> tile it back into the layout
+#
+# A window with a single pane has nowhere to send it, so it stays floating; a
+# clear message beats a silent no-op.
+#
+# Inside tmux $TMUX is "socket-path,server-pid,session-id", so tmux commands
+# need -S to reach the same server.
+
+set -e
+
+self=$1
+
+tmux_cmd() {
+    if [ -n "${TMUX:-}" ]; then
+        tmux -S "${TMUX%%,*}" "$@"
+    else
+        tmux "$@"
+    fi
+}
+
+# the window this pane lives in, and the first other pane in it
+win=$(tmux_cmd display-message -p -t "$self" '#{window_id}')
+other=$(tmux_cmd list-panes -t "$win" -F '#{pane_id}' |
+    awk -v me="$self" '$1 != me { print $1; exit }')
+
+if [ -z "$other" ]; then
+    tmux_cmd display-message "float-toggle: only pane in this window"
+    exit 1
+fi
+
+if [ "$(tmux_cmd display-message -p -t "$self" '#{pane_floating_flag}')" = "0" ]; then
+    # `move-pane -f` cannot float the current pane in 3.8 — with no -s/-t it
+    # sees the same pane at both ends and errors out. break-pane -W lifts the
+    # pane out of the tiled layout into a floater, which is the 3.8 way.
+    tmux_cmd break-pane -d -W -s "$self" -t "$win"
+else
+    # 3.8 made join-pane accept a floating source, so a floater can go back
+    # into the layout. -h splits the receiving pane horizontally.
+    tmux_cmd join-pane -d -h -s "$self" -t "$other"
+fi

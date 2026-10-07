@@ -1,10 +1,9 @@
 # install-linux.yaml — plain Ubuntu links. NOT omarchy (see PLATFORMS.md).
 
 - link:
-    # ── terminal (kitty shared with macOS; macos_* directives are inert on Linux) ──
-    ~/.config/kitty/kitty.conf:
-        create: true
-        path: packages/kitty/kitty.conf
+    # ── terminal (kitty — kitty.conf, open-actions.conf and shaders/ are
+    #    cross-platform and linked from COMMON in install.conf.yaml; macos_*
+    #    directives in the config are inert here) ──
 
     # ── tmux (requires tmux >= 3.4 for pane-scrollbars / popups) ──
     ~/.tmux.conf: packages/tmux/tmux.conf

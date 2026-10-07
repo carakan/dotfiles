@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+# showimg — display images in the current terminal, correctly under tmux.
+#
+# Why this exists: kitty renders images through its own APC graphics protocol
+# (ESC _G ... ESC \). tmux understands sixel only, and kitty has no sixel at
+# all, so a raw graphics sequence from any program inside tmux is silently
+# dropped. The only route is tmux's passthrough envelope, where the sequence is
+# wrapped in `ESC P tmux; ... ESC \` and `allow-passthrough on` is set. chafa
+# and viu can do that wrapping themselves, but only when told explicitly —
+# `--passthrough=auto` falls back to symbol art inside tmux.
+#
+# This wrapper picks the right tool and flags for the detected environment:
+#
+#   tmux + kitty -> chafa -f kitty --passthrough=tmux
+#   kitty direct -> chafa -f kitty
+#   other term   -> chafa, auto-detecting from terminfo
+#
+# Usage: showimg [-s WxH] [--list-commands] FILE...
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+usage: showimg [-s WxH] [--list-commands] FILE...
+  -s WxH            target size, e.g. -s 80x40 (default: fit the window)
+  --list-commands   print the command that would run, then exit
+EOF
+  exit 2
+}
+
+size=""
+list_only=0
+files=()
+
+while (($#)); do
+  case "$1" in
+    -s) (($# >= 2)) || usage; size="$2"; shift 2 ;;
+    --list-commands) list_only=1; shift ;;
+    -h|--help) usage ;;
+    --) shift; files+=("$@"); break ;;
+    -*) echo "showimg: unknown option: $1" >&2; usage ;;
+    *) files+=("$1"); shift ;;
+  esac
+done
+
+((${#files[@]})) || usage
+
+# ---- which renderer ------------------------------------------------------
+if command -v chafa >/dev/null 2>&1; then
+  tool=chafa
+elif command -v viu >/dev/null 2>&1; then
+  tool=viu
+elif command -v img2sixel >/dev/null 2>&1; then
+  tool=img2sixel
+else
+  cat >&2 <<'EOF'
+showimg: no image renderer found. Install one of:
+  brew install chafa      # preferred
+  brew install viu
+  brew install libsixel   # provides img2sixel
+EOF
+  exit 1
+fi
+
+# ---- which graphics protocol --------------------------------------------
+in_tmux=0
+[[ -n "${TMUX:-}" ]] && in_tmux=1
+
+# Detect a kitty-protocol terminal.
+#
+# Inside tmux, TERM_PROGRAM is rewritten to "tmux" and TERM to
+# "tmux-256color", and KITTY_WINDOW_ID is only present if the session was
+# started after tmux.conf began propagating it — an already-running session
+# has it unset in its panes. So the authoritative source inside tmux is tmux
+# itself: ask which terminal the client is attached to.
+kitty_like=0
+if ((in_tmux)); then
+  # `client_termname` is the terminal the tmux client is attached to, which
+  # for our setup is xterm-kitty even though the pane's TERM is tmux-256color.
+  # -t targets the current client so this works from any pane.
+  outer=$(tmux display-message -p -t "$(tmux display-message -p '#{client_id}' 2>/dev/null || true)" \
+            '#{client_termname}' 2>/dev/null || true)
+  case "$outer" in
+    *kitty*|*ghostty*|*rio*) kitty_like=1 ;;
+  esac
+  # fall back to the propagated variable when tmux is unavailable
+  [[ -n "${KITTY_WINDOW_ID:-}" ]] && kitty_like=1
+else
+  case "${TERM_PROGRAM:-}" in
+    kitty|ghostty|rio|WezTerm) kitty_like=1 ;;
+  esac
+  case "${TERM:-}" in
+    *kitty*|*ghostty*|*rio*) kitty_like=1 ;;
+  esac
+  [[ -n "${KITTY_WINDOW_ID:-}" ]] && kitty_like=1
+fi
+
+# ---- target size ---------------------------------------------------------
+# The pane is the only authoritative source. COLUMNS/LINES are shell variables
+# that bash sets but never exports, so a script running as a child process sees
+# neither of them and used to fall through to 80x24 in every pane — which is
+# why images rendered at the wrong size under tmux.
+if [[ -z "$size" ]]; then
+  cols=""
+  rows=""
+  # `read` exits 1 on empty input and `((...))` exits 1 when the expression
+  # evaluates to 0 — both abort a `set -e` script, so they are guarded.
+  if ((in_tmux)) && [[ -n "${TMUX_PANE:-}" ]]; then
+    pane_geom=$(tmux display-message -p -t "$TMUX_PANE" \
+      '#{pane_width} #{pane_height}' 2>/dev/null || true)
+    if [[ -n "$pane_geom" ]]; then
+      read -r cols rows <<<"$pane_geom" || true
+    fi
+  fi
+  if [[ -z "$cols" || -z "$rows" ]]; then
+    cols=${COLUMNS:-}
+    rows=${LINES:-}
+  fi
+  if [[ -z "$cols" || -z "$rows" ]]; then
+    cols=$(tput cols 2>/dev/null || true)
+    rows=$(tput lines 2>/dev/null || true)
+  fi
+  # fall back only if nothing reported a real geometry
+  [[ "$cols" =~ ^[0-9]+$ ]] || cols=80
+  [[ "$rows" =~ ^[0-9]+$ ]] || rows=24
+  # one column and two rows of headroom so the image never wraps onto the
+  # prompt or pushes the last line off-screen
+  cols=$((cols > 1 ? cols - 1 : 1))
+  rows=$((rows > 3 ? rows - 2 : 1))
+  size="${cols}x${rows}"
+fi
+
+# ---- the one argv the tools actually run ---------------------------------
+# Assembled once so `--list-commands` and the exec below cannot drift apart.
+case "$tool" in
+  chafa)
+    cmd=(chafa -s "$size")
+    if ((in_tmux)) && ((kitty_like)); then
+      # Both flags are required: chafa's own auto-detection deliberately
+      # avoids pixel graphics when it detects a multiplexer.
+      cmd+=(-f kitty --passthrough=tmux)
+    elif ((kitty_like)); then
+      cmd+=(-f kitty)
+    fi
+    # `--` ends option parsing; only chafa takes it.
+    cmd+=(--)
+    ;;
+  viu)
+    # viu takes separate -w/-h, not chafa's `-s WxH`. Its `-s` means
+    # `--static` (first gif frame), so the old `viu -s 80x24` was rejected.
+    # It also has no `--tmux` flag — tmux support is detected from $TMUX, and
+    # `--` is not accepted either, so neither is passed.
+    cmd=(viu)
+    w=${size%x*}; h=${size#*x}
+    cmd+=(-w "$w" -h "$h")
+    ;;
+  img2sixel)
+    # No tmux support at all; refuse rather than emit a sequence tmux drops.
+    if ((in_tmux)); then
+      cat >&2 <<'EOF'
+showimg: img2sixel cannot pass images through tmux (it has no passthrough
+mode, and tmux has no sixel support for xterm-kitty). Use chafa instead:
+  brew install chafa
+EOF
+      exit 1
+    fi
+    # img2sixel has no equivalent of chafa's -s WxH; it scales to the
+    # terminal's own size via its terminfo entry.
+    cmd=(img2sixel)
+    ;;
+esac
+cmd+=("${files[@]}")
+
+if ((list_only)); then
+  printf '%q ' "${cmd[@]}"
+  printf '\n'
+  exit 0
+fi
+
+for f in "${files[@]}"; do
+  [[ -e "$f" ]] || { echo "showimg: not found: $f" >&2; exit 1; }
+done
+
+exec "${cmd[@]}"

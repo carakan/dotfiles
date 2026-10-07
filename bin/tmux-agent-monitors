@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# tmux-agent-monitors - register the tmux 3.8 monitor hooks that drive
+# bin/tmux-agent-done (long-command finish notifications). Called from the
+# "3.8 agentic" section of packages/tmux/tmux.conf on every client attach:
+# monitors are client-scoped and cannot be created at config-parse time
+# ("no current session"), so they are (re)registered here instead.
+#
+# Monitor syntax: set-hook -T -B '@name:what:format' command
+#   %*  = all panes of the attached session, format checked once a second,
+#   -T  = fire only when the format is/becomes true (edge-triggered).
+#
+# Note the flag order: -T must come *before* -B, otherwise tmux reads the -T
+# argument as part of the subscription and errors with "too many arguments".
+#
+# Hook commands deliberately avoid nesting double quotes inside
+# run-shell "...". tmux hands the string to sh -c after one round of
+# unescaping, so a second layer of \" survives as a literal backslash-quote and
+# the command silently does nothing — the hook appears registered, the format
+# is true, and no state changes. Verified on this machine: identical hooks
+# fired with single-quoted run-shell and stayed silent with double-quoted ones.
+# All the real work therefore lives in this script and in tmux-agent-done,
+# which the hooks just invoke with plain arguments.
+
+set -u
+
+# -S so we talk to the same server that invoked us, whatever socket was used.
+# $TMUX is "socket-path,server-pid,session-id".
+sock=""
+if [ -n "${TMUX:-}" ]; then
+    sock="${TMUX%%,*}"
+fi
+tm() { tmux ${sock:+-S "$sock"} "$@"; }
+
+# stale-state sweep: notifications only make sense while a client is attached
+# (monitors are client-scoped), so any @busy-since state that survived from
+# before this attach can never have been delivered — clear it instead of
+# letting the first done-event sweep fire a storm of hours-old notifications
+# (observed: five stale panes, 100 minutes late, after test residue).
+tm list-panes -a -F '#{pane_id}' 2>/dev/null | while IFS= read -r pane; do
+    tm set -pq -t "$pane" "@busy-since-$pane" "" 2>/dev/null
+    tm set -pq -t "$pane" "@busy-cmd-$pane" "" 2>/dev/null
+done
+
+# pane becomes busy: not a shell, and not one of the interactive apps we skip
+tm set-hook -T -B \
+  '@agent-start:%*:#{&&:#{!=:#{pane_current_command},zsh},#{!:#{m:*nvim*,*vim*,*vi*,*ssh*,*less*,*lazygit*,*fzf*,#{pane_current_command}}}}' \
+  'run-shell -b "$HOME/.dotfiles/bin/tmux-agent-start"'
+
+# pane falls idle again: a long command has finished
+tm set-hook -T -B \
+  '@agent-done:%*:#{==:#{pane_current_command},zsh}' \
+  'run-shell -b "$HOME/.dotfiles/bin/tmux-agent-done"'
