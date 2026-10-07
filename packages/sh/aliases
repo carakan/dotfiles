@@ -21,9 +21,43 @@ alias sp="nvr -cc split"
 alias vs="nvr -cc vsplit"
 alias tree="tree -C"
 alias clear='clear && printf "\e[3J"'
-alias cat='bat'
+# `cat` is bat for pretty output, but bat only understands a subset of cat's
+# flags: `cat -v`, `-b`, `-e`, `-t`, `-E`, `-T` all fail with
+# "error: unexpected argument '-v' found" and print nothing. A plain alias
+# cannot fix that, so this is a function: flags bat understands go to bat, and
+# anything else is handed to the real /bin/cat. `cat -v file | less` is the
+# common real-world case and now works again.
+cat() {
+  local passthrough=()
+  local arg seen_file=0
+
+  for arg in "$@"; do
+    case "$arg" in
+      # long options bat supports and we want to keep
+      --help|--version) command bat "$@"; return $? ;;
+      # bat's -n means "only numbers", not cat's "number every line", so it
+      # must go to the real cat to keep `cat -n file` meaning what it always did
+      -n|--number) passthrough+=("$arg"); continue ;;
+      # every other flag (incl. -v, -A, -b, -e, -t, -E, -T, -s, -u) is only
+      # meaningful for real cat
+      -*) passthrough+=("$arg"); continue ;;
+      *) seen_file=1; continue ;;
+    esac
+  done
+
+  # anything we had to hand off, or no file arguments at all (piped input)
+  if ((${#passthrough[@]})); then
+    command /bin/cat "$@"
+    return $?
+  fi
+  if (( ! seen_file )); then
+    command /bin/cat
+    return $?
+  fi
+  command bat "$@"
+}
 alias icat="kitty +kitten icat"
-alias c='cat'
+alias c='bat'
 alias top='htop'
 
 # Bundler

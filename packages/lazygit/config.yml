@@ -16,8 +16,6 @@ gui:
   showPanelJumps: true
   showCommandLog: false
   showFileTree: true
-  authorColors:
-    "*": cyan
   theme: # Solarized Osaka Dark — verbatim from craftzdog's solarized-osaka.nvim extra
     activeBorderColor:
       - "#4a7ebe"
@@ -47,6 +45,8 @@ gui:
       - "#d26681"
     defaultFgColor:
       - "#FEF9E1"
+    authorColors:
+      "*": cyan
 git:
   autoFetch: true
   autoRefresh: true
