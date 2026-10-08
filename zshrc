@@ -78,7 +78,6 @@ source $ZSH/oh-my-zsh.sh
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export LC_TYPE=en_US.UTF-8
 
 setopt HIST_IGNORE_SPACE
 
@@ -144,6 +143,9 @@ export HOMEBREW_AUTO_UPDATE_SECS=600000
 ulimit -n 200000
 ulimit -u 8192
 
+# shared ssh-agent (systemd user service) — passphrase once per boot
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
 export HOMEBREW_BAT=1
 export HOMEBREW_DISPLAY_INSTALL_TIMES=1
 export HOMEBREW_INSTALL_FROM_API=1
@@ -163,20 +165,25 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# load ASDF for homebrew installation
-source "$(brew --prefix asdf)/libexec/asdf.sh"
+# asdf 0.20 (Go rewrite) ships no asdf.sh; integration is just its shims dir.
+[[ -d "$HOME/.asdf/shims" ]] && export PATH="$HOME/.asdf/shims:$PATH"
 
 eval "$(zsh-patina activate)"
 
 # ROCm
-alias python=python3.13
-alias pip=pip3.13
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
+
+# Python: pin python/python3/pip/pip3 to Homebrew python@3.13 (3.13.14).
+# Brew's unversioned `python3` follows the newest python@ keg (3.14), so put
+# python@3.13's unversioned shims first on PATH. Covers shebang scripts and
+# non-interactive children too (aliases would not). The opt/ path is stable
+# across brew upgrades; if the keg is ever removed, PATH falls through.
+export PATH="/home/linuxbrew/.linuxbrew/opt/python@3.13/libexec/bin:$PATH"
 export HCC_AMDGPU_TARGET=gfx1030
 
 export HIP_VISIBLE_DEVICES=0
 export GFX_ARCH=gfx1030
-export ROCM_VERSION=10.0.0
+export ROCM_VERSION=10.1.0
 
 
 export CMAKE_HIP_COMPILER=$(hipconfig -l)/clang++
@@ -186,7 +193,12 @@ export HIP_PATH=$(hipconfig -p)
 # that returns a filesystem path, and an empty/invalid value hides ALL GPUs from PyTorch
 
 
-# export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+# ROCm 10 devel headers/libs (global, hardlink copy of the rocm-sdk-devel wheel).
+# Lets ANY project/venv source-build HIP packages (cupy, flash-attn, aiter...);
+# survives venv deletion. CPATH/LIBRARY_PATH are compile-time only, no runtime effect.
+source "$HOME/rocm-devel/env.sh"
+
+# export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True  # POISON: nondeterministic black/garbage renders on ROCm 10 nightly — proven 2026-09-13, do not enable
 
 # export TORCH_BLAS_PREFER_HIPBLASLT=0
 # export TORCH_BLAS_PREFER_CUBLASLT=1

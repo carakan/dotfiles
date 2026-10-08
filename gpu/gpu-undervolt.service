@@ -1,0 +1,10 @@
+[Unit]
+Description=AMD GPU undervolt (rx 6800 xt)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/gpu-undervolt apply
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Junction-driven GPU fan curve (RX 6800 XT)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/gpu-fan apply
+ExecStop=/usr/local/sbin/gpu-fan stop
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

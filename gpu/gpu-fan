@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Junction-driven fan curve for RX 6800 XT (amdgpu sysfs, needs root).
+# Stock VBIOS curve is acoustic; it let junction reach 110C (SW CTF shutdown).
+# This keeps the GPU fans tied to JUNCTION temp with a fast ramp above 90C.
+# Install: sudo cp ~/dotfiles/gpu/gpu-fan /usr/local/sbin/
+#          sudo cp ~/dotfiles/gpu/gpu-fan.service /etc/systemd/system/
+#          sudo systemctl enable --now gpu-fan.service
+set -u
+
+DEV=""
+for d in /sys/class/drm/card[0-9]/device; do
+  [[ $(<"$d/vendor") == "0x1002" && -e $d/pp_od_clk_voltage ]] && { DEV=$d; break; }
+done
+[[ -n $DEV ]] || { echo "no AMD GPU hwmon"; exit 1; }
+HWM=$(echo "$DEV"/hwmon/hwmon*)
+
+# junction C -> fan %: 25% below 65C, 25-65% for 65-95C, 65-100% for 95-105C
+# noise-tuned 2026-10-07: renders hold junction <=95 at <=65%; full ramp reserved
+# for genuine spikes (CTF trip is 110C, so 95 still keeps 15C of margin)
+target_pct() {
+  local j=$1
+  if   (( j <= 65 )); then echo 25
+  elif (( j <= 95 )); then echo $(( 25 + (j - 65) * 40 / 30 ))
+  elif (( j <= 105 )); then echo $(( 65 + (j - 95) * 35 / 10 ))
+  else echo 100; fi
+}
+
+case "${1:-apply}" in
+apply)
+  echo 1 > "$HWM/pwm1_enable"   # manual PWM
+  cur=$(<"$HWM/pwm1")
+  while true; do
+    j=$(( $(<"$HWM/temp2_input") / 1000 ))
+    e=$(( $(<"$HWM/temp1_input") / 1000 ))
+    t=$(target_pct "$j")
+    (( e >= 95 )) && t=100       # edge safeguard: full fans at 95C (crit 100C)
+    tgt=$(( t * 255 / 100 ))
+    d=$(( tgt - cur )); (( d > 3 )) && d=3; (( d < -3 )) && d=-3  # smooth ramp
+    (( cur != tgt )) && { cur=$(( cur + d )); echo "$cur" > "$HWM/pwm1"; }
+    sleep 2
+  done
+  ;;
+stop)
+  pkill -f 'gpu-fan apply' 2>/dev/null
+  echo 2 > "$HWM/pwm1_enable"   # restore VBIOS auto curve
+  echo "auto curve restored"
+  ;;
+status)
+mode=manual; [ "$(<"$HWM/pwm1_enable")" = 2 ] && mode=auto
+printf 'mode=%s pwm=%s/255 (%d%%) fan=%dRPM\n' \
+    "$mode" "$(<"$HWM/pwm1")" "$(( $(<"$HWM/pwm1") * 100 / 255 ))" \
+    "$(( $(<"$HWM/fan1_input") ))"
+  printf 'edge %dC junction %dC mem %dC power %dW\n' \
+    "$(( $(<"$HWM/temp1_input") / 1000 ))" "$(( $(<"$HWM/temp2_input") / 1000 ))" \
+    "$(( $(<"$HWM/temp3_input") / 1000 ))" "$(( $(<"$HWM/power1_average") / 1000000 ))"
+  ;;
+*) echo "usage: gpu-fan [apply|stop|status]"; exit 2 ;;
+esac

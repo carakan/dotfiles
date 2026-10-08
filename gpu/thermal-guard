@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Thermal guard: logs CPU/GPU temps+power during renders, warns at soft limits.
+# No root needed (reads hwmon). Peaks printed at exit; full trace -> logfile.
+# Usage: thermal-guard [seconds] [logfile]      (defaults: 3600 / logs/thermal_$(date).log)
+set -u
+
+DUR=${1:-3600}
+LOG=${2:-logs/thermal_$(date +%Y%m%d_%H%M%S).log}
+mkdir -p "$(dirname "$LOG")"
+
+find_hw() { # $1=name $2=label-regex -> hwmon dir
+  for h in /sys/class/hwmon/hwmon*; do
+    [[ $(<"$h/name") == "$1" ]] || continue
+    for t in "$h"/temp*_input; do
+      [[ -e $t ]] || continue
+      l=$(cat "${t%_input}_label" 2>/dev/null)
+      [[ $l =~ $2 ]] && { echo "$t"; return; }
+    done
+  done
+}
+
+CPU=$(find_hw coretemp 'Package id 0')
+GPU_E=$(find_hw amdgpu 'edge');   GPU_J=$(find_hw amdgpu 'junction')
+GPU_M=$(find_hw amdgpu 'mem')
+GPUP=$(dirname "$(find_hw amdgpu 'edge')")/power1_average
+[[ -n $CPU && -n $GPU_E ]] || { echo "coretemp/amdgpu hwmon not found"; exit 1; }
+
+# soft limits: act BEFORE the 100C hardware trip, never disable it
+LIM_CPU=95; LIM_EDGE=90; LIM_JUNC=103
+peak_cpu=0; peak_edge=0; peak_junc=0; peak_mem=0; peak_pw=0; alerts=0
+
+echo "thermal-guard start $(date +%T) limits: cpu=${LIM_CPU} edge=${LIM_EDGE} junction=${LIM_JUNC}" | tee -a "$LOG"
+end=$((SECONDS + DUR))
+while (( SECONDS < end )); do
+  c=$(( $(<"$CPU") / 1000 ))
+  e=$(( $(<"$GPU_E") / 1000 ))
+  j=$(( $(<"$GPU_J") / 1000 ))
+  m=$(( $(<"$GPU_M") / 1000 ))
+  p=$(( $(<"$GPUP") / 1000000 ))
+  (( c > peak_cpu )) && peak_cpu=$c
+  (( e > peak_edge )) && peak_edge=$e
+  (( j > peak_junc )) && peak_junc=$j
+  (( m > peak_mem )) && peak_mem=$m
+  (( p > peak_pw )) && peak_pw=$p
+  msg=""
+  (( c >= LIM_CPU )) && { msg="$msg CPU:${c}C>=${LIM_CPU}C"; }
+  (( e >= LIM_EDGE )) && { msg="$msg EDGE:${e}C>=${LIM_EDGE}C"; }
+  (( j >= LIM_JUNC )) && { msg="$msg JUNCTION:${j}C>=${LIM_JUNC}C"; }
+  if [[ -n $msg ]]; then
+    ((alerts++))
+    echo "$(date +%T) SOFT-LIMIT:$msg (edge $e junction $j cpu $c power ${p}W)" | tee -a "$LOG"
+  fi
+  echo "$(date +%T) cpu=$c edge=$e junction=$j mem=$m power=${p}W" >> "$LOG"
+  sleep 2
+done
+
+echo "PEAKS: cpu=${peak_cpu}C edge=${peak_edge}C junction=${peak_junc}C mem=${peak_mem}C gpu_power=${peak_pw}W soft_alerts=$alerts" | tee -a "$LOG"

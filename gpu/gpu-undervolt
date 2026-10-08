@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Undervolt AMD Navi 21 (RX 6800 XT) via amdgpu sysfs.
+# Needs amdgpu.ppfeaturemask=0xffffffff on the kernel cmdline (reboot once).
+# Verify: ./gpu-undervolt status   Reset: ./gpu-undervolt reset
+set -euo pipefail
+
+OFFSET=-75   # mV. Safe: -75, aggressive: -100..-125 (test for artifacts/crashes)
+
+DEV=""
+for d in /sys/class/drm/card[0-9]/device; do
+  [[ $(<"$d/vendor") == "0x1002" && -e $d/pp_od_clk_voltage ]] && { DEV=$d; break; }
+done
+[[ -n $DEV ]] || { echo "no AMD GPU with pp_od_clk_voltage (ppfeaturemask enabled + rebooted?)"; exit 1; }
+
+case "${1:-apply}" in
+apply)
+  echo manual > "$DEV/power_dpm_force_performance_level"
+  echo "vo $OFFSET" > "$DEV/pp_od_clk_voltage"
+  echo c > "$DEV/pp_od_clk_voltage"
+  hwm=$(echo "$DEV"/hwmon/hwmon*)
+  echo 255000000 > "$hwm/power1_cap"   # 255W = card's minimum (range 255-312, default 272): cooler junction, ~2% slower
+  echo "applied ${OFFSET}mV offset + 255W cap"
+  ;;
+reset)
+  echo manual > "$DEV/power_dpm_force_performance_level"
+  echo r > "$DEV/pp_od_clk_voltage"; echo c > "$DEV/pp_od_clk_voltage"
+  hwm=$(echo "$DEV"/hwmon/hwmon*)
+  echo 272000000 > "$hwm/power1_cap"   # card's default as found 2026-10-07
+  echo auto > "$DEV/power_dpm_force_performance_level"
+  echo "stock table restored"
+  ;;
+status)
+  echo "perf level: $(<"$DEV/power_dpm_force_performance_level")"
+  grep -E 'OD_VDDGFX_OFFSET|OD_SCLK' -A1 "$DEV/pp_od_clk_voltage"
+  hwm=$(echo "$DEV"/hwmon/hwmon*)
+  printf 'edge %d°C  hotspot %d°C  mem %d°C  power %dW (cap %dW)\n' \
+    "$(($(<"$hwm/temp1_input") / 1000))" "$(($(<"$hwm/temp2_input") / 1000))" \
+    "$(($(<"$hwm/temp3_input") / 1000))" "$(($(<"$hwm/power1_average") / 1000000))" \
+    "$(($(<"$hwm/power1_cap") / 1000000))"
+  ;;
+*) echo "usage: $0 [apply|reset|status]"; exit 2 ;;
+esac
