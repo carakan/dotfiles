@@ -116,7 +116,7 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
+export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
 # Palette for fzf >= 0.48 and for the tmux-fzf popups (single source of the
 # popup colors below; FZF_DEFAULT_OPTS above keeps its own --color spelling and
 # its bold:italic highlights, so edit colors in whichever block you care about).
@@ -130,9 +130,15 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # --- tmux-fzf: hand the shell's fzf settings to the pickers ---------------
 # The pickers run in the tmux server (run-shell), which does not see this
-# shell's environment — so TMUX_FZF_OPTIONS here is pushed into the session and
-# global stores below. The plugin evals it, so the literal $FZF_COLORS inside
-# expands when the picker starts.
+# shell's environment — so the values below are pushed into the session and
+# global stores. Note the shell expands $FZF_COLORS here, before anything is
+# pushed: what lands in TMUX_FZF_OPTIONS is the finished palette, not a
+# reference. The plugin evals the string it receives, which is what makes
+# quoting like --border-label=' fzf ' survive as one argument.
+#
+# FZF_COLORS is pushed as well, so the fzf process inside the popup (and any
+# child it spawns) sees the same palette even when TMUX_FZF_OPTIONS carries no
+# explicit --color.
 #
 # Styling is shared (one palette, one frame definition); only the geometry
 # differs per GUI: the desktop popup keeps a preview pane, the narrow/mobile one
@@ -151,13 +157,17 @@ export TMUX_FZF_COMPACT_OPTIONS="$TMUX_FZF_COMPACT_FLAGS $TMUX_FZF_FRAME"
 # update-environment is NOT an alternative: it copies from the *terminal's*
 # environment, which never had these values (they are exported later, by the
 # interactive shell). One var per call — set-environment takes a single
-# name/value pair, even on tmux 3.8.
+# name/value pair, even on tmux 3.8. The session lookup is guarded because
+# $TMUX survives into ssh/container shells whose server is long gone, and an
+# unguarded call would print "error connecting" on every prompt.
 if [ -n "$TMUX" ]; then
-    _tmfzf_session="$(tmux display-message -p '#S')"
-    for _tmfzf_var in FZF_COLORS TMUX_FZF_OPTIONS TMUX_FZF_COMPACT_OPTIONS; do
-        tmux set-environment -g "$_tmfzf_var" "${(P)_tmfzf_var}"
-        tmux set-environment -t "$_tmfzf_session" "$_tmfzf_var" "${(P)_tmfzf_var}"
-    done
+    _tmfzf_session="$(tmux display-message -p '#S' 2>/dev/null)" || _tmfzf_session=""
+    if [ -n "$_tmfzf_session" ]; then
+        for _tmfzf_var in FZF_COLORS TMUX_FZF_OPTIONS TMUX_FZF_COMPACT_OPTIONS; do
+            tmux set-environment -g "$_tmfzf_var" "${(P)_tmfzf_var}" 2>/dev/null
+            tmux set-environment -t "$_tmfzf_session" "$_tmfzf_var" "${(P)_tmfzf_var}" 2>/dev/null
+        done
+    fi
     unset _tmfzf_session _tmfzf_var
 fi
 
