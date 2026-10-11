@@ -117,8 +117,9 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS='--no-bold --color=fg:#FEF9E1,bg:#282828,hl:bold:italic:#a9b665 --color=fg+:#FEF9E1,hl+:bold:italic:#a9b665,bg+:#282828,preview-bg:#202020 --color=pointer:#d4be98 --prompt=" "'
-# Modern equivalent (fzf >= 0.48); tmux-fzf themes its popups from this, and
-# tmux.conf propagates it into the server env via update-environment.
+# Palette for fzf >= 0.48 and for the tmux-fzf popups (single source of the
+# popup colors below; FZF_DEFAULT_OPTS above keeps its own --color spelling and
+# its bold:italic highlights, so edit colors in whichever block you care about).
 export FZF_COLORS='fg:#FEF9E1,bg:#282828,hl:#a9b665,fg+:#FEF9E1,bg+:#282828,hl+:#a9b665,pointer:#d4be98,preview-bg:#202020,gutter:#282828,info:#a9b665,query:#d4be98'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
@@ -126,6 +127,29 @@ export BAT_CONFIG_PATH="/home/carakan/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window noborder --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# --- tmux-fzf: hand the shell's fzf settings to the pickers ---------------
+# TMUX_FZF_OPTIONS is what tmux-fzf's popups get; FZF_COLORS is what plain fzf
+# gets. Default: the same palette plus the popup-only geometry/frame flags.
+# For pickers with *exactly* the shell's options, use:
+#     export TMUX_FZF_OPTIONS="$FZF_DEFAULT_OPTS"
+export TMUX_FZF_POPUP_FLAGS="-p -w 60% -h 60% -m --layout=reverse"
+export TMUX_FZF_OPTIONS="$TMUX_FZF_POPUP_FLAGS --color=$FZF_COLORS --border=rounded --border-label=' fzf ' --border-label-pos=3 --separator='─' --preview-window=right:50%:wrap"
+
+# The tmux server keeps its own environment store, and update-environment can't
+# copy these values: it reads the *terminal's* environment, which never had them
+# (the exports above happen later, in this shell). So push them from the shell:
+# the session store is what run-shell hands to the picker, where the plugin evals
+# TMUX_FZF_OPTIONS and expands $FZF_COLORS; -g covers sessions created later.
+# One var per call — set-environment takes a single name/value pair, even on 3.8.
+if [ -n "$TMUX" ]; then
+    _tmfzf_session="$(tmux display-message -p '#S')"
+    tmux set-environment -g FZF_COLORS "$FZF_COLORS"
+    tmux set-environment -g TMUX_FZF_OPTIONS "$TMUX_FZF_OPTIONS"
+    tmux set-environment -t "$_tmfzf_session" FZF_COLORS "$FZF_COLORS"
+    tmux set-environment -t "$_tmfzf_session" TMUX_FZF_OPTIONS "$TMUX_FZF_OPTIONS"
+    unset _tmfzf_session
+fi
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 
