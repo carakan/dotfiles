@@ -129,26 +129,36 @@ export FZF_CTRL_T_OPTS="$FZF_COMPLETION_OPTS"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # --- tmux-fzf: hand the shell's fzf settings to the pickers ---------------
-# TMUX_FZF_OPTIONS is what tmux-fzf's popups get; FZF_COLORS is what plain fzf
-# gets. Default: the same palette plus the popup-only geometry/frame flags.
-# For pickers with *exactly* the shell's options, use:
-#     export TMUX_FZF_OPTIONS="$FZF_DEFAULT_OPTS"
+# The pickers run in the tmux server (run-shell), which does not see this
+# shell's environment — so TMUX_FZF_OPTIONS here is pushed into the session and
+# global stores below. The plugin evals it, so the literal $FZF_COLORS inside
+# expands when the picker starts.
+#
+# Styling is shared (one palette, one frame definition); only the geometry
+# differs per GUI: the desktop popup keeps a preview pane, the narrow/mobile one
+# goes near-fullscreen with inline info.
+export TMUX_FZF_FRAME="--color=$FZF_COLORS --border=rounded --border-label=' fzf ' --border-label-pos=3 --separator='─'"
 export TMUX_FZF_POPUP_FLAGS="-p -w 60% -h 60% -m --layout=reverse"
-export TMUX_FZF_OPTIONS="$TMUX_FZF_POPUP_FLAGS --color=$FZF_COLORS --border=rounded --border-label=' fzf ' --border-label-pos=3 --separator='─' --preview-window=right:50%:wrap"
+export TMUX_FZF_COMPACT_FLAGS="-p -w 96% -h 88% -m --info=inline --layout=reverse"
+export TMUX_FZF_OPTIONS="$TMUX_FZF_POPUP_FLAGS $TMUX_FZF_FRAME --preview-window=right:50%:wrap"
+# Narrow clients (< TMUX_FZF_COMPACT_WIDTH, default 140 — e.g. a phone over
+# Termius) use this instead, so pinning TMUX_FZF_OPTIONS does not also pin the
+# desktop geometry on the phone. Blank it to keep the built-in compact layout.
+export TMUX_FZF_COMPACT_OPTIONS="$TMUX_FZF_COMPACT_FLAGS $TMUX_FZF_FRAME"
+# For pickers with *exactly* the shell's options instead:
+#     export TMUX_FZF_OPTIONS="$FZF_DEFAULT_OPTS"   (popup loses -p)
 
-# The tmux server keeps its own environment store, and update-environment can't
-# copy these values: it reads the *terminal's* environment, which never had them
-# (the exports above happen later, in this shell). So push them from the shell:
-# the session store is what run-shell hands to the picker, where the plugin evals
-# TMUX_FZF_OPTIONS and expands $FZF_COLORS; -g covers sessions created later.
-# One var per call — set-environment takes a single name/value pair, even on 3.8.
+# update-environment is NOT an alternative: it copies from the *terminal's*
+# environment, which never had these values (they are exported later, by the
+# interactive shell). One var per call — set-environment takes a single
+# name/value pair, even on tmux 3.8.
 if [ -n "$TMUX" ]; then
     _tmfzf_session="$(tmux display-message -p '#S')"
-    tmux set-environment -g FZF_COLORS "$FZF_COLORS"
-    tmux set-environment -g TMUX_FZF_OPTIONS "$TMUX_FZF_OPTIONS"
-    tmux set-environment -t "$_tmfzf_session" FZF_COLORS "$FZF_COLORS"
-    tmux set-environment -t "$_tmfzf_session" TMUX_FZF_OPTIONS "$TMUX_FZF_OPTIONS"
-    unset _tmfzf_session
+    for _tmfzf_var in FZF_COLORS TMUX_FZF_OPTIONS TMUX_FZF_COMPACT_OPTIONS; do
+        tmux set-environment -g "$_tmfzf_var" "${(P)_tmfzf_var}"
+        tmux set-environment -t "$_tmfzf_session" "$_tmfzf_var" "${(P)_tmfzf_var}"
+    done
+    unset _tmfzf_session _tmfzf_var
 fi
 
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
