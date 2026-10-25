@@ -14,8 +14,10 @@
     ~/.aliases: packages/sh/aliases
     ~/.bashrc: packages/sh/bashrc
     ~/.zshrc: packages/sh/zshrc
+    ~/.zshenv: packages/sh/zshenv # exec-channel zsh (ssh one-liners, remote-spawned tools) sources ONLY this
     ~/.p10k.zsh: packages/sh/pk10.zsh
     ~/.profile: packages/sh/profile
+    ~/.zprofile: packages/sh/profile # zsh login shells (incl. every sshd login) read .zprofile, not .profile
     ~/.prettierrc: packages/sh/prettierrc
 
     # ── asdf / tool versions ───────────────────────────────

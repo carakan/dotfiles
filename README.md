@@ -1,7 +1,21 @@
 # README
 
-My custom .dotfiles setup across my multiple machines (works
-very well on OSx, not sure on other OS).
+My custom .dotfiles setup across my multiple machines.
+
+The configs are cross-platform. `./install` picks the right set per OS
+(`install-darwin.yaml` / `install-linux.yaml`), and the machine-specific
+pieces live in their own package directories (`packages/yabai/`,
+`packages/macos/`, `packages/karabiner/` are macOS-only;
+`bin/ubuntu_clean_rocm.sh` is Linux-only).
+
+One caveat: this checkout was written for **Intel** macOS, where Homebrew
+is Tier 3 — no bottles, so every formula compiles from source. The
+workarounds that compensates for that (symlinking brew kegs at other
+installs, and the once-compiled llvm parked in
+`/usr/local/Cellar/.llvm-builds/`) are Intel-only; the scripts that
+implement them detect the platform and do nothing on Apple Silicon or
+Linux, where bottles and distro packages make them unnecessary. See
+`AGENTS.md` §7 and `docs/brew-intel-symlink-workaround.md`.
 
 # Usage
 
@@ -9,15 +23,22 @@ See the [usage instructions](https://github.com/carakan/dotfiles/blob/master/USA
 
 # Window Management (yabai + skhd)
 
-[yabai](https://github.com/asmvik/yabai) is a tiling window manager for macOS.
+[yabai](https://github.com/Christian-SC26/yabai) is a tiling window manager for macOS
+(a fork of [asmvik/yabai](https://github.com/asmvik/yabai)).
 [skhd](https://github.com/koekeishiya/skhd) is the keyboard daemon that binds
 global shortcuts to yabai commands.
 
 ## Setup
 
 ```zsh
-brew install yabai skhd jq
+brew install skhd jq          # yabai itself is NOT a brew formula here
 ```
+
+yabai is the fork's release binary (currently **v7.1.30**, sha256
+`934262db166e0dbd3ca0314aecddcb8d68f124a0daf13fc16848660a10286107`) installed
+at `/usr/local/bin/yabai`. To upgrade: download the release asset, compare the
+hash, replace the binary, then
+`launchctl kickstart -k gui/501/com.asmvik.yabai`.
 
 Config lives in `config/yabai/` and is symlinked by dotbot:
 
@@ -26,11 +47,20 @@ Config lives in `config/yabai/` and is symlinked by dotbot:
 | `yabairc` | yabai config (spaces, rules, layout, signals) |
 | `skhdrc` | keyboard shortcuts |
 | `update_border_color.sh` | hides border on 1-visible-window spaces (IPC only, no flicker) |
-| `save_layout.sh` | snapshot current window layout |
-| `restore_layout.sh` | restore saved window layout |
+| `session_restore.sh` | starts yabai if launchd did not, then loads the saved workspace session |
+| `com.asmvik.yabai.plist` | starts yabai at login |
+| `com.carakan.yabai-session.plist` | runs `session_restore.sh` once at login |
 
-LaunchAgents are at `~/Library/LaunchAgents/com.asmvik.yabai.plist` and
-`~/Library/LaunchAgents/com.koekeishiya.skhd.plist`.
+Session state lives at `~/.local/state/yabai/session.json` (native yabai
+7.1.27+ `space --save-session/--load-session`; skhd `ctrl+alt-s` saves the
+baseline, `ctrl+alt-r` re-applies).
+
+LaunchAgents live in `packages/yabai/*.plist` and are symlinked by dotbot into
+`~/Library/LaunchAgents/` (`com.asmvik.yabai`, `com.koekeishiya.skhd`,
+`com.carakan.yabai-session`). Logs: `~/.local/state/yabai/yabai.err.log` and
+`restore.log`. If yabai ever fails to come up after a login, `session_restore.sh`
+re-enables and bootstraps it by itself ~20 s in; the log line tells you if it
+had to.
 
 ## Shortcuts
 
@@ -148,9 +178,18 @@ All shortcuts are **global** (system-wide). skhd must be running.
 
 ## Auto-fullscreen
 
-When a space has exactly **1 window**, yabai automatically removes padding and
-gap and hides borders so the window fills the screen like native fullscreen.
-When a second window appears, padding/gap and borders are restored.
+When a space has exactly **1 visible managed window**, yabai hides the border so
+the window fills the screen like native fullscreen. When a second window
+appears, the border comes back.
+
+Only the border color changes (pure `borders` IPC). Padding and gap are left at
+their global `yabairc` values: an earlier version also stripped them on space
+entry, and that resize was the source of kitty/tmux redraw flicker.
+`packages/yabai/update_border_color.sh` runs on `window_created`,
+`window_destroyed`, `window_focused` and `space_changed`; its window query is
+wrapped in a 3 s timeout because yabai executes it inside its own signal
+handler, where a query issued during the startup signal burst would otherwise
+block forever.
 
 ## Spaces
 
@@ -232,7 +271,8 @@ brew install htop
 
 ```zsh
 brew install fzf
-/usr/local/opt/fzf/install
+# shell integration (key-bindings + completion) is sourced by packages/sh/fzf.zsh
+source <(fzf --zsh)
 brew install git-cal
 ```
 

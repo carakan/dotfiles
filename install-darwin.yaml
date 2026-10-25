@@ -25,6 +25,18 @@
     ~/.config/skhd/skhdrc:
         create: true
         path: packages/yabai/skhdrc
+    # ── LaunchAgents: yabai is not a brew formula here (the fork's release
+    #    binary lives in /usr/local/bin), so these two agents are the only
+    #    thing that starts the WM and restores the workspace at login.
+    #    force: they must replace the unmanaged hand-made plists of the same name.
+    ~/Library/LaunchAgents/com.asmvik.yabai.plist:
+        create: true
+        force: true
+        path: packages/yabai/com.asmvik.yabai.plist
+    ~/Library/LaunchAgents/com.carakan.yabai-session.plist:
+        create: true
+        force: true
+        path: packages/yabai/com.carakan.yabai-session.plist
 
     # ── macOS real config paths (Go os.UserConfigDir) ───────
     ~/Library/Application Support/lazygit/config.yml:

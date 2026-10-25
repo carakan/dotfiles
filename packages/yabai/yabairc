@@ -1,6 +1,21 @@
 #!/usr/bin/env sh
-sudo yabai --load-sa
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# The scripting addition has to be loaded as root ("scripting-addition must
+# be loaded as root!"). Without it yabai delivers NO window events at all
+# (window_created / window_focused / application_* never fire), so the
+# border script below never runs and the border colors stay frozen at the
+# values set at the bottom of this file.
+#
+# `sudo` cannot prompt here: this file is sourced by launchd at login and
+# signal actions run without a terminal. /etc/sudoers.d/yabai therefore has
+# to grant NOPASSWD for exactly this command. If sudo answers "a password
+# is required", that rule is missing or does not match the command — fix it
+# with:
+#   printf 'carakan ALL=(root) NOPASSWD: /usr/local/bin/yabai --load-sa\n' \
+#     | sudo tee /etc/sudoers.d/yabai
+sudo /usr/local/bin/yabai --load-sa
+yabai -m signal --remove dock_did_restart 2>/dev/null
+yabai -m signal --add event=dock_did_restart \
+    action="sudo /usr/local/bin/yabai --load-sa" label=dock_did_restart
 
 # SPACES
 yabai -m space 1 --label 1_work
@@ -31,13 +46,16 @@ yabai -m rule --add app="^(Proton Mail|Spark|Outlook|Outlook \(PWA\))$" space=1_
 yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
 yabai -m rule --add app="^(kitty)$" space=3_email
 yabai -m rule --add app="^(Code)$" space=4_code
-yabai -m rule --add app="^(Topaz Video AI|Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2025|Topaz Photo AI|Python)$" space=5_temp
+yabai -m rule --add app="^(VisoMaster Fusion|python|Topaz Video AI|Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2025|Topaz Photo AI|Python)$" space=5_temp
 yabai -m rule --add app="^(ToshLLM|Trezor Suite|Ollama|Bitwarden|FileZilla|Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
 yabai -m rule --add app="^(Tailscale|OpenVPN Connect|OpenVPN|Slack|Zoom|Discord|Skype|WhatsApp)$" space=7_temp
 yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp
 
 # ignore these apps
 yabai -m rule --add app=".*" sub-layer=normal
+# Picture-in-Picture: never insert into the tree at all (pre-insert float,
+# no layout reshuffle)
+yabai -m rule --add app="^Picture-in-Picture$" manage=off
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Little Snitch$" manage=off
 yabai -m rule --add app="^About This Mac" manage=off
@@ -71,7 +89,7 @@ yabai -m config                              \
     window_animation_easing     ease_in_out_quint \
     window_opacity_duration     0.0          \
     active_window_opacity       1.0          \
-    normal_window_opacity       0.92         \
+    normal_window_opacity       0.91         \
     window_opacity              on           \
     insert_feedback_color       0xaad75f5f   \
     split_ratio                 0.50         \

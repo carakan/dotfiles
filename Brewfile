@@ -103,13 +103,27 @@ brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
+# NOT built by brew on this Intel machine: no bottles -> 10-20 min source
+# build. The keg is a symlink into ~/.asdf/installs/nodejs/<version> (with a
+# copied INSTALL_RECEIPT.json); same treatment for bun and python@3.14 below.
+# Keep the keg name == receipt stable == formula stable, or brew rebuilds it.
+# Procedure + traps: docs/brew-intel-symlink-workaround.md
 brew "node"
+# Bun — JS runtime + package manager. Symlinked to the asdf install for the
+# same reason as node (no Intel bottle -> source build).
+brew "bun"
 # Interactive GPU process monitor
 brew "nvtop"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
-# AI coding agent, built for the terminal
-brew "opencode"
+# AI coding agent, built for the terminal.
+# NOT via brew: opencode 2.x is source-only on the brew side (no bottle on
+# Intel, and the build pulls the whole llvm->rust->bun->zig chain from
+# source, which fails repeatedly). Installed from npm instead — see
+# packages/opencode/INSTALL.md. Keep this comment in sync if the situation
+# changes: if homebrew-core ever ships an Intel bottle for 2.x, brew is the
+# better option again.
+# brew "opencode"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
 # Sync Postgres data between databases
@@ -124,6 +138,13 @@ brew "poppler"
 brew "postgresql@14"
 # Object-relational database system
 brew "postgresql@18", restart_service: :changed
+# Interpreted, interactive, object-oriented programming language
+# NOT built by brew on this Intel machine: no bottles -> source build. The keg
+# is a symlink into ~/.asdf/installs/python/<version> (with a copied
+# INSTALL_RECEIPT.json); same treatment as node and bun above. Keep the keg
+# name == receipt stable == formula stable, or brew rebuilds it.
+# Procedure + traps: docs/brew-intel-symlink-workaround.md
+brew "python@3.14"
 # Persistent key-value database, with built-in net interface
 brew "redis", restart_service: :changed
 # Safe, concurrent, practical language
@@ -147,7 +168,10 @@ brew "zsh-syntax-highlighting"
 # Simple hotkey-daemon for macOS.
 brew "asmvik/formulae/skhd"
 # A tiling window manager for macOS based on binary space partitioning.
-brew "asmvik/formulae/yabai"
+# yabai: installed manually since 2026-10-09 — Christian-SC26 fork v7.1.30
+# (notarized release) to /usr/local/bin/yabai:
+# https://github.com/Christian-SC26/yabai/releases — brew uninstall yabai was run;
+# do NOT re-add `brew "asmvik/formulae/yabai"` or bundle will downgrade to 7.1.25.
 # Coding agent with the IDE wired in
 brew "can1357/tap/omp", trusted: true
 # A window border system for macOS

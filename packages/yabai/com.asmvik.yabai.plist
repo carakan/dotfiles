@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.asmvik.yabai.plist — starts the yabai daemon at login.
+
+  yabai is Christian-SC26/yabai (a fork of asmvik/yabai); the binary is the
+  v7.1.30 release asset, sha256
+  934262db166e0dbd3ca0314aecddcb8d68f124a0daf13fc16848660a10286107.
+  Nothing in Homebrew owns it (brew's yabai tap only has 7.1.25), so this
+  agent is the only thing that makes the window manager come up — losing it
+  means starting yabai by hand after every login.
+
+  Notes:
+  * PATH is a short static list: LaunchAgents inherit a bare PATH and
+    yabairc calls jq, yabai and the helper scripts in ~/bin and /usr/local/bin.
+  * Logs live in ~/.local/state/yabai/, not /tmp: /tmp is wiped on reboot,
+    which erased the evidence of what happened at login.
+  * Nice -20 / ProcessType Interactive keep yabai responsive while the
+    machine is busy after login.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.asmvik.yabai</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/yabai</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/Users/carakan/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- yabai has no clean-exit path, so restarting on crash is enough;
+         ThrottleInterval keeps a crash loop from spinning. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>Crashed</key>
+        <true/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>5</integer>
+
+    <key>Nice</key>
+    <integer>-20</integer>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/carakan/.local/state/yabai/yabai.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/carakan/.local/state/yabai/yabai.err.log</string>
+</dict>
+</plist>

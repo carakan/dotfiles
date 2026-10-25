@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.carakan.yabai-session.plist — applies the saved yabai workspace
+  session once at login, after com.asmvik.yabai is serving the socket.
+
+  It is a one-shot (RunAtLoad, no KeepAlive): it waits for the yabai
+  socket, waits for post-login windows to settle, then runs
+  `yabai -m space --load-session`. Its own progress goes to
+  ~/.local/state/yabai/restore.log; the paths below only capture launchd's
+  view of the script (e.g. "permission denied" from a bad interpreter).
+
+  Exit code 1 means the yabai socket never appeared — in practice that
+  means yabai itself failed to start, so read com.asmvik.yabai's log first.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.carakan.yabai-session</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/sh</string>
+        <string>/Users/carakan/.dotfiles/packages/yabai/session_restore.sh</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/carakan/.local/state/yabai/session-restore.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/carakan/.local/state/yabai/session-restore.err.log</string>
+</dict>
+</plist>

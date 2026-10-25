@@ -141,10 +141,14 @@ ctrl + alt - z : yabai -m display --focus recent
 ctrl + cmd - c : yabai -m window --display next; yabai -m display --focus next
 
 # ------------------------------------------------------------------------------
-# Layout save/restore (per space)
+# Workspace session (yabai 7.1.27+ native — whole-arrangement snapshots)
 # ------------------------------------------------------------------------------
-# Save current window layout to /tmp/yabai_layout_<space>.json
-ctrl + alt - s : /Users/carakan/.dotfiles/packages/yabai/save_layout.sh
+# Saves ALL spaces: window->space mapping, BSP tree (split sides + ratios),
+# per-space layout/paddings. Manual baseline: press ctrl+alt-s whenever your
+# arrangement is the one you want at next login. Matches windows by app name
+# on restore; unclaimed windows are left untouched.
+# Auto-load at login: com.carakan.yabai-session LaunchAgent (session_restore.sh)
+ctrl + alt - s : yabai -m space --save-session "$HOME/.local/state/yabai/session.json" && osascript -e 'display notification "session saved" with title "yabai"'
 
-# Restore saved window layout
-ctrl + alt - r : /Users/carakan/.dotfiles/packages/yabai/restore_layout.sh
+# Re-apply the saved session now (e.g. after late app launches or experimenting)
+ctrl + alt - r : yabai -m space --load-session "$HOME/.local/state/yabai/session.json" && osascript -e 'display notification "session loaded" with title "yabai"'
