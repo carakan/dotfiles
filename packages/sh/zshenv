@@ -1,0 +1,16 @@
+# packages/sh/zshenv → ~/.zshenv
+# Sourced by EVERY zsh invocation — including sshd exec channels (`zsh -c`),
+# which read NO other startup files (no login → no /etc/zprofile → no
+# path_helper). Without this, non-interactive remote commands see only
+# sshd's bare PATH: ssh one-liners can't find brew tools or repo bin scripts.
+
+case ":$PATH:" in
+  *":/usr/local/bin:"*) ;;                                       # already present
+  *) export PATH="/usr/local/bin:/usr/local/sbin${PATH:+:$PATH}" ;;
+esac
+# ~/.local/bin stays BEFORE /usr/local/bin: repo bin scripts shadow system
+# copies predictably on sshd exec channels and everywhere else.
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *) export PATH="$HOME/.local/bin${PATH:+:$PATH}" ;;
+esac

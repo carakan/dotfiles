@@ -1,6 +1,8 @@
 # fzf.zsh — all fzf configuration, sourced by zshrc.
-# Includes: keybindings (fzf --zsh), theme (FZF_COLORS shared with tmux-fzf
-# via tmux update-environment), default opts, completion, Ctrl-T / Alt-C / Ctrl-R.
+# Includes: keybindings (fzf --zsh), theme (FZF_COLORS spliced into
+# FZF_DEFAULT_OPTS — fzf has no FZF_COLORS variable of its own), default opts,
+# completion, Ctrl-T / Alt-C / Ctrl-R. tmux-fzf inherits FZF_DEFAULT_OPTS via
+# tmux's update-environment, so this file styles the plugin's pickers too.
 
 # clipboard used by fzf bindings (platform-agnostic name)
 case "$(uname -s)" in
@@ -63,11 +65,12 @@ footer:dim:#6e7681,\
 nth:italic,\
 nomatch:dim:strip"
 
-# Modern fzf full style. Requires fzf >= 0.74 (Homebrew: 0.74.4) for: raw
+# Modern fzf full style. Requires fzf >= 0.74 (Homebrew: 0.74.5) for: raw
 # mode + toggle-raw + nomatch strip (0.66), word wrap (0.68), --id-nth and
 # walker follow (0.71), inline footer border (0.72), next preview position +
-# every(N)/FZF_IDLE_TIME (0.73), non-modal floating pane (0.74). All flags
-# are literal; only vars expand.
+# every(N)/FZF_IDLE_TIME (0.73), non-modal floating pane (0.74), mode-2026
+# sync rendering + separator auto-suppression (0.74.1). All flags are
+# literal; only vars expand.
 export FZF_DEFAULT_OPTS='--ansi
   --cycle
   --style full
@@ -75,7 +78,6 @@ export FZF_DEFAULT_OPTS='--ansi
   --info=inline-right
   --border=rounded
   --padding=1,2
-  --separator="─"
   --border-label=" fzf "
   --border-label-pos=3
   --input-label=" Input "
@@ -85,7 +87,6 @@ export FZF_DEFAULT_OPTS='--ansi
   --gutter=" "
   --gutter-raw=" "
   --filepath-word
-  --highlight-line
   --preview-window=right:60%:wrap-word
   --footer=" C-a select-all · C-/ preview · C-d/u scroll · C-s sort · Alt-w wrap "
   --footer-border
@@ -113,9 +114,24 @@ export FZF_DEFAULT_OPTS='--ansi
   --bind="alt-w:toggle-wrap-word"
   --bind="alt-r:toggle-raw"
   '"--color='$FZF_COLORS' --popup='center,60%,60%' --history='$HOME/.local/state/fzf'"
-# tmux >= 3.7 note: the explicit --border above keeps --popup as the classic
-# modal popup with fzf's own rounded border/labels. Drop --border (or pass
-# border-native) to get the 0.74 non-modal floating pane instead.
+
+# Keep the tmux server in sync with this file. The tmux-fzf pickers run in the
+# server's environment as run-shell jobs, which read the SESSION environment —
+# so a session-level entry (or its absence after an update-environment removal)
+# masks the global one. Push to the global environment AND every session, from
+# the very file that defines the variable: no ordering dependency, and nothing
+# strips it afterwards (nothing else manages it).
+if [ -n "$TMUX" ]; then
+  tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS"
+  tmux list-sessions -F '#S' 2>/dev/null | while IFS= read -r s; do
+    tmux set-environment -t "$s" FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS"
+  done
+fi
+# tmux note (live server 3.7c): the explicit --border above keeps --popup as
+# the classic modal popup with fzf's own rounded border/labels. Dropping
+# --border would use the 0.74 non-modal floating pane — on 3.7.x that still
+# unzooms a zoomed window when opened over one (0.74.5: fixed only on tmux
+# 3.8+; 3.7b crashes outright). Revisit when the server runs 3.8+.
 
 # File walker (Ctrl-T source)
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
@@ -125,7 +141,7 @@ export BAT_CONFIG_PATH="$HOME/.bat.conf"
 export FZF_COMPLETION_OPTS="--preview-window=border-none --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden,follow"
 export FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden,follow"
-export FZF_COMPLETION_TRIGGER='**'
+# FZF_COMPLETION_TRIGGER removed: '**' is the completion-script default.
 
 # Ctrl-T: file picker. Multi-select + file-type header + named labels.
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

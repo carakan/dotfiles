@@ -35,7 +35,7 @@
     # =========================[ Line #1 ]=========================
     # os_icon               # os identifier
     dir                     # current directory
-    vcs                     # git status
+    vcs                     # git status (async when the gitstatus daemon runs - see zshrc)
     # =========================[ Line #2 ]=========================
     newline                 # \n
     # prompt_char           # prompt symbol
@@ -86,7 +86,15 @@
     # gcloud                  # google cloud cli account and project (https://cloud.google.com/)
     # google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
     # toolbox                 # toolbox name (https://github.com/containers/toolbox)
-    context                 # user@hostname
+    # context                 # user@hostname — removed 2026-10-21, see below
+    #   It rendered `carakan@Carloss-Mac-Pro` on every shell because the tmux
+    #   server itself was started from an SSH session, so SSH_CONNECTION is
+    #   inherited by all panes and p10k takes its remote branch (P9K_SSH=1).
+    #   `ssh localhost` to spawn GUI tools is routine here, so "am I in SSH?"
+    #   says nothing. To bring it back (it is also the root/sudo indicator),
+    #   uncomment the line above, start tmux from a local shell so panes do not
+    #   inherit SSH_CONNECTION, and keep POWERLEVEL9K_CONTEXT_TEMPLATE= empty
+    #   below so only root/remote shells show user@host.
     # nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
     # ranger                  # ranger shell (https://github.com/ranger/ranger)
     # yazi                    # yazi shell (https://github.com/sxyazi/yazi)
@@ -98,7 +106,7 @@
     nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
     # chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
     vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
-    vpn_ip                # virtual private network indicator
+    # vpn_ip                # virtual private network indicator — off 2026-10-21: this is a wired Mac Pro, it never showed anything useful
     # load                  # CPU load
     # disk_usage            # disk usage
     # ram                   # free RAM
@@ -985,12 +993,17 @@
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n@%m'
   # Context format when in SSH without privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n@%m'
-  # Default context format (no privileges, no SSH): user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
-
-  # Don't show context unless running with privileges or in SSH.
-  # Tip: Remove the next line to always show context.
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
+  # Default context format (no privileges, no SSH): empty, so the prompt does
+  # not repeat `carakan@Carloss-Mac-Pro` on every local shell. Keep
+  # ROOT_TEMPLATE / REMOTE_*_TEMPLATE above: those are the cases worth seeing
+  # (you are root, or you are on someone else's machine over SSH).
+  #
+  # NOTE: this p10k (v1.20.0-167) only reads _PREFIX/_TEMPLATE/_ROOT_TEMPLATE.
+  # The wizard's `POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}
+  # _EXPANSION=` opt-out that used to live here is inert on this version — that
+  # is why the segment kept rendering %n@%m locally. Emptying the template is
+  # the version-proof way to hide it.
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE=
 
   # Custom icon.
   # typeset -g POWERLEVEL9K_CONTEXT_VISUAL_IDENTIFIER_EXPANSION='⭐'

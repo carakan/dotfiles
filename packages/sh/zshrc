@@ -1,5 +1,25 @@
 export ZSH_DISABLE_COMPFIX=true
 
+# Session persistence over SSH only: an ssh login lands directly in tmux,
+# attaching to session $TMUX_AUTO_SESSION (default "main") with -d — the desk
+# detaches when the phone connects and vice versa, so sessions survive the
+# swap in both directions. Local terminal windows deliberately do NOT take
+# this path: with -d, every new kitty window would steal the session out from
+# under the previous one (that regression is why the earlier unconditioned
+# version of this block was removed on 2026-10-14). Locally, oh-my-zsh's tmux
+# plugin (ZSH_TMUX_AUTOSTART=true below) attaches without -d as before.
+# Guards skip nested ssh from local panes ($TMUX), non-interactive sessions
+# (scp/rsync/git remotes), shells without a tty, hosts without tmux, and
+# per-connection opt-outs: TMUX_AUTO_ATTACH_OFF=1 ssh …
+if [[ -o interactive && -t 0 && -n "$SSH_CONNECTION" && -z "$TMUX" \
+      && -z "$TMUX_AUTO_ATTACH_OFF" ]] && (( $+commands[tmux] )); then
+  sess="${TMUX_AUTO_SESSION:-main}"
+  if tmux has-session -t "$sess" 2>/dev/null; then
+    exec tmux attach-session -d -t "$sess"
+  fi
+  exec tmux new-session -s "$sess"
+fi
+
 # Zsh History
 # (Save History to Dropbox if already set up)
 export PSY_HISTORY_FILE="$HOME/Dropbox/Apps/zsh/.zsh_history"
@@ -41,6 +61,11 @@ export ZSH_TMUX_AUTOSTART=true
 # own tmux.extra.conf, bypassing ~/.tmux.conf (no tpm, no persist). With false
 # it passes -f $ZSH_TMUX_CONFIG, which defaults to ~/.tmux.conf.
 export ZSH_TMUX_FIXTERM=false
+# TMUX_AUTO_ATTACH_OFF (see the ssh block at the top) must also silence the
+# omz plugin fallback: an opted-out ssh shell would otherwise fall through to
+# an attach without -d and mirror keystrokes with whatever client the desk
+# has on the session.
+[[ -n "$TMUX_AUTO_ATTACH_OFF" ]] && export ZSH_TMUX_AUTOSTART=false
 
 # export TERM=xterm-256color-italic
 # Let kitty set TERM=xterm-kitty (its terminfo is installed in ~/.terminfo).
@@ -108,6 +133,20 @@ case "$(uname -s)" in
   Darwin) plugins+=(brew macos deja) ;;
   Linux)  plugins+=(brew zsh-autosuggestions) ;;
 esac
+
+# ── gitstatus backend (must run BEFORE oh-my-zsh.sh loads the p10k theme) ──
+# p10k only *consumes* the gitstatus daemon; it never starts it, and this
+# Oh My Zsh does not bundle the plugin. p10k decides at theme load whether the
+# async backend is available, so loading this later silently leaves the prompt
+# with no git status at all. NAME must be POWERLEVEL9K: that is the daemon pid
+# variable p10k looks for (GITSTATUS_DAEMON_PID_POWERLEVEL9K).
+# Daemon binary lives in ~/.cache/gitstatus/gitstatusd-darwin-x86_64 and must
+# match the bundled plugin's version (rebuild with
+# `powerlevel10k/gitstatus/build -w`, then copy usrbin/gitstatusd over it).
+if [[ -r $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/gitstatus.plugin.zsh ]]; then
+  source $HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/gitstatus.plugin.zsh
+  gitstatus_start -s -1 -u -1 -d -1 -c -1 -m -1 POWERLEVEL9K 2>/dev/null
+fi
 
 # User configuration
 
