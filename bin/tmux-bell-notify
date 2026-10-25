@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # tmux-bell-notify - macOS desktop notification for tmux window events that
-# fire the bell action. Used by the alert-bell hook in packages/tmux/tmux.conf.
+# fire the silence action. Used by the alert-silence hook in
+# packages/tmux/tmux.conf (NOT alert-bell: verified on 3.8 that
+# monitor-silence fires alert-silence and never alert-bell, so program bells
+# never reach this script).
+#
+# The scan below is still needed to find WHICH window went silent; with the
+# alert-silence hook it can only be a watchdog window.
 #
 # Deliberately notifies ONLY for the silence watchdog (prefix M): a window
 # armed with monitor-silence that produced no output for N minutes. Program

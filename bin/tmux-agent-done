@@ -11,7 +11,10 @@
 #   #{pane_id} interpolated into a nested quoted run-shell, which never ran.
 # Tunables (tmux options):
 #   @agentic-notify-secs  minimum runtime to notify (default 30)
-#   @agentic-skip-cmds    skip-list, comma-separated globs, e.g. *vim*,*ssh*
+# The interactive-app skip-list is hardcoded (case below) on purpose: the
+# same globs must also gate the START monitor's format in
+# bin/tmux-agent-monitors, and a tmux monitor format cannot take its match
+# pattern from an option value.
 #
 # Set TMUX_AGENT_DONE_TEST=1 to log to /tmp/tmux-agent-done.log instead of
 # notifying (used by the config test).

@@ -23,6 +23,21 @@
 
 set -u
 
+# Monitor hooks (`set-hook -B`) are ACCEPTED by stable tmux 3.8 but never
+# fire there — verified 2026-10-25 on this machine: subscriptions register
+# (show-hooks -B lists them) yet the once-a-second format expansion never
+# runs, with a normal or a control-mode client attached. They fire from tmux
+# HEAD (next-3.9) on. Registering on 3.8 would silently do nothing, so leave
+# cleanly with an explanation instead.
+case "$(tmux -V 2>/dev/null)" in
+    *next-*|*3.9*|*4.*|*5.*) ;;
+    *)
+        echo "tmux-agent-monitors: monitor hooks need tmux HEAD (next-3.9+);" \
+             "on $(tmux -V 2>/dev/null) they register but never fire — not arming" >&2
+        exit 0
+        ;;
+esac
+
 # -S so we talk to the same server that invoked us, whatever socket was used.
 # $TMUX is "socket-path,server-pid,session-id".
 sock=""
