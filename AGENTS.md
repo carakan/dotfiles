@@ -228,8 +228,12 @@ policy, and the recurring tasks. Start here, don't re-derive.
   `bin/tmux-agent-monitors` detects the version and no-ops with a stderr
   note. `brew install --HEAD tmux` (next-3.9+) + server restart activates it
   on the next attach, no config change. The watchdog does not use monitors
-  and works on 3.8. `pane-scrollbars` stays OFF (Termius corruption suspect;
-  kitty draws its own scrollbar). Back from the revert: `remain-on-exit`,
+  and works on 3.8. `pane-scrollbars` re-enabled 2026-10-27 as `auto-hide`
+  (+ right / 2000ms / themed colours) after the 10-25 OFF decision — the
+  on/off flip-flop across sessions was itself the "sometimes works" bug;
+  the value now lives in tmux.conf, committed. If Termius shows rendering
+  corruption while the bar draws, revert is the single `auto-hide` line.
+  Back from the revert: `remain-on-exit`,
   prefix X (kill other panes), copy-mode R (refresh-toggle), clear-on-attach
   off; the 3.8-only lines are gated on the option existing so a 3.7 server
   loads the file without errors. Config changes apply on `tmux source-file`;

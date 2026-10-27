@@ -163,6 +163,11 @@ pane never changes width. Verified — `pane_width` stayed 100 before, during an
 after a scroll under `auto-hide`. `pane-scrollbars-style` styles it, and
 `pane-scrollbars-timeout` (2000ms) controls how long it lingers.
 
+**Enabled since 2026-10-27**: `auto-hide` + `right` + 2000ms live in tmux.conf
+(committed — the 10-25 "OFF" turn was interactive-only, which is how the bar
+kept silently disappearing between server restarts). The style is set in
+tmux.conf because no tmux theme file owns it.
+
 ### `#{client_charset}` is not a thing — use `#{client_utf8}`
 
 `#{client_charset}` expands to an **empty string** rather than erroring, in every
