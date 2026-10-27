@@ -374,3 +374,14 @@ exit 0 with a clear "not applicable" message when `uname` reports Linux or
 arm64, and the rest of the repo contains no other Intel-only assumptions
 (`pk10.zsh` mentions "brew" only in perlbrew comments; yabai's
 `session_restore.sh` already puts both brew prefixes on PATH).
+
+## tmux workstation gotchas (2026-10-27)
+- The automation shell on this Mac can inherit `TMUX=/usr/local/bin/tmux`
+  (path, not a socket spec). Every tmux client call then tries to use the
+  binary as a socket and fails with "error connecting to /usr/local/bin/tmux
+  (Socket operation on non-socket)" — the error names the SOCKET PATH it
+  tried, not the binary. Prefix tmux calls with `env -u TMUX` there.
+- The tmux server died ~2026-10-27 14:00 (during config-revert experiments);
+  stale socket + two zombie `tmux attach` clients lingered. Server was
+  rebuilt from the repo config; window names/panes restored by the existing
+  attach hooks. Socket default path: /tmp/tmux-501/default.
