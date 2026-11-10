@@ -3,6 +3,53 @@
 For any agent working in this repo: the machine conventions, the tooling
 policy, and the recurring tasks. Start here, don't re-derive.
 
+## 0. Git policy — NEVER commit automatically
+
+- **Do not run `git commit` in this repo without the user's explicit
+  approval, per change.** The user wants to monitor and review every change
+  before it enters history.
+- Default flow: edit files → show the diff (`git status`, `git diff`) → let
+  the user commit. Stage only the exact paths the user names.
+- `git reset --soft` / `git reset --mixed` to un-commit my own local commits
+  is allowed (and expected) when the user asks; never rewrite pushed history.
+
+## 0b. Change tracking — every tweak lives in this repo
+
+- **Every change to this machine's configuration is tracked here.** A tweak
+  that lives only on the machine (a hand-edited dotfile in `$HOME`, a
+  one-off `sed` on a system file, a manual `brew link`, a hand-written
+  `~/.tmux.conf` line, an env var exported from a shell profile that is not
+  in this repo) is **not a change — it is an untracked change**, and it is
+  forbidden. It cannot be reviewed, cannot be reproduced on the other
+  machine, and will be silently lost the next time dotbot relinks a file.
+- **The rule:** the tracked artifact lives in this repo, and the machine's
+  state is a *symlink* to it (or a copy produced by a tracked script).
+  - Config file → `packages/<tool>/<config>`, symlinked into place.
+  - A behavioural change that needs a command → a **script in this repo**
+    (`packages/<tool>/<name>.sh`, executable, idempotent, documented in
+    its header) that performs the change. Never "run this once by hand".
+  - A decision that changed a file's content → the change is in the file
+    in this repo, and the *reason* is in the file's comments and in this
+    document.
+- **No global workarounds without a tracked script and documentation.** If a
+  fix has to be applied outside `$HOME`/the repo — a system file, a Homebrew
+  formula's own files, a keg, a LaunchAgent plist, an `/etc` path — it needs
+  (a) a script in this repo that applies it, idempotently, and (b) prose
+  documenting what it patches, why, and how to verify it. Both, not either.
+  "I edited it once on the machine" is never acceptable, and neither is
+  "here is the script" without the prose.
+- **Verification must be reproducible from the repo.** Any claim that a
+  tweak is in place must be checkable by running something in this repo (a
+  check script, a config load, a command whose output proves it) — not by
+  the agent's memory of what it did earlier in the session.
+- The same applies to **rollbacks**: a fix that was reverted needs the
+  revert recorded too (in git history, and in the doc if the state is
+  subtle), so the repo never claims a state the machine no longer has.
+- Corollary for agents: **if you cannot express the change as a tracked
+  artifact, you have not finished the change.** Say so, and say what is
+  missing, instead of leaving the machine in a state the repo does not
+  describe.
+
 ## 1. Runtime tooling policy (brew vs asdf)
 
 - This is an **Intel x86_64 macOS** machine — Homebrew is Tier 3: **no
@@ -30,6 +77,28 @@ policy, and the recurring tasks. Start here, don't re-derive.
   copied `INSTALL_RECEIPT.json` whose `source.versions.stable` matches the
   keg name string exactly (revision suffix included). Full procedure and
   traps: `docs/brew-intel-symlink-workaround.md`.
+- **neovim is the nightly, symlinked into brew — never compiled.** The keg
+  `/usr/local/Cellar/neovim/0.12.6` is a symlink to
+  `~/.local/opt/nvim-nightly` (the tarball from
+  `github.com/neovim/neovim/releases/tag/nightly`); brew still reports the
+  **last stable** version because the keg directory name, the receipt's
+  `source.versions.stable` and the formula's stable must be the same string.
+  Refresh: `packages/nvim/update-nightly.sh` (idempotent; keeps the receipt,
+  re-wires `/usr/local/opt/neovim`, `/usr/local/bin/nvim`,
+  `/usr/local/lib/nvim` — the last one matters, upstream builds the nightly
+  with prefix `/usr/local`, so nvim loads its tree-sitter parsers from
+  there). `brew pin neovim` keeps `brew upgrade` from replacing the symlink
+  with a build. `brew info neovim` fails with "linked/neovim is not inside a
+  keg" — same wart as node, harmless.
+- **Never run `brew cleanup`, and never let brew run one for you.** Homebrew
+  cleans up automatically after every install/upgrade (`==> Cleanup`), which
+  deletes superseded kegs. That is how neovim's binary disappeared on
+  2026-11-05: its keg was a dependency install (`installed_on_request:
+  false`), got renamed `0.12.6_old` when a newer version arrived, and the
+  automatic cleanup deleted it — nobody uninstalled anything.
+  `HOMEBREW_NO_INSTALL_CLEANUP=1` in `packages/sh/zshrc-darwin` disables the
+  automatic one. Install formulae as requested ones and keep them as
+  top-level `Brewfile` entries so brew's bookkeeping knows they are wanted.
 - **Revision bumps (`x.y.z` → `x.y.z_1`) are swaps, never builds.** The
   source is identical; only the packaging revision changed. Rename the keg
   (or its symlink), rewrite the receipt's `source.versions.stable`, repoint
@@ -149,6 +218,17 @@ policy, and the recurring tasks. Start here, don't re-derive.
   Upgrade = download release tar.gz, verify sha256, replace binary,
   `launchctl kickstart -k gui/501/com.asmvik.yabai` (retry once if it exits
   0 — startup lock-race clean-exit).
+- **The sudoers rule pins the binary's sha256**, so an upgrade needs a root
+  step of its own. `/etc/sudoers.d/yabai` holds
+  `carakan ALL=(root) NOPASSWD: sha256:<digest> /usr/local/bin/yabai --load-sa`
+  (root-only file, mode 640 — `cat` needs sudo). A new binary has a new
+  digest, so `sudo yabai --load-sa` stops matching the rule and asks for a
+  password — which is fatal, because `yabairc` runs `--load-sa` at login
+  without a TTY: the SA then never loads, no window events fire, and the
+  window manager is dead. After replacing the binary: rewrite the digest in
+  the rule, then re-run `sudo /usr/local/bin/yabai --load-sa` to install the
+  payload the new binary ships (the payload changes between releases —
+  v7.1.29 and v7.1.31 changed it without a version bump).
 - **Both LaunchAgents are repo-managed** (`packages/yabai/com.asmvik.yabai.plist`,
   `packages/yabai/com.carakan.yabai-session.plist`, symlinked into
   `~/Library/LaunchAgents/` by `install-darwin.yaml`). They were hand-made
@@ -175,7 +255,8 @@ policy, and the recurring tasks. Start here, don't re-derive.
   Restrictions must be disabled!" otherwise. That is a Recovery-only
   `csrutil disable --no-debugger --no-filesystem` (keep
   `--no-restricted --no-unsigned` too, or the flags already off get reset).
-  The SA's socket is `/tmp/yabai-sa_<uid>.socket`; if it is missing, the SA
+  The SA's socket is `/tmp/yabai-sa_<user>.socket` (named after the user
+  name, not the uid — `/tmp/yabai-sa_carakan.socket`); if it is missing, the SA
   is dead.
 - `session_restore.sh` is the safety net: after 20 s without a yabai socket
   it re-enables and bootstraps `com.asmvik.yabai` itself, then waits up to
@@ -192,6 +273,66 @@ policy, and the recurring tasks. Start here, don't re-derive.
 
 ## 5. Terminal stack state
 
+- **fzf 0.75.0** (`packages/sh/fzf.zsh`, sourced by the zshrc): the config
+  targets **fzf >= 0.75.0** (Homebrew 0.75.0, verified 2026-11-08). What
+  0.75.0 actually adds is narrow, and the config uses it deliberately:
+  - The new `{change,transform,bg-transform}-info-command` actions. A
+    permanent `--info-command` is **not** set: the man page states it
+    "runs synchronously and blocks the UI until completion", so it would
+    re-introduce a shell spawn per keystroke — the exact stall the bg-
+    transform label variants were introduced to remove. Instead it is an
+    **opt-in toggle**: `alt-i` switches the info line to
+    `<counter> | pos <n>` (FZF_INFO + FZF_POS), `alt-u` restores the plain
+    counter (an empty change-info-command resets it). Verified in tmux:
+    baseline `3/3 +S` → alt-i `3/3 +S | pos 1` → alt-u `3/3 +S`.
+  - Two semantics changes that do **not** affect this config:
+    `transform-nth`/`transform-with-nth` no longer split output at the pipe
+    character (only the `change-` pair rotates through pipe-separated
+    values), and `change-nth`/`change-with-nth` now apply the value AFTER
+    the current one and skip values equal to the current one. This config
+    uses neither family.
+  - The **bg- transform variants** are now used for the two label
+    transforms (list label on `result-final`, preview label on `focus`) and
+    for the Ctrl-T `focus:+bg-transform-header`. The plain `transform-*`
+    actions block the UI while the command runs; these three fire on every
+    result change or cursor move, so the synchronous form was a per-move
+    stall. The list label is on **`result-final`, not `result`**:
+    `result` also fires on every intermediate snapshot while the input
+    stream is still loading, so a slow producer spawns the transform dozens
+    of times for a label that is overwritten before it is ever displayed.
+    Measured with a 50-item **pipe** producer: `result` fired 50 times,
+    `result-final` once. (A producer redirected to a *file* shows no
+    difference — fzf reads a seekable file in one pass. The pipe is the
+    case that matters.) Steady-state behaviour after loading is identical.
+  - **Bind commands must be POSIX, not bash.** fzf runs them through
+    `$SHELL -c`, so `[[ ... ]]` breaks on a box whose `$SHELL` is dash
+    (`[[: not found`, label dies with it). The label transforms use
+    `[ ... ]` and quote `$FZF_QUERY` (a multi-word query otherwise splits
+    into extra test operands: `[: a: unexpected operator`). Keep new bind
+    bodies POSIX. Note fzf substitutes `{}` as a **single-quoted** string
+    (`'a b|c'`), so a multi-word item stays one word in `[ -n {} ]`.
+  - `alt-u` binds `change-info-command:` with an **empty** value, which
+    unsets the info command and restores fzf's native counter with no
+    shell spawn. `change-info-command:echo $FZF_INFO` looks equivalent and
+    is not: the command stays installed, so fzf keeps spawning a shell to
+    produce the counter on every keystroke. Measured by pointing `$SHELL`
+    at a logging wrapper: after `alt-u`, the info command ran **0** times
+    over 5 keystrokes; with `echo $FZF_INFO` it ran **10** times.
+  - **`packages/fzf/check-fzf.sh`** is the tracked verification script
+    (AGENTS.md §0b): it checks the installed fzf against the documented
+    floor, parses every option set the config ships through fzf itself
+    (fzf exits 2 with `unknown option` / `unknown action` /
+    `unsupported key` on anything it does not know), confirms the
+    0.75-only actions AND events exist, and runs every transform body
+    under **both bash and dash**, requiring exit 0 and identical output.
+    That last check is what catches a bashism: fzf's own parser accepts
+    `[[ ... ]]` happily, so only running the body reveals it. Run the
+    script after any fzf upgrade or any edit to a bind body.
+  - Quoting trap in this file: `FZF_DEFAULT_OPTS` is a **single-quoted**
+    shell string that ends with `.../fzf'"`. Swapping those last two
+    characters silently breaks the export (zsh then parses the option
+    lines as commands and reports `not valid in this context`), and the
+    symptom appears far from the cause. Keep the terminator byte-exact.
 - **zsh prompt** (`packages/sh/pk10.zsh`, symlinked to `~/.p10k.zsh`; note the
   filename typo `pk10`): `context` removed 2026-10-21 — the tmux server was
   started over SSH, so panes inherit `SSH_CONNECTION`, p10k takes its remote
@@ -235,9 +376,19 @@ policy, and the recurring tasks. Start here, don't re-derive.
   corruption while the bar draws, revert is the single `auto-hide` line.
   Back from the revert: `remain-on-exit`,
   prefix X (kill other panes), copy-mode R (refresh-toggle), clear-on-attach
-  off; the 3.8-only lines are gated on the option existing so a 3.7 server
-  loads the file without errors. Config changes apply on `tmux source-file`;
-  server restart only when server-scoped options change.
+  off — clear-on-attach is now per-client: `off` is the server default
+  (desktop kitty, primary screen), and the zshrc SSH attach path flips it to
+  `on` for the phone so Termius gets the alternate screen and its own
+  scrollbar stops tracking tmux paint frames (see packages/tmux/README.md,
+  "Phone (Termius) scrolling"). The 3.8-only lines are gated on the option
+  existing so a 3.7 server loads the file without errors. The client-attached
+  monitor guard matches `*kitty*` in client_termname — NOT RGB (589b896's
+  RGB guard matched every client; the wildcard grants RGB to all, and the
+  live Termius client verifiably attaches with RGB). **FROZEN 2026-11-10,
+  user-confirmed working: never modify the zshrc clear-on-attach scoping or
+  the client-attached guard again without an explicit request — breaking
+  them re-creates the phone "ascii garbage" bug.** Config changes apply on
+  `tmux source-file`; server restart only when server-scoped options change.
 - **mosh: evaluated and rolled back (2026-10-13) — do not retry with Termius.**
   Termius's mosh client sends no terminal type in-band and mosh-server then
   clamps its color budget to 8 (monochrome) and Termius's repaint model loses
@@ -256,7 +407,12 @@ policy, and the recurring tasks. Start here, don't re-derive.
 - **Mobile (Termius)**: plain SSH. Auto-attach is back (2026-10-25) but
   SSH-ONLY: the zshrc takeover block (`attach -d` onto `$TMUX_AUTO_SESSION`,
   default `main`) runs only when `SSH_CONNECTION` is set — desk↔phone swap
-  semantics — and never for local shells. The 10-14 regression was `-d`
+  semantics — and never for local shells. Since 2026-11-10 the same block
+  also sets `clear-on-attach on` just before attaching, so the phone gets
+  the alternate screen (Termius's client-side scrollbar stops tracking tmux
+  paint frames; swipes reach tmux copy-mode history). Local shells reset the
+  option to `off` before the omz plugin attaches, so kitty keeps the primary
+  screen. The 10-14 regression was `-d`
   firing on every local kitty window, stealing the session from the previous
   one; local shells now go through the omz tmux plugin (attach without -d)
   as before. Opt out per connection with `TMUX_AUTO_ATTACH_OFF=1` — it also

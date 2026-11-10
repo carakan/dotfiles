@@ -14,11 +14,35 @@ export ZSH_DISABLE_COMPFIX=true
 if [[ -o interactive && -t 0 && -n "$SSH_CONNECTION" && -z "$TMUX" \
       && -z "$TMUX_AUTO_ATTACH_OFF" ]] && (( $+commands[tmux] )); then
   sess="${TMUX_AUTO_SESSION:-main}"
-  if tmux has-session -t "$sess" 2>/dev/null; then
-    exec tmux attach-session -d -t "$sess"
-  fi
-  exec tmux new-session -s "$sess"
+  # DO NOT MODIFY — FROZEN 2026-11-10, user-confirmed working. This block plus
+  # the desktop reset below is the phone-scrolling fix (Termius gets the
+  # alternate screen via per-client clear-on-attach). Breaking it re-creates
+  # the "ascii garbage on every resize" bug. Change only on explicit request.
+  # Phone clients get the alternate screen: clear-on-attach is a server option
+  # read at THIS client's attach (tty_start_tty), so setting it here — before
+  # the exec — scopes the choice to the phone without touching kitty's
+  # primary-screen behaviour below. Alt screen keeps tmux out of the primary
+  # buffer, so Termius's own client-side scrollbar stops tracking tmux's
+  # redraw frames ("ascii garbage on every resize") and swipes reach tmux
+  # copy-mode history via mouse events instead. The session is created
+  # detached first so a phone-started server also picks this up: a bare
+  # `tmux set` cannot start a server, and tmux.conf defaults the option to
+  # off at server start. On a pre-3.8 server the set errors silently; that
+  # server ignores clear-on-attach entirely, so nothing to scope anyway.
+  tmux has-session -t "$sess" 2>/dev/null || tmux new-session -d -s "$sess"
+  tmux set -s clear-on-attach on 2>/dev/null
+  exec tmux attach-session -d -t "$sess"
 fi
+
+# Desktop kitty (and any other local terminal) attaches via the omz tmux
+# plugin below, WITHOUT -d. Reset the server option the phone's SSH block
+# flips to on: clear-on-attach off keeps tmux on the primary screen so
+# pre-attach output stays in the terminal's own scrollback (2026-10-25
+# decision). clear-on-attach is read per client at attach time, so this
+# pre-attach reset scopes it back for local clients. Skip silently when no
+# server is running — tmux.conf already defaults it to off at server start.
+[[ -z "$SSH_CONNECTION" && -z "$TMUX" ]] \
+  && tmux has-session 2>/dev/null && tmux set -s clear-on-attach off 2>/dev/null
 
 # Zsh History
 # (Save History to Dropbox if already set up)
@@ -201,7 +225,6 @@ export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_byte
 # fzf: keybindings, theme, opts — all in fzf.zsh next to this file
 source "${${(%):-%x}:A:h}/fzf.zsh"
 
-
 export RIPGREP_CONFIG_PATH=~/.config/.ripgreprc
 
 eval "$(direnv hook zsh)"
@@ -231,4 +254,12 @@ command -v zsh-patina >/dev/null && eval "$(zsh-patina activate)"
 
 # Conda: NOT auto-initialized (saves ~580ms per shell).
 # Use direnv's `layout python` in project .envrc, or `conda activate` explicitly.
+#
+#
+# trm-cli: machine-local internal tool (guarded so other machines skip it)
+[[ -x "/Users/carakan/development/nodejs/trm/old-changes/tools/trm-cli/bin/trm-cli.ts" ]] && \
+  alias trm="/Users/carakan/development/nodejs/trm/old-changes/tools/trm-cli/bin/trm-cli.ts"
+# >>> trm-cli managed >>>
+[ -f "$HOME/.zshrc.trm-cli" ] && source "$HOME/.zshrc.trm-cli"
+# <<< trm-cli managed <<<
 

@@ -270,6 +270,58 @@ The ordinary 3.8 event hooks (`pane-created`, `pane-exited`, `pane-died`,
 correctly and are available if you want edge-triggered behaviour instead of
 polling.
 
+## Phone (Termius) scrolling: per-client `clear-on-attach` (2026-11-10)
+
+**Status: confirmed working by the user. FROZEN — do not modify the zshrc
+clear-on-attach scoping or the `*kitty*` termname guard again; they are a
+matched pair.**
+
+**Symptom:** on the phone, scrolling shows torn tmux frames ("ascii garbage
+on every resize") and Termius's own client-side scrollbar tracks the wrong
+buffer. Blamed on 589b896 ("disabled some agentic + scrolling").
+
+**What 589b896 actually did (audited 2026-11-10):**
+
+| Change | Verdict |
+|---|---|
+| Removed `pane-scrollbars auto-hide` (+ position/timeout) | Real regression — this is the "disabled scrolling" part; restored by 37bc3a8 (10-27) |
+| Gated `clear-on-attach off` and copy-mode `R` behind `if-shell` | Verified working: live server has `off` applied and the `R` binding registered; both also survive `source-file` |
+| Client-attached monitor guard `#{m:*RGB*,#{client_termfeatures}}` | Broken — a no-op. The `*:…:RGB:…` terminal-features entry grants RGB to *every* client; the live Termius client verifiably attaches with RGB in `client_termfeatures`, so the guard matched the phone and armed the per-second polling it was written to prevent. Dormant on 3.8 (monitors never fire), would bite on next-3.9. Fixed: guard now matches `*kitty*` in `client_termname` (Termius announces `xterm-256color`, nested tmux `tmux-256color` — no false positives) |
+
+**The scrolling mechanism itself:** `clear-on-attach off` keeps tmux on the
+*primary* screen, so every tmux redraw pushes lines into the terminal's
+native scrollback. Termius then draws its own client-side scrollbar for that
+buffer — which contains tmux paint frames, not history. tmux's copy-mode
+scrollback (1M lines) is a *different* buffer. Two scrollbars, two buffers.
+
+**The fix:** `clear-on-attach` is a server option, but it is read at *each
+client's* attach (`tty_start_tty`), so a value set just before a client
+attaches scopes to that client. Hooks fire too late for the attaching client
+(measured: hook-set value lost the race against `tty_start_tty`), so the
+scoping lives in the zshrc attach paths, which run strictly before `exec
+tmux attach`:
+
+- `packages/sh/zshrc` SSH block (phone): create the session detached if
+  missing (a bare `tmux set` cannot start a server — measured), then
+  `tmux set -s clear-on-attach on`, then attach. Phone gets the alternate
+  screen: tmux stops painting the primary buffer, Termius's native scrollbar
+  goes quiet, and swipes reach tmux copy-mode history as mouse events
+  (`mouse on` → SGR 1006).
+- Same file, local shells: reset the option to `off` before the omz plugin
+  attaches, so desktop kitty keeps the primary-screen behaviour (pre-attach
+  output stays in kitty's scrollback, the 10-25 decision). Skipped silently
+  when no server is running; tmux.conf still defaults it to `off` at server
+  start.
+
+Net: `clear-on-attach` stays `off` between attaches; each client's attach
+reads what its own login path set. Kitty keeps the primary screen, the phone
+gets the alternate screen, and the "sometimes works, sometimes fails"
+flip-flop loses its buffer confusion.
+
+**To roll back:** delete the `tmux set -s clear-on-attach on` line in the
+zshrc SSH block (and optionally the local reset). Phone returns to the
+primary screen.
+
 ## OPEN: powerline glyphs correct in Termius on Ubuntu, broken on macOS
 
 **Status: diagnosed, not yet fixed.** Do not "fix" this by changing fonts
