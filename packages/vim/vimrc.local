@@ -11,8 +11,8 @@ set encoding=utf8
 let g:fugitive_dynamic_colors = 1
 
 if has('nvim-0.4')
-  set pumblend=22
-  set winblend=15
+  set pumblend=15
+  set winblend=12
   set wildoptions+=pum,tagfile
   :hi PmenuSel blend=5
   set pumheight=15
@@ -39,6 +39,22 @@ au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir.ht
 au BufRead,BufNewFile mix.lock set filetype=elixir
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 
+" OmniComplete: replace supra-vim's broken snippet (see ~/.supra-vim/.vimrc).
+" It writes the autocmd across several lines with "\" continuations, so Vim
+" parses the *pattern* as "*if" (the "if" is swallowed by the pattern) and
+" the command as a bare `setlocal omnifunc=syntaxcomplete#Complete`. That
+" runs in buffers that are not modifiable and raises
+"   E21: Cannot make changes, 'modifiable' is off
+" Drop the broken autocmd, then install a single-line one that also checks
+" 'modifiable'. `augroup END` first, so the deletion targets the default
+" group (where the broken autocmd lives) and not some other group.
+augroup END
+autocmd! FileType *if
+augroup OmniComplete
+  autocmd!
+  autocmd FileType * if &omnifunc == "" && &modifiable | setlocal omnifunc=syntaxcomplete#Complete | endif
+augroup END
+
 " Disable arrows keys
 noremap   <Up>     <NOP>
 noremap   <Down>   <NOP>
@@ -58,10 +74,30 @@ let g:tmux_navigator_save_on_switch = 1
 let g:tmux_navigator_disable_when_zoomed = 1
 
 " vim-rooter: resolve the project root ONCE at startup, then never re-cd on
-" BufEnter — `:Rooter` stays available for manual re-rooting
+" BufEnter — `:Rooter` stays available for manual re-rooting.
+"
+" g:rooter_patterns overrides vim-rooter's default, which includes
+" 'package.json'. Root detection is breadth-first, so the NEAREST ancestor
+" wins: a nested package inside a monorepo/worktree (trm/old-changes/api)
+" was detected as the root, and rooter then `cd`s to that root. That moved
+" the cwd out from under the session, so obsession saved the buffer list
+" relative to the moved cwd and the paths compounded into 'api/api/api/…'
+" on every save — the restored session then opened the nested api project
+" instead of the worktree it was saved from.
+" Only VCS markers and Makefile mark a root now. '.git' matches a gitfile
+" too (git worktrees have .git as a FILE, not a directory).
+let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile']
+" manual_only = 1 disables rooter's OWN VimEnter/BufReadPost/BufEnter/
+" BufWritePost hooks, so the root is resolved once (the two explicit calls
+" below) and never re-cd'd on every buffer switch — that auto project
+" switching is exactly what must not happen inside a root.
 let g:rooter_manual_only = 1
+" 'cd' keeps a global cwd (plugins and tools expect one); 'lcd' would scope
+" it to the window and break anything reading the cwd.
 let g:rooter_cd_cmd = 'cd'
-let g:rooter_silent_changetocwd = 1
+" Real option name — the previous 'g:rooter_silent_changetocwd' was a typo
+" that did nothing, so rooter printed 'cwd: <dir>' on every root change.
+let g:rooter_silent_chdir = 1
 augroup rooter_once
 	autocmd!
 	" ++once: fires on the FIRST file read — startup root; nested lets
@@ -100,7 +136,8 @@ let g:ale_echo_cursor = 0
 let g:ale_detail_to_floating_preview = 1
 let g:ale_use_neovim_diagnostics_api = 1
 
-let g:ale_ruby_syntax_tree_options = "--print-width=90 --plugins=plugin/disable_auto_ternary,plugin/single_quotes"
+let g:ale_ruby_syntax_tree_executable = "/Users/carakan/.asdf/installs/ruby/2.7.8/bin/stree"
+let g:ale_ruby_syntax_tree_options = "--print-width=100 --plugins=plugin/disable_auto_ternary,plugin/single_quotes"
 let g:ale_haml_syntax_tree_options = "--print-width=90 --plugins=haml"
 nmap ]a <Plug>(ale_next_wrap)
 nmap [a <Plug>(ale_previous_wrap)
@@ -115,7 +152,7 @@ let g:ale_linters = {
   \ 'javascript': ['eslint', 'tsserver'],
   \ 'json': ['prettier'],
   \ 'lua': ['luac', 'luacheck'], 
-  \ 'ruby': ['standardrb'],
+  \ 'ruby': ['rubocop'],
   \ 'scss': ['stylelint', 'prettier'],
   \ 'typescript': ['tslint', 'typecheck', 'tsserver'],
   \ 'vim': ['vint'],
@@ -130,7 +167,7 @@ let g:ale_fixers = {
   \ 'json': ['prettier'],
   \ 'lua': ['lua-format'],
   \ 'markdown': ['prettier'],
-  \ 'ruby': ['syntax_tree'],
+  \ 'ruby': ['syntax_tree', 'rubocop'],
   \ 'scss': ['stylelint'],
   \ 'typescript': ['prettier', 'tslint'],
   \ 'vue': ['prettier'],
@@ -260,12 +297,11 @@ hi link BqfPreviewRange Search
 
 
 
-hi ScrollbarGitAdd           guibg=#008700 guifg=#b9eeb8
-hi ScrollbarGitAddHandle     guibg=#b9eeb8 guifg=#008700
-hi ScrollbarGitChange        guibg=#573054 guifg=#C643C6
-hi ScrollbarGitChangeHandle  guibg=#C643C6 guifg=#573054
-hi ScrollbarGitDelete        guibg=#FF5D4F guifg=#ff8378
-hi ScrollbarGitDeleteHandle  guibg=#ff8378 guifg=#FF5D4F
+" nvim-scrollbar Git colors MIGRATED into the Lua block above (dofile of
+" legacy-lua-extracted.lua): v2 renamed the overlap groups Scrollbar*Handle ->
+" Scrollbar*Thumb and the renderer reads *Thumb, so these vimscript lines only
+" colored a dead alias. The pairs now live next to setup(), re-applied on
+" ColorScheme.
 
 
 hi GitSignsAdd guifg=#008700 guibg=#2d2d2d
@@ -637,3 +673,13 @@ let g:db_ui_table_helpers = {
 \   }
 \ }
 
+
+" --- message noise filter ---------------------------------------------------
+" Lives with the snacks setup in packages/nvim/legacy-lua-extracted.lua
+" (the live config this file sources): snacks' own notifier `filter` decides
+" which notifications are silenced. See the MSG_NOISE list there.
+"
+" To stop C-level errors from popping up (noice messages view), uncomment:
+" lua << EOF
+" require('noice').setup({ views = { messages = { enabled = false } } })
+" EOF

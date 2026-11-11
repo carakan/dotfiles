@@ -469,6 +469,35 @@ scrollbar.
   supra-vim is re-bootstrapped; the same trick applies to any multi-line
   `:autocmd` with `\` continuations — write it on one line.
 
+- **vim-rooter must not treat `package.json` as a root marker (fixed
+  2026-11-11).** `packages/vim/vimrc.local` sets `g:rooter_patterns` to
+  `['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile']`, dropping
+  vim-rooter's default `'package.json'`. Root detection is breadth-first, so
+  the **nearest** ancestor wins: in a monorepo/worktree the nested package
+  (`trm/old-changes/api`) matched `package.json` and became the root, and
+  rooter `cd`s to that root — the session for `~/development/nodejs/trm/old-changes`
+  ended up in `old-changes/api` instead of the worktree. That moved the cwd
+  under the session, so the saved buffer list (relative paths) compounded into
+  `api/api/api/…` on every save. `.git` matches a gitfile too, so git
+  worktrees still resolve to the worktree root. Also fixed there:
+  `g:rooter_silent_changetocwd` was a typo (real name:
+  `g:rooter_silent_chdir`), and `g:rooter_manual_only = 1` stays set so
+  rooter never re-cds on BufEnter/BufWritePost. Keep `g:rooter_manual_only`
+  and the explicit once-only `Rooter` calls together — removing them
+  reintroduces automatic project switching inside a root.
+
+- **Neovim session store: `~/.vim/session/`, NOT the repo.** `~/.vimrc` →
+  `~/.supra-vim/.vimrc` → sources `~/.vimrc.local` (symlink to
+  `packages/vim/vimrc.local`). Plugins are dein-managed under
+  `~/.vim/bundle/repos/` (not `site/pack/`). `tpope/vim-obsession` +
+  `dhruvasagar/vim-prosession` write sessions to `~/.vim/session/`, named by
+  the cwd with `/` → `%` (`%Users%carakan%…`); prosession loads them with
+  `execute 'source' fnameescape(path)` — `fnameescape` escapes `%` as `\%`, so
+  the load works, but a raw `nvim -S %Users%…` does NOT (E499). The repo's
+  `packages/nvim/` is the not-yet-applied 0.10→0.13 migration (MIGRATION.md
+  phase 1c) and is not what runs; `packages/nvim/FLIP.md` phase 5 would delete
+  `~/.vim/session/`, wiping every saved session — check before deleting.
+
 ## 6. Recipes
 
 ### Update a small CLI tool
