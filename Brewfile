@@ -101,6 +101,14 @@ brew "luv"
 # Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
+# NOT built by brew: the keg is a symlink to the downloaded nightly
+# (~/.local/opt/nvim-nightly), so `nvim` is v0.13-dev while brew still
+# reports the last stable version (the keg directory name must keep matching
+# it, or brew rebuilds from source - no Intel bottle).
+# Refresh: packages/nvim/update-nightly.sh (idempotent, re-downloads + re-wires).
+# `brew pin neovim` keeps `brew upgrade` from replacing the symlink with a
+# compiled build. HOMEBREW_NO_INSTALL_CLEANUP=1 (packages/sh/zshrc-darwin)
+# keeps brew's automatic post-install cleanup from deleting the keg.
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 # NOT built by brew on this Intel machine: no bottles -> 10-20 min source
@@ -168,7 +176,7 @@ brew "zsh-syntax-highlighting"
 # Simple hotkey-daemon for macOS.
 brew "asmvik/formulae/skhd"
 # A tiling window manager for macOS based on binary space partitioning.
-# yabai: installed manually since 2026-10-09 — Christian-SC26 fork v7.1.30
+# yabai: installed manually since 2026-10-09 — Christian-SC26 fork v7.3.3
 # (notarized release) to /usr/local/bin/yabai:
 # https://github.com/Christian-SC26/yabai/releases — brew uninstall yabai was run;
 # do NOT re-add `brew "asmvik/formulae/yabai"` or bundle will downgrade to 7.1.25.

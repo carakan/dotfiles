@@ -218,6 +218,15 @@ policy, and the recurring tasks. Start here, don't re-derive.
   Upgrade = download release tar.gz, verify sha256, replace binary,
   `launchctl kickstart -k gui/501/com.asmvik.yabai` (retry once if it exits
   0 — startup lock-race clean-exit).
+- **Installed: v7.3.3** (upgraded 2026-11-11 from v7.3.1; the release ships
+  scripting-addition payload **2.1.38**, so `sudo yabai --load-sa` MUST be
+  re-run after this upgrade). Binary sha256
+  `b2a70005031d50e42582a0f472dbda3504623e5c652e2fcacc080155ee9c63ee` — the
+  sudoers rule below pins exactly this digest, so it had to be rewritten in
+  the same session (the old one pinned v7.3.1's
+  `e9a0617d951bf7e25a4e5ee754cfd32f86c30705e2a081d105b39cfc3dba2133`).
+  Rollback binary kept at `~/.local/state/yabai/yabai-v7.3.1.bak` (restore it
+  and re-pin the old digest if v7.3.3 misbehaves).
 - **The sudoers rule pins the binary's sha256**, so an upgrade needs a root
   step of its own. `/etc/sudoers.d/yabai` holds
   `carakan ALL=(root) NOPASSWD: sha256:<digest> /usr/local/bin/yabai --load-sa`
