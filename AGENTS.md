@@ -354,6 +354,13 @@ policy, and the recurring tasks. Start here, don't re-derive.
   `powerlevel10k/gitstatus/build -w`, then copy `usrbin/gitstatusd` over it —
   plain `make` fails against Homebrew libgit2 1.9). Without this the prompt
   silently falls back to p10k's slow synchronous git renderer.
+  Fish-style path (2026-11-11): `POWERLEVEL9K_DIR_MAX_LENGTH=0` — every
+  component is abbreviated to its shortest unique prefix (`~/.dotfiles/p/sh`),
+  last component full; the wizard default was `80` (shorten only past 80
+  columns). p10k's `truncate_to_unique` strategy *is* the fish algorithm, so
+  no OMZ plugin is needed — upstream OMZ dropped `plugins/omz` entirely, and
+  rendering the OMZ `shrink-path` plugin's output through a custom p10k
+  segment would lose the dir block, the git-root anchor and the 🔒 icon.
 - **kitty 0.49.2** (`packages/kitty/kitty.conf`): scrollbar
   scrolled-or-hovered, `padding_fill_strategy neighboring_cell`,
   and the NATIVE `cursor_trail 3` (decay 0.1 0.25, color #676f7f).
