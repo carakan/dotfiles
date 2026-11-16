@@ -251,15 +251,18 @@ policy, and the recurring tasks. Start here, don't re-derive.
   from the launchd label: the raw binary showed as "yabai", and the session
   agent — which ran `/bin/sh session_restore.sh` — showed as "sh" with no
   description and no developer. The bundles give both rows a proper name
-  ("Yabai", "Yabai Session Restore"), the yabai icon, a bundle identifier
-  and `CFBundleGetInfoString`. The daemon row keeps the signer's developer
-  name ("Polina Haritonova", Team DVJTWMLL8X) because the bundle's
-  executable is a **symlink** to the notarized `/usr/local/bin/yabai` — a
-  wrapper script would lose it. The session bundle's launcher is a shell
-  script, so that row shows name + icon but no developer: macOS can only
-  read that from a code signature, and this machine has no Developer ID
-  identity to sign with. Bump `CFBundleVersion` in
-  `Yabai.app/Contents/Info.plist` on every yabai upgrade.
+  ("Yabai", "YabaiSessionRestore"), the yabai icon, a bundle identifier
+  and `CFBundleGetInfoString`. Note macOS strips spaces from the launched
+  executable's file name for a script, so the session row reads
+  "YabaiSessionRestore" no matter how the launcher is spelled. The daemon
+  row keeps the signer's developer name ("Polina Haritonova", Team
+  DVJTWMLL8X) because the bundle's executable is a **symlink** to the
+  notarized `/usr/local/bin/yabai` — a wrapper script would lose it. The
+  session bundle's launcher is a shell script, so that row shows name +
+  icon but no developer: macOS can only read that from a code signature,
+  and this machine has no Developer ID identity to sign with. Bump
+  `CFBundleVersion` in `Yabai.app/Contents/Info.plist` on every yabai
+  upgrade.
   **BTM caches the record**: editing a plist *behind* its symlink does not
   re-register the item — macOS watches `~/Library/LaunchAgents` for
   *directory* events, so the symlink itself has to be replaced

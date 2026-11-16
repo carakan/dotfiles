@@ -25,7 +25,7 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/carakan/.dotfiles/packages/yabai/YabaiSessionRestore.app/Contents/MacOS/YabaiSessionRestore</string>
+        <string>/Users/carakan/.dotfiles/packages/yabai/YabaiSessionRestore.app/Contents/MacOS/Yabai Session Restore</string>
     </array>
 
     <key>EnvironmentVariables</key>

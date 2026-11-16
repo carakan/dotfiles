@@ -20,7 +20,7 @@
     <string>en</string>
 
     <key>CFBundleExecutable</key>
-    <string>YabaiSessionRestore</string>
+    <string>Yabai Session Restore</string>
 
     <key>CFBundleIdentifier</key>
     <string>com.carakan.yabai-session</string>
