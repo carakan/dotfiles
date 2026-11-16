@@ -296,6 +296,15 @@ policy, and the recurring tasks. Start here, don't re-derive.
 - Configs: `packages/yabai/yabairc` (9 labeled spaces, app→space rules,
   border-color signal, dock-restart SA reload), `packages/yabai/skhdrc` (all
   global shortcuts).
+- **skhd's LaunchAgent is a local file, not repo-managed**
+  (`~/Library/LaunchAgents/com.koekeishiya.skhd.plist` — Homebrew's plist,
+  hand-edited). It runs `~/.config/skhd/skhd-launch.sh` (also local, not in
+  the repo), which retries `skhd` in a loop: skhd 0.3.9 aborts when another
+  app holds SecureEventInput at startup. Its Login Items row reads
+  **"skhd-launch"**; it used to read **"sh"** (the plist ran `/bin/sh`), which
+  looked like junk and was deleted from Login Items — that silently killed
+  *every* yabai shortcut, since skhd is what runs them. Don't delete that
+  row; if the shortcuts stop working, check `pgrep -fl skhd` first.
 - **Workspace sessions**: `ctrl+alt-s` saves the full arrangement to
   `~/.local/state/yabai/session.json` (manual, on demand); `ctrl+alt-r`
   re-applies; `com.carakan.yabai-session` LaunchAgent auto-loads it at login
