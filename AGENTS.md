@@ -244,6 +244,28 @@ policy, and the recurring tasks. Start here, don't re-derive.
   local files until 2026-10-21, which is how yabai ended up not starting at
   login at all. Never edit the copies in `~/Library/LaunchAgents` — edit the
   repo files and re-run `./install`.
+- **Both agents launch app bundles**, not the raw binary
+  (`packages/yabai/Yabai.app`, `packages/yabai/YabaiSessionRestore.app`).
+  macOS takes the name shown in System Settings → General → Login Items
+  from the **launched executable** (Background Task Management `Name`), not
+  from the launchd label: the raw binary showed as "yabai", and the session
+  agent — which ran `/bin/sh session_restore.sh` — showed as "sh" with no
+  description and no developer. The bundles give both rows a proper name
+  ("Yabai", "Yabai Session Restore"), the yabai icon, a bundle identifier
+  and `CFBundleGetInfoString`. The daemon row keeps the signer's developer
+  name ("Polina Haritonova", Team DVJTWMLL8X) because the bundle's
+  executable is a **symlink** to the notarized `/usr/local/bin/yabai` — a
+  wrapper script would lose it. The session bundle's launcher is a shell
+  script, so that row shows name + icon but no developer: macOS can only
+  read that from a code signature, and this machine has no Developer ID
+  identity to sign with. Bump `CFBundleVersion` in
+  `Yabai.app/Contents/Info.plist` on every yabai upgrade.
+  **BTM caches the record**: editing a plist *behind* its symlink does not
+  re-register the item — macOS watches `~/Library/LaunchAgents` for
+  *directory* events, so the symlink itself has to be replaced
+  (`rm` + `ln -s`) and the job re-bootstrapped, or the old name sticks
+  until the next login. Side effect of the symlink: the daemon's process
+  name is now "Yabai", so `pgrep -x yabai` no longer matches it.
 - yabai's own log is `~/.local/state/yabai/yabai.err.log` (**not** `/tmp`:
   /tmp is wiped at reboot, which hid the login failures).
 - **The scripting addition is loaded, and it is required.** `yabairc` runs

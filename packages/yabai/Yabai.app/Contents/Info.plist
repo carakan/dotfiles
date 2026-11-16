@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Yabai.app — the bundle com.asmvik.yabai.plist launches.
+
+  Why a bundle at all: macOS derives the *name* shown in System Settings →
+  General → Login Items from the launched executable (Background Task
+  Management "Name"), not from the launchd label. Pointed straight at
+  /usr/local/bin/yabai the row read "yabai"; a bundle lets it read "Yabai",
+  carry the yabai icon, and expose a real description (CFBundleGetInfoString)
+  plus a bundle identifier instead of a bare reverse-DNS label.
+
+  Contents/MacOS/Yabai is a SYMLINK to /usr/local/bin/yabai on purpose: the
+  notarized binary is what gets exec'd, so the Login Items row also shows the
+  signer's developer name ("Polina Haritonova", Team DVJTWMLL8X). A wrapper
+  script would drop that. Keep the symlink pointing at the canonical install
+  path — the same path the sudoers rule pins for `--load-sa`.
+
+  CFBundleVersion tracks the yabai release: bump it on every upgrade.
+
+  Resources/yabai.icns is the upstream icon (assets/icon/icon.png from the
+  Christian-SC26/yabai repo), converted to a multi-size icns.
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+
+    <key>CFBundleExecutable</key>
+    <string>Yabai</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.asmvik.yabai</string>
+
+    <key>CFBundleName</key>
+    <string>Yabai</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>Yabai</string>
+
+    <key>CFBundleGetInfoString</key>
+    <string>Tiling window manager for macOS — Christian-SC26 fork</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>7.3.3</string>
+
+    <key>CFBundleVersion</key>
+    <string>7.3.3</string>
+
+    <key>CFBundleIconFile</key>
+    <string>yabai.icns</string>
+
+    <!-- Background only: no Dock icon, no menu bar item. -->
+    <key>LSBackgroundOnly</key>
+    <true/>
+    <key>LSUIElement</key>
+    <true/>
+
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>

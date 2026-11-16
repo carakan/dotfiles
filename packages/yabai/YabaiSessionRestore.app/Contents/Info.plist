@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  YabaiSessionRestore.app — the bundle com.carakan.yabai-session.plist
+  launches.
+
+  Same reason as Yabai.app: macOS takes the Login Items name from the
+  launched executable, so "/bin/sh session_restore.sh" showed up as "sh" with
+  no description. Contents/MacOS/YabaiSessionRestore forwards to the repo's
+  session_restore.sh.
+
+  Unlike Yabai.app this bundle has no signed executable of its own (it is a
+  shell script), so the Login Items row shows the name and icon but no
+  developer line — macOS can only read that from a code signature, and this
+  machine has no Developer ID identity to sign with.
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+
+    <key>CFBundleExecutable</key>
+    <string>YabaiSessionRestore</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.carakan.yabai-session</string>
+
+    <key>CFBundleName</key>
+    <string>Yabai Session Restore</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>Yabai Session Restore</string>
+
+    <key>CFBundleGetInfoString</key>
+    <string>Reapplies your saved yabai window layout at login</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+
+    <key>CFBundleIconFile</key>
+    <string>yabai.icns</string>
+
+    <!-- Background only: no Dock icon, no menu bar item. -->
+    <key>LSBackgroundOnly</key>
+    <true/>
+    <key>LSUIElement</key>
+    <true/>
+
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>
