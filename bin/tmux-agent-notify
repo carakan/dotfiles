@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# tmux-agent-notify - desktop notification that a long command finished in a
+# tmux pane the user is not looking at.
+#
+# Usage: tmux-agent-notify <pane-id> <cmd> <elapsed-secs>
+#
+# One notifier, two callers:
+#   - packages/sh/zshrc (preexec/precmd hooks): the shell knows exactly when
+#     a command starts and when it returns, so it calls this directly. Works
+#     on every tmux version (monitor hooks are accepted by tmux 3.8 but never
+#     fire there, which left the finisher dormant).
+#   - bin/tmux-agent-done (the tmux monitor sweep): the backstop for panes
+#     that go idle without a shell hook firing.
+#
+# The pane state (@busy-since-<pane> / @busy-cmd-<pane>) is the shared
+# handshake: a run is only reported while its state is still pending, and
+# reporting clears it. So whichever path fires first reports the run and the
+# other one finds nothing — a long command is never announced twice.
+#
+# Set TMUX_AGENT_DONE_TEST=1 to log to /tmp/tmux-agent-done.log instead of
+# notifying (used by the config test).
+
+set -u
+
+pane=${1:-}
+cmd=${2:-}
+elapsed=${3:-0}
+
+[ -n "$pane" ] || exit 0
+[ -n "$cmd" ] || exit 0
+case "$elapsed" in ''|*[!0-9]*) exit 0 ;; esac
+
+sock=""
+if [ -n "${TMUX:-}" ]; then
+    sock="${TMUX%%,*}"
+fi
+t() { tmux ${sock:+-S "$sock"} "$@"; }
+
+# The run must still be pending: another notifier already reported it.
+pending=$(t show -pqv -t "$pane" "@busy-since-$pane" 2>/dev/null)
+[ -n "$pending" ] || exit 0
+
+# Interactive apps are not agent runs — no notification for them. The same
+# globs must also gate the monitor path's start detection, so they stay
+# hardcoded here.
+case "$cmd" in
+    nvim|nvim*|vim|vim*|vi|ssh*|less|less*|lazygit|lazygit*|fzf|fzf*) exit 0 ;;
+esac
+
+sess=$(t display -p -t "$pane" '#{session_name}' 2>/dev/null) || exit 0
+win=$(t display -p -t "$pane" '#{window_name}' 2>/dev/null) || exit 0
+ptitle=$(t display -p -t "$pane" '#{pane_title}' 2>/dev/null) || exit 0
+wactive=$(t display -p -t "$pane" '#{?window_active,1,0}' 2>/dev/null) || exit 0
+pactive=$(t display -p -t "$pane" '#{?pane_active,1,0}' 2>/dev/null) || exit 0
+
+# The user is looking at this exact pane — nothing to announce.
+if [ "$wactive" = "1" ] && [ "$pactive" = "1" ]; then
+    t set -pq -t "$pane" "@busy-since-$pane" "" 2>/dev/null
+    t set -pq -t "$pane" "@busy-cmd-$pane" "" 2>/dev/null
+    exit 0
+fi
+
+# Report it: clear the state first, so a second notifier for the same run
+# finds nothing pending.
+t set -pq -t "$pane" "@busy-since-$pane" "" 2>/dev/null
+t set -pq -t "$pane" "@busy-cmd-$pane" "" 2>/dev/null
+
+msg="$cmd finished in ${elapsed}s${ptitle:+ — $ptitle}"
+if [ -n "${TMUX_AGENT_DONE_TEST:-}" ]; then
+    echo "[$sess:$win] $msg" >> /tmp/tmux-agent-done.log
+else
+    osascript -e "display notification \"$msg\" with title \"tmux agent · $sess:$win\"" >/dev/null 2>&1
+fi

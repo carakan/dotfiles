@@ -393,7 +393,7 @@ policy, and the recurring tasks. Start here, don't re-derive.
   no OMZ plugin is needed — upstream OMZ dropped `plugins/omz` entirely, and
   rendering the OMZ `shrink-path` plugin's output through a custom p10k
   segment would lose the dir block, the git-root anchor and the 🔒 icon.
-- **kitty 0.49.2** (`packages/kitty/kitty.conf`): scrollbar
+- **kitty 0.51.0** (`packages/kitty/kitty.conf`): scrollbar
   scrolled-or-hovered, `padding_fill_strategy neighboring_cell`,
   and the NATIVE `cursor_trail 3` (decay 0.1 0.25, color #676f7f).
   Custom Slang shader pipelines were tried and REMOVED 2026-10-25 (look not
@@ -404,6 +404,22 @@ policy, and the recurring tasks. Start here, don't re-derive.
   shader cache shows as ENOENT on `m_*_0.slang-module`;
   `rm -rf ~/Library/Caches/kitty/shaders` rebuilds it — moot while no
   `custom_shaders` line is set.
+- **kitty remote control (2026-11-19)**: `allow_remote_control socket-only`
+  + `listen_on unix:kitty-{kitty_pid}` → one unix socket per kitty instance
+  in `$TMPDIR/kitty-<pid>`, so a second instance cannot steal the first one's
+  path (a fixed name logs "Invalid listen_on, ignoring"). `socket-only`
+  accepts socket requests and DENIES requests that arrive on the TTY, so a
+  program running inside the terminal cannot drive kitty. kitty exports the
+  socket path as `KITTY_LISTEN_ON` and `packages/tmux/tmux.conf` forwards it
+  through `update-environment`, so `kitty @ ls` / `kitty @ get-text
+  --extent=screen` work inside tmux panes — that is how an agent reads what
+  is actually on screen (the rendered tmux session, not just one pane) and
+  how it focuses the window that is waiting for input. **listen_on is not
+  reloadable: it takes effect on the next kitty start** (the running kitty
+  needs a restart; tmux sessions survive it). Caveat: `kitty @ launch` runs
+  the zshrc, and the omz tmux plugin then steals the tmux session from the
+  current window — launch a task window with an explicit command
+  (`kitty @ launch --type=window -- <cmd>`), never a bare shell.
 - **tmux**: `packages/tmux/tmux.conf`, symlinked live. Core session/pane/
   copy-mode config + on-demand plugins, plus the agentic helpers
   RE-ENABLED 2026-10-25 with the guards the 10-14 revert called for:
@@ -411,13 +427,24 @@ policy, and the recurring tasks. Start here, don't re-derive.
   `bin/tmux-bell-notify` (program bells stay a visual tab marker); the
   long-command finisher arms on client attach but ONLY for RGB (desktop)
   clients — phones never arm the per-second polling.
-  **The finisher is dormant on stable tmux 3.8**: `set-hook -B` monitor
-  hooks register there but never fire (verified 2026-10-25: the once-a-second
-  format expansion never runs, even with a control-mode client attached);
+  **The finisher is now shell-driven (2026-11-19)** — the tmux monitor path
+  alone was dormant on stable tmux 3.8 (`set-hook -B` monitor hooks register
+  there but never fire: verified 2026-10-25, the once-a-second format
+  expansion never runs even with a control-mode client attached;
   `bin/tmux-agent-monitors` detects the version and no-ops with a stderr
-  note. `brew install --HEAD tmux` (next-3.9+) + server restart activates it
-  on the next attach, no config change. The watchdog does not use monitors
-  and works on 3.8. `pane-scrollbars` re-enabled 2026-10-27 as `auto-hide`
+  note). The primary path is `packages/sh/zshrc`: `preexec` records the run
+  in the pane options `@busy-since-<pane>` / `@busy-cmd-<pane>`, `precmd`
+  hands it to `bin/tmux-agent-notify` when it ran longer than
+  `@agentic-notify-secs` (default 30). Event driven, version independent,
+  no polling. `bin/tmux-agent-notify` is the single notifier for both paths:
+  it reports a run only while its pane state is still pending and clears
+  that state when it reports, so the shell path and the monitor sweep can
+  never announce the same run twice (and the sweep no longer reports a
+  still-running pane as finished). The monitor path stays as the backstop for
+  panes that go idle without a shell hook and needs tmux HEAD:
+  `brew install --HEAD tmux` (next-3.9+) + server restart activates it on
+  the next attach, no config change. The watchdog does not use monitors and
+  works on 3.8. `pane-scrollbars` re-enabled 2026-10-27 as `auto-hide`
   (+ right / 2000ms / themed colours) after the 10-25 OFF decision — the
   on/off flip-flop across sessions was itself the "sometimes works" bug;
   the value now lives in tmux.conf, committed. If Termius shows rendering

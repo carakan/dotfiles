@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 # tmux-agent-done - desktop notification when a long command finishes in a
-# tmux pane you are not looking at. Called by the tmux 3.8 monitor hooks in
-# packages/tmux/tmux.conf ("3.8 agentic" section); requires a HEAD (3.8+)
-# server since monitors use `set-hook -B`.
+# tmux pane you are not looking at. The monitor-hook path: tmux calls this
+# when a pane falls idle again.
+#
+# The shell-driven path (packages/sh/zshrc preexec/precmd hooks) calls
+# bin/tmux-agent-notify directly and works on every tmux version — tmux 3.8
+# accepts monitor hooks but never fires them, so this sweep alone left the
+# finisher dormant on stable tmux. Both paths share the pane state
+# (@busy-since-<pane> / @busy-cmd-<pane>) and the notification core, and the
+# core only reports a run whose state is still pending, so a long command is
+# never announced twice.
 #
 # Usage: tmux-agent-done
 #   No arguments: the @agent-done hook fires per pane with no payload, so the
@@ -11,13 +18,6 @@
 #   #{pane_id} interpolated into a nested quoted run-shell, which never ran.
 # Tunables (tmux options):
 #   @agentic-notify-secs  minimum runtime to notify (default 30)
-# The interactive-app skip-list is hardcoded (case below) on purpose: the
-# same globs must also gate the START monitor's format in
-# bin/tmux-agent-monitors, and a tmux monitor format cannot take its match
-# pattern from an option value.
-#
-# Set TMUX_AGENT_DONE_TEST=1 to log to /tmp/tmux-agent-done.log instead of
-# notifying (used by the config test).
 
 set -u
 
@@ -34,33 +34,22 @@ now=$(date +%s)
 for pane in $(t list-panes -a -F '#{pane_id}'); do
     since=$(t show -pqv -t "$pane" "@busy-since-$pane" 2>/dev/null)
     cmd=$(t show -pqv -t "$pane" "@busy-cmd-$pane" 2>/dev/null)
-    t set -pq -t "$pane" "@busy-since-$pane" "" 2>/dev/null
-    t set -pq -t "$pane" "@busy-cmd-$pane" "" 2>/dev/null
     [ -n "$since" ] || continue
     [ -n "$cmd" ] || continue
+
+    # Only panes that are idle NOW are finished runs. A pane that is still
+    # busy keeps its state: clearing it here would report a running command
+    # as finished and lose its start time.
+    running=$(t display -p -t "$pane" '#{pane_current_command}' 2>/dev/null)
+    case "$running" in
+        zsh|bash|sh|fish) ;;
+        *) continue ;;
+    esac
 
     elapsed=$((now - since))
     [ "$elapsed" -ge "$min" ] || continue
 
-    # defense: state written outside the start monitor (tests, residue from a
-    # previous registration) must not turn interactive apps into notifications
-    case "$cmd" in
-        nvim|nvim*|vim|vim*|vi|ssh*|less|less*|lazygit|lazygit*|fzf|fzf*) continue ;;
-    esac
-
-    info=$(t display -p -t "$pane" '#{session_name}:#{window_name}|#{pane_title}|active=#{window_active}') || continue
-    win=$(echo "$info" | cut -d'|' -f1)
-    ptitle=$(echo "$info" | cut -d'|' -f2)
-    active=${info##*active=}
-    [ "$active" = "1" ] && continue   # you are watching this window
-
-    # contextual: command + runtime in the message, window + agent pane title
-    # in the title line so the notification reads at a glance
-    msg="$cmd finished in ${elapsed}s${ptitle:+ — $ptitle}"
-    if [ -n "${TMUX_AGENT_DONE_TEST:-}" ]; then
-        echo "[$win] $msg" >> /tmp/tmux-agent-done.log
-    else
-        osascript -e "display notification \"$msg\" with title \"tmux agent · $win\"" >/dev/null 2>&1
-    fi
+    # The core does the interactive-app skip list, the "user is looking at
+    # this pane" check, clears the state and sends the notification.
+    "$HOME/.dotfiles/bin/tmux-agent-notify" "$pane" "$cmd" "$elapsed"
 done
-

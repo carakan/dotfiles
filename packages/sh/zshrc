@@ -44,6 +44,52 @@ fi
 [[ -z "$SSH_CONNECTION" && -z "$TMUX" ]] \
   && tmux has-session 2>/dev/null && tmux set -s clear-on-attach off 2>/dev/null
 
+# ── Long-command finisher, driven by the shell (not by tmux monitors) ──
+# tmux 3.8 accepts monitor hooks but never fires them, so the finisher armed
+# by packages/tmux/tmux.conf (bin/tmux-agent-monitors) was dormant on this
+# machine: a long agent run finished and nothing was reported. The shell
+# knows the same thing without polling — preexec runs when a command starts,
+# precmd when it returns — so arm the notification from there instead.
+#
+# The run state and the notification live in bin/tmux-agent-notify, the same
+# core the monitor sweep uses. The core only reports a run whose state is
+# still pending and clears that state when it reports, so the shell path and
+# the monitor path can never announce the same run twice.
+if [[ -n "$TMUX" && -o interactive ]] && (( $+commands[tmux] )); then
+  autoload -Uz add-zsh-hook
+
+  typeset -g _agent_since=0
+  typeset -g _agent_cmd=""
+  typeset -g _agent_min=30
+  typeset -g _agent_min_at=0
+
+  _agent_start() {
+    _agent_since=$EPOCHSECONDS
+    _agent_cmd="${1%% *}"
+    tmux set -pq -t "$TMUX_PANE" "@busy-since-$TMUX_PANE" "$_agent_since" 2>/dev/null
+    tmux set -pq -t "$TMUX_PANE" "@busy-cmd-$TMUX_PANE" "$_agent_cmd" 2>/dev/null
+  }
+
+  _agent_finish() {
+    local since=$_agent_since elapsed min
+    _agent_since=0
+    (( since > 0 )) || return 0
+    elapsed=$(( EPOCHSECONDS - since ))
+    # Refresh the threshold at most once a minute — reading it costs a tmux
+    # call and the option rarely changes.
+    if (( EPOCHSECONDS - _agent_min_at > 60 )); then
+      min=$(tmux show -gv @agentic-notify-secs 2>/dev/null)
+      _agent_min=${min:-30}
+      _agent_min_at=$EPOCHSECONDS
+    fi
+    (( elapsed >= _agent_min )) || return 0
+    "$HOME/.dotfiles/bin/tmux-agent-notify" "$TMUX_PANE" "$_agent_cmd" "$elapsed" &!
+  }
+
+  add-zsh-hook preexec _agent_start
+  add-zsh-hook precmd _agent_finish
+fi
+
 # Zsh History
 # (Save History to Dropbox if already set up)
 export PSY_HISTORY_FILE="$HOME/Dropbox/Apps/zsh/.zsh_history"
