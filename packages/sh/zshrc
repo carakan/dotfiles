@@ -190,8 +190,9 @@ fi
 plugins=( zsh-interactive-cd bgnotify history gem mix rails alias-tips node npm bun git
           tmux asdf zsh-completions copypath safe-paste)
 # Platform plugin delta (must be final before oh-my-zsh sources below)
-# deja tuning — exported BEFORE omz loads the plugin (env is read at source
-# time). Keeps deja conservative, close to old zsh-autosuggestions behavior:
+# deja tuning — read when deja's integration is sourced, which happens AFTER
+# zsh-patina (see the load-order note next to that activation). Keeps deja
+# conservative, close to old zsh-autosuggestions behavior:
 export DEJA_HIGHLIGHT_STYLE="fg=#8e8a70,bold,italic" # ghost style zsh-autosuggestions used
 export DEJA_FUZZY=tight           # near-adjacent matches only; prefix anchors unchanged
 export DEJA_EMPTY=off             # no ghost predictions on an empty prompt
@@ -200,7 +201,9 @@ export DEJA_TOGGLE_EMPTY_KEY=     # Shift+↑ flips a persisted GLOBAL setting; 
 export DEJA_CYCLE_FUZZY_KEY=      # Shift+→ would persist a global preset change; unbind
 export DEJA_CYCLE_FUZZY_BACK_KEY= # Shift+← ditto
 case "$(uname -s)" in
-  Darwin) plugins+=(brew macos deja) ;;
+  # NOT an omz plugin: deja has to be loaded after zsh-patina, and omz
+  # sources every plugin before the patina activation below.
+  Darwin) plugins+=(brew macos) ;;
   Linux)  plugins+=(brew zsh-autosuggestions) ;;
 esac
 
@@ -297,6 +300,30 @@ eval "$(atuin init zsh)"
 
 # zsh-patina (syntax highlighting) — guard if binary is missing
 command -v zsh-patina >/dev/null && eval "$(zsh-patina activate)"
+
+# deja (inline autosuggestions) — loaded AFTER zsh-patina, on purpose.
+# Both wrap the same ZLE widgets, and whoever wraps last draws last: patina
+# redraws the whole line to apply its syntax colours, so when patina is
+# loaded after deja it wipes the ghost text deja draws and the autosuggestions
+# silently never appear (verified 2026-11-20: `zsh -f` + deja shows the
+# ghost, adding patina on top removes it, reversing the order brings it
+# back). Same reason zsh-autosuggestions is documented to be sourced after
+# zsh-syntax-highlighting.
+#
+# This cannot be an omz plugin: omz sources all of its plugins (including
+# the deja one) before the patina activation above. The bootstrap is the one
+# the omz plugin used — deja's binary writes its integration to
+# ~/.local/share/deja/init.zsh and refreshes it in the background when the
+# binary changes; `deja init zsh` only bootstraps that file on first run.
+if (( $+commands[deja] )); then
+  _deja_init_file="$HOME/.local/share/deja/init.zsh"
+  if [[ -r "$_deja_init_file" ]]; then
+    source "$_deja_init_file"
+  else
+    eval "$(deja init zsh)"
+  fi
+  unset _deja_init_file
+fi
 
 # Conda: NOT auto-initialized (saves ~580ms per shell).
 # Use direnv's `layout python` in project .envrc, or `conda activate` explicitly.

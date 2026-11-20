@@ -65,12 +65,59 @@ footer:dim:#6e7681,\
 nth:italic,\
 nomatch:dim:strip"
 
-# Modern fzf full style. Requires fzf >= 0.74 (Homebrew: 0.74.5) for: raw
+# Modern fzf full style. Requires fzf >= 0.75.0 (Homebrew: 0.75.0) for: raw
 # mode + toggle-raw + nomatch strip (0.66), word wrap (0.68), --id-nth and
 # walker follow (0.71), inline footer border (0.72), next preview position +
 # every(N)/FZF_IDLE_TIME (0.73), non-modal floating pane (0.74), mode-2026
-# sync rendering + separator auto-suppression (0.74.1). All flags are
-# literal; only vars expand.
+# sync rendering + separator auto-suppression (0.74.1), info-command actions
+# (0.75). All flags are literal; only vars expand.
+#
+# 0.75.0 (2026-11-07) changed two semantics this file relies on:
+#   * transform-nth / transform-with-nth no longer split their output at the
+#     pipe character. Only change-nth / change-with-nth rotate through
+#     pipe-separated values. Nothing here uses the nth family, so no action
+#     is needed.
+#   * change-nth / change-with-nth now apply the value AFTER the current one
+#     in the list and skip values equal to the current one.
+#
+# The label transforms below are the bg- variants on purpose: the plain
+# transform-* actions run SYNCHRONOUSLY, so fzf freezes the UI while the
+# command runs (man page: can make the interface sluggish). The list label
+# is recomputed on every result change and the preview label on every cursor
+# move, so the synchronous form costs a shell spawn per keystroke. The bg-
+# form runs the same command in the background and applies the result when it
+# arrives; fzf tracks a background version counter and discards results from
+# superseded runs, so a stale label cannot overwrite a fresh one.
+#
+# The list label fires on result-final, not result. result also fires on
+# every INTERMEDIATE snapshot while the input stream is still loading, so a
+# slow producer (a large `rg --files`, a tmux list over many panes) spawns
+# the transform dozens of times for a label nobody can read yet - it is
+# overwritten before it is ever displayed. result-final fires once, when the
+# stream closes, and then on every query change: same live label, one spawn.
+#
+# The transform bodies use POSIX test ([ ... ]) rather than bash's [[ ... ]].
+# fzf runs bind commands through $SHELL -c, and $SHELL is whatever the
+# session has - dash on a plain /bin/sh, which has no [[ operator and fails
+# with "[[: not found", taking the whole label down with it. The [ ... ] form
+# works under bash, zsh and dash alike. $FZF_QUERY is quoted because it can
+# contain spaces, which would otherwise split into extra test operands.
+#
+# The new {change,transform,bg-transform}-info-command actions in 0.75.0 are
+# NOT wired into the default opts, on purpose: --info-command runs
+# synchronously and blocks the UI until completion (man page), so a permanent
+# one would re-introduce the per-keystroke stall the bg- variants just
+# removed. They are exposed as an opt-in toggle instead (alt-i / alt-u below):
+# alt-i adds the cursor position to the info line, alt-u restores the plain
+# counter. That way the new feature is available without taxing every
+# keystroke.
+#
+# alt-u passes an EMPTY value, which resets --info-command to unset and
+# restores fzf's native counter. The alternative - change-info-command with
+# "echo $FZF_INFO" - looks equivalent and is not: the info command stays
+# installed, so fzf keeps running a shell to produce the counter on every
+# single keystroke. Empty means fzf renders the counter itself, with no
+# spawn at all.
 export FZF_DEFAULT_OPTS='--ansi
   --cycle
   --style full
@@ -88,16 +135,16 @@ export FZF_DEFAULT_OPTS='--ansi
   --gutter-raw=" "
   --filepath-word
   --preview-window=right:60%:wrap-word
-  --footer=" C-a select-all · C-/ preview · C-d/u scroll · C-s sort · Alt-w wrap "
+  --footer=" C-a select-all · C-/ preview · C-d/u scroll · C-s sort · Alt-w wrap · Alt-i pos "
   --footer-border
-  --bind="result:transform-list-label:
-      if [[ -z $FZF_QUERY ]]; then
+  --bind="result-final:bg-transform-list-label:
+      if [ -z \"$FZF_QUERY\" ]; then
         echo \" $FZF_MATCH_COUNT items \"
       else
         echo \" $FZF_MATCH_COUNT matches for [ $FZF_QUERY ] \"
       fi
       "
-  --bind="focus:transform-preview-label:[[ -n {} ]] && printf \" Previewing [ %s ] \" {}"
+  --bind="focus:bg-transform-preview-label:[ -n {} ] && printf \" Previewing [ %s ] \" {}"
   --bind="ctrl-d:half-page-down"
   --bind="ctrl-u:half-page-up"
   --bind="ctrl-b:page-up"
@@ -113,7 +160,9 @@ export FZF_DEFAULT_OPTS='--ansi
   --bind="ctrl-s:toggle-sort"
   --bind="alt-w:toggle-wrap-word"
   --bind="alt-r:toggle-raw"
-  '"--color='$FZF_COLORS' --popup='center,60%,60%' --history='$HOME/.local/state/fzf'"
+  --bind="alt-i:change-info-command:printf \" %s | pos %s \" \"$FZF_INFO\" \"$FZF_POS\""
+  --bind="alt-u:change-info-command:"
+  '"--color='$FZF_COLORS' --history='$HOME/.local/state/fzf'"
 
 # Keep the tmux server in sync with this file. The tmux-fzf pickers run in the
 # server's environment as run-shell jobs, which read the SESSION environment —
@@ -127,11 +176,26 @@ if [ -n "$TMUX" ]; then
     tmux set-environment -t "$s" FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS"
   done
 fi
-# tmux note (live server 3.7c): the explicit --border above keeps --popup as
-# the classic modal popup with fzf's own rounded border/labels. Dropping
-# --border would use the 0.74 non-modal floating pane — on 3.7.x that still
-# unzooms a zoomed window when opened over one (0.74.5: fixed only on tmux
-# 3.8+; 3.7b crashes outright). Revisit when the server runs 3.8+.
+# tmux note (live server 3.8, verified 2026-11-08; corrected 2026-11-20):
+# --border and --popup must NOT be combined. The earlier note here claimed
+# the explicit --border kept --popup as the classic modal popup - that is
+# wrong for fzf 0.75: with both set, fzf exits immediately with no UI and
+# no message (verified 2026-11-20: `FZF_DEFAULT_OPTS="--border=rounded
+# --popup=center,60%,60%" fzf` exits 0 and draws nothing; either option
+# alone is fine). Every picker died that way - Ctrl-T, Ctrl-R, Alt-C and the
+# tmux-fzf plugin's pickers - because they all inherit this variable.
+# --popup is the one that goes: it selects the 0.74 non-modal floating pane,
+# which on tmux 3.7.x unzooms a zoomed window when opened over one (0.74.5
+# fixed it for tmux 3.8+; tmux 3.7b crashes outright), and this config is
+# shared with the Linux box whose tmux may still be 3.7. Without --popup
+# fzf is the classic full-screen modal picker, with the rounded border and
+# the labels above - correct on every tmux version. To get the centered
+# floating picker back instead, drop --border and keep --popup.
+#
+# Check the option set after any fzf upgrade: fzf reports a bad option on
+# stderr, but a fatal combination can exit silently, and the pickers are the
+# only place it shows up. packages/fzf/check-fzf.sh is the repo's checker
+# for this (it parses each option set with --filter).
 
 # File walker (Ctrl-T source)
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --follow --ignore-file $HOME/.ignore"
@@ -150,7 +214,7 @@ export FZF_CTRL_T_OPTS="--multi
   --border-label=' Files '
   --preview-window='right:60%:wrap-word'
   --preview '(bat {} || cat {} || tree -C {}) 2> /dev/null | head -200'
-  --bind='focus:+transform-header:file --brief {} 2>/dev/null || echo \"No file selected\"'"
+  --bind='focus:+bg-transform-header:file --brief {} 2>/dev/null || echo \"No file selected\"'"
 
 # Alt-C: directory jumper (tree preview)
 export FZF_ALT_C_OPTS="--walker=dir,hidden,follow

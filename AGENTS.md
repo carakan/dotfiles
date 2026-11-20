@@ -369,11 +369,38 @@ policy, and the recurring tasks. Start here, don't re-derive.
     That last check is what catches a bashism: fzf's own parser accepts
     `[[ ... ]]` happily, so only running the body reveals it. Run the
     script after any fzf upgrade or any edit to a bind body.
+  - **`--border` and `--popup` must not be combined** (2026-11-20). fzf
+    0.75 accepts either on its own, but with both set it exits immediately
+    and draws nothing: every picker (Ctrl-T, Ctrl-R, Alt-C and the tmux-fzf
+    plugin's pickers) died silently, because they all inherit
+    `FZF_DEFAULT_OPTS`. The earlier note in `packages/sh/fzf.zsh` claimed
+    the explicit `--border` kept `--popup` as the classic modal popup —
+    false for 0.75. `--popup` is the one that goes (it selects the 0.74
+    non-modal floating pane, which unzooms a zoomed window on tmux 3.7 —
+    the Linux box may still be 3.7); without it fzf is the classic modal
+    picker with the rounded border and the labels, correct on every tmux.
+    `packages/fzf/check-fzf.sh` has a rule for this: each option set parses
+    on its own, so the per-set parse check cannot see a fatal combination.
   - Quoting trap in this file: `FZF_DEFAULT_OPTS` is a **single-quoted**
     shell string that ends with `.../fzf'"`. Swapping those last two
     characters silently breaks the export (zsh then parses the option
     lines as commands and reports `not valid in this context`), and the
     symptom appears far from the cause. Keep the terminator byte-exact.
+- **zsh completion stack (2026-11-20)**: the inline autosuggestions are
+  **deja** (binary `deja` + `~/.local/share/deja/init.zsh`, which the binary
+  writes and refreshes itself; `deja init zsh` only bootstraps that file on
+  first run). It is deliberately **not an omz plugin**: it is sourced
+  explicitly in `packages/sh/zshrc` **after** zsh-patina. Both wrap the same
+  ZLE widgets and whoever wraps last draws last — patina redraws the whole
+  line to apply its syntax colours, so with patina loaded after deja it
+  wipes the ghost text and the autosuggestions silently never appear
+  (verified 2026-11-20: `zsh -f` + deja shows the ghost, adding patina on
+  top removes it, reversing the order brings it back). omz sources all of
+  its plugins before the patina activation, so the plugin list cannot
+  express that order. The `DEJA_*` tuning vars stay where they are (they are
+  read when the integration is sourced). `deja fuzzy` / `deja empty` read and
+  change the persisted `fuzzy` / `empty_suggestions` values in
+  `~/.local/share/deja/config` (`fuzzy=tight`, `empty_suggestions=off`).
 - **zsh prompt** (`packages/sh/pk10.zsh`, symlinked to `~/.p10k.zsh`; note the
   filename typo `pk10`): `context` removed 2026-10-21 — the tmux server was
   started over SSH, so panes inherit `SSH_CONNECTION`, p10k takes its remote
