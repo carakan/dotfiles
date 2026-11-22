@@ -1,0 +1,76 @@
+# tmux-agent-hooks - preexec/precmd hooks for the tmux long-command finisher.
+# Sourced from packages/sh/zshrc; zsh only. Do not execute.
+#
+# The shell knows when a command starts (preexec) and when it returns
+# (precmd), so the finisher needs no tmux side channel: start time and command
+# name live in shell variables, and a completed run costs one cached tmux read
+# (the threshold) plus the notifier. Nothing is written to the tmux server,
+# so there is no stale pane state to sweep and no second announce path to
+# deduplicate against.
+#
+# A run is announced only when it lasted >= @agentic-notify-secs (tmux global
+# option, default 30). Whether the pane is one you are looking at is decided
+# at report time by bin/tmux-agent-notify.
+
+typeset -g _tmux_agent_notify=${${(%):-%x}:A:h}/tmux-agent-notify
+
+_tmux_agent_init() {
+  emulate -L zsh
+  [[ -o interactive && -n $TMUX && -n $TMUX_PANE ]] || return 0
+  (( $+commands[tmux] )) || return 0
+
+  autoload -Uz add-zsh-hook
+  zmodload zsh/datetime 2>/dev/null || return 0
+
+  # Keep a run that is in flight across a zshrc reload; initialise otherwise.
+  typeset -g _tmux_agent_since=${_tmux_agent_since:-0}
+  typeset -g _tmux_agent_cmd=${_tmux_agent_cmd:-}
+  typeset -g _tmux_agent_min=${_tmux_agent_min:-30}
+  typeset -g _tmux_agent_min_at=${_tmux_agent_min_at:-0}
+
+  # Commands that are never agent runs: interactive full-screen tools and
+  # remote shells. Kept in sync with the guard in tmux-agent-notify.
+  _tmux_agent_skip() {
+    case $1 in
+      nvim|nvim*|vim|vim*|vi|ssh*|less|less*|lazygit|lazygit*|fzf|fzf*) return 0 ;;
+    esac
+    return 1
+  }
+
+  _tmux_agent_preexec() {
+    local -a w
+    w=( ${(z)1} )
+    # Drop leading VAR=value assignments: the command is the word after them.
+    while (( $#w )) && [[ $w[1] == [A-Za-z_]*=* ]]; do
+      w=( ${w[2,-1]} )
+    done
+    _tmux_agent_cmd=${w[1]:-}
+    _tmux_agent_since=$EPOCHSECONDS
+  }
+
+  _tmux_agent_precmd() {
+    local since=$_tmux_agent_since cmd=$_tmux_agent_cmd elapsed min
+    _tmux_agent_since=0
+    (( since > 0 )) || return 0
+    [[ -n $cmd ]] || return 0
+    elapsed=$(( EPOCHSECONDS - since ))
+    _tmux_agent_skip "$cmd" && return 0
+
+    # Reading the threshold costs a tmux call; it rarely changes, so refresh
+    # it at most once a minute. An unset option (or a dead server) means 30.
+    if (( EPOCHSECONDS - _tmux_agent_min_at > 60 )); then
+      min=$(tmux show -gv @agentic-notify-secs 2>/dev/null)
+      _tmux_agent_min=${min:-30}
+      _tmux_agent_min_at=$EPOCHSECONDS
+    fi
+
+    (( elapsed >= _tmux_agent_min )) || return 0
+    "$_tmux_agent_notify" "$TMUX_PANE" "$cmd" "$elapsed" &!
+  }
+
+  add-zsh-hook preexec _tmux_agent_preexec
+  add-zsh-hook precmd _tmux_agent_precmd
+}
+
+_tmux_agent_init
+unfunction _tmux_agent_init

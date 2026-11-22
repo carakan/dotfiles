@@ -11,7 +11,7 @@
 # Deliberately notifies ONLY for the silence watchdog (prefix M): a window
 # armed with monitor-silence that produced no output for N minutes. Program
 # bells — including agents ringing a bell when they finish — are dropped:
-# those completions are already covered contextually by tmux-agent-done, so
+# those completions are already covered contextually by tmux-agent-notify, so
 # notifying here duplicated every agent finish (audited 2026-10-07). Bells
 # stay visible the quiet way: the onedark activity marker on the window tab.
 #

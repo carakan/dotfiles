@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# tmux-agent-notify - desktop notification for a long command that finished
+# in a tmux pane you are not looking at.
+#
+# Usage: tmux-agent-notify <pane-id> <cmd> <elapsed-secs>
+#
+# Single caller: bin/tmux-agent-hooks, the preexec/precmd hooks sourced from
+# packages/sh/zshrc. It invokes this once per run that reached
+# @agentic-notify-secs. There is no monitor path and no pane state: tmux 3.8
+# registers monitor subscriptions but never fires them (re-verified
+# 2026-11-22 for global, session and pane scope), so the shell is the only
+# source of start times.
+#
+# Exits 0 for every not-a-notification case: bad arguments, an interactive
+# tool, the pane you are looking at, a pane that is gone.
+#
+# Set TMUX_AGENT_TEST=1 to append to $XDG_STATE_HOME/tmux-agent.log (default
+# ~/.local/state/tmux-agent.log) instead of raising a notification.
+
+set -u
+
+pane=${1:-}
+cmd=${2:-}
+elapsed=${3:-}
+[ -n "$pane" ] || exit 0
+[ -n "$cmd" ] || exit 0
+case "$elapsed" in ''|*[!0-9]*) exit 0 ;; esac
+
+# Interactive tools are not agent runs. Same list as the preexec guard in
+# bin/tmux-agent-hooks; keep both in sync (this copy is what holds when the
+# notifier is called by hand).
+case "$cmd" in
+    nvim|nvim*|vim|vim*|vi|ssh*|less|less*|lazygit|lazygit*|fzf|fzf*) exit 0 ;;
+esac
+
+# $TMUX is "socket-path,server-pid,session-id": talk to the same server,
+# whatever socket the caller is on.
+# Array, not `${sock:+-S "$sock"}`: a socket path with a space would split.
+tmux_cmd=(tmux)
+if [ -n "${TMUX:-}" ]; then
+    tmux_cmd=(tmux -S "${TMUX%%,*}")
+fi
+t() { "${tmux_cmd[@]}" "$@"; }
+
+# One round trip: names, pane title and focus. Fields are separated with a
+# unit separator so window names may contain anything printable.
+us=$'\x1f'
+info=$(t display -p -t "$pane" \
+    "#{session_name}${us}#{window_name}${us}#{pane_title}${us}#{?window_active,#{?pane_active,1,0},0}" \
+    2>/dev/null) || exit 0
+[ -n "$info" ] || exit 0
+IFS=$us read -r sess win ptitle active <<<"$info"
+
+# An unknown pane id (or one that died mid-run) expands to empty fields.
+[ -n "$sess" ] || exit 0
+
+# The user is looking at this exact pane: nothing to announce.
+[ "$active" = 1 ] && exit 0
+
+msg="$cmd finished in ${elapsed}s${ptitle:+ — $ptitle}"
+title="tmux agent · $sess:$win"
+
+if [ -n "${TMUX_AGENT_TEST:-}" ]; then
+    log="${XDG_STATE_HOME:-$HOME/.local/state}/tmux-agent.log"
+    mkdir -p "${log%/*}"
+    printf '[%s] %s\n' "$title" "$msg" >>"$log"
+elif command -v osascript >/dev/null 2>&1; then
+    # Arguments, not string interpolation: a command line or pane title may
+    # contain quotes, backslashes or $ signs.
+    osascript - "$title" "$msg" >/dev/null 2>&1 <<'APPLESCRIPT'
+on run argv
+    display notification (item 2 of argv) with title (item 1 of argv)
+end run
+APPLESCRIPT
+fi

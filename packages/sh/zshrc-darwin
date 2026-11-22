@@ -11,6 +11,17 @@ export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 export HOMEBREW_AUTO_UPDATE_SECS=600000
 
+# Homebrew runs a cleanup after EVERY install/upgrade ("==> Cleanup") that
+# deletes superseded kegs. On this Intel machine that is dangerous twice over:
+#  - neovim's binary was deleted that way (its keg had been renamed
+#    <version>_old, so cleanup saw an old version and removed it - the
+#    "installed" neovim vanished from PATH without anyone uninstalling it);
+#  - the llvm/node/ruby/python kegs are symlinks into ~/.local/opt and
+#    ~/.asdf, and cleanup treats them as old versions too.
+# With this set, only an explicit `brew cleanup` removes anything - and that
+# one is documented as "never run it" in docs/brew-intel-symlink-workaround.md.
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+
 # Change open files limit and user processes limit.
 # See: https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
 ulimit -n 200000

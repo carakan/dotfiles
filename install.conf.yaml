@@ -46,16 +46,9 @@
     ~/.local/bin/tmux-float-toggle:
         create: true
         path: bin/tmux-float-toggle
-    # tmux 3.8 monitor hooks + long-command finish notification
-    ~/.local/bin/tmux-agent-monitors:
-        create: true
-        path: bin/tmux-agent-monitors
-    ~/.local/bin/tmux-agent-start:
-        create: true
-        path: bin/tmux-agent-start
-    ~/.local/bin/tmux-agent-done:
-        create: true
-        path: bin/tmux-agent-done
+    # tmux long-command finisher: all logic is bin/tmux-agent-hooks (sourced
+    # by packages/sh/zshrc) + bin/tmux-agent-notify (called by absolute path).
+    # No PATH links; the tmux monitor scripts were removed 2026-11-22.
     # AI prompt for lazygit commit commands (read by bin/lazygit-ai)
     ~/.config/lazygit-ai/prompt:
         create: true

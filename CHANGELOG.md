@@ -14,6 +14,71 @@ was reached lives here.
 
 ## 2026-11-22
 
+### tmux finisher: shell-only, monitor path deleted
+
+- **Audit.** `bin/tmux-agent-*` was four scripts for one notification.
+  `tmux-agent-monitors` armed `set-hook -T -B` subscriptions from
+  `client-attached`, `tmux-agent-start` stamped `@busy-since-*` /
+  `@busy-cmd-*` on **every** non-shell pane (not just the pane that
+  transitioned), `tmux-agent-done` swept every pane looking for idle ones,
+  and `tmux-agent-notify` held the notification plus a pane-state handshake.
+  The shell path (`preexec`/`precmd`) wrote the same state from the other
+  side so the two paths could not announce a run twice — the dedupe
+  machinery existed only because two paths existed.
+- **Evidence the monitor path is dead.** On the live server (tmux 3.8,
+  `/dev/ttys000` xterm-kitty attached), three subscriptions were registered
+  with a format that was true for the whole test window
+  (`#{==:#{pane_current_command},omp}`, pane `%7`):
+
+  ```
+  tmux set-hook          -T -B '@zz:%*:…' 'run-shell -b "echo fired >> /tmp/zz.log"'   # global
+  tmux set-hook -t main  -T -B '@zz:%*:…' …                                            # session
+  tmux set-hook -t %7    -T -B '@zz:%7:…' …                                            # pane
+  ```
+
+  All three showed up in `show-hooks -B`; none wrote its file within 5 s.
+  That reproduces the 2026-10-25 finding. `packages/tmux/README.md` had
+  claimed the opposite ("they do work") from a manual run; the section now
+  records this test instead.
+- **What changed.**
+  - `bin/tmux-agent-hooks` (new, zsh, sourced by `packages/sh/zshrc`): the
+    `preexec`/`precmd` pair, moved out of zshrc. The command is the first
+    word of `${(z)…}` after dropping leading `VAR=value` assignments; the
+    interactive-tool skip list is applied **at start**, so a skipped command
+    never needs a later tmux call; the threshold
+    (`tmux show -gv @agentic-notify-secs`, default 30) is cached for 60 s.
+    Re-sourcing preserves a run that is in flight.
+  - `bin/tmux-agent-notify`: one caller, no pane-state handshake. A single
+    `display -p` round trip yields session, window, pane title and focus
+    (unit-separated); the skip list is re-checked, then `osascript` gets the
+    title and message as **argv**, so a command line or pane title with
+    quotes, backslashes or `$` can no longer corrupt the AppleScript.
+    `TMUX_AGENT_TEST=1` appends to `~/.local/state/tmux-agent.log`
+    (was `/tmp/tmux-agent-done.log`).
+  - Deleted `bin/tmux-agent-monitors`, `bin/tmux-agent-start`,
+    `bin/tmux-agent-done`, their `~/.local/bin` links, the
+    `client-attached` hook, and the `@busy-*` pane options. Nothing polls,
+    nothing can go stale, and the shell no longer pays two tmux writes per
+    command (`@busy-since` / `@busy-cmd` on every `preexec`).
+- **Why shell-only is safe here.** Every shell on this machine is a zsh
+  (kitty launches and ssh sessions alike), and `preexec`/`precmd` bracket
+  *every* command started from that prompt — `omp`, `make`, `sleep`, all of
+  them — regardless of the pane's foreground process. The only uncovered
+  panes are ones whose shell is not zsh, and there are none. tmux 3.8's
+  ordinary event hooks (`pane-created`, `pane-shell-prompt`, …) still fire,
+  so a future backstop should use those, not monitors.
+- **Verify.** `zsh -n bin/tmux-agent-hooks`, `bash -n bin/tmux-agent-notify`.
+  Hook logic with a stub `tmux`: 61 s `sleep` → notify called, long `nvim` →
+  not called, 3 s `ls` → not called, `TMUX_AGENT_TEST=1 make build` → notify
+  called with cmd `make` (assignment prefix dropped). End to end in a real
+  pane: `@agentic-notify-secs 2` + `TMUX_AGENT_TEST=1`, `sleep 4` typed into
+  a detached `zsh -i` window → exactly one line in
+  `~/.local/state/tmux-agent.log`, with window and pane titles. Direct calls:
+  an inactive pane appends a line; the focused pane
+  (`#{pane_active}#{window_active}` = `11`) appends none; `nvim` and a
+  non-numeric duration append none; `%999` appends none (empty session name
+  is treated as a dead pane).
+
 ### yabai 7.3.3 → 7.3.5
 
 - **Release check.** Christian-SC26 fork, universal binary (x86_64 + arm64),

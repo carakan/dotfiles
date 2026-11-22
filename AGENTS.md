@@ -222,16 +222,18 @@ looks arbitrary, the changelog has the incident behind it.
   plugin must start **before** `oh-my-zsh.sh`;
   `POWERLEVEL9K_DIR_MAX_LENGTH=0` (fish-style shortening).
 - **tmux** (`packages/tmux/tmux.conf`, symlinked live): the long-command
-  finisher's primary path is shell-driven (`preexec`/`precmd` in
-  `packages/sh/zshrc` → `bin/tmux-agent-notify`, threshold
-  `@agentic-notify-secs`, default 30); `bin/tmux-agent-monitors` is the HEAD-only
-  backstop and no-ops on stable 3.8. `bin/tmux-agent-notify` is the single
-  notifier for both paths — it reports only while the pane state is pending
-  and clears it, so a run is never announced twice. The silence watchdog does
-  not use monitors. `pane-scrollbars` is `auto-hide`; revert that one line if
+  finisher is **shell-only** — `packages/sh/zshrc` sources
+  `bin/tmux-agent-hooks`, whose `preexec`/`precmd` hooks call
+  `bin/tmux-agent-notify` for runs >= `@agentic-notify-secs` (default 30).
+  Never re-add a tmux monitor path without first proving on the running tmux
+  that a `set-hook -B` subscription actually fires: 3.8 registers them and
+  never fires them (re-verified 2026-11-22 at global, session and pane
+  scope), and the deleted `tmux-agent-{monitors,start,done}` existed only to
+  work around that. There is no tmux-side run state: the `@busy-*` pane
+  options are gone, so nothing can go stale. The silence watchdog does not
+  use monitors. `pane-scrollbars` is `auto-hide`; revert that one line if
   Termius shows corruption. **FROZEN by the user**: never touch the zshrc
-  clear-on-attach scoping or the client-attached guard (`*kitty*` in
-  `client_termname`, not RGB) without an explicit request — breaking them
+  clear-on-attach scoping without an explicit request — breaking it
   re-creates the phone "ascii garbage" bug. 3.8-only lines stay gated on the
   option existing.
 - **`packages/sh/zshenv` → `~/.zshenv`** is the only file sshd exec channels
