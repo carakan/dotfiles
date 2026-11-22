@@ -31,30 +31,45 @@
     # Based on woolly-mammoth: https://github.com/Kr1ss-XD.
     commit-decoration-style = 130 box
     dark = true
-    file-decoration-style = "#606018" overline
-    file-added-label = [●]
-    file-copied-label = [C]
-    file-modified-label = [+]
+    file-decoration-style = "#2d2c35" box "#2d2c35"
+    file-added-label = [+]
+    file-copied-label = [=]
+    file-modified-label = [*]
     file-removed-label = [⛌]
     file-renamed-label = [→]
-    file-style = 232 bold 184
-    hunk-header-style = syntax bold italic 237
+    file-style = orange bold "#2d2c35"
+    hunk-header-file-style = blue bold
+    hunk-header-line-number-style = orange
+    hunk-header-decoration-style = gray box ul
+    hunk-header-style = file line-number syntax bold italic 237
+    hunk-label = "@"
     line-numbers = true
     line-numbers-left-format = "{nm:>1}┊"
-    line-numbers-left-style = red
+    line-numbers-left-style = line
     line-numbers-minus-style = red bold
     line-numbers-plus-style = green bold
     line-numbers-right-format = " {np:>1}┊"
-    line-numbers-right-style = green
+    line-numbers-right-style = line
     line-numbers-zero-style = "#545474" italic
-    minus-emph-style = normal "#80002a"
-    minus-style = normal "#5e0000"
-    plus-emph-style = syntax bold "#007e5e"
+    minus-emph-style = syntax "#80002a"
+    minus-style = syntax "#400000"
+    plus-emph-style = syntax bold darkgreen
     plus-style = syntax "#003500"
     syntax-theme = OneHalfDark
-    whitespace-error-style = "#80002a" reverse
+    whitespace-error-style = black reverse
     zero-style = syntax
     blame-format = "{author:<18} ({commit:>7}) ┊{timestamp:^16}┊ "
+    blame-palette = "#000000" "#003500" "#282828" "#3c3836"
+
+[delta "colibri-colorblind"]
+    # author: https://github.com/pablospe
+    # colibri, with blue instead of green for added lines.
+    features = colibri
+    dark = true
+    hunk-header-file-style = "#21a44d" bold
+    line-numbers-plus-style = blue bold
+    plus-emph-style = syntax bold "#005488"
+    plus-style = syntax "#003a70"
 
 [delta "collared-trogon"]
     # author: https://github.com/clnoll
@@ -709,4 +724,20 @@
     plus-empty-line-marker-style = syntax forestgreen
     whitespace-error-style = black ghostwhite
     hunk-header-file-style = darkgoldenrod
-    hunk-header-active-border-color = "#6c8aae"
+    # ── hunk headers: switch on the file/line stamps (0.21 special attributes;
+    #    hunk-header-file-style and hunk-header-line-number-style were dead
+    #    without them) ──
+    hunk-label = ""
+    hunk-header-style = "#a5acb7" italic file line-number
+    # ── blame: core.pager = delta, so `git blame` renders here ──
+    # NB: -format describes git's INPUT (must stay the 25-char default, or
+    # delta stops recognising blame lines); -output-format is what you see.
+    blame-timestamp-output-format = "%Y-%m-%d"
+    blame-separator-style = "#414036"
+    blame-code-style = syntax
+    # ── inline hints + merge conflicts ──
+    inline-hint-style = "#63696d" italic
+    merge-conflict-ours-diff-header-style = "#4a7ebe" bold
+    merge-conflict-ours-diff-header-decoration-style = "#4a7ebe" box
+    merge-conflict-theirs-diff-header-style = "#d26681" bold
+    merge-conflict-theirs-diff-header-decoration-style = "#d26681" box

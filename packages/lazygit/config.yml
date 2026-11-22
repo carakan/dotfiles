@@ -9,6 +9,12 @@ gui:
   showIcons: true
   border: single
   tabWidth: 2
+  # 0.66: dark/light aware. `auto` asks the terminal and also feeds
+  # {{colorScheme}} to the diff renderers below, so delta matches the background.
+  colorScheme: auto
+  # 'detailed' commit graph uses the git branch-drawing glyphs (U+F5D0-U+F60D);
+  # kitty draws those itself, so auto already picks detailed here.
+  commitGraphStyle: auto
   # side panel behaviour (r4ppz)
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 2
@@ -27,9 +33,11 @@ gui:
       - "bold"
     optionsTextColor:
       - "#268bd3"
+    # 0.66 split: attributes belong in selectedLineFgColor, the bg list is color only
+    selectedLineFgColor:
+      - bold
     selectedLineBgColor:
       - "#0f3045"
-      - "bold"
     # dimmed variant of selectedLineBgColor for unfocused views (0.65 inactive look)
     inactiveViewSelectedLineBgColor:
       - "#143b56"
@@ -51,16 +59,23 @@ git:
   autoFetch: true
   autoRefresh: true
   overrideGpg: true
+  # keep lazygit's diff context in step with git's `[diff] context = 1`
+  diffContextSize: 1
   # 0.64 renamed git.pagers -> git.diffRenderers; cycle with | (name shows in
   # the status toast). Diff context ({ } keys) flows through via git's -U.
+  # --{{colorScheme}} expands to --dark/--light (0.66). The sbs renderer only
+  # turns on side-by-side when the diff view is wide enough — delta cannot
+  # measure that itself when lazygit feeds it through a pager.
   diffRenderers:
     - name: delta
       colorArg: always
-      command: delta --features=lazygit-carakan --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+      command: delta --features=lazygit-carakan --{{colorScheme}} --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
     - name: delta sbs
       colorArg: always
-      command: delta --features=lazygit-theme --side-by-side --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
-  branchLogCmd: 'git log --graph --color=always --date=human --format="%C(#268bd3)%h%C(#f55350)%d%C(reset) - %C(##FEF9E1)(%ad)%C(reset) %s %C(#b28500){%an}%C(reset)" {{branchName}} --'
+      command: delta --features=lazygit-carakan --{{colorScheme}} --paging=never {{if gt .width 140}}--side-by-side{{end}} --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  # %C(##FEF9E1) was invalid and made `git log --graph` die with
+  # "invalid color value" — the branches panel log view was empty.
+  branchLogCmd: 'git log --graph --color=always --date=human --format="%C(#268bd3)%h%C(#f55350)%d%C(reset) - %C(#FEF9E1)(%ad)%C(reset) %s %C(#b28500){%an}%C(reset)" {{branchName}} --'
 os:
   # `e` opens files in the HOSTING nvim when inside a snacks float ($NVIM set),
   # standalone nvim otherwise (r4ppz pattern)
