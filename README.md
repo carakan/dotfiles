@@ -34,8 +34,8 @@ global shortcuts to yabai commands.
 brew install skhd jq          # yabai itself is NOT a brew formula here
 ```
 
-yabai is the fork's release binary (currently **v7.1.30**, sha256
-`934262db166e0dbd3ca0314aecddcb8d68f124a0daf13fc16848660a10286107`) installed
+yabai is the fork's release binary (currently **v7.3.1**, sha256
+`e9a0617d951bf7e25a4e5ee754cfd32f86c30705e2a081d105b39cfc3dba2133`) installed
 at `/usr/local/bin/yabai`. To upgrade: download the release asset, compare the
 hash, replace the binary, then
 `launchctl kickstart -k gui/501/com.asmvik.yabai`.

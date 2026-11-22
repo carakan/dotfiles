@@ -60,6 +60,10 @@
     ~/.config/lazygit-ai/prompt:
         create: true
         path: packages/lazygit/prompt
+    # local llama.cpp server for Qwen3.8-27B + the "pi" LoRA (start/end)
+    ~/.local/bin/qwen3.8-pi-server:
+        create: true
+        path: bin/qwen3.8-pi-server
 
     # ── git ────────────────────────────────────────────────
     ~/.gitconfig: packages/git/gitconfig
@@ -103,17 +107,14 @@
     ~/.config/Code/User/settings.json:
         path: packages/vscode/settings.json
 
-    # ── kitty (cross-platform; the shaders/ subdir holds custom_shaders
-    #    pipeline files, which kitty resolves relative to this dir) ──
+    # ── kitty (cross-platform; kitty 0.50 resolves its built-in shaders by
+    #    name, so no local shaders dir is needed — see packages/kitty/kitty.conf) ──
     ~/.config/kitty/kitty.conf:
         create: true
         path: packages/kitty/kitty.conf
     ~/.config/kitty/open-actions.conf:
         create: true
         path: packages/kitty/open-actions.conf
-    ~/.config/kitty/shaders:
-        create: true
-        path: packages/kitty/shaders
 
     # ── opencode (AI agent; per-file/dir links — live dir also holds runtime
     #    state: .atl cache + node_modules stay real. opencode.json is NOT

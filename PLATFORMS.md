@@ -22,12 +22,18 @@ Plain Ubuntu is feature-detected, not distro-locked:
   kitty ≥ 0.49 for `custom_shaders`; the shipped
   `packages/kitty/shaders/subtle.pipeline` fails to load on older builds and
   kitty then warns on every start.
-- **Font dependency**: Maple Mono NF (the ligature-bearing variant used in
-  kitty, tmux-fzf statusline, fzf border labels). Install via linuxbrew
-  `brew install --cask font-maple-mono-nf`, or drop the .ttf into
-  `~/.local/share/fonts/` and run `fc-cache -f`. **Do NOT use
-  `packages/fonts/fontspatched/`** — that's legacy Hasklug Nerd Font for old
-  kitty (before the switch to Maple Mono NF).
+- **Font dependency**: Maple Mono **NFMT** — the NFM build (ligatures plus
+  Nerd Font icons normalised to one cell) with the icon outlines stretched
+  vertically to cap height, because kitty never constrains glyph height and a
+  one-cell icon is otherwise ~80% of the cap height. Install: take
+  `MapleMono-NFM-unhinted.zip` from the maple-font release, drop the .ttf files
+  into `~/.local/share/fonts/`, run `packages/fonts/nfmt-icon-scale.py <src>
+  <dest>`, then `fc-cache -f`. No brew cask ships NFM, and the plain
+  `Maple Mono NF` build draws icons 1.4-1.9x the cell width, so kitty sized
+  them differently per face — that is why it is no longer used. Keep the
+  PostScript names (`MapleMono-NFMT-Light` …) in sync with
+  `packages/kitty/kitty.conf`. **Do NOT use `packages/fonts/fontspatched/`** —
+  that's legacy Hasklug Nerd Font for old kitty.
 - **ROCm boxes** (RX 6800/6900 XT / gfx1030): see `docs/ubuntu/OS-TWEAKS.md`
   for the apt repo, group setup, and `HSA_OVERRIDE_GFX_VERSION` rationale. The
   ROCm env exports are guarded in `packages/sh/zshrc-linux` (only fire when

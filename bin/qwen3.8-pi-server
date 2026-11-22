@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+# qwen3.8-pi-server - serve Qwen3.8-27B with the harness-hub "pi" adapter
+# (LoRA) on the locally built llama.cpp.
+#
+# Subcommands:
+#   qwen3.8-pi-server            run llama-server in the FOREGROUND (default)
+#   qwen3.8-pi-server start      start it in the background, wait until the
+#                                HTTP endpoint answers /health, print the URL
+#   qwen3.8-pi-server end        stop the running server ("stop" is an alias)
+#   qwen3.8-pi-server status     report whether it is running
+#
+# This is a manual tool, not a service: nothing is installed into launchd,
+# nothing runs at login. You start it when you want it and stop it when you
+# are done; the GPU is 16 GB, so it is also the only model you can hold at
+# once.
+#
+# The adapter is trained for thinking OFF, so the chat template is started with
+# enable_thinking=false. Every flag can be overridden from the environment:
+#
+#   MODEL   base GGUF (must be a Qwen3.8-27B derivative)
+#   LORA    adapter GGUF
+#   PORT    listen port (9931)
+#   CTX     context size (32768)
+#   NGL     layers on the GPU (99 = all that fit)
+#   ALIAS   model name the API reports (qwen3.8-pi)
+#   THINKING true/false, flips enable_thinking
+#   SERVER  llama-server binary
+#
+# Any extra arguments are passed straight to llama-server.
+set -euo pipefail
+
+MODEL="${MODEL:-/Users/carakan/models/Qwen3.8-27B-UD-IQ3_XXS.gguf}"
+LORA="${LORA:-/Users/carakan/models/Qwen3.8-27B-pi-lora-F16.gguf}"
+SERVER="${SERVER:-/Users/carakan/development/toshllm/dist/ToshLLM.app/Contents/Resources/bin/llama-server}"
+PORT="${PORT:-9931}"
+HOST="${HOST:-127.0.0.1}"
+CTX="${CTX:-32768}"
+NGL="${NGL:-99}"
+ALIAS="${ALIAS:-qwen3.8-pi}"
+THINKING="${THINKING:-false}"
+
+# Where the PID file and the server log live. ~/.local/state is the same
+# place fzf and opencode keep theirs.
+STATE_DIR="${STATE_DIR:-$HOME/.local/state/qwen3.8-pi}"
+PID_FILE="$STATE_DIR/server.pid"
+LOG_FILE="$STATE_DIR/server.log"
+
+# How long `start` waits for the model to load and the endpoint to answer.
+# The 27B IQ3 model is ~10 GB and the GPU has 16 GB, so the load is not
+# instant; 300 s is generous but still bounded.
+START_TIMEOUT="${START_TIMEOUT:-300}"
+
+# How long `end` waits for a graceful exit before it escalates to SIGKILL.
+STOP_TIMEOUT="${STOP_TIMEOUT:-30}"
+
+usage() {
+  sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+# The health endpoint is reached on the loopback address even when the
+# server binds 0.0.0.0, so a wildcard bind still probes correctly.
+health_url() {
+  local host=$HOST
+  case "$host" in
+    0.0.0.0|"") host=127.0.0.1 ;;
+  esac
+  printf 'http://%s:%s/health' "$host" "$PORT"
+}
+
+server_healthy() {
+  curl -fsS --max-time 3 "$(health_url)" >/dev/null 2>&1
+}
+
+# The PID of the server started by this script, if it is still alive.
+managed_pid() {
+  [ -f "$PID_FILE" ] || return 1
+  local pid
+  pid=$(cat "$PID_FILE" 2>/dev/null) || return 1
+  [ -n "$pid" ] || return 1
+  kill -0 "$pid" 2>/dev/null || return 1
+  printf '%s' "$pid"
+}
+
+# The PID of ANY llama-server holding the port, started by hand or otherwise.
+# This is what lets `end` stop a server that was launched outside this script
+# - the common case, since `start` is only a convenience.
+port_pid() {
+  local pid
+  pid=$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | head -1) || return 1
+  [ -n "$pid" ] || return 1
+  printf '%s' "$pid"
+}
+
+# Guard against killing an unrelated process that happens to hold the port:
+# the command line must be a llama-server for THIS model/alias.
+is_our_server() {
+  local pid=$1 cmd
+  cmd=$(ps -p "$pid" -o command= 2>/dev/null) || return 1
+  case "$cmd" in
+    *llama-server*) ;;
+    *) return 1 ;;
+  esac
+  case "$cmd" in
+    *"$MODEL"*|*"$LORA"*|*"$ALIAS"*) return 0 ;;
+  esac
+  return 1
+}
+
+cmd_start() {
+  mkdir -p "$STATE_DIR"
+
+  local pid
+  if pid=$(managed_pid); then
+    echo "already running (pid $pid) - see $LOG_FILE"
+    exit 0
+  fi
+  if pid=$(port_pid); then
+    echo "port $PORT is already in use by pid $pid" >&2
+    if is_our_server "$pid"; then
+      echo "  (that is this server; use '$0 end' to stop it)" >&2
+    fi
+    exit 1
+  fi
+
+  rm -f "$PID_FILE"
+  : >"$LOG_FILE"
+
+  # nohup + a redirected log detaches the server from this shell: the child
+  # survives the script exiting and the terminal closing.
+  nohup "$SERVER" \
+    -m "$MODEL" \
+    --lora "$LORA" \
+    --alias "$ALIAS" \
+    --chat-template-kwargs "{\"enable_thinking\": $THINKING}" \
+    -c "$CTX" \
+    -ngl "$NGL" \
+    --host "$HOST" \
+    --port "$PORT" \
+    "$@" >>"$LOG_FILE" 2>&1 &
+  pid=$!
+  printf '%s\n' "$pid" >"$PID_FILE"
+
+  # Wait for the endpoint, but not forever: a 27B load on a busy machine is
+  # slow, and a failed load must not leave a zombie PID file behind.
+  local waited=0
+  while [ "$waited" -lt "$START_TIMEOUT" ]; do
+    if ! kill -0 "$pid" 2>/dev/null; then
+      echo "server exited during startup - last log lines:" >&2
+      tail -n 20 "$LOG_FILE" >&2 || true
+      rm -f "$PID_FILE"
+      exit 1
+    fi
+    if server_healthy; then
+      echo "started (pid $pid) on http://$HOST:$PORT - model $ALIAS"
+      echo "log: $LOG_FILE"
+      exit 0
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+
+  echo "timed out after ${START_TIMEOUT}s waiting for $(health_url)" >&2
+  echo "the server is still running (pid $pid); check $LOG_FILE" >&2
+  exit 1
+}
+
+cmd_end() {
+  local pid=""
+  pid=$(managed_pid) || pid=$(port_pid) || true
+
+  if [ -z "$pid" ]; then
+    echo "not running"
+    rm -f "$PID_FILE"
+    exit 0
+  fi
+
+  if ! is_our_server "$pid"; then
+    echo "pid $pid holds port $PORT but is not this model - refusing to kill it" >&2
+    exit 1
+  fi
+
+  kill -TERM "$pid" 2>/dev/null || true
+
+  local waited=0
+  while kill -0 "$pid" 2>/dev/null; do
+    if [ "$waited" -ge "$STOP_TIMEOUT" ]; then
+      echo "no exit after ${STOP_TIMEOUT}s, sending SIGKILL" >&2
+      kill -KILL "$pid" 2>/dev/null || true
+      break
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+
+  rm -f "$PID_FILE"
+  echo "stopped (pid $pid)"
+}
+
+cmd_status() {
+  local pid=""
+  pid=$(managed_pid) || pid=$(port_pid) || true
+
+  if [ -z "$pid" ]; then
+    echo "not running"
+    return 1
+  fi
+
+  if server_healthy; then
+    echo "running (pid $pid) on http://$HOST:$PORT - healthy"
+  else
+    echo "running (pid $pid) on http://$HOST:$PORT - NOT answering /health"
+  fi
+  return 0
+}
+
+cmd=""
+case "${1:-}" in
+  start) cmd=start; shift ;;
+  end|stop) cmd=end; shift ;;
+  status) cmd=status; shift ;;
+  -h|--help|help) usage; exit 0 ;;
+esac
+
+case "$cmd" in
+  start) cmd_start "$@" ;;
+  end) cmd_end ;;
+  status) cmd_status ;;
+  *)
+    # Foreground, the original behaviour. The exec keeps llama-server in the
+    # terminal's process group, so Ctrl-C stops it.
+    [ -f "$MODEL" ] || { echo "base model not found: $MODEL" >&2; exit 1; }
+    [ -f "$LORA" ]  || { echo "adapter not found: $LORA" >&2; exit 1; }
+    [ -x "$SERVER" ] || { echo "llama-server not found: $SERVER" >&2; exit 1; }
+    exec "$SERVER" \
+      -m "$MODEL" \
+      --lora "$LORA" \
+      --alias "$ALIAS" \
+      --chat-template-kwargs "{\"enable_thinking\": $THINKING}" \
+      -c "$CTX" \
+      -ngl "$NGL" \
+      --host "$HOST" \
+      --port "$PORT" \
+      "$@"
+    ;;
+esac

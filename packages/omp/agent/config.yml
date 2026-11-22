@@ -5,7 +5,7 @@ modelRoles:
   worker: minimax-code/MiniMax-M3
   advisor: zai/glm-5.3:high
   review: zai/glm-5.3-flash:high
-  default: minimax-code/MiniMax-M3.1-Flash-Preview
+  default: zai/glm-5.3-flash:high
 skills:
   includeSkills:
     - tdd-workflow
