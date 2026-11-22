@@ -1,0 +1,10 @@
+#!/bin/sh
+# Yabai — launcher for com.asmvik.yabai.plist.
+#
+# A wrapper, not a symlink to /usr/local/bin/yabai, on purpose: macOS puts the
+# *signer's* name under the item in Login Items, and the signed binary put
+# "Polina Haritonova" (the fork author's Developer ID) there. An unsigned
+# wrapper has no signature, so the row shows just "Yabai".
+#
+# The notarized binary itself is untouched and is still what runs.
+exec /usr/local/bin/yabai "$@"

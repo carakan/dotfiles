@@ -6,9 +6,14 @@
 
   It is a one-shot (RunAtLoad, no KeepAlive): it waits for the yabai
   socket, waits for post-login windows to settle, then runs
-  `yabai -m space --load-session`. Its own progress goes to
+  `yabai -m space` with the load-session flag. Its own progress goes to
   ~/.local/state/yabai/restore.log; the paths below only capture launchd's
   view of the script (e.g. "permission denied" from a bad interpreter).
+
+  It launches YabaiSessionRestore.app (a bundle in this repo) instead of
+  "/bin/sh session_restore.sh": macOS names the Login Items row after the
+  launched executable, so running /bin/sh made the row read "sh" with no
+  description. The bundle's launcher forwards to the same script.
 
   Exit code 1 means the yabai socket never appeared — in practice that
   means yabai itself failed to start, so read com.asmvik.yabai's log first.
@@ -20,8 +25,7 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/sh</string>
-        <string>/Users/carakan/.dotfiles/packages/yabai/session_restore.sh</string>
+        <string>/Users/carakan/.dotfiles/packages/yabai/YabaiSessionRestore.app/Contents/MacOS/Yabai Session Restore</string>
     </array>
 
     <key>EnvironmentVariables</key>

@@ -4,11 +4,18 @@
   com.asmvik.yabai.plist — starts the yabai daemon at login.
 
   yabai is Christian-SC26/yabai (a fork of asmvik/yabai); the binary is the
-  v7.1.30 release asset, sha256
-  934262db166e0dbd3ca0314aecddcb8d68f124a0daf13fc16848660a10286107.
+  v7.3.5 release asset, sha256
+  f25c6b50a9a71736403bf0051b2f23e70ff36ecfcfee92193fb5f5cd98d94927.
   Nothing in Homebrew owns it (brew's yabai tap only has 7.1.25), so this
   agent is the only thing that makes the window manager come up — losing it
   means starting yabai by hand after every login.
+
+  The job launches Yabai.app (a bundle in this repo) rather than
+  /usr/local/bin/yabai directly: macOS names the Login Items row after the
+  launched executable, so the bundle is what makes it read "Yabai" instead of
+  "yabai", with the icon and the signer's developer name. The bundle's
+  executable is a symlink to /usr/local/bin/yabai — the same path the
+  sudoers rule pins for the load-sa call.
 
   Notes:
   * PATH is a short static list: LaunchAgents inherit a bare PATH and
@@ -25,7 +32,7 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/yabai</string>
+        <string>/Users/carakan/.dotfiles/packages/yabai/Yabai.app/Contents/MacOS/Yabai</string>
     </array>
 
     <key>EnvironmentVariables</key>
@@ -37,13 +44,12 @@
     <key>RunAtLoad</key>
     <true/>
 
-    <!-- yabai has no clean-exit path, so restarting on crash is enough;
-         ThrottleInterval keeps a crash loop from spinning. -->
+    <!-- Restart on ANY exit, not only on a crash. At login yabai can lose a
+         startup lock race and exit 0, and `KeepAlive {Crashed}` then left the
+         window manager dead until a manual kickstart. ThrottleInterval keeps
+         a crash loop from spinning. (v7.3.5) -->
     <key>KeepAlive</key>
-    <dict>
-        <key>Crashed</key>
-        <true/>
-    </dict>
+    <true/>
     <key>ThrottleInterval</key>
     <integer>5</integer>
 

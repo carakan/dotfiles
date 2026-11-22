@@ -18,36 +18,55 @@ yabai -m signal --add event=dock_did_restart \
     action="sudo /usr/local/bin/yabai --load-sa" label=dock_did_restart
 
 # SPACES
-yabai -m space 1 --label 1_work
-yabai -m space 2 --label 2_webs
-yabai -m space 3 --label 3_email
-yabai -m space 4 --label 4_code
-yabai -m space 5 --label 5_temp
-yabai -m space 6 --label 6_temp
-yabai -m space 7 --label 7_temp
-yabai -m space 8 --label 8_temp
-yabai -m space 9 --label 9_other
+# Guarded so a normal login writes nothing into yabai.err.log. Unguarded, the
+# label of a space this display setup does not have logged "could not locate
+# the space to act on!", and the display assignment logged "acting space is
+# already located on the given display." (exit 1, plus "mission-control is
+# active" while the login animation runs) on every single login.
+nspaces=$(yabai -m query --spaces 2>/dev/null | jq 'length' 2>/dev/null)
+case "$nspaces" in ''|*[!0-9]*) nspaces=9 ;; esac
+
+space_label() {  # space_label <index> <label>
+    [ "$1" -le "$nspaces" ] && yabai -m space "$1" --label "$2"
+}
+space_label 1 1_work
+space_label 2 2_webs
+space_label 3 3_email
+space_label 4 4_code
+space_label 5 5_temp
+space_label 6 6_temp
+space_label 7 7_temp
+space_label 8 8_temp
+space_label 9 9_other
 
 yabai -m config --space 5_temp layout float
 yabai -m config --space 6_temp layout float
 yabai -m config --space 7_temp layout float
 
-yabai -m space 1_work --display 1
-yabai -m space 2_webs --display 1
-yabai -m space 3_email --display 1
-yabai -m space 4_code --display 1
-yabai -m space 5_temp --display 1
-yabai -m space 6_temp --display 1
-yabai -m space 7_temp --display 1
-yabai -m space 8_temp --display 2
+ndisplays=$(yabai -m query --displays 2>/dev/null | jq 'length' 2>/dev/null)
+case "$ndisplays" in ''|*[!0-9]*) ndisplays=2 ;; esac
+
+space_to_display() {  # space_to_display <label> <display> — only on a real change
+    [ "$2" -le "$ndisplays" ] || return 0
+    cur=$(yabai -m query --spaces --space "$1" 2>/dev/null | jq -r '.display' 2>/dev/null)
+    [ "$cur" = "$2" ] || yabai -m space "$1" --display "$2"
+}
+space_to_display 1_work 1
+space_to_display 2_webs 1
+space_to_display 3_email 1
+space_to_display 4_code 1
+space_to_display 5_temp 1
+space_to_display 6_temp 1
+space_to_display 7_temp 1
+space_to_display 8_temp 2
 
 #======= Rules =======================
 yabai -m rule --add app="^(Proton Mail|Spark|Outlook|Outlook \(PWA\))$" space=1_work
 yabai -m rule --add app="^(Microsoft Edge|Safari|Google Chrome)$" space=2_webs
 yabai -m rule --add app="^(kitty)$" space=3_email
 yabai -m rule --add app="^(Code)$" space=4_code
-yabai -m rule --add app="^(VisoMaster Fusion|python|Topaz Video AI|Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2025|Topaz Photo AI|Python)$" space=5_temp
-yabai -m rule --add app="^(ToshLLM|Trezor Suite|Ollama|Bitwarden|FileZilla|Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
+yabai -m rule --add app="^(TagGUI|VisoMaster Fusion|python|Topaz Video AI|Lightroom Classic|HitPaw Photo AI|Adobe Photoshop 2025|Topaz Photo AI|Python)$" space=5_temp
+yabai -m rule --add app="^(ToshLLM|Trezor Suite|Obsidian|Bitwarden|FileZilla|Insomnia|Firefox Developer Edition|Boom 3D|Maps|Gemini 2|UserNotificationCenter|1Password 7|Creative Cloud|Docker Desktop|Preview|System Settings|Podcasts|CleanMyMac X|Navicat Premium|App Store|Dash|Activity Monitor|Calculator|Finder|Notes|Invoice Pro|Fork|Books|IINA|VLC|Microsoft Excel|Microsoft Word|Font Book)$" space=6_temp
 yabai -m rule --add app="^(Tailscale|OpenVPN Connect|OpenVPN|Slack|Zoom|Discord|Skype|WhatsApp)$" space=7_temp
 yabai -m rule --add app="^(Firefox|X|Spotify)$" space=8_temp
 
@@ -74,7 +93,25 @@ yabai -m rule --add title="(Copy|Bin|About This Mac|Info)" manage=off
 yabai -m rule --apply
 
 #======= Global Config =======================
+# Three options that only exist in the fork since v7.1.33 / v7.1.35 / v7.3.0
+# (they are absent from every upstream yabai release):
+#   window_native_tabs             — native macOS tabs (Terminal, Finder,
+#     Ghostty) share one tile, so opening/switching/closing a tab no longer
+#     reshuffles the BSP layout. Only the selected tab is in the layout; a tab
+#     dragged out of the tab bar becomes its own tile. Off upstream by default.
+#   mouse_bsp_live_resize          — resizing a tiled window with the mouse
+#     moves the sibling borders live instead of only on mouse release. The
+#     fork's default is 'on'; pinned here so the behaviour does not change
+#     silently when the fork flips a default again.
+#   space_gesture_natural_scrolling — direction of the synthesized swipe used
+#     for space switching without the scripting addition. 'auto' follows the
+#     macOS "Natural scrolling" system preference. A no-op with the SA
+#     loaded (the SA switches spaces directly), pinned so a future
+#     `csrutil enable` does not invert the swipe direction silently.
 yabai -m config                              \
+    window_native_tabs           on           \
+    mouse_bsp_live_resize        on           \
+    space_gesture_natural_scrolling auto      \
     external_bar                off:41:0     \
     menubar_opacity             1.0          \
     mouse_follows_focus         off          \
