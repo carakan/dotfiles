@@ -292,10 +292,3 @@ fi
 # Use direnv's `layout python` in project .envrc, or `conda activate` explicitly.
 #
 #
-# trm-cli: machine-local internal tool (guarded so other machines skip it)
-[[ -x "/Users/carakan/development/nodejs/trm/old-changes/tools/trm-cli/bin/trm-cli.ts" ]] && \
-  alias trm="/Users/carakan/development/nodejs/trm/old-changes/tools/trm-cli/bin/trm-cli.ts"
-# >>> trm-cli managed >>>
-[ -f "$HOME/.zshrc.trm-cli" ] && source "$HOME/.zshrc.trm-cli"
-# <<< trm-cli managed <<<
-

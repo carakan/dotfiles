@@ -224,57 +224,60 @@ it reattaches.
   `bg=themegreen,fg=themeblack` — those are 3.8 *theme keywords*, not a
   conflict with the plugin.)
 
-## Monitor hooks: they do work, and they were silently broken
+## Monitor hooks: they register, they do not fire (2026-11-22)
 
-An earlier version of this file said monitor hooks never fired. **That was
-wrong** — it was a harness artifact, and the real feature was quietly dead for a
-different reason. Both are now fixed and verified.
+`set-hook -T -B '@name:%*:format' …` is *accepted* by stable tmux 3.8 —
+`show-hooks -B` lists the subscription, the format evaluates true — and no
+command ever runs. Re-verified on the live server (3.8, kitty client
+attached) with a format that was true for the whole test window:
 
-Monitor syntax is `set-hook -T -B name:what:format command`:
+| scope | command |
+|---|---|
+| global | `set-hook -T -B '@zz:%*:…'` |
+| session | `set-hook -t main -T -B '@zz:%*:…'` |
+| pane | `set-hook -t %7 -T -B '@zz:%7:…'` |
 
-- `name` must begin with `@`.
-- `what` is empty (the attached session), a pane id (`%3`), `%*` for all panes,
-  a window id (`@2`), or `@*` for all windows.
-- **`-T` must come before `-B`.** The other order fails with
-  `too many arguments`.
+None fired. That matches the 2026-10-25 finding, and it is why the
+monitor-based finisher was removed on 2026-11-22: `tmux-agent-monitors`,
+`tmux-agent-start` and `tmux-agent-done` (armed from a `client-attached`
+hook) existed only to work around a mechanism this build does not run.
 
-Monitors are client-scoped: they cannot be created at config-parse time
-(`no current session`), so they are registered by `bin/tmux-agent-monitors` from
-the `client-attached` hook.
+The long-command finisher is now shell-only: `packages/sh/zshrc` sources
+`bin/tmux-agent-hooks`, whose `preexec`/`precmd` hooks call
+`bin/tmux-agent-notify` for runs that reached `@agentic-notify-secs`
+(default 30). Nothing polls once a second and no `@busy-*` pane options are
+written, so there is no stale state to sweep and no second announce path.
 
-The bug that made the agent-finisher notification never appear was quoting.
-tmux hands a hook command to `sh -c` after one round of unescaping, so a nested
-`run-shell -b "tmux set -t \"#{pane_id}\" …"` leaves a literal `\"` in the string
-and the command no-ops. The hook registers, the format evaluates true, and
-nothing happens — no error, no log. The fix was to move the logic into
-`bin/tmux-agent-start` / `bin/tmux-agent-done` and have the hooks call them with
-plain arguments. Verified end to end through the real `client-attached` hook:
+Traps that still apply if a monitor path is ever revisited — each one cost a
+session to find:
 
-```
-start hook: busy-since='1791211984' cmd='sleep'
-done hook:  busy-since cleared
-NOTIFICATION: sleep finished in t:bg (5s)
-```
-
-Two more traps worth knowing:
-
-- `run-shell` does **not** inherit the client's environment, so
-  `TMUX_AGENT_DONE_TEST` set in your shell never reaches the hook. Use
-  `tmux set-environment -g` if a hook needs a variable.
+- `-T` must come **before** `-B`, otherwise tmux reads the `-T` argument as
+  part of the subscription and errors with `too many arguments`.
+- Monitor hooks are **not inherited** and only run from the scope where they
+  are created.
+- tmux hands a hook command to `sh -c` after one round of unescaping: a
+  nested `run-shell -b "… \"#{pane_id}\" …"` leaves a literal `\"` in the
+  string and silently no-ops. Pass plain arguments to a script instead.
+- `run-shell` does **not** inherit the client environment, so a test flag set
+  in your shell never reaches a hook; use `tmux set-environment -g`.
 - `TMUX` inside a `run-shell` job is `socket-path,server-pid,session-id`; the
-  first field is what `tmux -S` needs. Scripts that fall back to a plain `tmux`
-  when `TMUX` is unset will silently talk to the *default* socket instead.
+  first field is what `tmux -S` needs. Falling back to a bare `tmux` when
+  `TMUX` is unset silently talks to the *default* socket.
 
 The ordinary 3.8 event hooks (`pane-created`, `pane-exited`, `pane-died`,
-`pane-title-changed`, `window-renamed`, `pane-shell-prompt`, …) all fire
-correctly and are available if you want edge-triggered behaviour instead of
-polling.
+`pane-title-changed`, `window-renamed`, `pane-shell-prompt`, …) do fire and
+are the supported edge-triggered mechanism.
+
+Test flag: `TMUX_AGENT_TEST=1 bin/tmux-agent-notify <pane> <cmd> <secs>`
+appends to `~/.local/state/tmux-agent.log` instead of notifying.
 
 ## Phone (Termius) scrolling: per-client `clear-on-attach` (2026-11-10)
 
 **Status: confirmed working by the user. FROZEN — do not modify the zshrc
-clear-on-attach scoping or the `*kitty*` termname guard again; they are a
-matched pair.**
+clear-on-attach scoping again.** (The `*kitty*` `client_termname` guard this
+used to be paired with was deleted with the monitor path on 2026-11-22;
+nothing polls per client any more, so the phone cannot be polled by
+accident.)
 
 **Symptom:** on the phone, scrolling shows torn tmux frames ("ascii garbage
 on every resize") and Termius's own client-side scrollbar tracks the wrong
@@ -286,7 +289,7 @@ buffer. Blamed on 589b896 ("disabled some agentic + scrolling").
 |---|---|
 | Removed `pane-scrollbars auto-hide` (+ position/timeout) | Real regression — this is the "disabled scrolling" part; restored by 37bc3a8 (10-27) |
 | Gated `clear-on-attach off` and copy-mode `R` behind `if-shell` | Verified working: live server has `off` applied and the `R` binding registered; both also survive `source-file` |
-| Client-attached monitor guard `#{m:*RGB*,#{client_termfeatures}}` | Broken — a no-op. The `*:…:RGB:…` terminal-features entry grants RGB to *every* client; the live Termius client verifiably attaches with RGB in `client_termfeatures`, so the guard matched the phone and armed the per-second polling it was written to prevent. Dormant on 3.8 (monitors never fire), would bite on next-3.9. Fixed: guard now matches `*kitty*` in `client_termname` (Termius announces `xterm-256color`, nested tmux `tmux-256color` — no false positives) |
+| Client-attached monitor guard `#{m:*RGB*,#{client_termfeatures}}` | Broken — a no-op. The `*:…:RGB:…` terminal-features entry grants RGB to *every* client; the live Termius client verifiably attaches with RGB in `client_termfeatures`, so the guard matched the phone and armed the per-second polling it was written to prevent. Dormant on 3.8 (monitors never fire), would bite on next-3.9. Fixed once by matching `*kitty*` in `client_termname` (Termius announces `xterm-256color`, nested tmux `tmux-256color` — no false positives); **moot since 2026-11-22** — the monitor path and this guard were deleted, nothing polls per client |
 
 **The scrolling mechanism itself:** `clear-on-attach off` keeps tmux on the
 *primary* screen, so every tmux redraw pushes lines into the terminal's
@@ -355,12 +358,14 @@ All Private Use Area, i.e. Nerd Font Powerline glyphs with no Unicode
 meaning. kitty on macOS renders them via:
 
 ```
-font_family postscript_name=MapleMono-NF-Light
-symbol_map   U+e0b0-U+e0c8 … Maple Mono NF Regular
+font_family postscript_name=MapleMono-NFMT-Light
 ```
 
-That `symbol_map` is macOS-side only; it explains why kitty works, not why
-Termius on macOS differs from Termius on Ubuntu.
+The glyphs come from the primary face and `narrow_symbols` caps them at one
+cell. This used to go through a `symbol_map … Maple Mono NF Regular`, which
+made kitty treat them as fallback glyphs and size them from their ink — that
+is what produced mixed 1- and 2-cell separators. This all explains why kitty
+works, not why Termius on macOS differs from Termius on Ubuntu.
 
 ### Leading hypothesis: server-side, not terminal-side
 

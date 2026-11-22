@@ -38,10 +38,11 @@ So rather than building, Homebrew is pointed at versions **asdf already installe
 ```
 /usr/local/Cellar/llvm/23.1.3    -> llvm/23.1.0   (HOLLOW - see below)
 /usr/local/Cellar/llvm@21/21.1.8_1                 (real build, renamed)
-/usr/local/Cellar/node/26.12.1   -> ~/.asdf/installs/nodejs/26.12.1 (v26.12.1)
-/usr/local/Cellar/bun/1.4.4      -> ~/.asdf/installs/bun/1.4.4      (bun 1.4.4)
-/usr/local/Cellar/python@3.14/3.14.9 -> ~/.asdf/installs/python/3.14.9
+/usr/local/Cellar/node/26.13.0_1 -> ~/.asdf/installs/nodejs/26.13.0 (v26.13.0)
+/usr/local/Cellar/bun/1.4.4_1    -> ~/.asdf/installs/bun/1.4.4      (bun 1.4.4)
+/usr/local/Cellar/python@3.14/3.14.10 -> ~/.asdf/installs/python/3.14.10
 /usr/local/Cellar/ruby/4.0.8   -> ~/.asdf/installs/ruby/4.0.7     (ruby 4.0.7)
+/usr/local/Cellar/neovim/0.12.6 -> ~/.local/opt/nvim-nightly        (nightly, 2026-11-06)
 ```
 
 **The unversioned `llvm` keg is hollow** (found 2026-10-21 — **superseded
@@ -104,6 +105,106 @@ brew upgrade --dry-run pi-coding-agent
 pi-coding-agent 1.0.0 -> 1.0.2
 ```
 
+## Neovim: the nightly, symlinked into brew (2026-11-06)
+
+Homebrew ships no macOS Intel bottle for neovim, so `brew install neovim`
+compiles from source, and the stable formula is always behind the nightly.
+Neovim publishes a ready-made nightly tarball instead, so the download is
+used and the compiled build is thrown away:
+
+```
+https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-x86_64.tar.gz
+```
+
+Layout (identical in shape to the asdf swaps above):
+
+```
+~/.local/opt/nvim-nightly/                        <- the real, downloaded nightly
+/usr/local/Cellar/neovim/0.12.6   -> the nightly  <- what brew sees
+/usr/local/opt/neovim             -> ../Cellar/neovim/0.12.6
+/usr/local/bin/nvim               -> ../Cellar/neovim/0.12.6/bin/nvim
+/usr/local/lib/nvim               -> ~/.local/opt/nvim-nightly/lib/nvim
+/usr/local/var/homebrew/linked/neovim -> ../../../Cellar/neovim/0.12.6
+```
+
+**The Cellar entry is named after brew's LAST STABLE version (0.12.6), never
+after the nightly's own version string.** The rule above applies verbatim:
+keg directory name == receipt's `source.versions.stable` == formula's current
+stable. The *content* behind the symlink is the nightly, so `nvim --version`
+reports `v0.13.0-dev-…` while `brew list --versions neovim` reports `0.12.6`.
+Rename the keg when the stable moves, or brew treats it as outdated and
+rebuilds it (a source build nobody wants).
+
+`/usr/local/lib/nvim` matters: upstream builds the nightly with prefix
+`/usr/local`, so nvim's runtimepath contains `/usr/local/lib/nvim` and loads
+its tree-sitter parsers from there. It must point at the nightly's
+`lib/nvim`, otherwise the parsers come from the discarded brew build (which
+also lacks `diff.so`).
+
+`brew pin neovim` keeps `brew upgrade` from replacing the symlink with a
+compiled build. Nothing depends on neovim, so the pin costs nothing (pins
+block installs that need a *newer* version of the pinned formula - the rule
+from "Pinning caveat" below).
+
+Refresh with `packages/nvim/update-nightly.sh` - idempotent: download, verify
+the binary runs, swap the directory, keep the `INSTALL_RECEIPT.json` (brew
+treats a keg without one as incomplete and rebuilds it), re-wire every link,
+print the resulting state. The nightly release publishes **no checksum**
+(only tagged releases do), so the script verifies what it can: the tarball
+unpacks, the binary runs and reports a `-dev` build.
+
+Expected wart, same as `node`: `brew info neovim` fails with
+
+```
+Error: /usr/local/var/homebrew/linked/neovim is not inside a keg
+```
+
+because brew resolves the linked marker through the symlinked keg. Brew's own
+bookkeeping cannot follow a keg that is a symlink out of the Cellar. Nothing
+else breaks: `brew list --versions`, `brew outdated`, `brew bundle check` and
+`brew upgrade --dry-run` all work, and `brew bundle check` does not list
+neovim as unmet.
+
+## The python site-packages gap (2026-10-28)
+
+Swapping a brew `python@3.x` keg for an asdf install breaks **every python-only
+formula**, because Homebrew's real python ships a `.pth` that adds the *shared*
+site-packages directory to `sys.path`:
+
+```
+/usr/local/lib/python3.15/site-packages/   <- mesonbuild, certifi, setuptools, z3
+```
+
+An asdf-built python has no such `.pth`, so that directory is invisible to it.
+Symptom (2026-10-28): every meson-based build died with
+
+```
+ModuleNotFoundError: No module named 'mesonbuild'
+```
+
+which took out `harfbuzz`, `librsvg` and `tectonic`. `brew reinstall meson`
+does **not** fix it — meson's own keg copy (`lib/python3.15/site-packages/mesonbuild`)
+is intact; the wrapper's shebang points at the asdf python, which cannot see it.
+
+Fix — give the asdf interpreter the same path Homebrew gives its own:
+
+```sh
+minor=3.15; ver=3.15.2
+printf '/usr/local/lib/python%s/site-packages\n' "$minor" \
+  > ~/.asdf/installs/python/$ver/lib/python$minor/site-packages/zzz_homebrew.pth
+```
+
+Repeat for every asdf python a brew keg points at (3.14.10 -> 3.14). Verify:
+
+```sh
+python3.15 -c "import mesonbuild, certifi, z3; print('ok')"
+meson --version
+```
+
+Caveats: the `.pth` lives inside the asdf install, so `asdf install python <same
+version>` wipes it (re-add it); and it puts Homebrew's packages on the asdf
+interpreter's path, which is exactly what the swap intends.
+
 ## Pinning caveat
 
 `brew pin` **blocks installs** that need a newer version of the pinned formula:
@@ -121,13 +222,39 @@ Error: You must `brew unpin node` as installing pi-coding-agent requires
 Pinning them does hide them from `brew outdated`, but that is cosmetic and not worth
 blocking installs.
 
-## NEVER run `brew cleanup`
+## NEVER run `brew cleanup` — and brew runs one by itself
 
 With this layout, `brew cleanup` would delete the **real llvm binaries**: it removes kegs
 that are not the newest version, and `llvm/23.1.0` (the actual build) looks older than
 `llvm/23.1.3` (a symlink). If the old version ever has to go, delete the symlinks first
 and keep the real dir under the name `opt` points at. Same logic applies to node/ruby
 keg symlinks pointing into `~/.asdf`.
+
+**The dangerous one is the automatic cleanup.** Homebrew runs a cleanup step
+after *every* install and upgrade (`==> Cleanup` at the end of the output),
+which removes superseded kegs — so nothing has to be typed for formulae to
+disappear. That is exactly how neovim vanished on 2026-11-05:
+
+- its keg had been installed on 2026-10-10 **as a dependency**
+  (`installed_on_request: false` in the receipt), so brew never recorded it
+  as a formula the user wants;
+- a later install put a newer neovim in place, and Homebrew renamed the old
+  keg to `0.12.6_old` — the convention for "superseded version";
+- the newer install was later removed, leaving only the `_old` keg, unlinked
+  (`/usr/local/opt/neovim` and `/usr/local/bin/nvim` gone with it);
+- the next automatic cleanup saw `0.12.6_old`, judged it an old version and
+  deleted it. `nvim` was gone from PATH with nobody uninstalling it.
+
+`HOMEBREW_NO_INSTALL_CLEANUP=1` (set in `packages/sh/zshrc-darwin`) turns the
+automatic cleanup off, so only an explicit `brew cleanup` removes anything —
+and that one stays forbidden here. With it set, `brew cleanup --dry-run`
+should list caches and empty directories only, never a keg.
+
+Two habits that prevent a repeat: install a formula as a **requested** one
+(`brew install <formula>`, and keep it as a top-level entry in the `Brewfile`)
+so brew's bookkeeping knows it is wanted, and keep `brew pin` on the formulae
+whose kegs are symlinks into `~/.local/opt` (`neovim`), so an upgrade cannot
+replace the symlink with a real build.
 
 ## Verify
 
@@ -964,3 +1091,108 @@ the build).
 the `Errno::EEXIST`: the symlink pointed at a directory that no longer
 existed, brew decided llvm was uninstalled, and `mkdir` on the symlink path
 failed. If a build is moved, the symlink must be re-pointed in the same step.
+
+## Session 2026-10-28: node 26.12.1_1, python@3.14 3.14.10, python@3.15 3.15.2
+
+Three-formula swap, zero compile (all targets pre-seeded in asdf). Same
+fastest-form: receipt `source.versions.stable` = keg string → `rm` the old
+keg symlink → `ln -s` the asdf install under the new keg name → repoint
+`opt/<f>` → repoint every `/usr/local/bin` link (29 this time — enumerate
+them with a readlink loop over `/usr/local/bin/*`, don't guess).
+
+- node `26.12.1 -> 26.12.1_1`: receipt existed (hardlinked into the asdf
+  install, the known trap) — edited in place.
+- python@3.15 `3.15.0_1 -> 3.15.2`: real asdf 3.15.2 build; `python3`
+  stays on 3.15 (default), as intended.
+- python@3.14 `3.14.9 -> 3.14.10`: **KEG-NAME SKEW, DELIBERATE** — the asdf
+  `3.14.10` install is a *copy of 3.14.9* (identical 277 MB, binary prints
+  3.14.9). Brew is satisfied; the binary lags the label. Replace with a real
+  `asdf install python 3.14.10` when convenient and the keg follows for free
+  (it is already a symlink to that directory).
+
+- bun `1.4.4 -> 1.4.4_1`: same swap, `bun`/`bunx` repointed, binary is real
+  1.4.4 (no skew).
+
+Reminder that still holds: never `brew cleanup` with this layout; the
+upgrade batch runs per-formula in a loop so one failed build doesn't abort
+the rest (`/tmp/brew-upgrade-batch.sh` pattern).
+
+### Traps from 2026-10-28 (upgrade batch)
+
+- **`brew edit <formula>` clones the whole core tap** (~500 MB, minutes) on
+  this API-only Homebrew. There is no local formula file to patch, and the
+  clone aborts the tap if interrupted — remove
+  `/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core` to get back to
+  API-only behaviour.
+- **`bmake` (new btop dependency) cannot build here**: its unit tests
+  `cmd-interrupt` and `deptgt-interrupt` fail in this environment and the
+  formula hard-codes `ENV["BROKEN_TESTS"]` (so it cannot be extended from
+  outside). btop therefore stays at 1.4.7; 1.4.8 needs a hand-built bmake.
+- **Stale `/usr/local/var/homebrew/locks/*.lock` files block unrelated
+  formulae** — a killed `brew upgrade boost` left the *cmake* lock held, and
+  the next `brew reinstall git` died with "A `brew reinstall git` process has
+  already locked /usr/local/Cellar/cmake". After any killed build:
+  `rm -f /usr/local/var/homebrew/locks/*.lock`.
+- **A killed brew build can leave its lock files behind** (43 stale locks
+  observed after one abort) even when no brew process is alive — always
+  clear the lock dir after an interrupted build.
+- **Never background a long brew batch with `nohup` from an agent shell**:
+  when a *different* agent command times out, the harness kills that
+  command's process group and takes the nohup'd batch with it (bit twice
+  today). Run the batch in the foreground of a single long-timeout call.
+- `brew reinstall` of a formula with new dependencies builds them too —
+  `git` pulled in `curl` + `libnghttp3` + `libngtcp2` from source, which is
+  where the 20+ minutes went, not git itself.
+
+## Session 2026-10-30: node 26.12.1_1 → 26.13.0_1
+
+Revision-plus-minor bump, zero compile: asdf already carried **nodejs 26.13.0**
+(installed that day), so the whole swap was the standard four steps.
+
+```bash
+R=~/.asdf/installs/nodejs
+cp "$R/26.12.1/INSTALL_RECEIPT.json" "$R/26.13.0/INSTALL_RECEIPT.json"
+jq --arg v 26.13.0_1 '.source.versions.stable = $v
+    | .built_as_bottle = true | .poured_from_bottle = true
+    | .installed_as_dependency = false | .installed_on_request = true' \
+   "$R/26.13.0/INSTALL_RECEIPT.json" > /tmp/r.json && mv /tmp/r.json "$R/26.13.0/INSTALL_RECEIPT.json"
+rm -f /usr/local/Cellar/node/26.12.1_1
+ln -s "$R/26.13.0" /usr/local/Cellar/node/26.13.0_1
+rm -rf /usr/local/opt/node && ln -sfn ../Cellar/node/26.13.0_1 /usr/local/opt/node
+for b in node npm npx; do ln -sfn "../Cellar/node/26.13.0_1/bin/$b" "/usr/local/bin/$b"; done
+brew link node
+```
+
+Note the keg name carries the **revision suffix** (`26.13.0_1`) while the asdf
+directory does not (`26.13.0`) — the rule is "keg name == formula's stable
+string", and for node that string includes `_1`.
+
+### New: `brew info <formula>` breaks while the keg is behind the formula
+
+While node was installed at `26.12.1_1` but the formula's stable was
+`26.13.0_1`, every `brew info node` died with:
+
+```
+Error: /usr/local/var/homebrew/linked/node is not inside a keg
+```
+
+That is **not** a broken symlink — brew was trying to *migrate* the link to the
+new (not yet installed) keg. Proof: `brew info bun` and `brew info python@3.14`
+were fine, because both were already at their formulas' stable versions, and
+the error disappeared the moment the keg was renamed to `26.13.0_1`. A stale
+`linked/<formula>` entry pointing at a keg name that no longer exists gives
+the same message.
+
+### `brew link` maintains `var/homebrew/linked/` itself
+
+`brew link node` created 45,924 symlinks (npm's whole bundled tree) and
+repointed `/usr/local/var/homebrew/linked/node` to the new keg on its own —
+the hand-made `linked/<formula>` entry this doc used to require is no longer
+needed on Homebrew 7.
+
+Verified: `brew list --versions node` → `26.13.0_1`; `brew outdated node` →
+empty; `brew info node` → works; `/usr/local/bin/node --version` → `v26.13.0`;
+`npm` → 11.20.0; asdf's interactive pin unchanged (`~/.tool-versions` still
+`nodejs 22.23.0`, shims resolve `v22.23.0`); `brew install --dry-run
+pi-coding-agent` lists no node build. The old asdf install `26.12.1` is kept —
+old versions are never deleted.
