@@ -4,8 +4,8 @@
   com.asmvik.yabai.plist — starts the yabai daemon at login.
 
   yabai is Christian-SC26/yabai (a fork of asmvik/yabai); the binary is the
-  v7.3.5 release asset, sha256
-  f25c6b50a9a71736403bf0051b2f23e70ff36ecfcfee92193fb5f5cd98d94927.
+  v7.3.6 release asset, sha256
+  385e0abafd4552d991e96f83c512a64d18dbc4022787993c223f8f5722044201.
   Nothing in Homebrew owns it (brew's yabai tap only has 7.1.25), so this
   agent is the only thing that makes the window manager come up — losing it
   means starting yabai by hand after every login.

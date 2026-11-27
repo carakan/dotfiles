@@ -124,9 +124,11 @@ looks arbitrary, the changelog has the incident behind it.
 ## 4. yabai / skhd
 
 - **Manual install, checksummed**, at `/usr/local/bin/yabai`; brew must not
-  own it. Installed: **v7.3.5**, sha256
-  `f25c6b50a9a71736403bf0051b2f23e70ff36ecfcfee92193fb5f5cd98d94927`,
-  scripting-addition payload **2.1.39**.
+  own it. Installed: **v7.3.6**, sha256
+  `385e0abafd4552d991e96f83c512a64d18dbc4022787993c223f8f5722044201`,
+  scripting-addition payload **2.1.39** (unchanged from 7.3.5 — the release
+  notes state no `--load-sa` re-sign is needed when coming from 7.3.5, but the
+  *running* daemon still needs the payload loaded again after a restart).
 - **Upgrade procedure** (root step included, order matters):
   1. download the release tarball + `.sha256`, verify it, and cross-check the
      inner binary against the digest GitHub reports for the bare `yabai` asset;
@@ -156,6 +158,17 @@ looks arbitrary, the changelog has the incident behind it.
   `window_shadow`. Socket: `/tmp/yabai-sa_<username>.socket` (named after the
   user, e.g. `/tmp/yabai-sa_carakan.socket`) — missing means the SA is dead. `yabairc`
   re-arms it on `dock_did_restart`.
+- **SA liveness check — the socket mtime lies.** The SA is injected into the
+  **Dock** process, and the Dock holds `/tmp/yabai-sa_<user>.socket` for as
+  long as *it* lives. Restarting yabai does **not** recreate that socket, so
+  its timestamp still shows the injection time (e.g. 08:29 long after a
+  16:00 daemon restart) — a stale mtime is normal, not a dead SA. Check who
+  holds it instead (`lsof -U | grep yabai-sa` → the holder must be `Dock`),
+  and prove events really flow with a live test:
+  `yabai -m signal --add event=window_focused label=sa_test action="sh -c 'echo fired >> /tmp/sa_test.log'"`,
+  focus another managed window (`yabai -m window --focus <id>`), then check
+  the log and clean up with `yabai -m signal --remove <index>` (removal by
+  index; removing by label leaves an empty-labelled entry behind).
 - **Both LaunchAgents are repo-managed** and launch app bundles
   (`packages/yabai/Yabai.app`, `packages/yabai/YabaiSessionRestore.app`), never
   the raw binary: macOS takes
@@ -221,6 +234,15 @@ looks arbitrary, the changelog has the incident behind it.
   `~/.p10k.zsh`): no `context` element, element is `vcs`, and the gitstatus
   plugin must start **before** `oh-my-zsh.sh`;
   `POWERLEVEL9K_DIR_MAX_LENGTH=0` (fish-style shortening).
+  **Updating the stack:** oh-my-zsh has no tagged releases — `master` is the
+  release, so `git -C ~/.oh-my-zsh pull --ff-only` is the update. The
+  third-party clones under `~/.oh-my-zsh/custom/{plugins,themes}` are pulled
+  the same way (zsh-completions, zsh-syntax-highlighting, zsh-autosuggestions,
+  alias-tips, deja, powerlevel10k). Nothing here is managed by the repo, so
+  a bump is machine state only — but if the **gitstatus daemon** in
+  `~/.cache/gitstatus/` ever stops matching p10k's
+  `gitstatus/usrbin/gitstatusd` (compare sha256), copy it over or the prompt
+  silently loses its git status.
 - **tmux** (`packages/tmux/tmux.conf`, symlinked live): the long-command
   finisher is **shell-only** — `packages/sh/zshrc` sources
   `bin/tmux-agent-hooks`, whose `preexec`/`precmd` hooks call

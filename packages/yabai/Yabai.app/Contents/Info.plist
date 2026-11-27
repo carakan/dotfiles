@@ -42,10 +42,10 @@
     <string>Tiling window manager for macOS — Christian-SC26 fork</string>
 
     <key>CFBundleShortVersionString</key>
-    <string>7.3.5</string>
+    <string>7.3.6</string>
 
     <key>CFBundleVersion</key>
-    <string>7.3.5</string>
+    <string>7.3.6</string>
 
     <key>CFBundleIconFile</key>
     <string>yabai.icns</string>

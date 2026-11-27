@@ -5,7 +5,12 @@ call dein#add('Asheq/close-buffers.vim')
 " call dein#add('MattesGroeger/vim-bookmarks') " DELETED 11 Julio 
 call dein#add('alvan/vim-closetag')
 call dein#add('RRethy/vim-hexokinase', {'build': 'make hexokinase'})
-call dein#add('nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'})
+" branch main: upstream archived `master` (2025-05) and the rewrite lives on `main`.
+" The archived master breaks on nvim >= 0.12: its `set-lang-from-info-string!`
+" directive handler calls vim.treesitter.get_node_text() on the new-style node
+" (a plain table), while nvim's get_range() still calls node:range() ->
+" "attempt to call method 'range' (a nil value)" on every markdown parse.
+call dein#add('nvim-treesitter/nvim-treesitter', {'rev': 'main', 'do': ':TSUpdate'})
 " call dein#add('nvim-treesitter/playground')  " REMOVED 2026-09-04 — archived upstream; module disabled (crash source); :Inspect covers it
 " call dein#add('arthurxavierx/vim-caser') " DELETED 11 Julio
 call dein#add('carakan/new-railscasts-theme')
@@ -43,7 +48,7 @@ call dein#add('ibhagwan/fzf-lua')
 
 
 
-call dein#add("nvim-treesitter/nvim-treesitter-textobjects")
+call dein#add("nvim-treesitter/nvim-treesitter-textobjects", {'rev': 'main'})
 call dein#add('chrisgrieser/nvim-recorder')
 call dein#add("m4xshen/smartcolumn.nvim")
 " call dein#add("lukas-reineke/indent-blankline.nvim")  " REPLACED 2026-09-04 by snacks.indent
@@ -60,7 +65,13 @@ call dein#add('kevinhwang91/promise-async')
 call dein#add('nvim-lua/plenary.nvim')
 call dein#add('sindrets/diffview.nvim')
 
-call dein#add("petertriho/nvim-scrollbar")
+" nvim-scrollbar v2 (migrated 2026-10-22). v2 replaces v1 on `main` on
+" 2026-11-16 (petertriho/nvim-scrollbar#121) and both scrollbar setup blocks in
+" packages/nvim were rewritten to the v2 option shape. dein's key is `rev`
+" (a revision, branch or tag) — there is no `branch` key. Until 2026-11-16 the
+" v2 code lives on `refactor/v2`, so that branch is pinned; after that date
+" `main` carries v2 and this rev line can simply be dropped.
+call dein#add("petertriho/nvim-scrollbar", {'rev': 'refactor/v2'})
 call dein#add('uga-rosa/ccc.nvim')
 call dein#add("luukvbaal/statuscol.nvim")  " RESTORED 2026-09-08 — snacks.statuscolumn didn't work out
 

@@ -12,6 +12,247 @@ was reached lives here.
 
 ---
 
+## 2026-11-26
+
+### oh-my-zsh core + every custom plugin
+
+- **What was updated** (`git pull --ff-only` in each clone; all were clean
+  beforehand, no local commits to preserve):
+
+  | Clone | Before | After | Note |
+  |---|---|---|---|
+  | `~/.oh-my-zsh` (ohmyzsh) | `abfce72` | `abfce72` | already current (master, 2026-11-26) — OMZ has no tagged releases, master *is* the release |
+  | `custom/plugins/zsh-completions` | `b5e8e0a` | `989b232` | new `_node` completion (vfs options) |
+  | `custom/plugins/zsh-syntax-highlighting` | `0bfcb58` | `e6683f2` | upstream fix: infinite loop when `$PWD` was deleted (#819) |
+  | `custom/plugins/deja` | `9715684` | `1ee2074` | docs only; latest tag is still **v0.4.2** |
+  | `custom/plugins/alias-tips` | `41cb143` | `41cb143` | upstream is dormant (last commit 2023-01-19) |
+  | `custom/plugins/zsh-autosuggestions` | `85919cd` | `85919cd` | current (Linux-only load) |
+  | `custom/themes/powerlevel10k` | `d05a1b0` | `50a35cc` | **v1.21.0** (released 2026-11-19) |
+
+- **Configuration: no change was needed, and none was made.** Checked
+  explicitly:
+  - **p10k v1.21.0** is additive only — Terraform/tenv version element, an
+    instant-prompt temp-file bail-out and a `wizard cp -p` fix on network
+    homes. The repo's generated theme `packages/sh/pk10.zsh` (symlinked to
+    `~/.p10k.zsh`) still renders correctly, so it was **not** regenerated:
+    regenerating would rewrite a 97 KB tracked file for no behavioural gain
+    and risk the hand-set invariants (no `context` element, element is `vcs`,
+    `POWERLEVEL9K_DIR_MAX_LENGTH=0`).
+  - **gitstatus daemon is still in sync**: the p10k release did not change
+    `gitstatus/usrbin/gitstatusd`, and the cached daemon
+    `~/.cache/gitstatus/gitstatusd-darwin-x86_64` is byte-identical to it
+    (sha256 `b9e34d53…f76c8`). A mismatch there is the classic cause of a
+    prompt without git status.
+  - **Completion cache** rebuilt itself: `~/.zcompdump-Carloss-Mac-Pro-5.9.2`
+    was written at 17:59, after the plugin update, so the new `_node`
+    completion is in.
+  - **Load order invariant intact**: deja is still sourced *after*
+    zsh-patina in `packages/sh/zshrc` (patina repaints the line and erases
+    the ghost text), and the gitstatus plugin still starts before
+    `oh-my-zsh.sh`.
+- **Verification.** A pty interactive shell (`script -q /dev/null zsh -il`)
+  starts with no warnings and renders the prompt with the time, the vcs
+  segment (branch `master`, `*6 +7 !12 ?44` for this repo's dirty state) and
+  the exit-status element — so the theme, the gitstatus daemon and the
+  completion system all work after the bump. `zsh --version` → 5.9.2
+  (brew); the login shell stays `/bin/zsh` (system 5.9).
+- **Not touched on purpose.** `zsh-syntax-highlighting` is installed (both
+  the OMZ clone and the brew formula) but **not loaded** on this machine —
+  highlighting comes from `zsh-patina` (1.12.0) and autosuggestions from
+  `deja` (0.4.2, the brew binary, which is the latest upstream release).
+  All brew-managed parts of the stack (zsh 5.9.2, zsh-patina 1.12.0,
+  atuin 18.25.1, direnv 2.38.2, fzf 0.75.0, deja 0.4.2) are current —
+  `brew outdated` lists none of them.
+
+### yabai 7.3.5 → 7.3.6 (Christian-SC26 fork)
+
+- **Release.** v7.3.6, published 2026-11-24. Fixes the space switch being
+  undone right after leaving Mission Control: cancelling Mission Control (esc,
+  hotkey or gesture) made yabai jump back to the space it was opened from
+  within 400 ms, which also swallowed a `space --focus` / `--switch` sent in
+  that window. The scripting addition is unchanged (**2.1.39**), so no
+  `--load-sa` re-sign was needed — only a reload of the payload into the
+  running daemon.
+- **Download + verification.** `yabai-v7.3.6.tar.gz` sha256
+  `7d271b4712141e99cb21fe4093d09fb1fdb59114d11c16a90e647cd38e397d35`
+  matches the published `.sha256`; the binary inside is
+  `385e0abafd4552d991e96f83c512a64d18dbc4022787993c223f8f5722044201`, which
+  is byte-identical to the bare `yabai` release asset — the second,
+  independent check that the tarball was not repacked. Signature unchanged:
+  `Developer ID Application: Polina Haritonova (DVJTWMLL8X)`, identifier
+  `com.asmvik.yabai`, `codesign -v` → "satisfies its Designated Requirement".
+- **Install.** Old binary kept at `~/.local/state/yabai/yabai-v7.3.5.bak`
+  (plus `~/.local/opt/yabai-backups/`); new one installed with
+  `install -m 755` to `/usr/local/bin/yabai` (brew does not own it).
+  `yabai --version` → `yabai-v7.3.6`.
+- **Repo metadata bumped:** `Yabai.app/Contents/Info.plist`
+  `CFBundleVersion`/`CFBundleShortVersionString` 7.3.5 → 7.3.6, and the
+  agent plist comment now names the v7.3.6 digest. `AGENTS.md` §4 records the
+  new version, digest and the fact that the SA payload is unchanged.
+- **Root step (digest pin) — the user's to run, then verified.** The sudoers
+  rule pins the binary's sha256, so swapping the binary invalidates it by
+  design (`sudo -n /usr/local/bin/yabai --load-sa` → "a password is
+  required"). The agent was restarted with the new binary before the rule
+  was rewritten, which meant **the scripting addition was not loaded** in the
+  meantime — no `window_created` / `window_focused` events, so border colors
+  were frozen. The user ran this one command in their own terminal:
+
+  ```sh
+  sudo sh -c 'printf "carakan ALL=(root) NOPASSWD: sha256:385e0abafd4552d991e96f83c512a64d18dbc4022787993c223f8f5722044201 /usr/local/bin/yabai --load-sa\n" > /etc/sudoers.d/yabai && chmod 640 /etc/sudoers.d/yabai'
+  ```
+
+  (`/etc/sudoers.d/yabai` was exactly this one-liner for the old digest, so
+  the rewrite preserved its shape.) A GUI askpass dialog was attempted first
+  and cannot work: this agent's shell runs in a **Background** launchd
+  session (`launchctl managername` → `Background`), so `osascript display
+  dialog` has no Aqua session to draw in and hangs. No passwordless sudo
+  path exists either (`sudo -n true|tee|install|cp|visudo` all ask for a
+  password).
+- **Reload + verification.** `launchctl bootout` + `bootstrap` + `kickstart`
+  the agent (BTM caches the Login Items record keyed on directory events), so
+  `yabairc` re-ran `sudo /usr/local/bin/yabai --load-sa` and the payload
+  landed. Evidence:
+  - `sudo -n /usr/local/bin/yabai --load-sa` now answers with **no password**
+    (the digest pin matches again) and is idempotent (second run: 0.13 s,
+    silent);
+  - `yabai --version` → `yabai-v7.3.6`, daemon pid 27041, 39 managed windows,
+    9 spaces, service answering queries;
+  - **window events actually flow**: a temporary `window_focused` signal
+    (`yabai -m signal --add … label=sa_test`) wrote to `/tmp/sa_test.log`
+    four times while focus was moved between two managed windows — the SA is
+    alive, so borders keep tracking space occupancy. The test signal was
+    removed by index afterwards; the signal list is back to the repo's five
+    (`border_window_created`, `border_window_destroyed`,
+    `border_window_focused`, `border_space_changed`, `dock_did_restart`);
+  - `yabai.err.log` gained **zero** lines across the reload (914 before and
+    after) — no sudo failures, no "could not locate the space", no jq
+    parse errors from the border script.
+- **Trap recorded in `AGENTS.md` §4: the SA socket mtime lies.** The SA is
+  injected into the **Dock** process, and the Dock holds
+  `/tmp/yabai-sa_<user>.socket` for as long as *it* lives — restarting yabai
+  does not recreate it, so its timestamp still showed 08:29 after the 16:00
+  daemon restart. Liveness must be checked with `lsof -U | grep yabai-sa`
+  (holder must be `Dock`) or with a live event test, not with the mtime.
+
+---
+
+## 2026-11-25
+
+### nvim: phase-1 config brought in line with the legacy chain (port + plugin cull)
+
+- **What was checked.** The new config (`packages/nvim/`) is built and boots
+  clean, but `~/.config/nvim` still symlinks to `~/.vim`, so the legacy chain
+  is what actually runs. The user's own edits since the phase-1 scaffold
+  (`packages/vim/vimrc.local` staged + unstaged, `packages/nvim/legacy-lua-extracted.lua`)
+  were diffed against the new layers, and the new config was booted headless
+  (`nvim --cmd "set rtp^=packages/nvim" -u packages/nvim/init.lua`) to probe
+  options, globals and keymaps at runtime.
+- **Two real bugs were still live in the new config.** `lua/plugins/rooter.lua`
+  kept the typo'd `g:rooter_silent_changetocwd` (so rooter printed
+  `cwd: <dir>` on every root change) and never overrode `g:rooter_patterns`,
+  whose default `package.json` entry made a nested package win the
+  breadth-first root search — the `api/api/api/…` session-path corruption.
+  Both are the user's legacy fixes, now ported.
+- **Treesitter was a no-op.** The phase-1 file only *assigned* legacy fields
+  (`require('nvim-treesitter').highlight = {...}`), which does nothing on the
+  `main` branch: no textobjects, no syntax highlighting, no indent. The new
+  `lua/plugins/treesitter.lua` uses the `main` API properly —
+  `ts.setup{install_dir='/usr/local/lib/nvim'}` (the legacy location, not a
+  second copy under `stdpath('data')/site`), `ts.install(PARSERS)`,
+  `vim.treesitter.start()` + `indentexpr` on `FileType`, and the
+  nvim-treesitter-textobjects keymaps (ak ik ac ic af if aa ia, ]m ]] ]M ][
+  [m [[ [M [], `<leader>a`/`<leader>A` swap). Verified: 52 parsers installed,
+  highlighter active on a ruby buffer, `select_textobject('@class.outer')`
+  lands on the class, `goto_next_start('@function.outer')` jumps to the method.
+- **Ported from the legacy config:** `pumblend=15`/`winblend=12`,
+  `set undofile`, `g:elixir_use_markdown_for_docs=1`, the snacks notifier
+  noise filter (`MSG_NOISE`, `NVIM_MSG_FILTER_DEBUG=1`) and the
+  `HighlightedyankRegion` / `GitSignsAdd` highlights the modular theme was
+  missing.
+- **Cut 11 plugins** (user: "I don't code much anymore"): `nvim-autopairs`,
+  `nvim-bqf`, `nvim-hlslens`, `smartcolumn.nvim`, `conflict-marker.vim`,
+  `vim-abolish`, `vim-repeat`, `targets.vim`, `markview.nvim`,
+  `tailwind-tools.nvim` + the orphan `gx.nvim`. Deleted with `packdel` so
+  `nvim-pack-lock.json` and `~/.local/share/nvim/site/pack/core/opt` stay in
+  sync (50 → 40 entries). No keymap was lost — none of them had one in the
+  new config. Deliberately skipped: `g:bufferline_echo` (gone in bufferline
+  v4), the bqf highlight groups (plugin cut), treesitter folds (legacy had
+  `folding.enable` but also `set nofoldenable`, so folds never showed).
+- **Not touched:** the FLIP itself. `install.conf.yaml` still has no nvim
+  block and `install-darwin.yaml` still links the legacy `vimrc.*.local`
+  files — the user will flip later. Full detail in
+  `packages/nvim/MIGRATION.md` §10.
+
+---
+
+## 2026-11-23
+
+### brew: bun 1.4.5 / ruby 4.0.10 symlinked to asdf; cache-only cleanup
+
+- **Swaps.** Both formula stables had moved past their kegs and both targets
+  were already in asdf (`bun 1.4.5`, `ruby 4.0.10`), so both were zero-compile.
+  Keg name == receipt `source.versions.stable` == formula stable, as always;
+  `opt/<f>` and every `/usr/local/bin` link into the keg repointed by hand.
+  ruby's old keg was a **real 115 MB build** (`poured_from_bottle: false`), so
+  it was moved to `~/.local/opt/brew-kegs/ruby/4.0.9`, not deleted.
+- **The link tree, not just `bin/`.** A brew ruby keg links ~4,800 files into
+  `/usr/local/{lib,include,share}`. Repointing `bin/` plus a `-maxdepth 4`
+  pass left 4,786 dangling links (`lib/ruby/4.0.0/**`); they only surfaced
+  because `brew cleanup --dry-run` listed them. Fix: walk every symlink whose
+  target contains the old keg name (no depth cap), relink when the target
+  exists in the new keg, delete otherwise. Verified: zero dangling links under
+  `/usr/local/{bin,lib,include,share,opt}`, `ruby 4.0.10`, `gem 4.0.20`,
+  `bundle 4.1.0`, `bun 1.4.5`, `brew outdated bun ruby` empty,
+  `brew info bun|ruby` works, asdf shims still win on PATH.
+- **Keg-name bumps, no builds.** `node` → keg `26.13.1_3` over asdf `26.13.0`
+  (`/usr/local/bin/node` reports v26.13.0); `llvm` → keg `23.1.6` over the
+  parked `~/.local/opt/llvm-builds/23.1.4` (`llvm-config` reports 23.1.4).
+  Receipts rewritten to the keg strings, `opt/*` and the `linked/node` marker
+  repointed, and 22,971 symlinks into node's keg (npm-globals mirror) plus 2
+  for llvm rewritten by string substitution. Trap: a walker that filters
+  symlinked `dirnames` before examining entries silently skips `opt/node`
+  itself — collect entries first, filter for descent second.
+- **redis 8.12.0 installed as a core-only manual keg; brew's own upgrade
+  cannot finish.** `brew upgrade redis` builds the redis-stack modules:
+  redisearch dies on boost 1.92's **empty** `boost_headers-1.92.0` CMake
+  component dir, redisjson on a `rustc -vV` SIGABRT. The abort was the real
+  landmine — building redis upgraded **z3 5.3.2 → 5.4.1**, and the parked
+  LLVM (hence rustc/cargo/crystal) hard-links
+  `/usr/local/opt/z3/lib/libz3.5.3.dylib`. Fixed with a compat symlink to the
+  5.3.2 dylib inside the 5.4.1 keg; `rustc 1.100.0` runs again. Redis itself
+  came from brew's cached 8.12.0 tarball (`make BUILD_TLS=yes`, ~40 s), keg
+  assembled with the previous keg's service files — without
+  `sh.brew.redis.plist`/`.service`, `brew services restart` errors out *and
+  stops redis*. 8.10.3 with its four module `.so`s parked at
+  `~/.local/opt/brew-kegs/redis/8.10.3`; service verified on 8.12.0 with the
+  existing dump (`PONG`, 4 keys).
+- **boost 1.92.0_1 repaired — the `boost_headers` CMake package was missing
+  because a killed Oct-28 upgrade left a truncated keg.** No
+  `INSTALL_RECEIPT.json`, 25 of 52 component dirs, `boost_headers-1.92.0/`
+  empty. With `CMP0167 NEW` (redisearch sets it) `find_package(Boost)` goes
+  through `BoostConfig.cmake`, which hard-requires `boost_headers` and failed
+  with "Could not find a package configuration file provided by
+  boost_headers". `brew reinstall boost` (17 min Tier 3 source build, 16,678
+  files) restored receipt, sbom and all component configs; verified with a
+  CMake consumer — `boost_headers_DIR=/usr/local/lib/cmake/boost_headers-1.92.0`,
+  `find_package(Boost REQUIRED)` → `Boost_FOUND=1`, compiled against
+  `<boost/version.hpp>`. **Lesson:** an interrupted brew build leaves a keg
+  that still passes `brew list`; a missing `INSTALL_RECEIPT.json` and empty
+  component dirs are the tell.
+- **Cleanup stayed cache-only.** Global `brew cleanup` is still forbidden here
+  (see `docs/brew-intel-symlink-workaround.md`); the safe subset is the
+  download cache and `~/Library/Logs/Homebrew/`. Deleted 91 dry-run entries
+  (7.14 GiB; cache 16G → 12G), skipping anything with a today mtime because a
+  `brew reinstall gentle-ai git-delta omp redis ripgrep kitty whatsapp` batch
+  was mid-build in another shell. The ten superseded kegs the dry-run also
+  listed (`go 1.27.3`, `jpeg-xl 0.12.0_1`, …) were left in place — old kegs
+  are removed by hand, one at a time. `opt/redis*` dangles because the Oct 28
+  keg was renamed `8.10.3.reinstall` while the link still says `8.10.3`; the
+  in-flight batch is rebuilding redis 8.12.0, which will re-link it. Nothing
+  else dangles.
+
+---
+
 ## 2026-11-22
 
 ### tmux finisher: shell-only, monitor path deleted
@@ -235,6 +476,50 @@ was reached lives here.
 - **Vendored themes refreshed** to the 0.21.2 `themes.gitconfig` (new
   `colibri-colorblind`, rewritten `colibri`, `line-numbers-*-style = line`),
   with the local `lazygit-carakan` block preserved verbatim.
+
+### Session persistence: keep tmux-persist; pi/omp/opencode restore fixed
+
+- **Evaluated** `underclockeddev/better-tmux-resurrect` (single-author fork,
+  created 2026-11-03) against the installed `hyoretsu/tmux-persist`
+  (`e3f61ff`, 2026-08-17). Controlled run on a throwaway `tmux -L bench`
+  server: 2 sessions, 6 windows, 36 panes with 200-line scrollbacks, pane
+  contents on, median of three. **Save: 11.5 s vs 0.7 s** — tmux-persist
+  forks `ps` and the strategy script per pane plus one
+  `show-window-options` per window; better snapshots one `ps` and batches the
+  rest through `source-file`. **Restore at 6 panes is a tie** (0.89 s vs
+  0.80 s).
+- **Rejected better-tmux-resurrect** despite the speed: (1) `save.sh` guards
+  the whole save behind `flock -w 60 9 || exit 0`, and stock macOS has no
+  `flock` — every save exits 0 having written nothing (measured: 0 files,
+  0.09 s); (2) its only agent feature — exact Claude sessions — is Linux-only
+  (`/proc`, a Claude build publishing `~/.claude/sessions/*.json`), opt-in,
+  and replaces unmapped panes with `true`; (3) one global snapshot, so no
+  per-session restore. tmux-persist ships `session` strategies for claude,
+  codex, copilot, cursor-agent, agy, gemini and opencode, and saves one
+  snapshot per session. With `@persist-save-on-exit`/`@persist-auto-restore`
+  off, save runs only on `prefix C-g`, so the per-save cost is paid on purpose.
+- **opencode restore was silently broken** — in both forks. Through the asdf
+  shim, `ps` records the absolute binary path
+  (`/Users/carakan/.asdf/installs/nodejs/22.23.0/bin/opencode`), which matches
+  neither the process list (`_proc_matches_full_command` anchors at the start
+  of the string) nor the strategy lookup (`_just_command` takes the first
+  word, no basename). Fixed config-side with an inline entry
+  `".*opencode->opencode --continue"`: the list now matches the absolute path
+  and restore sends `opencode --continue`.
+- **pi and omp added.** Both CLIs resume the most recent session for the cwd
+  with `--continue` and neither fork ships a strategy. New
+  `packages/tmux/persist-strategies/{pi,omp}_session.sh` preserve every other
+  flag and pass an explicit `-c/-r/--session/--restore` through untouched.
+  tmux.conf copies them into the plugin's `strategies/` at load — the plugin
+  resolves strategies only inside its own tree, and the copies are untracked,
+  so TPM updates keep them — and adds `"pi" "omp"` to `@persist-processes`.
+- **Verify.** Throwaway server with panes running `pi --session-dir /tmp/x`,
+  `omp`, `opencode`: save, kill, restore → `bash -x restore.sh | grep
+  send-keys` shows `pi --continue`, `omp --continue`, `opencode --continue`.
+  `_process_on_the_restore_list` matches all three (and still rejects `zsh`).
+  nvim is identical in both forks — `nvim -S` when a `Session.vim` exists
+  (vim-obsession is installed), already wired via
+  `@persist-strategy-nvim session`.
 
 ---
 

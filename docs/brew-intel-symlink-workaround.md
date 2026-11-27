@@ -36,16 +36,16 @@ So rather than building, Homebrew is pointed at versions **asdf already installe
 ## Current layout
 
 ```
-/usr/local/Cellar/llvm/23.1.3    -> llvm/23.1.0   (HOLLOW - see below)
-/usr/local/Cellar/llvm@21/21.1.8_1                 (real build, renamed)
-/usr/local/Cellar/node/26.13.0_1 -> ~/.asdf/installs/nodejs/26.13.0 (v26.13.0)
-/usr/local/Cellar/bun/1.4.4_1    -> ~/.asdf/installs/bun/1.4.4      (bun 1.4.4)
+/usr/local/Cellar/llvm/23.1.6    -> ~/.local/opt/llvm-builds/23.1.4 (real build, parked)
+/usr/local/Cellar/node/26.13.1_3 -> ~/.asdf/installs/nodejs/26.13.0 (v26.13.0)
+/usr/local/Cellar/bun/1.4.5      -> ~/.asdf/installs/bun/1.4.5      (bun 1.4.5)
 /usr/local/Cellar/python@3.14/3.14.10 -> ~/.asdf/installs/python/3.14.10
-/usr/local/Cellar/ruby/4.0.8   -> ~/.asdf/installs/ruby/4.0.7     (ruby 4.0.7)
-/usr/local/Cellar/neovim/0.12.6 -> ~/.local/opt/nvim-nightly        (nightly, 2026-11-06)
+/usr/local/Cellar/python@3.15/3.15.2  -> ~/.asdf/installs/python/3.15.2
+/usr/local/Cellar/ruby/4.0.10    -> ~/.asdf/installs/ruby/4.0.10    (ruby 4.0.10)
+/usr/local/Cellar/neovim/0.12.6  -> ~/.local/opt/nvim-nightly       (nightly, 2026-11-06)
 ```
 
-**The unversioned `llvm` keg is hollow** (found 2026-10-21 — **superseded
+**The unversioned `llvm` keg *was* hollow** (found 2026-10-21 — **superseded
 2026-10-23**, see "Session 2026-10-23 (later)" at the end of this file: llvm
 is now a real compiled build parked in `Cellar/.llvm-builds/`, and the
 hollow `llvm@21` build it replaced was deleted by a failed install's
@@ -1196,3 +1196,232 @@ empty; `brew info node` → works; `/usr/local/bin/node --version` → `v26.13.0
 `nodejs 22.23.0`, shims resolve `v22.23.0`); `brew install --dry-run
 pi-coding-agent` lists no node build. The old asdf install `26.12.1` is kept —
 old versions are never deleted.
+
+## Session 2026-11-23: bun 1.4.5, ruby 4.0.10 — and the nested-link trap
+
+Both formulae had moved past their kegs (bun `1.4.4_1` → `1.4.5`, ruby
+`4.0.9` → `4.0.10`) and both targets were already installed by asdf, so the
+swap was zero-compile. bun was the usual keg symlink; ruby 4.0.9 was a
+**real 115 MB source build**, moved out of brew's reach (never deleted):
+
+```
+~/.local/opt/brew-kegs/ruby/4.0.9/            <- the real build, parked
+/usr/local/Cellar/ruby/4.0.10 -> ~/.asdf/installs/ruby/4.0.10
+/usr/local/opt/ruby -> ../Cellar/ruby/4.0.10
+```
+
+`~/.local/opt/brew-kegs/<formula>/<version>` is now the parking spot for real
+kegs, for the same reason llvm builds live in `~/.local/opt/llvm-builds`:
+nothing that is not a formula may stay inside `Cellar/` (brew enumerates every
+directory there as a formula name), and cleanup must never reach it.
+
+**Trap: repointing only `bin/` leaves ~4,800 dangling links.** A brew ruby keg
+links its whole tree into `/usr/local/{lib,include,share}`:
+`lib/ruby/4.0.0/**` alone is ~4.7k files, plus `lib/libruby*.dylib`,
+`lib/pkgconfig/ruby-4.0.pc`, `include/ruby-4.0.0`, `share/{ri,man}` and the
+`opt/ruby@4` / `opt/ruby@4.0` aliases. Repoint **every** symlink whose target
+contains the old keg name — no `-maxdepth` — then drop the ones whose target
+the asdf install does not ship:
+
+```bash
+find /usr/local/bin /usr/local/sbin /usr/local/lib /usr/local/include \
+     /usr/local/share /usr/local/opt -type l | while read -r l; do
+  old=$(readlink "$l"); case "$old" in *Cellar/ruby/4.0.9*) ;; *) continue;; esac
+  new=${old//Cellar\/ruby\/4.0.9/Cellar/ruby/4.0.10}
+  tgt=$(cd "$(dirname "$l")" && python3 -c 'import os,sys;print(os.path.normpath(sys.argv[1]))' "$new")
+  if [ -e "$tgt" ]; then ln -sfn "$new" "$l"; else rm -f "$l"; fi
+done
+```
+
+A depth-capped find silently fixed the top ~370 and left the nested ones
+broken; `brew cleanup --dry-run` then listed 4,786 of them as broken links,
+which is how the miss surfaced. Verify with
+`find /usr/local/{bin,lib,include,share,opt} -type l ! -exec test -e {} \; -print`
+(zero output).
+
+### Cleanup policy: cache-only (`brew cleanup` still banned)
+
+The ban on a global `brew cleanup` stands, but the **safe subset** is the
+download cache and the build logs — disposable by definition, and they contain
+no kegs:
+
+```bash
+brew cleanup --dry-run                     # review what brew would remove
+# keep only the lines under the cache and the logs:
+grep '^Would remove' ... | grep -E "^Would remove: $(brew --cache)/|^Would remove: $HOME/Library/Logs/Homebrew/" ...
+```
+
+Everything else the dry-run lists is a keg. Superseded kegs (`go 1.27.3`
+next to `1.27.4`, `jpeg-xl 0.12.0_1` next to `0.13.0`, …) are removed **by
+hand, one at a time**, never by cleanup: this layout depends on kegs that look
+old (symlinks into `~/.asdf`, `~/.local/opt`), and the one time cleanup ran
+unattended it deleted a `_old` keg nobody meant to lose.
+
+Result of the 2026-11-23 run: 91 entries deleted, **7.14 GiB freed** (cache
+16G → 12G), everything with a today mtime skipped because a `brew reinstall
+gentle-ai git-delta omp redis ripgrep kitty whatsapp` batch was mid-build in
+another shell. Never purge the cache while a build is running without that
+mtime guard: brew may still be reading a tarball it downloaded minutes ago.
+
+### Same day, later: node 26.13.1_3 and llvm 23.1.6 (keg names only)
+
+Both stables moved again and neither needed a build:
+
+| formula | new keg name | content | binary reports |
+|---|---|---|---|
+| `node` | `26.13.1_3` | asdf `26.13.0` | v26.13.0 |
+| `llvm` | `23.1.6` | parked `~/.local/opt/llvm-builds/23.1.4` | 23.1.4 |
+
+The keg-name rule applies to both, revision suffix included (`_3` is part of
+node's stable string). llvm's parked build keeps its receipt; only
+`source.versions.stable` was rewritten to `23.1.6` so the receipt agrees with
+the keg name. Both are deliberate skew — brew's number is a label, the binary
+is the truth. `brew list --versions` → `node 26.13.1_3`, `llvm 23.1.6`;
+`brew outdated` empty; `brew info` works.
+
+**Trap: a link walker that filters symlinked directories first misses
+`opt/<formula>`.** `opt/node` is a symlink and appears in `dirnames`, so
+checking the links only after filtering for descent skips it. Collect the
+entries first, filter second:
+
+```python
+entries = list(dirnames) + list(filenames)
+dirnames[:] = [d for d in dirnames if not os.path.islink(os.path.join(dirpath, d))]
+for name in entries: ...
+```
+
+node had **22,971 symlinks** into its keg (the npm-globals mirror under
+`/usr/local/lib/node_modules`), llvm two (`opt/llvm` plus the versioned
+alias). Rewriting by string substitution (`Cellar/node/26.13.0_1` →
+`Cellar/node/26.13.1_3`) preserves the exact previous link surface, unlike
+`brew link`, which would also expose asdf's gem/binstub tree.
+
+### redis 8.12.0: brew cannot build its modules here — core-only keg + the z3 landmine
+
+`brew reinstall redis` kept ending at 8.10.3 with an empty
+`Cellar/redis/8.12.0`; `brew upgrade redis` got further and still died after
+8 minutes:
+
+```
+==> [module] redisearch: FAILED (continuing with remaining modules)
+==> [module] redisjson:  FAILED (continuing with remaining modules)
+ERROR: deploy finished with module copy failure(s): redisearch redisjson
+```
+
+Two independent, environmental causes:
+
+1. **redisearch** wants the `boost_headers` CMake component, and the installed
+   boost `1.92.0_1` ships an **empty** component directory:
+   `/usr/local/Cellar/boost/1.92.0_1/lib/cmake/boost_headers-1.92.0/` has 0
+   files → `CMake Error ... Could not find a package configuration file
+   provided by "boost_headers"`. (Its toml++ patch also fails: "patch does not
+   apply".)
+2. **redisjson** dies at the *toolchain probe*:
+   `rustc_wrapper rustc -vV (signal: 6, SIGABRT)` — rustc loads the parked
+   LLVM 23.1.4, and that dylib had just lost its z3, because building redis
+   upgraded **z3 5.3.2 → 5.4.1** while `libLLVM.23.1.dylib` hard-codes
+   `/usr/local/opt/z3/lib/libz3.5.3.dylib`.
+
+**The z3 landmine is machine-wide:** every binary linking the parked llvm
+(rustc, cargo, crystal, llvm tools) aborts with `Library not loaded:
+/usr/local/opt/z3/lib/libz3.5.3.dylib`. Fix (applied):
+
+```bash
+ln -sf /usr/local/Cellar/z3/5.3.2/lib/libz3.5.3.2.0.dylib \
+       /usr/local/Cellar/z3/5.4.1/lib/libz3.5.3.dylib
+```
+
+The old keg is kept on purpose so the ABI the LLVM build was linked against is
+still what loads; 5.4.1's own dylib stays for new consumers. After **any** z3
+upgrade, `rustc --version` must not abort.
+
+Both module failures are packaging/toolchain defects, so redis was built
+core-only from the tarball brew had already cached, then swapped in like a
+release binary:
+
+```bash
+tar -xzf ~/Library/Caches/Homebrew/downloads/*--redis-8.12.0.tar.gz -C /tmp/redisbuild
+(cd /tmp/redisbuild/redis-8.12.0 && make -j8 BUILD_TLS=yes)   # ~40 s, 8 cores
+# keg = bin/{redis-server,redis-cli,redis-benchmark} + check-aof/rdb/sentinel
+#       symlinks, LICENSE.txt, README.md, and the two service files copied
+#       from the old keg: sh.brew.redis.plist, sh.brew.redis.service
+```
+
+**Trap: a hand-built keg without `sh.brew.redis.plist` makes
+`brew services restart redis` fail** — "Formula `redis` has not implemented
+#plist, #service or provided a locatable service file" — *and leaves redis
+stopped*. Copy both service files from the old keg before restarting.
+
+Final state: `Cellar/redis/8.12.0` is the manual core build (no modules; the
+config loads none), its receipt claims 8.12.0 with `poured_from_bottle: true`
+so `brew outdated redis` is empty, and the 8.10.3 keg with all four module
+`.so` files is parked at `~/.local/opt/brew-kegs/redis/8.10.3`. `opt/redis`,
+`lib/redis`, the six `bin` links and the `linked/redis` marker point at the
+new keg; `brew services` runs it (`redis_version:8.12.0`, existing dump.rdb
+loaded). `brew upgrade redis` will retry the module build while brew thinks
+the formula is outdated; the `boost_headers` blocker it hit is now repaired
+(next section), so only module-local issues (the toml++ patch warning) remain
+unverified.
+
+### boost 1.92.0_1: a killed upgrade left a truncated keg — rebuild repairs the CMake package
+
+The redisearch `boost_headers` failure was not a Boost bug: the boost keg
+itself was damaged. The killed `brew upgrade boost` of 2026-10-28 (lock-file
+trap above) left a half-written keg that brew still reported as installed:
+
+- **no `INSTALL_RECEIPT.json`** — the giveaway, every real keg has one,
+- `lib/cmake/boost_headers-1.92.0/` **empty**, `boost_geometry-1.92.0/` etc.
+  absent: only 25 of 52 component dirs,
+- no `LICENSE` / `sbom.spdx.json`.
+
+Why that breaks consumers: with CMake ≥ 3.30 and `CMP0167 NEW` (redisearch
+sets it explicitly) `find_package(Boost)` loads `BoostConfig.cmake` instead of
+the legacy FindBoost, and BoostConfig *hard-requires* the headers component:
+
+```cmake
+# BoostConfig.cmake
+macro(boost_find_component comp required quiet)
+  get_filename_component(_BOOST_CMAKEDIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
+  find_package(boost_${comp} ${Boost_VERSION} EXACT CONFIG ${required} ...)
+endmacro()
+...
+boost_find_component(headers 1 0)   # 1 = required
+if(NOT boost_headers_FOUND)
+  set(Boost_NOT_FOUND_MESSAGE "A required dependency, boost_headers, has not been found.")
+```
+
+So `find_package(Boost REQUIRED)` dies with "Could not find a package
+configuration file provided by boost_headers" even though the headers are on
+disk. Fix = clean rebuild of the same keg (Tier 3 source build, 17 min):
+
+```bash
+rm -f /usr/local/var/homebrew/locks/*.lock
+brew reinstall boost   # ./bootstrap.sh, ./b2 headers, ./b2 → 16,678 files
+```
+
+Result: receipt + sbom back, 52 component dirs, and the canonical
+`lib/cmake/boost_headers-1.92.0/boost_headers-config.cmake` defining
+
+```cmake
+add_library(Boost::headers INTERFACE IMPORTED)
+set_target_properties(Boost::headers PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_BOOST_INCLUDEDIR}")   # /usr/local/include
+```
+
+plus `boost_headers-config-version.cmake` (`PACKAGE_VERSION 1.92.0`,
+exact-match aware) — required because BoostConfig asks for `EXACT`.
+
+Verified with a throwaway CMake project reproducing redisearch's lookups
+(`CMP0167 NEW`):
+
+```
+boost_headers_DIR=/usr/local/lib/cmake/boost_headers-1.92.0
+Boost::headers INCLUDE=/usr/local/include
+Boost_FOUND=1 Boost_INCLUDE_DIRS=/usr/local/include
+boost 1.92.0            # compiled against <boost/version.hpp>
+```
+
+Takeaway: an interrupted brew build leaves a keg that *looks* installed —
+`brew list` shows it and binaries run — while metadata and CMake configs are
+half-written. Before blaming a package, check for `INSTALL_RECEIPT.json` and
+compare the component-dir count against a healthy install.
